@@ -183,7 +183,7 @@ class _HomePageState extends State<HomePage> {
                               foregroundColor: Colors.white,
                               backgroundColor: Colors.blue, // foreground
                             ),
-                            onPressed: () => Get.to(SheepGame())
+                            onPressed: () => Get.to(() => SheepGame())
                             //() {
                             //flutterReactiveBle.deinitialize();}
                             // flutterReactiveBle.scannerState.scanIsInProgress
@@ -197,7 +197,7 @@ class _HomePageState extends State<HomePage> {
                               foregroundColor: Colors.white,
                               backgroundColor: Colors.grey, // foreground
                             ),
-                            onPressed: () => Get.to(SheepGame()),
+                            onPressed: () => Get.to(() => SheepGame()),
                             child: const Text('disconnect'),
                           ),
                   ],
