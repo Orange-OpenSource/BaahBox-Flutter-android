@@ -5,18 +5,13 @@ import 'dart:io' show Platform;
 import 'package:location_permissions/location_permissions.dart';
 import 'util/sensorInput.dart';
 import 'package:get/get.dart';
+import 'appController.dart';
+import 'games/sheepGame.dart';
 
 void main() {
   return runApp(
     const GetMaterialApp(home: HomePage()),
   );
-}
-
-class Controller extends GetxController {
-  var sensorData = 'No data'.obs;
-  void renew(String data) {
-    sensorData.value = data;
-  }
 }
 
 class HomePage extends StatefulWidget {
@@ -36,27 +31,28 @@ class _HomePageState extends State<HomePage> {
   final flutterReactiveBle = FlutterReactiveBle();
   late StreamSubscription<DiscoveredDevice> _scanStream;
   late QualifiedCharacteristic _rxCharacteristic;
+  final Controller c = Get.put(Controller());
+
 // These are the UUIDs of your device
   final Uuid serviceUuid = Uuid.parse('6E400001-B5A3-F393-E0A9-E50E24DCCA9E');
   final Uuid characteristicUuid =
       Uuid.parse('6E400003-B5A3-F393-E0A9-E50E24DCCA9E');
-
+  Stream<List<int>>? subscriptionStream;
   void _startScan() async {
     bool permGranted = false;
-    setState(() {
-      _scanStarted = true;
-      print("starting to Scan");
-    });
-
     PermissionStatus permission;
+
     if (Platform.isAndroid) {
       permission = await LocationPermissions().requestPermissions();
       if (permission == PermissionStatus.granted) permGranted = true;
     } else if (Platform.isIOS) {
       permGranted = true;
     }
-
     if (permGranted) {
+      setState(() {
+        _scanStarted = true;
+        print("starting to Scan");
+      });
       _scanStream = flutterReactiveBle
           .scanForDevices(withServices: [serviceUuid]).listen((device) {
         if (device.name.contains(RegExp('Baah Box'))) {
@@ -104,11 +100,26 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  Stream<List<int>>? subscriptionStream;
+
+  void subscribeToStream() async  {
+      setState(() {
+        subscriptionStream = flutterReactiveBle
+            .subscribeToCharacteristic(_rxCharacteristic);
+        subscriptionStream?.forEach((element) => updateControllerWith(element));
+      });
+  }
+
+ void updateControllerWith(List<int> data) {
+   var tuples = computeData(data);
+   for ((MusclesInput, JoystickInput) tuple in tuples) {
+     print("${tuple.$1.describe()}, ${tuple.$2.describe()}");
+     c.setJoystickTo(tuple.$2);
+     c.setMusclesTo(tuple.$1);
+   }
+ }
 
   @override
   Widget build(BuildContext context) {
-    final Controller c = Get.put(Controller());
 
     return Scaffold(
         backgroundColor: Colors.white,
@@ -160,13 +171,9 @@ class _HomePageState extends State<HomePage> {
                         ? ElevatedButton(
                             onPressed: subscriptionStream != null
                                 ? null
-                                : () async {
-                                    setState(() {
-                                      subscriptionStream = flutterReactiveBle
-                                          .subscribeToCharacteristic(
-                                              _rxCharacteristic);
-                                    });
-                                  },
+                                : () {
+                              subscribeToStream();
+                            },
                             child: const Text('subscribe'),
                           )
                         : ElevatedButton(
@@ -183,12 +190,12 @@ class _HomePageState extends State<HomePage> {
                               foregroundColor: Colors.white,
                               backgroundColor: Colors.blue, // foreground
                             ),
-                            onPressed: () => Get.to(() => SheepGame())
-                            //() {
-                            //flutterReactiveBle.deinitialize();}
+                            onPressed: () {
+                              flutterReactiveBle.deinitialize();
+                            }
                             // flutterReactiveBle.scannerState.scanIsInProgress
-                            //     ? flutterReactiveBle.stopScan
-                            //     : null;
+                            //    ? flutterReactiveBle.stopScan
+                            //    : null;}
                             ,
                             child: const Text('disconnect'),
                           )
@@ -197,49 +204,58 @@ class _HomePageState extends State<HomePage> {
                               foregroundColor: Colors.white,
                               backgroundColor: Colors.grey, // foreground
                             ),
-                            onPressed: () => Get.to(() => SheepGame()),
+                            onPressed: () {},
                             child: const Text('disconnect'),
                           ),
                   ],
                 ),
                 subscriptionStream != null
-                    ? StreamBuilder<List<int>>(
-                        stream: subscriptionStream,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            print(snapshot.data);
-                            print("next:");
-                            c.renew(computeData(snapshot.data?.toList()));
-                            return Obx(() => Text("${c.sensorData}"));
-                          }
-                          return const Text('No data yet');
-                        })
-                    : const Text('Stream not initialized')
+                    ?
+             //   StreamBuilder<List<int>>(
+               //         stream: subscriptionStream,
+                //        builder: (context, snapshot) {
+                   //       if (snapshot.hasData) {
+                    //        print('next: ${snapshot.data} \n');
+                     //       print("==================");
+                           // updateControllerWith(snapshot.data!.toList());
+
+                           // return
+                Obx(() => Container(
+                                width: 150,
+                                height: (c.musclesInput.muscle1).toDouble() / 5,
+                                decoration: BoxDecoration(
+                                  color: Colors.blue,
+                                  border: Border.all(),
+                                ),
+
+                                child: Text(c.musclesInput.describe())
+                            ))
+    //;
+                        //  }
+                         // return const Text('No data yet');
+                     //   })
+                    : const Text('Stream not initialized'),
+
+                _connected
+                    ? ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.blue, // foreground
+                        ),
+                        onPressed: () => Get.to(() => SheepGame()),
+                        child: const Text('sheep'),
+                      )
+                    : ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.grey, // foreground
+                        ),
+                        onPressed: () => Get.to(() => SheepGame()),
+                        child: const Text('sheep'),
+                      )
               ]),
-        ));
+        )
+    );
   }
 }
 
-class SheepGame extends StatelessWidget {
-  @override
-  Widget build(context) {
-    final Controller c = Get.find();
-    // Access the updated count variable
-    return Scaffold(
-        body: Center(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.white,
-              backgroundColor: Colors.grey, // foreground
-            ),
-            onPressed: () => Get.back(),
-            child: const Text('Sheep ! Back to earth !'),
-          ),
-          Text('${c.sensorData.value}')
-        ])));
-  }
-}
