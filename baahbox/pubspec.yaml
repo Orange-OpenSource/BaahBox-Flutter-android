@@ -71,10 +71,10 @@ flutter:
      - assets/images/
      - assets/images/Dashboard/
      - assets/images/icon/
-     - assets/images/Jeux/Ballon/
-     - assets/images/Jeux/Crapaud/
-     - assets/images/Jeux/Etoile/
-     - assets/images/Jeux/Mouton/
+     - assets/images/Jeux/Balloon/
+     - assets/images/Jeux/Toad/
+     - assets/images/Jeux/Star/
+     - assets/images/Jeux/Sheep/
      - assets/images/Jeux/Spaceship/
      - assets/images/Particules/
      - assets/images/Splashscreen/

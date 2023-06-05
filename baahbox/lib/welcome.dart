@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:baahbox/games/testGame.dart';
-import 'package:baahbox/games/star/starGame.dart';
-import 'package:baahbox/games/testGame.dart';
+import 'package:baahbox/games/Dino/dinoGameScene.dart';
+import 'package:baahbox/games/balloon/balloonGameScene.dart';
 import 'package:baahbox/settings.dart';
 import 'package:baahbox/controllers/appController.dart';
-import 'package:flame/game.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({Key? key}) : super(key: key);
@@ -43,15 +42,15 @@ class WelcomePage extends StatelessWidget {
               //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 GameRow('assets/images/Dashboard/menu_etoile@2x.png',
-                    0xFF70576E, 'Star', 1),
+                    0xFF70576E, 'Star', 1, DinoGameScene()),
                 GameRow('assets/images/Dashboard/menu_ballon@2x.png',
-                    0xFFE26F3B, 'Balloon', 1),
+                    0xFFE26F3B, 'Balloon', 1, BalloonGameScene()),
                 GameRow('assets/images/Dashboard/menu_mouton@2x.png',
-                    0xFFF98885, 'Sheep', 1),
+                    0xFFF98885, 'Sheep', 1, DinoGameScene()),
                 GameRow('assets/images/Dashboard/menu_espace@2x.png',
-                    0xFF085559, 'Starship', 2),
+                    0xFF085559, 'Starship', 2, DinoGameScene()),
                 GameRow('assets/images/Dashboard/menu_gobe@2x.png', 0xFF86A2A3,
-                    'Toad', 2),
+                    'Toad', 2, DinoGameScene()),
               ]
               //wrap
               ),
@@ -60,10 +59,9 @@ class WelcomePage extends StatelessWidget {
 }
 
 class GameRow extends StatelessWidget {
-  // const GameRow({Key? key}) : super(key: key);
 
-  GameRow(this.gameAsset, this.gameColorCode, this.title, this.numberOfSensors);
-  final game = StarGame();
+  GameRow(this.gameAsset, this.gameColorCode, this.title, this.numberOfSensors, this.gameScene);
+  final Widget gameScene;
   final String gameAsset;
   int gameColorCode;
   String title;
@@ -103,6 +101,6 @@ class GameRow extends StatelessWidget {
                     )
                   ])
             ])),
-        onPressed: () => Get.to(() => StarGame()));
+        onPressed: () => Get.to(() => gameScene));
   }
 }

@@ -36,7 +36,8 @@ class TestGame extends StatelessWidget {
                       sensorTest(),
                     ]
                 )
-            ), floatingActionButton: FloatingActionButton(
+            ),
+          floatingActionButton: FloatingActionButton(
           onPressed: () => Get.back(),
           tooltip: 'Increment',
           child: const Icon(Icons.arrow_back),

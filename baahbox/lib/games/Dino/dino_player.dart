@@ -1,8 +1,11 @@
 import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
 import 'helpers/directions.dart';
+import 'package:baahbox/controllers/appController.dart';
+import 'package:get/get.dart';
 
 class DinoPlayer extends SpriteAnimationComponent with HasGameRef {
+  final Controller c = Get.find();
   DinoPlayer() : super(size: Vector2.all(100.0), anchor: Anchor.center);
 
   late final SpriteAnimation _walkingRightAnimation;
@@ -28,7 +31,7 @@ class DinoPlayer extends SpriteAnimationComponent with HasGameRef {
   updatePosition(double dt) {
     switch (direction) {
       case Direction.up:
-        position.y --;
+        position.y -= c.musclesInput.muscle1 / 50;
         break;
       case Direction.down:
         position.y ++;
