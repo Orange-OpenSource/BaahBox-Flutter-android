@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:baahbox/games/testGame.dart';
+import 'package:baahbox/games/star/starGame.dart';
+import 'package:baahbox/games/testGame.dart';
 import 'package:baahbox/settings.dart';
 import 'package:baahbox/controllers/appController.dart';
+import 'package:flame/game.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({Key? key}) : super(key: key);
@@ -60,7 +63,7 @@ class GameRow extends StatelessWidget {
   // const GameRow({Key? key}) : super(key: key);
 
   GameRow(this.gameAsset, this.gameColorCode, this.title, this.numberOfSensors);
-
+  final game = StarGame();
   final String gameAsset;
   int gameColorCode;
   String title;
@@ -100,6 +103,6 @@ class GameRow extends StatelessWidget {
                     )
                   ])
             ])),
-        onPressed: () => Get.to(() => TestGame()));
+        onPressed: () => Get.to(() => StarGame()));
   }
 }
