@@ -34,15 +34,6 @@ class TestGame extends StatelessWidget {
                     children: [
                       Text(c.musclesInput.describe()),
                       sensorTest(),
-                      SizedBox(height: 50,),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: Colors.grey, // foreground
-                        ),
-                        onPressed: () => Get.back(),
-                        child: const Text('go back to games !'),
-                      )
                     ]
                 )
             ), floatingActionButton: FloatingActionButton(
