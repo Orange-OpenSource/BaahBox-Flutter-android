@@ -26,32 +26,9 @@ class SheepGame extends StatelessWidget {
             child: const Text('Sheep ! Back to earth !'),
           ),
           Text(c.musclesInput.describe()),
-                  Star()
         ]
         )
     )
     ));
   }
-}
-
-class Star extends StatelessWidget {
-  const Star ({super.key});
-
-
-  @override
-  Widget build(BuildContext context) {
-    final Controller controller = Get.find();
-    return Obx(() =>
-        Container(
-          width: 150,
-          height: (controller.musclesInput.muscle1).toDouble() / 5,
-          decoration: BoxDecoration(
-            color: Colors.blue,
-            border: Border.all(),
-          ),
-
-          child: Text(controller.musclesInput.describe())
-    )
-    );
-    }
 }

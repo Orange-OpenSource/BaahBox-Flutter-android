@@ -118,6 +118,19 @@ class _BleConnectionPageState extends State<BleConnectionPage> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+        appBar: AppBar(
+      backgroundColor: Colors.white,
+      titleTextStyle: TextStyle(
+          color: Colors.blueGrey,
+          fontWeight: FontWeight.bold,
+          fontSize: 25),
+      centerTitle: true,
+      title: Text("Bluetooth Connexion"),
+      leading: IconButton(
+          icon: Icon( Icons.arrow_back,color: Colors.lightBlueAccent,),
+          onPressed: () => Get.to(() => WelcomePage(),)
+      ),
+    ),
         backgroundColor: Colors.white,
         body: Container(
           child: Column(

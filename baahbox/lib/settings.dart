@@ -18,7 +18,7 @@ class SettingsPage extends StatelessWidget {
           centerTitle: true,
           title: Text("Settings"),
           leading: IconButton(
-              icon: Icon( Icons.keyboard_arrow_left_sharp,color: Colors.lightBlueAccent,),
+              icon: Icon( Icons.arrow_back,color: Colors.lightBlueAccent,),
               onPressed: () => Get.to(() => WelcomePage(),)
           ),
         ),
@@ -30,7 +30,7 @@ class SettingsPage extends StatelessWidget {
                 children: [
               ElevatedButton(
                   onPressed: () => Get.to(() => BleConnectionPage()),
-                  child: Text('Connection settings'))
+                  child: Text('Connexion settings'))
             ])));
   }
 }

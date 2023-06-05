@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:baahbox/games/sheepGame.dart';
+import 'package:baahbox/games/testGame.dart';
 import 'package:baahbox/settings.dart';
 import 'package:baahbox/controllers/appController.dart';
 
@@ -100,6 +100,6 @@ class GameRow extends StatelessWidget {
                     )
                   ])
             ])),
-        onPressed: () => Get.to(() => SheepGame()));
+        onPressed: () => Get.to(() => TestGame()));
   }
 }
