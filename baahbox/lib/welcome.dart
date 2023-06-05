@@ -19,16 +19,15 @@ class WelcomePage extends StatelessWidget {
           title: Text("Baah !"),
           actions: [
             Container(
-                width: 30,
+                width: 25,
                 child: Image.asset(
-                  'assets/images/Dashboard/connexion_main@2x.png',
-                )),
+                  'assets/images/Dashboard/demo@2x.png', color: Color(0xFFF98885))),
+            SizedBox(width: 15,),
             Container(
-                width: 30,
+                width: 25,
                 child: Image.asset(
-                  'assets/images/Dashboard/settings_icon@2x.png',
-                )),
-            Icon(Icons.more_vert),
+                  'assets/images/Dashboard/settings_icon@2x.png', color: Color(0xFFF98885))),
+            SizedBox(width: 15,),
           ],
         ),
         backgroundColor: Colors.white,
