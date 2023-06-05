@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-import 'controllers/appController.dart';
 import 'package:baahbox/games/sheepGame.dart';
+import 'package:baahbox/settings.dart';
+import 'package:baahbox/controllers/appController.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
+    final Controller c = Get.put(Controller());
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
           titleTextStyle: TextStyle(
-              color: Colors.orangeAccent,
+              color: Color(0xFFF98885),
               fontWeight: FontWeight.bold,
               fontSize: 25),
           centerTitle: true,
@@ -20,14 +22,14 @@ class WelcomePage extends StatelessWidget {
           actions: [
             Container(
                 width: 25,
-                child: Image.asset(
-                  'assets/images/Dashboard/demo@2x.png', color: Color(0xFFF98885))),
+                child:
+               Image.asset('assets/images/Dashboard/demo@2x.png', color: Color(0xFFF98885))
+            ),
             SizedBox(width: 15,),
-            Container(
-                width: 25,
-                child: Image.asset(
-                  'assets/images/Dashboard/settings_icon@2x.png', color: Color(0xFFF98885))),
-            SizedBox(width: 15,),
+
+            IconButton(icon: Image.asset('assets/images/Dashboard/settings_icon@2x.png', color: Color(0xFFF98885)),
+                onPressed: () => Get.to(() => SettingsPage())
+            ),
           ],
         ),
         backgroundColor: Colors.white,
