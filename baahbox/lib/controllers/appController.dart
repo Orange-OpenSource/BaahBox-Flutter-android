@@ -2,7 +2,7 @@
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'dart:async';
 import 'dart:io' show Platform;
-import 'util/sensorInput.dart';
+import '../model/sensorInput.dart';
 import 'package:get/get.dart';
 
 class Controller extends GetxController {

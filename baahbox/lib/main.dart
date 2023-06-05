@@ -1,11 +1,12 @@
+import 'package:baahbox/welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'dart:async';
 import 'dart:io' show Platform;
 import 'package:location_permissions/location_permissions.dart';
-import 'util/sensorInput.dart';
+import 'model/sensorInput.dart';
 import 'package:get/get.dart';
-import 'appController.dart';
+import 'controllers/appController.dart';
 import 'games/sheepGame.dart';
 
 void main() {
@@ -250,7 +251,7 @@ class _HomePageState extends State<HomePage> {
                           foregroundColor: Colors.white,
                           backgroundColor: Colors.grey, // foreground
                         ),
-                        onPressed: () => Get.to(() => SheepGame()),
+                        onPressed: () => Get.to(() => WelcomePage()),
                         child: const Text('sheep'),
                       )
               ]),
