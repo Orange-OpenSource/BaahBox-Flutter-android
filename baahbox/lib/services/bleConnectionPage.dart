@@ -8,6 +8,7 @@ import 'package:baahbox/settings.dart';
 import 'package:baahbox/welcome.dart';
 import 'package:baahbox/model/sensorInput.dart';
 import 'package:baahbox/controllers/appController.dart';
+import 'package:baahbox/routes/routes.dart';
 
 
 class BleConnectionPage extends StatefulWidget {
@@ -128,7 +129,7 @@ class _BleConnectionPageState extends State<BleConnectionPage> {
       title: Text("Bluetooth Connexion"),
       leading: IconButton(
           icon: Icon( Icons.arrow_back,color: Colors.lightBlueAccent,),
-          onPressed: () => Get.to(() => WelcomePage(),)
+          onPressed: () => Get.toNamed(BaahBoxRoutes.welcome)
       ),
     ),
         backgroundColor: Colors.white,
@@ -237,7 +238,7 @@ class _BleConnectionPageState extends State<BleConnectionPage> {
                     foregroundColor: Colors.white,
                     backgroundColor: Colors.grey, // foreground
                   ),
-                  onPressed: () => Get.to(() => WelcomePage()),
+                  onPressed: () => Get.toNamed(BaahBoxRoutes.welcome),
                   child: const Text('back to the games !'),
                 )
               ]),

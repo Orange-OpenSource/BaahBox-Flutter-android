@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'controllers/appController.dart';
-import 'package:baahbox/services/bleConnectionPage.dart';
-import 'package:baahbox/welcome.dart';
+import 'package:baahbox/routes/routes.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -19,7 +18,7 @@ class SettingsPage extends StatelessWidget {
           title: Text("Settings"),
           leading: IconButton(
               icon: Icon( Icons.arrow_back,color: Colors.lightBlueAccent,),
-              onPressed: () => Get.to(() => WelcomePage(),)
+              onPressed: () => Get.toNamed(BaahBoxRoutes.welcome)
           ),
         ),
         backgroundColor: Colors.white,
@@ -29,7 +28,7 @@ class SettingsPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
               ElevatedButton(
-                  onPressed: () => Get.to(() => BleConnectionPage()),
+                  onPressed: () => Get.toNamed(BaahBoxRoutes.connection),
                   child: Text('Connexion settings'))
             ])));
   }

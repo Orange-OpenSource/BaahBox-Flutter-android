@@ -3,9 +3,9 @@ import 'helpers/navigation_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flame/game.dart';
+import 'package:baahbox/controllers/appController.dart';
 import 'dart:async';
 import 'dart:io' show Platform;
-import 'package:baahbox/controllers/appController.dart';
 import 'dart:ui';
 
 
