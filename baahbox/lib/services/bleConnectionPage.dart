@@ -4,8 +4,6 @@ import 'dart:async';
 import 'dart:io' show Platform;
 import 'package:get/get.dart';
 import 'package:location_permissions/location_permissions.dart';
-import 'package:baahbox/settings.dart';
-import 'package:baahbox/welcome.dart';
 import 'package:baahbox/model/sensorInput.dart';
 import 'package:baahbox/controllers/appController.dart';
 import 'package:baahbox/routes/routes.dart';
@@ -129,7 +127,7 @@ class _BleConnectionPageState extends State<BleConnectionPage> {
       title: Text("Bluetooth Connexion"),
       leading: IconButton(
           icon: Icon( Icons.arrow_back,color: Colors.lightBlueAccent,),
-          onPressed: () => Get.toNamed(BaahBoxRoutes.welcome)
+          onPressed: () => Get.toNamed(BBRoutes.welcome)
       ),
     ),
         backgroundColor: Colors.white,
@@ -238,7 +236,7 @@ class _BleConnectionPageState extends State<BleConnectionPage> {
                     foregroundColor: Colors.white,
                     backgroundColor: Colors.grey, // foreground
                   ),
-                  onPressed: () => Get.toNamed(BaahBoxRoutes.welcome),
+                  onPressed: () => Get.toNamed(BBRoutes.welcome),
                   child: const Text('back to the games !'),
                 )
               ]),

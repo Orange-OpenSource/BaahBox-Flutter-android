@@ -5,12 +5,11 @@ import 'package:baahbox/games/balloon/balloonGameScene.dart';
 import 'package:baahbox/games/star/starGameScene.dart';
 import 'package:baahbox/games/testGame.dart';
 import 'package:baahbox/games/dino/dinoGameScene.dart';
-import 'package:baahbox/welcome.dart';
 import 'package:baahbox/services/bleConnectionPage.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 
 
- class BaahBoxRoutes {
+ class BBRoutes {
   static const String welcome = "/";
   static const String star = "/star";
   static const String balloon = "/balloon";

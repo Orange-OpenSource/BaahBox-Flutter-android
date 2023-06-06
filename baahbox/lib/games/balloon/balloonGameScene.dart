@@ -2,11 +2,7 @@ import 'balloonGame.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flame/game.dart';
-import 'dart:async';
-import 'dart:io' show Platform;
 import 'package:baahbox/controllers/appController.dart';
-import 'dart:ui';
-
 
 class BalloonGameScene extends StatelessWidget {
   final Controller c = Get.find();

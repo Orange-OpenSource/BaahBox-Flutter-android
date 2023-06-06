@@ -1,13 +1,10 @@
 import 'dart:ui';
-
-import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/services.dart';
 import 'dino_player.dart';
 import 'dino_world.dart';
 import 'package:flutter/material.dart';
-
 import 'helpers/directions.dart';
 
 class DinoGame extends FlameGame with KeyboardEvents{
