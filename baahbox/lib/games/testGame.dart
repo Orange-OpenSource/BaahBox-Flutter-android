@@ -1,13 +1,12 @@
-
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:io' show Platform;
 import 'package:baahbox/model/sensorInput.dart';
-import 'package:baahbox/welcome.dart';
 import 'package:baahbox/controllers/appController.dart';
 import 'package:get/get.dart';
+import 'package:baahbox/routes/routes.dart';
 
-class TestGame extends StatelessWidget {
+class TestGamePage extends StatelessWidget {
   @override
   Widget build(context) {
     final Controller c = Get.find();
@@ -23,7 +22,7 @@ class TestGame extends StatelessWidget {
               title: Text("Test Page"),
               leading: IconButton(
                   icon: Icon( Icons.arrow_back,color: Colors.lightBlueAccent,),
-                  onPressed: () => Get.to(() => WelcomePage(),)
+                  onPressed: () => Get.toNamed(BaahBoxRoutes.welcome))
               ),
             ),
             body: Container(alignment: Alignment.center,

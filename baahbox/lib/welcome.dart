@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:baahbox/games/testGame.dart';
-import 'package:baahbox/games/Dino/dinoGameScene.dart';
-import 'package:baahbox/games/balloon/balloonGameScene.dart';
-import 'package:baahbox/settings.dart';
 import 'package:baahbox/controllers/appController.dart';
+import 'package:baahbox/routes/routes.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({Key? key}) : super(key: key);
@@ -30,7 +27,7 @@ class WelcomePage extends StatelessWidget {
             SizedBox(width: 15,),
 
             IconButton(icon: Image.asset('assets/images/Dashboard/settings_icon@2x.png', color: Color(0xFFF98885)),
-                onPressed: () => Get.to(() => SettingsPage())
+                onPressed: () => Get.toNamed('/settings')
             ),
           ],
         ),
@@ -42,15 +39,15 @@ class WelcomePage extends StatelessWidget {
               //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 GameRow('assets/images/Dashboard/menu_etoile@2x.png',
-                    0xFF70576E, 'Star', 1, DinoGameScene()),
+                    0xFF70576E, 'Star', 1, BaahBoxRoutes.star),
                 GameRow('assets/images/Dashboard/menu_ballon@2x.png',
-                    0xFFE26F3B, 'Balloon', 1, BalloonGameScene()),
+                    0xFFE26F3B, 'Balloon', 1, BaahBoxRoutes.balloon),
                 GameRow('assets/images/Dashboard/menu_mouton@2x.png',
-                    0xFFF98885, 'Sheep', 1, DinoGameScene()),
+                    0xFFF98885, 'Sheep', 1, BaahBoxRoutes.sheep),
                 GameRow('assets/images/Dashboard/menu_espace@2x.png',
-                    0xFF085559, 'Starship', 2, DinoGameScene()),
+                    0xFF085559, 'Starship', 2, BaahBoxRoutes.spaceShip),
                 GameRow('assets/images/Dashboard/menu_gobe@2x.png', 0xFF86A2A3,
-                    'Toad', 2, DinoGameScene()),
+                    'Toad', 2, BaahBoxRoutes.toad),
               ]
               //wrap
               ),
@@ -60,8 +57,8 @@ class WelcomePage extends StatelessWidget {
 
 class GameRow extends StatelessWidget {
 
-  GameRow(this.gameAsset, this.gameColorCode, this.title, this.numberOfSensors, this.gameScene);
-  final Widget gameScene;
+  GameRow(this.gameAsset, this.gameColorCode, this.title, this.numberOfSensors, this.gameSceneName);
+  final String gameSceneName;
   final String gameAsset;
   int gameColorCode;
   String title;
@@ -101,6 +98,6 @@ class GameRow extends StatelessWidget {
                     )
                   ])
             ])),
-        onPressed: () => Get.to(() => gameScene));
+        onPressed: () => Get.toNamed(gameSceneName));
   }
 }
