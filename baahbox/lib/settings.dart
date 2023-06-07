@@ -18,7 +18,7 @@ class SettingsPage extends StatelessWidget {
           title: Text("Settings"),
           leading: IconButton(
               icon: Icon( Icons.arrow_back,color: Colors.lightBlueAccent,),
-              onPressed: () => Get.toNamed(BBRoutes.welcome)
+              onPressed: () => Get.toNamed(BBRoute.welcome.path)
           ),
         ),
         backgroundColor: Colors.white,
@@ -28,7 +28,7 @@ class SettingsPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
               ElevatedButton(
-                  onPressed: () => Get.toNamed(BBRoutes.connection),
+                  onPressed: () => Get.toNamed(BBRoute.connection.path),
                   child: Text('Connexion settings'))
             ])));
   }

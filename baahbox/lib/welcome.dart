@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:baahbox/controllers/appController.dart';
 import 'package:baahbox/routes/routes.dart';
-import 'package:baahbox/constants/colors.dart';
+import 'package:baahbox/constants/enums.dart';
 import 'dart:ui';
 
 
@@ -11,7 +11,7 @@ class WelcomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final  mainColor = BBColors.theme1Colors['main'] as Color;
+    final  mainColor = BBColor.pinky.color;
     final Controller c = Get.put(Controller());
     return Scaffold(
         appBar: AppBar(
@@ -42,16 +42,11 @@ class WelcomePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                GameRow('assets/images/Dashboard/menu_etoile@2x.png',
-                    BBColors.theme1Colors['star'] as Color, 'Star', 1, BBRoutes.star),
-                GameRow('assets/images/Dashboard/menu_ballon@2x.png',
-                    BBColors.theme1Colors['balloon'] as Color, 'Balloon', 1, BBRoutes.balloon),
-                GameRow('assets/images/Dashboard/menu_mouton@2x.png',
-                    BBColors.theme1Colors['sheep'] as Color, 'Sheep', 1, BBRoutes.sheep),
-                GameRow('assets/images/Dashboard/menu_espace@2x.png',
-                    BBColors.theme1Colors['spaceShip'] as Color, 'SpaceShip', 2, BBRoutes.spaceShip),
-                GameRow('assets/images/Dashboard/menu_gobe@2x.png', BBColors.theme1Colors['toad'] as Color,
-                    'Toad', 2, BBRoutes.toad),
+                GameRow(BBGame.star, BBRoute.star.path),
+                GameRow(BBGame.balloon, BBRoute.balloon.path),
+                GameRow(BBGame.sheep, BBRoute.sheep.path),
+                GameRow(BBGame.starship, BBRoute.spaceShip.path),
+                GameRow(BBGame.toad, BBRoute.toad.path),
               ]
               //wrap
               ),
@@ -61,18 +56,15 @@ class WelcomePage extends StatelessWidget {
 
 class GameRow extends StatelessWidget {
 
-  GameRow(this.gameAsset, this.gameColor, this.title, this.numberOfSensors, this.gameSceneName);
-  final String gameSceneName;
-  final String gameAsset;
-  final Color gameColor;
-  String title;
-  int numberOfSensors;
+  GameRow(this.game, this.gamePath);
+  final String gamePath;
+  final BBGame game;
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
         style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(gameColor)),
+            backgroundColor: MaterialStateProperty.all(game.baseColor.color)),
         child: Container(
             alignment: Alignment.centerLeft,
             height: 100,
@@ -81,14 +73,14 @@ class GameRow extends StatelessWidget {
                 children: [
               Image(
                   alignment: Alignment.centerLeft,
-                  image: AssetImage(gameAsset)),
+                  image: AssetImage(game.mainAsset)),
               Spacer(),
               Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      title,
+                      game.title,
                       style: TextStyle(color: Colors.white),
                       textAlign: TextAlign.end,
                       textScaleFactor: 2.0,
@@ -102,6 +94,6 @@ class GameRow extends StatelessWidget {
                     )
                   ])
             ])),
-        onPressed: () => Get.toNamed(gameSceneName));
+        onPressed: () => Get.toNamed(gamePath));
   }
 }

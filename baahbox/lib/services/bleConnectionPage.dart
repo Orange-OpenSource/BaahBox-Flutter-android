@@ -127,7 +127,7 @@ class _BleConnectionPageState extends State<BleConnectionPage> {
       title: Text("Bluetooth Connexion"),
       leading: IconButton(
           icon: Icon( Icons.arrow_back,color: Colors.lightBlueAccent,),
-          onPressed: () => Get.toNamed(BBRoutes.welcome)
+          onPressed: () => Get.toNamed(BBRoute.welcome.path)
       ),
     ),
         backgroundColor: Colors.white,
@@ -236,7 +236,7 @@ class _BleConnectionPageState extends State<BleConnectionPage> {
                     foregroundColor: Colors.white,
                     backgroundColor: Colors.grey, // foreground
                   ),
-                  onPressed: () => Get.toNamed(BBRoutes.welcome),
+                  onPressed: () => Get.toNamed(BBRoute.welcome.path),
                   child: const Text('back to the games !'),
                 )
               ]),

@@ -6,18 +6,20 @@ import 'balloonSprite.dart';
 import 'package:flutter/material.dart';
 import 'package:baahbox/controllers/appController.dart';
 import 'package:get/get.dart';
-import 'package:baahbox/constants/colors.dart';
+import 'package:baahbox/constants/enums.dart';
 
 class BalloonGame extends FlameGame {
   final Controller c = Get.find();
-  Color backgroundColor() =>  BBColors.theme1Colors['balloon'] as Color;
+
+  @override
+  Color backgroundColor() =>  BBGame.balloon.baseColor.color;
 
   @override
   Future<void> onLoad() async {
     super.onLoad();
     await Flame.images.loadAll(<String>[
       'ballon_00@2x.png',
-     'ballon_01@2x.png',
+      'ballon_01@2x.png',
       'ballon_02@2x.png',
       'ballon_03@2x.png',
       'ballon_04@2x.png',

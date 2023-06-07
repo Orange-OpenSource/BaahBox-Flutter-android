@@ -6,11 +6,13 @@ import 'starSprite.dart';
 import 'package:flutter/material.dart';
 import 'package:baahbox/controllers/appController.dart';
 import 'package:get/get.dart';
-import 'package:baahbox/constants/colors.dart';
+import 'package:baahbox/constants/enums.dart';
 
 class StarGame extends FlameGame {
   final Controller c = Get.find();
-  Color backgroundColor() =>  BBColors.theme1Colors['star'] as Color;
+
+  @override
+  Color backgroundColor() =>  BBGame.star.baseColor.color;
 
   @override
   Future<void> onLoad() async {

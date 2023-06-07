@@ -8,7 +8,7 @@ void main() {
      GetMaterialApp(
         title: 'Baah Box Games!',
       //  home: const BleConnectionPage(),
-        initialRoute: BBRoutes.welcome,
+        initialRoute: BBRoute.welcome.path,
       getPages: BBRoutes.routes
      ),
   );

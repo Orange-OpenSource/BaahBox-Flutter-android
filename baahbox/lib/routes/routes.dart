@@ -8,35 +8,40 @@ import 'package:baahbox/games/dino/dinoGameScene.dart';
 import 'package:baahbox/services/bleConnectionPage.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 
+enum BBRoute {
+  welcome(path: "/"),
+  star(path: "/star"),
+  balloon(path: "/balloon"),
+  sheep(path: "/sheep"),
+  spaceShip(path: "/spaceShip"),
+  toad(path: "/toad"),
+  dino(path: "/dino"),
+  testSensors(path: "/testSensors"),
+  settings(path: "/settings"),
+  connection(path: "/connection"),
+  generalSettings(path: "/generalSettings"),
+  sheepSettings(path: "/sheepSettings"),
+  toadSettings(path: "/toadSettings"),
+  spaceShipSettings(path: "/spaceShipSettings");
 
- class BBRoutes {
-  static const String welcome = "/";
-  static const String star = "/star";
-  static const String balloon = "/balloon";
-  static String sheep = "/sheep";
-  static String spaceShip = "/spaceShip";
-  static String toad = "/toad";
-  static String dino = "/dino";
-  static String testSensors = "/testSensors";
-  static const String settings = "/settings";
-  static const String connection = "/connection";
-  static String generalSettings = "/generalSettings";
-  static String sheepSettings = "/sheepSettings";
-  static String toadSettings = "/toadSettings";
-  static String spaceShipSettings = "/spaceShipSettings";
+  const BBRoute({required this.path});
+  final String path;
+}
 
-  static String getHomePage() => welcome;
+class BBRoutes {
+
+  static String getHomePage() => BBRoute.welcome.path;
 
   static List<GetPage> routes = [
-    GetPage(page: () => const WelcomePage(), name: welcome),
-    GetPage(page: () => const SettingsPage(), name: settings),
-    GetPage(page: () => const BleConnectionPage(), name: connection),
-    GetPage(page: () =>  BalloonGameScene(), name: balloon),
-    GetPage(page: () =>  TestGamePage(), name: testSensors),
-    GetPage(page: () =>  DinoGameScene(), name: dino),
-    GetPage(page: () =>  DinoGameScene(), name: toad),
-    GetPage(page: () =>  DinoGameScene(), name: sheep),
-    GetPage(page: () =>  DinoGameScene(), name: spaceShip),
-    GetPage(page: () =>  StarGameScene(), name: star),
+    GetPage(page: () => const WelcomePage(), name: BBRoute.welcome.path),
+    GetPage(page: () => const SettingsPage(), name: BBRoute.settings.path),
+    GetPage(page: () => const BleConnectionPage(), name: BBRoute.connection.path),
+    GetPage(page: () => BalloonGameScene(), name: BBRoute.balloon.path),
+    GetPage(page: () => TestGamePage(), name: BBRoute.testSensors.path),
+    GetPage(page: () => DinoGameScene(), name: BBRoute.dino.path),
+    GetPage(page: () => DinoGameScene(), name: BBRoute.toad.path),
+    GetPage(page: () => DinoGameScene(), name: BBRoute.sheep.path),
+    GetPage(page: () => DinoGameScene(), name: BBRoute.spaceShip.path),
+    GetPage(page: () => StarGameScene(), name: BBRoute.star.path),
   ];
 }

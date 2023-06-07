@@ -22,7 +22,7 @@ class TestGamePage extends StatelessWidget {
               title: Text("Test Page"),
               leading: IconButton(
                   icon: Icon( Icons.arrow_back,color: Colors.lightBlueAccent,),
-                  onPressed: () => Get.toNamed(BBRoutes.welcome)
+                  onPressed: () => Get.toNamed(BBRoute.welcome.path)
               ),
             ),
             body: Container(alignment: Alignment.center,
