@@ -18,13 +18,6 @@ class BalloonSprite extends SpriteComponent with HasGameRef {
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    // await Flame.images.loadAll(<String>[
-    //   'ballon_00@2x.png',
-    //   'ballon_01@2x.png',
-    //   'ballon_02@2x.png',
-    //   'ballon_03@2x.png',
-    //   'ballon_04@2x.png',
-    // ]);
     this.sprite = balloonstartSprite;
     position = gameRef.size / 2;
     size = Vector2(100, 100);

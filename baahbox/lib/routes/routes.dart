@@ -37,6 +37,6 @@ import 'package:get/get_navigation/src/routes/get_route.dart';
     GetPage(page: () =>  DinoGameScene(), name: toad),
     GetPage(page: () =>  DinoGameScene(), name: sheep),
     GetPage(page: () =>  DinoGameScene(), name: spaceShip),
-    GetPage(page: () =>  DinoGameScene(), name: star),
+    GetPage(page: () =>  StarGameScene(), name: star),
   ];
 }
