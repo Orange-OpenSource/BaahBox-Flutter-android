@@ -7,7 +7,7 @@ import 'package:baahbox/controllers/appController.dart';
 
 
 
-class DinoGameScene extends StatelessWidget {
+class DinoGamePage extends StatelessWidget {
 
   final Controller c = Get.find();
   final game = DinoGame();

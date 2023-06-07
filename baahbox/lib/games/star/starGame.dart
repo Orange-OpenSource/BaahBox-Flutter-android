@@ -10,6 +10,7 @@ import 'package:baahbox/constants/enums.dart';
 
 class StarGame extends FlameGame {
   final Controller c = Get.find();
+  late Size screenSize;
 
   @override
   Color backgroundColor() =>  BBGame.star.baseColor.color;
@@ -17,6 +18,7 @@ class StarGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     super.onLoad();
+
     await Flame.images.loadAll(<String>[
       'jeu_etoile_01@2x.png',
       'jeu_etoile_02@2x.png',
@@ -29,5 +31,9 @@ class StarGame extends FlameGame {
   @override
   void update(double dt) {
     super.update(dt);
+  }
+
+  void resize(Size size) {
+    screenSize = size;
   }
 }

@@ -8,15 +8,15 @@ import 'package:get/get.dart';
 class StarSprite extends SpriteComponent with HasGameRef {
   final Controller c = Get.find();
   StarSprite() : super(size: Vector2.all(16.0), anchor: Anchor.center);
+
   final starSprite = Sprite(Flame.images.fromCache('jeu_etoile_01@2x.png'));
   final shiningStarSprite = Sprite(Flame.images.fromCache('jeu_etoile_02@2x.png'));
-
 
   @override
   Future<void> onLoad() async {
     super.onLoad();
     this.sprite = starSprite;
-    position = gameRef.size / 2;
+    position = gameRef.canvasSize / 2;
     size = Vector2(100, 100);
   }
 
@@ -39,7 +39,4 @@ class StarSprite extends SpriteComponent with HasGameRef {
     super.update(dt);
     updateSprite(dt);
   }
-
-
-
 }

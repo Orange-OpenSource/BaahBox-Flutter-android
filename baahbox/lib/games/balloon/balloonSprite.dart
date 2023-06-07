@@ -50,5 +50,18 @@ class BalloonSprite extends SpriteComponent with HasGameRef {
     this.sprite = newSprite;
     final newSize = newSprite.srcSize;
    this.size = newSize/5 ;
+   this.anchor = Anchor.center;
   }
 }
+
+// final image = await images.load('flame.png');
+//
+// final resized = await image.resize(sizeTarget);
+// add(
+// SpriteComponent(
+// sprite: Sprite(resized),
+// position: size / 2,
+// size: resized.size,
+// anchor: Anchor.center,
+// ),
+// );

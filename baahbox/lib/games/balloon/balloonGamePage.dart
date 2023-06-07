@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:flame/game.dart';
 import 'package:baahbox/controllers/appController.dart';
 
-class BalloonGameScene extends StatelessWidget {
+class BalloonGamePage extends StatelessWidget {
   final Controller c = Get.find();
   final game = BalloonGame();
 
