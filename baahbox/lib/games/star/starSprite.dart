@@ -1,9 +1,25 @@
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame/input.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame/flame.dart';
 import 'package:baahbox/controllers/appController.dart';
 import 'package:get/get.dart';
+import 'package:flame/events.dart';
+
+class Square extends RectangleComponent with TapCallbacks {
+  static const speed = 3;
+  static const squareSize = 128.0;
+  static const indicatorSize = 6.0;
+
+  Square(Vector2 position)
+      : super(
+    position: position,
+    size: Vector2.all(squareSize),
+    anchor: Anchor.center,
+  );
+}
+
 
 class StarSprite extends SpriteComponent with HasGameRef {
   final Controller c = Get.find();

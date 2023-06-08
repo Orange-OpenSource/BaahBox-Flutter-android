@@ -25,7 +25,7 @@ enum GameState {
   ended;
 }
 
-enum BBGame {
+enum BBGameList {
   star(
       title: 'Star',
       mainAsset: 'assets/images/Dashboard/menu_etoile@2x.png',
@@ -55,7 +55,7 @@ enum BBGame {
     numberOfSensors: 2,
   );
 
-  const BBGame({
+  const BBGameList({
     required this.title,
     required this.mainAsset,
     required this.baseColor,

@@ -33,23 +33,21 @@ class BalloonSprite extends SpriteComponent with HasGameRef {
     int coeff = (c.musclesInput.muscle1 / 100).toInt();
     switch(coeff) {
    case 0 || 1 || 2:
-    setTo(balloonstartSprite);
+    setTo(balloonstartSprite,1);
     case 3 || 4:
-      setTo(balloonlowSprite);
-
-      case 5 || 6 :
-        setTo(balloonmediumSprite);
-      case 6 || 7 || 8:
-        setTo(balloonhighSprite);
+      setTo(balloonlowSprite,1);
+      case 5 || 6 || 7 || 8 :
+        setTo(balloonhighSprite, coeff /10);
       case 9 || 10:
-    setTo(balloonexplodeSprite);
+    setTo(balloonexplodeSprite, 1);
     }
   }
 
-  setTo(Sprite newSprite) {
+  setTo(Sprite newSprite, double coeff) {
     this.sprite = newSprite;
     final newSize = newSprite.srcSize;
-   this.size = newSize/5 ;
+   this.size = newSize * coeff/4 ;
+   print("new size: ${this.size}");
    this.anchor = Anchor.center;
   }
 }

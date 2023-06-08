@@ -39,11 +39,11 @@ class WelcomePage extends StatelessWidget {
           child: ListView(
               padding: const EdgeInsets.all(0),
               children: <Widget>[
-            GameRow(BBGame.star, BBRoute.star.path),
-            GameRow(BBGame.balloon, BBRoute.balloon.path),
-            GameRow(BBGame.sheep, BBRoute.sheep.path),
-            GameRow(BBGame.starship, BBRoute.spaceShip.path),
-            GameRow(BBGame.toad, BBRoute.toad.path),
+            GameRow(BBGameList.star, BBRoute.star.path),
+            GameRow(BBGameList.balloon, BBRoute.balloon.path),
+            GameRow(BBGameList.sheep, BBRoute.sheep.path),
+            GameRow(BBGameList.starship, BBRoute.spaceShip.path),
+            GameRow(BBGameList.toad, BBRoute.toad.path),
           ] //wrap
           ),
         ));
@@ -53,7 +53,7 @@ class WelcomePage extends StatelessWidget {
 class GameRow extends StatelessWidget {
   GameRow(this.game, this.gamePath);
   final String gamePath;
-  final BBGame game;
+  final BBGameList game;
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +64,7 @@ class GameRow extends StatelessWidget {
             alignment: Alignment.centerLeft,
             height: 110,
             width: 400,
-            child: Row(//mainAxisAlignment: MainAxisAlignment.start,
+            child: Row(
                 children: [
               Image(
                   alignment: Alignment.centerLeft,

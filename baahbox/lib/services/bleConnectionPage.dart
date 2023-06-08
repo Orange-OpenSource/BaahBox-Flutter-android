@@ -107,7 +107,7 @@ class _BleConnectionPageState extends State<BleConnectionPage> {
   void updateControllerWith(List<int> data) {
     var tuples = computeData(data);
     for ((MusclesInput, JoystickInput) tuple in tuples) {
-      print("${tuple.$1.describe()}, ${tuple.$2.describe()}");
+     // print("${tuple.$1.describe()}, ${tuple.$2.describe()}");
       c.setJoystickTo(tuple.$2);
       c.setMusclesTo(tuple.$1);
     }

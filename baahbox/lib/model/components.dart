@@ -2,46 +2,50 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
+import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
+import 'package:baahbox/constants/enums.dart';
+import 'package:baahbox/games/BBGame.dart';
 
-
-
-class TappableSquare extends PositionComponent with TapCallbacks {
-
-  static const String description = '''
-    In this example we show the `Tappable` mixin functionality. You can add the
-    `Tappable` mixin to any `PositionComponent`.\n\n
-    Tap the squares to see them change their angle around their anchor.
-  ''';
-  static final Paint _white = Paint()..color = const Color(0xFFFFFFFF);
-  static final Paint _grey = Paint()..color = const Color(0xFFA5A5A5);
-
-  bool _beenPressed = false;
-
-  TappableSquare({Vector2? position})
-      : super(
-    position: position ?? Vector2.all(100),
-    size: Vector2.all(100),
-  );
-
+class PlayButtonComponent extends TextComponent
+    with TapCallbacks, HasGameRef<BBGame> {
+  PlayButtonComponent(String text, TextPaint renderer)
+      : super(text: text, textRenderer: renderer);
   @override
-  void render(Canvas canvas) {
-    canvas.drawRect(size.toRect(), _beenPressed ? _grey : _white);
-  }
-
-  @override
-  void onTapUp(_) {
-    _beenPressed = false;
-  }
-
-  @override
-  void onTapDown(_) {
-    _beenPressed = true;
-    angle += 1.0;
-  }
-
-  @override
-  void onTapCancel(_) {
-    _beenPressed = false;
+  void onTapDown(TapDownEvent event) {
+    removeFromParent();
+    switch (gameRef.state) {
+      case GameState.notStarted:
+        gameRef.state = GameState.onGoing;
+      case GameState.onGoing ||
+            GameState.halted: // shoud not happen in this game
+        break;
+      case GameState.ended:
+        gameRef.state = GameState.notStarted; // .notStarted
+    }
+    print("playButton ${text} tapped: new state is : ${gameRef.state}");
   }
 }
+
+//exemples  de Textpaint pour des Textcomponents:
+final _regularTextStyle =
+    TextStyle(fontSize: 18, color: BasicPalette.white.color);
+final _regular = TextPaint(style: _regularTextStyle);
+final _tiny = TextPaint(style: _regularTextStyle.copyWith(fontSize: 14.0));
+final _box = _regular.copyWith(
+  (style) => style.copyWith(
+    color: Colors.lightGreenAccent,
+    fontFamily: 'monospace',
+    letterSpacing: 2.0,
+  ),
+);
+final _shaded = TextPaint(
+  style: TextStyle(
+    color: BasicPalette.white.color,
+    fontSize: 40.0,
+    shadows: const [
+      Shadow(color: Colors.red, offset: Offset(2, 2), blurRadius: 2),
+      Shadow(color: Colors.yellow, offset: Offset(4, 4), blurRadius: 4),
+    ],
+  ),
+);

@@ -12,7 +12,7 @@ class BalloonGame extends FlameGame {
   final Controller c = Get.find();
 
   @override
-  Color backgroundColor() =>  BBGame.balloon.baseColor.color;
+  Color backgroundColor() =>  BBGameList.balloon.baseColor.color;
 
   @override
   Future<void> onLoad() async {
