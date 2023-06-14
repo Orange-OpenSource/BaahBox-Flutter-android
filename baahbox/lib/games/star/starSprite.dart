@@ -8,19 +8,6 @@ import 'package:baahbox/controllers/appController.dart';
 import 'package:get/get.dart';
 import 'package:flame/events.dart';
 
-class Square extends RectangleComponent with TapCallbacks {
-  static const speed = 3;
-  static const squareSize = 128.0;
-  static const indicatorSize = 6.0;
-
-  Square(Vector2 position)
-      : super(
-          position: position,
-          size: Vector2.all(squareSize),
-          anchor: Anchor.center,
-        );
-}
-
 class StarSprite extends SpriteComponent with HasGameRef<StarGame> {
   final Controller appController = Get.find();
   StarSprite() : super(size: Vector2.all(16.0), anchor: Anchor.center);
@@ -32,12 +19,16 @@ class StarSprite extends SpriteComponent with HasGameRef<StarGame> {
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    this.sprite = starSprite;
-    position = gameRef.canvasSize / 2;
-    size = starSprite.srcSize / 5;
+    initialize();
     // TODO: calculer automatiquement la taille de l'étoile en
     //  fonction de celle de l'écran.
 
+  }
+
+  void initialize() {
+    this.sprite = starSprite;
+    position = gameRef.canvasSize / 2;
+    size = starSprite.srcSize / 5;
   }
 
   setTo(Sprite newSprite) {

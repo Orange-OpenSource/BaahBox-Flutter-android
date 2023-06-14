@@ -17,6 +17,8 @@ class StarGamePage extends StatelessWidget {
             game: game,
             overlayBuilderMap: const {
               'PreGame': OverlayBuilder.preGame,
+              'Instructions': OverlayBuilder.instructions,
+              'FeedBack': OverlayBuilder.feedback,
               'PostGame': OverlayBuilder.postGame,
             },
           ),

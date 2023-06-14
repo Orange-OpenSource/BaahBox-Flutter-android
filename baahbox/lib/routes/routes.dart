@@ -5,6 +5,7 @@ import 'package:baahbox/games/balloon/balloonGamePage.dart';
 import 'package:baahbox/games/star/starGamePage.dart';
 import 'package:baahbox/games/testGamePage.dart';
 import 'package:baahbox/games/dino/dinoGamePage.dart';
+import 'package:baahbox/games/trex/trexGamePage.dart';
 import 'package:baahbox/services/bleConnectionPage.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 
@@ -16,6 +17,7 @@ enum BBRoute {
   spaceShip(path: "/spaceShip"),
   toad(path: "/toad"),
   dino(path: "/dino"),
+  trex(path: "/trex"),
   testSensors(path: "/testSensors"),
   settings(path: "/settings"),
   connection(path: "/connection"),
@@ -39,7 +41,7 @@ class BBRoutes {
     GetPage(page: () => BalloonGamePage(), name: BBRoute.balloon.path),
     GetPage(page: () => TestGamePage(), name: BBRoute.testSensors.path),
     GetPage(page: () => DinoGamePage(), name: BBRoute.dino.path),
-    GetPage(page: () => DinoGamePage(), name: BBRoute.toad.path),
+    GetPage(page: () => TRexGamePage(), name: BBRoute.toad.path),
     GetPage(page: () => DinoGamePage(), name: BBRoute.sheep.path),
     GetPage(page: () => DinoGamePage(), name: BBRoute.spaceShip.path),
     GetPage(page: () => StarGamePage(), name: BBRoute.star.path),
