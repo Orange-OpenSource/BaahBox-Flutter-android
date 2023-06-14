@@ -50,7 +50,8 @@ class _BleConnectionPageState extends State<BleConnectionPage> {
       });
       _scanStream = flutterReactiveBle
           .scanForDevices(withServices: [serviceUuid]).listen((device) {
-        if (device.name.contains(RegExp('Baah Box'))) {
+            print("Found ${device.name}");
+        if (device.name.contains(RegExp('Baah'))) {
           print("found !");
           print(device.name);
           print(device.id);
