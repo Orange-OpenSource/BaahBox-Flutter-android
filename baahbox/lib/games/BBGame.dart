@@ -21,7 +21,7 @@ class BBGame extends FlameGame with PanDetector {
     overlays.add('Instructions');
     overlays.add('PreGame');
     state = GameState.ready;
-}
+  }
 
   void startGame() {
     if (overlays.isActive('PreGame')) {
@@ -31,7 +31,6 @@ class BBGame extends FlameGame with PanDetector {
   }
 
   void displayFeedBack() {
-    overlays.clear();
     overlays.add('FeedBack');
   }
 
@@ -39,10 +38,10 @@ class BBGame extends FlameGame with PanDetector {
     overlays.clear();
     overlays.add('PostGame');
   }
+
   void resetGame() {
     overlays.clear();
     overlays.add('Instructions');
     state = GameState.running;
   }
-
 }

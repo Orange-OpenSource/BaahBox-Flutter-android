@@ -1,34 +1,27 @@
 import 'dart:ui';
 import 'package:flame/events.dart';
-import 'package:flame/game.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/flame.dart';
-import 'package:flame/components.dart';
 import 'package:flame/palette.dart';
+import 'package:get/get.dart';
+import 'package:baahbox/controllers/appController.dart';
 import 'package:baahbox/constants/enums.dart';
-import 'package:baahbox/model/components.dart';
 import 'package:baahbox/games/BBGame.dart';
 import 'starSprite.dart';
 
 class StarGame extends BBGame with TapCallbacks {
+  final Controller appController = Get.find();
   late Size screenSize;
   late StarSprite _star;
+
   var panInput = 0;
   var input = 0;
   var instructionTitle = 'Fais briller l\'étoile';
   var instructionSubtitle = 'en contractant ton muscle';
   var feedback = 'encore un effort!';
-  var bravo = TextComponent(text: 'Bravo', textRenderer: _bold);
-
   @override
   Color backgroundColor() => BBGameList.star.baseColor.color;
-
-  @override
-  void onTapDown(TapDownEvent event) {
-    super.onTapDown(event);
-    print("state : $state ");
-  }
 
   @override
   Future<void> onLoad() async {
@@ -41,7 +34,7 @@ class StarGame extends BBGame with TapCallbacks {
       'jeu_etoile_02@2x.png',
     ]);
     _star = StarSprite();
-    add(_star);
+   await add(_star);
   }
 
   @override
@@ -52,6 +45,7 @@ class StarGame extends BBGame with TapCallbacks {
       updateOverlaysAndState();
     }
   }
+
 
   void refreshInput() {
     // todo deal with 2 muscles or joystick input
@@ -108,15 +102,12 @@ class StarGame extends BBGame with TapCallbacks {
           "panInput : ${panInput} :::  panY : ${yPos} vs game ${canvasSize.y}");
     }
   }
+
+
+
+  @override
+  void onTapDown(TapDownEvent event) {
+    super.onTapDown(event);
+    print("state : $state ");
+  }
 }
-
-//======================================================
-// TODO à mettre dans une enum de style
-
-final _regularTextStyle =
-    TextStyle(fontSize: 18, color: BasicPalette.white.color);
-final _boldTextStyle = TextStyle(
-    fontSize: 18, color: BasicPalette.white.color, fontWeight: FontWeight.bold);
-
-final _regular = TextPaint(style: _regularTextStyle);
-final _bold = TextPaint(style: _boldTextStyle);

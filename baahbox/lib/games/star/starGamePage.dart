@@ -6,7 +6,7 @@ import 'package:baahbox/controllers/appController.dart';
 import 'package:baahbox/games/overlayBuilder.dart';
 
 class StarGamePage extends StatelessWidget {
-  final Controller c = Get.find();
+  final Controller appController = Get.find();
   final game = StarGame();
 
   @override

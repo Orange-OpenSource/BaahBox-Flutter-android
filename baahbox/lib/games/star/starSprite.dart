@@ -1,12 +1,8 @@
 import 'package:baahbox/games/star/starGame.dart';
 import 'package:flame/components.dart';
-import 'package:flame/extensions.dart';
-import 'package:flame/input.dart';
-import 'package:flame/sprite.dart';
 import 'package:flame/flame.dart';
 import 'package:baahbox/controllers/appController.dart';
 import 'package:get/get.dart';
-import 'package:flame/events.dart';
 
 class StarSprite extends SpriteComponent with HasGameRef<StarGame> {
   final Controller appController = Get.find();
@@ -22,19 +18,20 @@ class StarSprite extends SpriteComponent with HasGameRef<StarGame> {
     initialize();
     // TODO: calculer automatiquement la taille de l'étoile en
     //  fonction de celle de l'écran.
-
   }
 
   void initialize() {
     this.sprite = starSprite;
-    position = gameRef.canvasSize / 2;
+    position = gameRef.size / 2;
     size = starSprite.srcSize / 5;
   }
 
   setTo(Sprite newSprite) {
-    this.sprite = newSprite;
-    final newSize = newSprite.srcSize;
-    this.size = newSize / 5;
+    if (this.sprite != newSprite) {
+      this.sprite = newSprite;
+      final newSize = newSprite.srcSize;
+      this.size = newSize / 5;
+    }
   }
 
   @override
