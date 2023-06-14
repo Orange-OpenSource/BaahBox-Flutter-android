@@ -1,3 +1,4 @@
+import 'package:baahbox/games/star/starGame.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/input.dart';
@@ -20,8 +21,8 @@ class Square extends RectangleComponent with TapCallbacks {
         );
 }
 
-class StarSprite extends SpriteComponent with HasGameRef {
-  final Controller c = Get.find();
+class StarSprite extends SpriteComponent with HasGameRef<StarGame> {
+  final Controller appController = Get.find();
   StarSprite() : super(size: Vector2.all(16.0), anchor: Anchor.center);
 
   final starSprite = Sprite(Flame.images.fromCache('jeu_etoile_01@2x.png'));
@@ -33,7 +34,10 @@ class StarSprite extends SpriteComponent with HasGameRef {
     super.onLoad();
     this.sprite = starSprite;
     position = gameRef.canvasSize / 2;
-    size = Vector2(100, 100);
+    size = starSprite.srcSize / 5;
+    // TODO: calculer automatiquement la taille de l'étoile en
+    //  fonction de celle de l'écran.
+
   }
 
   setTo(Sprite newSprite) {
@@ -42,27 +46,13 @@ class StarSprite extends SpriteComponent with HasGameRef {
     this.size = newSize / 5;
   }
 
-  updateSprite(double dt) {
-    if (c.musclesInput.muscle1 > 500) {
+  @override
+  void update(double dt) {
+    super.update(dt);
+    if (gameRef.input > 750) {
       setTo(shiningStarSprite);
     } else {
       setTo(starSprite);
     }
-  }
-
-  updateOnPan(DragUpdateInfo info) {
-    var panPosition = info.eventPosition.game.y;
-    print("panY : ${panPosition} vs game ${size.y}");
-    if (panPosition < size.y / 2) {
-      setTo(shiningStarSprite);
-   } else {
-      setTo(starSprite);
-    }
-  }
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-   // updateSprite(dt);
   }
 }

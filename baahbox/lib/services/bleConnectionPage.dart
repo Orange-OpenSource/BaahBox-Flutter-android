@@ -26,7 +26,7 @@ class _BleConnectionPageState extends State<BleConnectionPage> {
   final flutterReactiveBle = FlutterReactiveBle();
   late StreamSubscription<DiscoveredDevice> _scanStream;
   late QualifiedCharacteristic _rxCharacteristic;
-  final Controller c = Get.put(Controller());
+  final Controller appController = Get.put(Controller());
 
 // These are the UUIDs of your device
   final Uuid serviceUuid = Uuid.parse('6E400001-B5A3-F393-E0A9-E50E24DCCA9E');
@@ -101,6 +101,7 @@ class _BleConnectionPageState extends State<BleConnectionPage> {
     setState(() {
       subscriptionStream = flutterReactiveBle
           .subscribeToCharacteristic(_rxCharacteristic);
+      appController.setConnectionStateTo(subscriptionStream != null);
       subscriptionStream?.forEach((element) => updateControllerWith(element));
     });
   }
@@ -109,8 +110,8 @@ class _BleConnectionPageState extends State<BleConnectionPage> {
     var tuples = computeData(data);
     for ((MusclesInput, JoystickInput) tuple in tuples) {
      // print("${tuple.$1.describe()}, ${tuple.$2.describe()}");
-      c.setJoystickTo(tuple.$2);
-      c.setMusclesTo(tuple.$1);
+      appController.setJoystickTo(tuple.$2);
+      appController.setMusclesTo(tuple.$1);
     }
   }
 
@@ -222,13 +223,13 @@ class _BleConnectionPageState extends State<BleConnectionPage> {
                     ?
                 Obx(() => Container(
                     width: 150,
-                    height: (c.musclesInput.muscle1).toDouble() / 5,
+                    height: (appController.musclesInput.muscle1).toDouble() / 5,
                     decoration: BoxDecoration(
                       color: Colors.blue,
                       border: Border.all(),
                     ),
 
-                    child: Text(c.musclesInput.describe())
+                    child: Text(appController.musclesInput.describe())
                 ))
                     : const Text('Stream not initialized'),
                 SizedBox(height: 80,),

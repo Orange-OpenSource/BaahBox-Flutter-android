@@ -15,13 +15,15 @@ class PlayButtonComponent extends TextComponent
   void onTapDown(TapDownEvent event) {
     removeFromParent();
     switch (gameRef.state) {
-      case GameState.notStarted:
-        gameRef.state = GameState.onGoing;
-      case GameState.onGoing ||
-            GameState.halted: // shoud not happen in this game
+      case GameState.initializing:
         break;
-      case GameState.ended:
-        gameRef.state = GameState.notStarted; // .notStarted
+      case GameState.ready:
+        gameRef.state = GameState.running;
+      case GameState.running ||
+            GameState.paused: // shoud not happen in this game
+        break;
+      case GameState.lost  || GameState.won:
+        gameRef.state = GameState.initializing; // .notStarted
     }
     print("playButton ${text} tapped: new state is : ${gameRef.state}");
   }

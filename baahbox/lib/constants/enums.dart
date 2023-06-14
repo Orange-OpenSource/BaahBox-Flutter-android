@@ -19,10 +19,16 @@ enum BBColor implements Comparable<BBColor> {
 }
 
 enum GameState {
-  notStarted,
-  onGoing,
-  halted,
-  ended;
+  // notStarted,
+  // onGoing,
+  // halted,
+  // ended;
+  initializing,
+  ready,
+  running,
+  paused,
+  won,
+  lost;
 }
 
 enum BBGameList {

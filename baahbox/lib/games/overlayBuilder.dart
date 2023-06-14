@@ -1,3 +1,4 @@
+import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import '../constants/enums.dart';
 import 'BBGame.dart';
@@ -10,7 +11,7 @@ class OverlayBuilder {
   }
 
   static Widget postGame(BuildContext context, BBGame game) {
-    assert(game.state == GameState.ended);
+    assert(game.state == GameState.won || game.state == GameState.lost);
     final message = 'Game Over';
     return PostGameOverlay(message: message, game: game);
   }
