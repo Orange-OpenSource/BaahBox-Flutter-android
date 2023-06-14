@@ -33,7 +33,8 @@ class StarGame extends BBGame with TapCallbacks {
     text: 'en contractant ton muscle',
     textRenderer: _regular,
   );
-  var feedback = TextComponent(text: 'Hello, Flame', textRenderer: _regular);
+  var feedback = TextComponent(text: 'encore un effort!', textRenderer: _regular);
+  var bravo = TextComponent(text: 'Bravo', textRenderer: _bold);
 
   var playButton = PlayButtonComponent(
     'Jouer',
@@ -79,23 +80,28 @@ class StarGame extends BBGame with TapCallbacks {
         ..x = size.x / 2
         ..y = size.y / 2,
     ]);
+    overlays.add('PreGame');
   }
 
   @override
   void update(double dt) {
     super.update(dt);
+    updateTitles();
     switch (state) {
       case GameState.notStarted:
         break;
       case GameState.onGoing:
-       // updateTitles();
+
+        overlays.remove('PreGame');
       case GameState.halted:
         break;
       case GameState.ended:
-        add(replayButton
-          ..anchor = Anchor.bottomCenter
-          ..x = size.x / 2
-          ..y = size.y - 30);
+      //  add(replayButton
+       //   ..anchor = Anchor.bottomCenter
+       //   ..x = size.x / 2
+       //   ..y = size.y - 30);
+        overlays.remove(overlays.activeOverlays.first);
+        overlays.add('PostGame');
     }
   }
 
@@ -107,18 +113,19 @@ class StarGame extends BBGame with TapCallbacks {
 
   void updateTitles() {
     int coeff = (getInputData() / 10).toInt();
-    print("input : ${coeff}");
+   // print("input : ${coeff}");
     switch (coeff) {
       case 0 || 1 || 2:
         break;
       case 3 || 4:
-        remove(title);
-        remove(subtitle);
-        add(feedback);
+        //remove(title);
+        //title.
+        //remove(subtitle);
+       // add(feedback);
       case 5 || 6 || 7 || 8:
-        remove(title);
-        remove(subtitle);
-        remove(feedback);
+       // remove(title);
+       // remove(subtitle);
+       // remove(feedback);
       case 9 || 10:
         state = GameState.ended;
         break;
@@ -127,5 +134,10 @@ class StarGame extends BBGame with TapCallbacks {
 
   void resize(Size size) {
     screenSize = size;
+  }
+
+  @override
+  void onPanUpdate(DragUpdateInfo info) {
+          _star.updateOnPan(info);
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flame/game.dart';
 import 'package:baahbox/controllers/appController.dart';
+import 'package:baahbox/games/overlayBuilder.dart';
 
 class StarGamePage extends StatelessWidget {
   final Controller c = Get.find();
@@ -14,7 +15,11 @@ class StarGamePage extends StatelessWidget {
         body: Stack(children: [
           GameWidget(
             game: game,
-          )
+            overlayBuilderMap: const {
+              'PreGame': OverlayBuilder.preGame,
+              'PostGame': OverlayBuilder.postGame,
+            },
+          ),
         ]),
         floatingActionButton: FloatingActionButton(
             onPressed: () => Get.back(),
