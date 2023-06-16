@@ -33,6 +33,7 @@ class _BleConnectionPageState extends State<BleConnectionPage> {
   final Uuid characteristicUuid =
   Uuid.parse('6E400003-B5A3-F393-E0A9-E50E24DCCA9E');
   Stream<List<int>>? subscriptionStream;
+
   void _startScan() async {
     bool permGranted = false;
     PermissionStatus permission;
@@ -62,6 +63,25 @@ class _BleConnectionPageState extends State<BleConnectionPage> {
         }
       });
     }
+  }
+
+  @override void initState() {
+    // TODO: implement initState
+    super.initState();
+    _startScan();
+  }
+
+  void stopScanning() {
+    _scanStream.cancel();
+    setState(() {
+      _scanStarted = false;
+      print("stop Scanning");
+    });
+
+  }
+  void leavePage() {
+    stopScanning();
+       //.scanIsInProgress ? flutterReactiveBle.stopScan : null;}
   }
 
   void _connectToDevice() {
@@ -114,11 +134,12 @@ class _BleConnectionPageState extends State<BleConnectionPage> {
       appController.setMusclesTo(tuple.$1);
     }
   }
+  final List<String> entries = <String>['A', 'B', 'C'];
+  final List<int> colorCodes = <int>[600, 500, 100];
 
   @override
   Widget build(BuildContext context) {
-
-    return Scaffold(
+   return Scaffold(
         appBar: AppBar(
       backgroundColor: Colors.white,
       titleTextStyle: TextStyle(
@@ -129,120 +150,136 @@ class _BleConnectionPageState extends State<BleConnectionPage> {
       title: Text("Bluetooth Connexion"),
       leading: IconButton(
           icon: Icon( Icons.arrow_back,color: Colors.lightBlueAccent,),
-          onPressed: () => Get.toNamed(BBRoute.welcome.path)
+          onPressed: () {
+            _scanStream.cancel();
+            print("stop scanning");
+            Get.toNamed(BBRoute.welcome.path);
+                }
       ),
     ),
         backgroundColor: Colors.white,
         body: Container(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Text('Baah Box connexion'),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // persistentFooterButtons: [
-                    _scanStarted
-                        ? ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Colors.grey, // foreground
-                      ),
-                      onPressed: () {},
-                      child: const Icon(Icons.search),
-                    )
-                        : ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue, // background
-                        foregroundColor: Colors.white, // foreground
-                      ),
-                      onPressed: _startScan,
-                      child: const Icon(Icons.search),
-                    ),
-                    _foundDeviceWaitingToConnect
-                        ? ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Colors.blue, // foreground
-                      ),
-                      onPressed: _connectToDevice,
-                      child: const Icon(Icons.bluetooth),
-                    )
-                        : ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.grey, // background
-                        foregroundColor: Colors.white, // foreground
-                      ),
-                      onPressed: () {},
-                      child: const Icon(Icons.bluetooth),
-                    ),
-                    _connected
-                        ? ElevatedButton(
-                      onPressed: subscriptionStream != null
-                          ? null
-                          : () {
-                        subscribeToStream();
-                      },
-                      child: const Text('subscribe'),
-                    )
-                        : ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Colors.grey, // foreground
-                      ),
-                      onPressed: () {},
-                      child: const Text('subscribe'),
-                    ),
-                    _connected
-                        ? ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Colors.blue, // foreground
-                      ),
-                      onPressed: () {
-                        flutterReactiveBle.deinitialize();
-                      }
-                      // flutterReactiveBle.scannerState.scanIsInProgress
-                      //    ? flutterReactiveBle.stopScan
-                      //    : null;}
-                      ,
-                      child: const Text('disconnect'),
-                    )
-                        : ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Colors.grey, // foreground
-                      ),
-                      onPressed: () {},
-                      child: const Text('disconnect'),
-                    ),
-                  ],
-                ),
-                subscriptionStream != null
-                    ?
-                Obx(() => Container(
-                    width: 150,
-                    height: (appController.musclesInput.muscle1).toDouble() / 5,
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      border: Border.all(),
-                    ),
+          child:
+        ListView.builder(
+    padding: const EdgeInsets.all(8),
+    itemCount: entries.length,
+    itemBuilder: (BuildContext context, int index) {
+    return Container(
+    height: 50,
+    color: Colors.amber[colorCodes[index]],
+    child: Center(child: Text('Entry ${entries[index]}')),
+    );})
 
-                    child: Text(appController.musclesInput.describe())
-                ))
-                    : const Text('Stream not initialized'),
-                SizedBox(height: 80,),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.grey, // foreground
-                  ),
-                  onPressed: () => Get.toNamed(BBRoute.welcome.path),
-                  child: const Text('back to the games !'),
-                )
-              ]),
-        )
+
+          // Column(
+          //     mainAxisAlignment: MainAxisAlignment.center,
+          //     crossAxisAlignment: CrossAxisAlignment.center,
+          //     children: [
+          //       const Text('Baah Box connexion'),
+          //       Row(
+          //         mainAxisAlignment: MainAxisAlignment.center,
+          //         children: [
+          //           // persistentFooterButtons: [
+          //           _scanStarted
+          //               ? ElevatedButton(
+          //             style: ElevatedButton.styleFrom(
+          //               foregroundColor: Colors.white,
+          //               backgroundColor: Colors.grey, // foreground
+          //             ),
+          //             onPressed: () {},
+          //             child: const Icon(Icons.search),
+          //           )
+          //               : ElevatedButton(
+          //             style: ElevatedButton.styleFrom(
+          //               backgroundColor: Colors.blue, // background
+          //               foregroundColor: Colors.white, // foreground
+          //             ),
+          //             onPressed: _startScan,
+          //             child: const Icon(Icons.search),
+          //           ),
+          //           _foundDeviceWaitingToConnect
+          //               ? ElevatedButton(
+          //             style: ElevatedButton.styleFrom(
+          //               foregroundColor: Colors.white,
+          //               backgroundColor: Colors.blue, // foreground
+          //             ),
+          //             onPressed: _connectToDevice,
+          //             child: const Icon(Icons.bluetooth),
+          //           )
+          //               : ElevatedButton(
+          //             style: ElevatedButton.styleFrom(
+          //               backgroundColor: Colors.grey, // background
+          //               foregroundColor: Colors.white, // foreground
+          //             ),
+          //             onPressed: () {},
+          //             child: const Icon(Icons.bluetooth),
+          //           ),
+          //           _connected
+          //               ? ElevatedButton(
+          //             onPressed: subscriptionStream != null
+          //                 ? null
+          //                 : () {
+          //               subscribeToStream();
+          //             },
+          //             child: const Text('subscribe'),
+          //           )
+          //               : ElevatedButton(
+          //             style: ElevatedButton.styleFrom(
+          //               foregroundColor: Colors.white,
+          //               backgroundColor: Colors.grey, // foreground
+          //             ),
+          //             onPressed: () {},
+          //             child: const Text('subscribe'),
+          //           ),
+          //           _connected
+          //               ? ElevatedButton(
+          //             style: ElevatedButton.styleFrom(
+          //               foregroundColor: Colors.white,
+          //               backgroundColor: Colors.blue, // foreground
+          //             ),
+          //             onPressed: () {
+          //               flutterReactiveBle.deinitialize();
+          //             }
+          //             // flutterReactiveBle.scannerState.scanIsInProgress
+          //             //    ? flutterReactiveBle.stopScan
+          //             //    : null;}
+          //             ,
+          //             child: const Text('disconnect'),
+          //           )
+          //               : ElevatedButton(
+          //             style: ElevatedButton.styleFrom(
+          //               foregroundColor: Colors.white,
+          //               backgroundColor: Colors.grey, // foreground
+          //             ),
+          //             onPressed: () {},
+          //             child: const Text('disconnect'),
+          //           ),
+          //         ],
+          //       ),
+          //       subscriptionStream != null
+          //           ?
+          //       Obx(() => Container(
+          //           width: 150,
+          //           height: (appController.musclesInput.muscle1).toDouble() / 5,
+          //           decoration: BoxDecoration(
+          //             color: Colors.blue,
+          //             border: Border.all(),
+          //           ),
+          //
+          //           child: Text(appController.musclesInput.describe())
+          //       ))
+          //           : const Text('Stream not initialized'),
+          //       SizedBox(height: 80,),
+          //       ElevatedButton(
+          //         style: ElevatedButton.styleFrom(
+          //           foregroundColor: Colors.white,
+          //           backgroundColor: Colors.grey, // foreground
+          //         ),
+          //         onPressed: () => Get.toNamed(BBRoute.welcome.path),
+          //         child: const Text('back to the games !'),
+          //       )
+          //     ]),
+        ),
     );
   }
 }
