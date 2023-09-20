@@ -26,4 +26,8 @@ class Controller extends GetxController {
   void setJoystickTo(JoystickInput ji) {
     _joystickInput.value = ji;
   }
+
+  void onClose() {
+    super.onClose();
+  }
 }
