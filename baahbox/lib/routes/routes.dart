@@ -6,6 +6,7 @@ import 'package:baahbox/games/testGamePage.dart';
 import 'package:baahbox/games/dino/dinoGamePage.dart';
 import 'package:baahbox/games/trex/trexGamePage.dart';
 import 'package:baahbox/services/bleConnectionPage.dart';
+import 'package:baahbox/services/connectionPage.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 
 enum BBRoute {
@@ -36,7 +37,7 @@ class BBRoutes {
   static List<GetPage> routes = [
     GetPage(page: () => const WelcomePage(), name: BBRoute.welcome.path),
     GetPage(page: () => const SettingsPage(), name: BBRoute.settings.path),
-    GetPage(page: () => const BleConnectionPage(), name: BBRoute.connection.path),
+    GetPage(page: () => const ConnectionPage(), name: BBRoute.connection.path),
     GetPage(page: () => BalloonGamePage(), name: BBRoute.balloon.path),
     GetPage(page: () => TestGamePage(), name: BBRoute.testSensors.path),
     GetPage(page: () => DinoGamePage(), name: BBRoute.dino.path),

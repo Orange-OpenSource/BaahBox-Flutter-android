@@ -1,3 +1,4 @@
+import 'package:baahbox/services/ble/getx_ble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'dart:async';
@@ -27,6 +28,7 @@ class _BleConnectionPageState extends State<BleConnectionPage> {
   late StreamSubscription<DiscoveredDevice> _scanStream;
   late QualifiedCharacteristic _rxCharacteristic;
   final Controller appController = Get.put(Controller());
+
    List<String> devices = <String>[];
 
 // These are the UUIDs of your device
@@ -134,8 +136,8 @@ class _BleConnectionPageState extends State<BleConnectionPage> {
     }
   }
 
-  final List<String> entries = <String>['A', 'B', 'C'];
-  final List<int> colorCodes = <int>[600, 500, 100];
+  //final List<String> entries = <String>['A', 'B', 'C'];
+  //final List<int> colorCodes = <int>[600, 500, 100];
 
   @override
   Widget build(BuildContext context) {
@@ -156,6 +158,20 @@ class _BleConnectionPageState extends State<BleConnectionPage> {
               print("stop scanning");
               Get.toNamed(BBRoute.welcome.path);
             }),
+        actions: [
+          Container(
+              width: 25,
+              child: Image.asset('assets/images/Dashboard/demo@2x.png',
+                  color: Colors.lightBlueAccent)),
+          SizedBox(
+            width: 15,
+          ),
+          IconButton(
+              icon: Image.asset(
+                  'assets/images/Dashboard/settings_icon@2x.png',
+                  color: Colors.lightBlueAccent),
+              onPressed: () => _startScan()),
+        ],
       ),
       backgroundColor: Colors.white,
       body: Column(

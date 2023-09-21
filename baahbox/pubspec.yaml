@@ -41,6 +41,7 @@ dependencies:
   flutter_reactive_ble: ^5.0.3
   location_permissions: ^4.0.0
   flame: ^1.8.0
+  meta:
 
 dev_dependencies:
   flutter_test:
