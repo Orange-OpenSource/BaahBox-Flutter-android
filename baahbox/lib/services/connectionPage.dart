@@ -50,6 +50,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
   void _disconnect() async {
     await _connection.cancel();
     _connected = false;
+    _logTexts = "";
     refreshScreen();
   }
 
@@ -289,7 +290,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
                   )
               ),
               height: 90,
-              child:  _connected ? Text(appController.musclesInput.describe().obs()) : const Text(""),
+              child:  _connected ? Obx(() => Text(appController.musclesInput.describe().obs())) : const Text(""),
           ),
               ],
       ),
