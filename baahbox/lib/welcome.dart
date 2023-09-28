@@ -4,6 +4,7 @@ import 'package:baahbox/controllers/appController.dart';
 import 'package:baahbox/routes/routes.dart';
 import 'package:baahbox/constants/enums.dart';
 import 'dart:ui';
+import 'package:baahbox/services/ble/getx_ble.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({Key? key}) : super(key: key);
@@ -12,6 +13,8 @@ class WelcomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final mainColor = BBColor.pinky.color;
     final Controller c = Get.put(Controller());
+    final GetxBle bleController = Get.put(GetxBle());
+
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
