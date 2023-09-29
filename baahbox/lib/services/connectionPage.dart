@@ -317,7 +317,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
               ),
             ],
           ),
-        ),
+        ), 
         persistentFooterButtons: [
           Container(
             height: 38,
