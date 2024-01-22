@@ -15,6 +15,7 @@ class BBGame extends FlameGame with PanDetector {
   String subTitle = "sous titre";
   String feedback = "encore un effort";
 
+  //Flame.device.fullScreen();
   Future<void> onLoad() async {
     await super.onLoad();
     overlays.clear();
