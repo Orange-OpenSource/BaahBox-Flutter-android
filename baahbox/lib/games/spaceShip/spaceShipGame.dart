@@ -125,7 +125,7 @@ class SpaceShipGame extends BBGame with TapCallbacks, PanDetector, HasCollisionD
       inputL = 0;
       inputR = 0;
       goLeft = true;
-      goRight = true;
+      goRight = true; 
     }
   }
 
