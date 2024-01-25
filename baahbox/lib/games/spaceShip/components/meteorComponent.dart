@@ -5,16 +5,16 @@ import 'package:baahbox/games/spaceShip/spaceShipGame.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/flame.dart';
 import 'dart:math';
-
+import 'package:flame/effects.dart';
 
 import 'package:flutter/cupertino.dart';
 
-class AsteroidComponent extends SpriteComponent
+class MeteorComponent extends SpriteComponent
     with HasGameRef<SpaceShipGame>, CollisionCallbacks {
   static const speed = 100;
   static final Vector2 initialSize = Vector2.all(100);
 
-  AsteroidComponent({required super.position})
+  MeteorComponent({required super.position})
       : super(anchor: Anchor.center);
 
   final meteor1Sprite = Sprite(Flame.images.fromCache('Jeux/Spaceship/meteor_01@3x.png'));
@@ -48,10 +48,17 @@ class AsteroidComponent extends SpriteComponent
       removeFromParent();
     }
   }
+  void disappear() {
+    this.add(
+        OpacityEffect.fadeOut(
+            EffectController(duration: 0.75)
+        ));
+    removeFromParent();
+  }
 
   void takeHit() {
-    removeFromParent();
-    this.add(ExplosionComponent(position: position));
+   // game.add(ExplosionComponent(position: position));
+    this.disappear();
     game.onCollision();
   }
 }

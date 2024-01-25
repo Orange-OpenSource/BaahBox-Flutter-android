@@ -18,6 +18,7 @@ class BalloonGame extends BBGame with TapCallbacks {
   var instructionTitle = 'Gonfle le ballon';
   var instructionSubtitle = 'en contractant ton muscle';
   var feedback = 'encore un petit effort!';
+
   @override
   Color backgroundColor() =>  BBGameList.balloon.baseColor.color;
 

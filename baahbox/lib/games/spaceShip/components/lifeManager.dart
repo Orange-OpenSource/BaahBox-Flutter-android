@@ -12,7 +12,7 @@ class LifeManager extends Component with HasGameRef<SpaceShipGame> {
 
   @override
   Future<void> onLoad() async {
-    _createLifes();
+    createLifes();
   }
 
   void _createLifeAt(double x, double y) {
@@ -21,10 +21,8 @@ class LifeManager extends Component with HasGameRef<SpaceShipGame> {
     game.add(life);
   }
 
-  void _createLifes() {
+  void createLifes() {
     const gapSize = 6;
-
-
     for (var i = 0; i < lifeNumber; i++) {
        var xpos = (50.0 + gapSize) * i;
       _createLifeAt(xpos + 10, game.size.y - 20);

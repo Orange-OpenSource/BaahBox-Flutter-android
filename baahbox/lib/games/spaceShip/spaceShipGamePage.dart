@@ -15,6 +15,12 @@ class SpaceShipGamePage extends StatelessWidget {
         body: Stack(children: [
           GameWidget(
             game: game,
+            overlayBuilderMap: const {
+              'PreGame': OverlayBuilder.preGame,
+              'Instructions': OverlayBuilder.instructions,
+              'FeedBack': OverlayBuilder.feedback,
+              'PostGame': OverlayBuilder.postGame,
+            },
             loadingBuilder: (_) => const Center(
               child: Text('Loading'),
             ),
