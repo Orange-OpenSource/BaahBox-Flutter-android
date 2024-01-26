@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:baahbox/games/spaceShip/components/meteorComponent.dart';
@@ -20,13 +22,35 @@ class ShipComponent extends SpriteComponent
   final leftShipSprite =
       Sprite(Flame.images.fromCache('Jeux/Spaceship/spaceship_left@3x.png'));
 
-
   void initialize() {
-    this.sprite = normalShipSprite;
+    sprite = normalShipSprite;
     size = normalShipSprite.srcSize / 10;
     position = Vector2(gameRef.size.x / 2,
-    (gameRef.size.y) / 2 + normalShipSprite.srcSize.y / 4);
-    this.anchor = Anchor.center;
+        (gameRef.size.y) / 2 + normalShipSprite.srcSize.y / 6);
+    anchor = Anchor.center;
+  }
+
+  void moveBy(double offset) {
+    var nextPositionX = position.x + offset;
+    if (((offset > 0) && ((nextPositionX + (size.x / 2)) <= game.size.x)) ||
+        ((offset < 0) && ((nextPositionX - (size.x / 2))) >= 0)) {
+      setSpriteTo(offset > 0 ? 1 : 2);
+      add(
+          MoveEffect.by(Vector2(offset, 0), EffectController(duration: .3)));
+    } else {
+      setSpriteTo(0);
+    }
+  }
+
+  void setSpriteTo(int spriteNb) {
+    switch (spriteNb) {
+      case 1:
+        sprite = leftShipSprite;
+      case 2:
+        sprite = rightShipSprite;
+      default:
+        sprite = normalShipSprite;
+    }
   }
 
   @override
@@ -38,6 +62,7 @@ class ShipComponent extends SpriteComponent
 
   void takeHit() {
     disappear();
+    game.add(ExplosionComponent(position: position));
   }
 
   @override
@@ -48,16 +73,23 @@ class ShipComponent extends SpriteComponent
     super.onCollisionStart(intersectionPoints, other);
     if (other is MeteorComponent) {
       other.takeHit();
-      // takeHit();
+      takeHit();
     }
     appear();
   }
 
   void disappear() {
-    this.add(OpacityEffect.fadeOut(EffectController(duration: 0.75)));
+    var effect = ColorEffect(
+      const Color(0xFF00FF00),
+      const Offset(0.0, 0.8),
+      EffectController(duration: .5),
+    );
+    add(effect);
+   add(effect.reset());
+        //OpacityEffect.fadeOut(EffectController(duration: 0.05)));
   }
 
   void appear() {
-    this.add(OpacityEffect.fadeIn(EffectController(duration: 0.2)));
+    add(OpacityEffect.to(1.0, EffectController(duration: 0.01))); //fadeIn(EffectController(duration: 0.01)));
   }
 }

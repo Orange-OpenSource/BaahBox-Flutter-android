@@ -7,8 +7,6 @@ import 'package:flame/flame.dart';
 import 'dart:math';
 import 'package:flame/effects.dart';
 
-import 'package:flutter/cupertino.dart';
-
 class MeteorComponent extends SpriteComponent
     with HasGameRef<SpaceShipGame>, CollisionCallbacks {
   static const speed = 100;
@@ -57,8 +55,7 @@ class MeteorComponent extends SpriteComponent
   }
 
   void takeHit() {
-   // game.add(ExplosionComponent(position: position));
-    this.disappear();
+    disappear();
     game.onCollision();
   }
 }

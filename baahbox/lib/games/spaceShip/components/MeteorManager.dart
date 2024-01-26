@@ -9,7 +9,7 @@ class MeteorCreator extends TimerComponent with HasGameRef {
   final Random random = Random();
   final meteor1Sprite = Sprite(Flame.images.fromCache('Jeux/Spaceship/meteor_01@3x.png'));
 
-  MeteorCreator() : super(period: 2, repeat: true);
+  MeteorCreator(): super(period: 2, repeat: true);
 
   @override
   void onTick() {

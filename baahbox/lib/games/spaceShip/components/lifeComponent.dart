@@ -18,7 +18,7 @@ class LifeComponent extends SpriteComponent
   Future<void> onLoad() async {
     super.onLoad();
     this.sprite = lifeSprite;
-    size = lifeSprite.srcSize /10;
+    size = lifeSprite.srcSize /15;
   }
 
   void disappear() {

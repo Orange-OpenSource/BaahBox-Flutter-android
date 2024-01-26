@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:baahbox/games/spaceShip/components/scoreManager.dart';
 import 'package:baahbox/games/spaceShip/components/shipComponent.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
@@ -17,13 +18,13 @@ import 'package:baahbox/games/spaceShip/components/star_background_creator.dart'
 import 'package:baahbox/games/spaceShip/components/lifeManager.dart';
 import 'package:flame/input.dart';
 
-class SpaceShipGame extends BBGame with TapCallbacks, PanDetector, HasCollisionDetection {
+class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
   final Controller appController = Get.find();
 
   late final ShipComponent ship;
-  late final TextComponent componentCounter;
   late final TextComponent scoreText;
   late final LifeManager lifeManager;
+  late final ScoreManager scoreManager;
 
   int score = 0;
   var panInput = 0;
@@ -49,27 +50,19 @@ class SpaceShipGame extends BBGame with TapCallbacks, PanDetector, HasCollisionD
     await add(MeteorCreator());
     await add(StarBackGroundCreator());
     await add(lifeManager = LifeManager());
+    await add(scoreManager = ScoreManager());
+
     super.onLoad();
   }
 
   void loadInfoComponents() {
     addAll([
-      FpsTextComponent(
-        position: size - Vector2(0,50),
-        anchor: Anchor.bottomRight,
-      ),
       scoreText = TextComponent(
-        position: size - Vector2(0, 25),
-        anchor: Anchor.bottomRight,
-        priority: 1,
-      ),
-      componentCounter = TextComponent(
         position: size,
         anchor: Anchor.bottomRight,
         priority: 1,
       ),
     ]);
-
   }
 
   Future<void> loadAssetsInCache() async {
@@ -88,44 +81,43 @@ class SpaceShipGame extends BBGame with TapCallbacks, PanDetector, HasCollisionD
     ]);
   }
 
-
 // Game play
   @override
   void update(double dt) {
     super.update(dt);
     if (state == GameState.running) {
       refreshInput();
-      transformInputInPosition();
+      transformInputInOffset();
+      scoreText.text = 'Score: $score';
     }
-    scoreText.text = 'Score: $score';
-    componentCounter.text = 'Components: ${children.length}';
   }
 
   void onCollision() {
-    lifeManager.looseOneLife();
-    increaseScore();
+    if (state == GameState.running) {
+      //    lifeManager.looseOneLife();
+    }
   }
 
   void increaseScore() {
-    score++;
+    if (state == GameState.running) {
+      score++;
+    }
   }
-
-
 
   // Box input
   void refreshInput() {
     // todo deal with 2 muscles or joystick input
+    inputL = 0;
+    inputR = 0;
+    goLeft = false;
+    goRight = false;
+
     if (appController.isConnectedToBox) {
       // The strength is in range [0...1024] -> Have it fit into [0...100]
-      inputL = (appController.musclesInput.muscle1/10).floor();
-      inputR = (appController.musclesInput.muscle2/10).floor();
-      goLeft = inputL > 50;
-      goRight = inputR > 50;
-    } else {
-      inputL = 0;
-      inputR = 0;
-      goLeft = true;
-      goRight = true; 
+      inputL = (appController.musclesInput.muscle1 ~/ 10);
+      inputR = (appController.musclesInput.muscle2 ~/ 10);
+      goLeft = (inputL > 10) && (inputL > inputR);
+      goRight = (inputR > 10) && (inputR > inputL);
     }
   }
 
@@ -140,47 +132,27 @@ class SpaceShipGame extends BBGame with TapCallbacks, PanDetector, HasCollisionD
     }
   }
 
-
   @override
   void endGame() {
-    // TODO: implement resetGame
     state = GameState.lost;
     pauseEngine();
     super.endGame();
   }
 
-
-
-  void transformInputInPosition() {
-      if (goLeft && goRight) { return; }
-      var offset = goRight ? 50 : -50;
-      var offsetD = offset.toDouble();
-      ship.add(MoveEffect.by(Vector2(offsetD, 0),
-            EffectController(duration: 0.3)));
+  void transformInputInOffset() {
+    if (!goLeft && !goRight) {
+      return;
+    }
+    var offset = goLeft ? 2.0 : -2.0;
+    ship.moveBy(offset);
   }
-
-
-
-
 
 // tap input (Demo mode)
   @override
   void onTapDown(TapDownEvent event) {
-    ship.add(
-        MoveEffect.to(Vector2(event.localPosition.x,ship.position.y),
-            EffectController(duration: 0.3)));
-  }
-
-  @override
-  void onPanUpdate(DragUpdateInfo info) {
-    if (appController.isConnectedToBox || state != GameState.running) {
-      panInput = 0;
-    } else {
-      ship.position += info.delta.global;
-      var yPos = info.eventPosition.global.y;
-      panInput = ((canvasSize.y - yPos) * 1024.0 / canvasSize.y).toInt();
-      print(
-          "panInput : ${panInput} :::  panY : ${yPos} vs game ${canvasSize.y}");
+    if (state == GameState.running) {
+      ship.add(MoveEffect.to(Vector2(event.localPosition.x, ship.position.y),
+          EffectController(duration: 0.3)));
     }
   }
 }
