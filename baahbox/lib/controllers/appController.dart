@@ -77,27 +77,33 @@ void onResumed() {
   print('HomeController - onResumed called');
   _isActive.value = true;
 }
+// Mandatory
+  @override
+  void onHidden() {
+    print('HomeController - onHidden called');
+    _isActive.value = false;
+  }
 
 // @override
 //   void didChangeAppLifecycleState(AppLifecycleState state) {
 //     switch (state) {
 //       case AppLifecycleState.resumed:
-//         log("App Resumed");
-//         instantSubmit();
+//         print("App Resumed");
+//        // instantSubmit();
 //         break;
 //       case AppLifecycleState.inactive:
-//         log("App InActive");
+//         print("App InActive");
 //         break;
 //       case AppLifecycleState.paused:
-//         log("App Paused");
+//         print("App Paused");
 //         break;
 //       case AppLifecycleState.detached:
-//         log("App Detached");
+//         print("App Detached");
 //         break;
-//       case AppLifecycleState.hidden:
-//       // TODO: Handle this case.
-//         log("Hidden");
-//         break;
+//      // case AppLifecycleState.hidden:
+//      // // TODO: Handle this case.
+//       //  print("Hidden");
+//       //  break;
 //     }
 //   }
 

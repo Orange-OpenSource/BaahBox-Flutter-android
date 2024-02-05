@@ -44,7 +44,6 @@ class ObstacleComponent extends SpriteComponent
     return (x+size.x/2 > game.size.x);
   }
   void disappear() {
-    //game.add(ExplosionComponent(position: position));
     this.add(
         OpacityEffect.fadeOut(
             EffectController(duration: 0.75)

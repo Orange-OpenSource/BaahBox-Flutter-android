@@ -6,13 +6,12 @@ import 'package:flame/effects.dart';
 import 'package:flame/geometry.dart';
 import 'package:baahbox/games/spaceShip/components/meteorComponent.dart';
 
-
-class MeteorCreator extends TimerComponent with HasGameRef<SpaceShipGame> {
+class MeteorManager extends TimerComponent with HasGameRef<SpaceShipGame> {
   final Random random = Random();
   final meteor1Sprite =
       Sprite(Flame.images.fromCache('Jeux/Spaceship/meteor_01@3x.png'));
 
-  MeteorCreator() : super(period: 2, repeat: true);
+  MeteorManager() : super(period: 2, repeat: true);
 
   @override
   void onTick() {
@@ -30,6 +29,14 @@ class MeteorCreator extends TimerComponent with HasGameRef<SpaceShipGame> {
               tau, EffectController(duration: 40, infinite: true))),
         ),
       );
+    }
+  }
+
+  void clearTheSky() {
+    for (var child in game.children) {
+      if (child is MeteorComponent) {
+        child.removeFromParent();
+      }
     }
   }
 }
