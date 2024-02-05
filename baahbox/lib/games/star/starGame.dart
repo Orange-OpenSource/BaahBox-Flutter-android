@@ -30,8 +30,8 @@ class StarGame extends BBGame with TapCallbacks {
 
     await super.onLoad();
     await Flame.images.loadAll(<String>[
-      'jeu_etoile_01@2x.png',
-      'jeu_etoile_02@2x.png',
+      'Jeux/Star/jeu_etoile_01@2x.png',
+      'Jeux/Star/jeu_etoile_02@2x.png',
     ]);
     _star = StarSprite();
    await add(_star);

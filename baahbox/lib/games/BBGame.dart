@@ -15,6 +15,7 @@ class BBGame extends FlameGame with PanDetector {
   String subTitle = "sous titre";
   String feedback = "encore un effort";
 
+  //Flame.device.fullScreen();
   Future<void> onLoad() async {
     await super.onLoad();
     overlays.clear();
@@ -26,6 +27,9 @@ class BBGame extends FlameGame with PanDetector {
   void startGame() {
     if (overlays.isActive('PreGame')) {
       overlays.remove('PreGame');
+    }
+    if (overlays.isActive('Instructions')) {
+      overlays.remove('Instructions');
     }
     state = GameState.running;
   }
@@ -41,7 +45,7 @@ class BBGame extends FlameGame with PanDetector {
 
   void resetGame() {
     overlays.clear();
-    overlays.add('Instructions');
+    //overlays.add('Instructions');
     state = GameState.running;
   }
 }
