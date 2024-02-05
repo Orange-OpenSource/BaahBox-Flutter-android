@@ -12,7 +12,7 @@ class StarComponent extends SpriteAnimationComponent
   void update(double dt) {
     super.update(dt);
 
-    if (game.appController.isActive) {
+    if (gameRef.appController.isActive) {
       y += dt * speed;
       if (y >= game.size.y) {
         removeFromParent();

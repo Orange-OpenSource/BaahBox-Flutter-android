@@ -13,27 +13,30 @@ class MeteorManager extends TimerComponent with HasGameRef<SpaceShipGame> {
 
   MeteorManager() : super(period: 2, repeat: true);
 
+
   @override
   void onTick() {
-    if (game.appController.isActive) {
+     if (gameRef.appController.isActive) {
       final _halfWidth = meteor1Sprite.originalSize.x / 10;
       game.addAll(
         List.generate(
           1,
-          (index) => MeteorComponent(
+              (index) =>
+          MeteorComponent(
             position: Vector2(
               _halfWidth + (game.size.x - _halfWidth) * random.nextDouble(),
               0,
             ),
-          )..add(RotateEffect.by(
-              tau, EffectController(duration: 40, infinite: true))),
+          )
+            ..add(RotateEffect.by(
+                tau, EffectController(duration: 40, infinite: true))),
         ),
       );
-    }
+     }
   }
 
   void clearTheSky() {
-    for (var child in game.children) {
+    for (var child in gameRef.children) {
       if (child is MeteorComponent) {
         child.removeFromParent();
       }

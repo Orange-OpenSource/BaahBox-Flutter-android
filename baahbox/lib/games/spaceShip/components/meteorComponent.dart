@@ -6,11 +6,17 @@ import 'package:flame/experimental.dart';
 import 'package:flame/flame.dart';
 import 'dart:math';
 import 'package:flame/effects.dart';
+import 'package:baahbox/controllers/appController.dart';
+import 'package:get/get.dart';
+
+import '../../../constants/enums.dart';
+
 
 class MeteorComponent extends SpriteComponent
     with HasGameRef<SpaceShipGame>, CollisionCallbacks {
   static const speed = 100;
   static final Vector2 initialSize = Vector2.all(100);
+  final Controller appController = Get.find();
 
   MeteorComponent({required super.position}) : super(anchor: Anchor.center);
 
@@ -32,15 +38,13 @@ class MeteorComponent extends SpriteComponent
   @override
   void update(double dt) {
     super.update(dt);
-    if (game.appController.isActive) {
       y += speed * dt;
-      if (isVisible()) {
+      if (isNotVisible() || !gameRef.appController.isActive || gameRef.state == GameState.lost ) {
         removeFromParent();
       }
-    }
   }
 
-  bool isVisible() {
+  bool isNotVisible() {
     return (y >= game.size.y);
   }
 
@@ -52,6 +56,5 @@ class MeteorComponent extends SpriteComponent
 
   void takeHit() {
     disappear();
-    game.onCollision();
   }
 }

@@ -68,7 +68,6 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
     ]);
   }
 
-
   Future<void> loadAssetsInCache() async {
     await Flame.images.loadAll(<String>[
       'Jeux/Spaceship/spaceship_left@3x.png',
@@ -98,14 +97,14 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
     }
   }
 
-  void onCollision() {
+  void looseLife() {
     if (state == GameState.running) {
       lifeManager.looseOneLife();
     }
   }
 
   void increaseScore() {
-    if (state == GameState.running && appController.isActive) {
+    if ((state == GameState.running) && (appController.isActive)) {
       score++;
     }
   }
@@ -129,10 +128,10 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
 
 // Game State management
   @override
-  void resetGame() {
+  void resetGame() async {
     super.resetGame();
-    meteorManager.clearTheSky();
     score = 0;
+    meteorManager.clearTheSky();
     ship.initialize();
     lifeManager.createLifes();
     if (paused) {
@@ -143,7 +142,6 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
   @override
   void endGame() {
     state = GameState.lost;
-    pauseEngine();
     super.endGame();
   }
 

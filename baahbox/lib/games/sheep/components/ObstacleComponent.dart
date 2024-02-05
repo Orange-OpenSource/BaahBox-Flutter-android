@@ -54,6 +54,5 @@ class ObstacleComponent extends SpriteComponent
 
   void takeHit() {
     disappear();
-   // game.onCollision();
   }
 }
