@@ -31,6 +31,7 @@ class BBGame extends FlameGame with PanDetector {
     if (overlays.isActive('Instructions')) {
       overlays.remove('Instructions');
     }
+    appController.setActivationStateTo(true);
     state = GameState.running;
   }
 
@@ -45,7 +46,7 @@ class BBGame extends FlameGame with PanDetector {
 
   void resetGame() {
     overlays.clear();
-    //overlays.add('Instructions');
+    overlays.add('Instructions');
     state = GameState.running;
   }
 }

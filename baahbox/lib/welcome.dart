@@ -6,7 +6,7 @@ import 'package:baahbox/constants/enums.dart';
 import 'dart:ui';
 import 'package:baahbox/services/ble/getx_ble.dart';
 
-class WelcomePage extends StatelessWidget {
+class WelcomePage extends StatelessWidget  with WidgetsBindingObserver {
   const WelcomePage({Key? key}) : super(key: key);
 
   @override
@@ -14,6 +14,7 @@ class WelcomePage extends StatelessWidget {
     final mainColor = BBColor.pinky.color;
     final Controller c = Get.put(Controller());
     final GetxBle bleController = Get.put(GetxBle());
+
 
     return Scaffold(
         appBar: AppBar(

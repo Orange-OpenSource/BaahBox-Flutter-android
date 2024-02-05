@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:baahbox/games/spaceShip/components/meteorComponent.dart';
-import 'package:baahbox/games/spaceShip/components/explosion_component.dart';
+import 'package:baahbox/games/spaceShip/components/explosionComponent.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/effects.dart';
 
