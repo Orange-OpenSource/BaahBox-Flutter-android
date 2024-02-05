@@ -18,7 +18,7 @@ class OverlayBuilder {
 
   static Widget postGame(BuildContext context, BBGame game) {
     assert(game.state == GameState.won || game.state == GameState.lost);
-    final message = 'Bravo !';
+    final message = game.state == GameState.won ? 'Bravo !' : 'Perdu !';
     return PostGameOverlay(message: message, game: game);
   }
 }
@@ -40,7 +40,7 @@ class PreGameOverlay extends StatelessWidget {
         children: [
           Spacer(),
           _startButton(context, game),
-          const SizedBox(height: 20),
+          const SizedBox(height: 35),
         ],
       ),
     );
@@ -77,7 +77,7 @@ class InstructionsOverlay extends StatelessWidget {
             game.title,
             style: const TextStyle(
               color: Colors.white,
-              fontSize: 32,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -85,7 +85,7 @@ class InstructionsOverlay extends StatelessWidget {
             game.subTitle,
             style: const TextStyle(
               color: Colors.white,
-              fontSize: 28,
+              fontSize: 17,
             ),
           ),
           const SizedBox(height: 90),

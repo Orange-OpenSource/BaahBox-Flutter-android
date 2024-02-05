@@ -8,9 +8,9 @@ class StarSprite extends SpriteComponent with HasGameRef<StarGame> {
   final Controller appController = Get.find();
   StarSprite() : super(size: Vector2.all(16.0), anchor: Anchor.center);
 
-  final starSprite = Sprite(Flame.images.fromCache('jeu_etoile_01@2x.png'));
+  final starSprite = Sprite(Flame.images.fromCache('Jeux/Star/jeu_etoile_01@2x.png'));
   final shiningStarSprite =
-      Sprite(Flame.images.fromCache('jeu_etoile_02@2x.png'));
+      Sprite(Flame.images.fromCache('Jeux/Star/jeu_etoile_02@2x.png'));
 
   @override
   Future<void> onLoad() async {

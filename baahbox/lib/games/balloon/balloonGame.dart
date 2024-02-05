@@ -7,17 +7,18 @@ import 'package:baahbox/controllers/appController.dart';
 import 'package:get/get.dart';
 import 'package:baahbox/constants/enums.dart';
 import 'package:baahbox/games/BBGame.dart';
-import 'balloonSprite.dart';
+import 'balloonComponent.dart';
 
 class BalloonGame extends BBGame with TapCallbacks {
   final Controller appController = Get.find();
-  late BalloonSprite _balloon;
+  late BalloonComponent _balloon;
 
   var panInput = 0;
   var input = 0;
   var instructionTitle = 'Gonfle le ballon';
   var instructionSubtitle = 'en contractant ton muscle';
   var feedback = 'encore un petit effort!';
+
   @override
   Color backgroundColor() =>  BBGameList.balloon.baseColor.color;
 
@@ -27,13 +28,13 @@ class BalloonGame extends BBGame with TapCallbacks {
     subTitle = instructionSubtitle;
     super.onLoad();
     await Flame.images.loadAll(<String>[
-      'ballon_00@2x.png',
-      'ballon_01@2x.png',
-      'ballon_02@2x.png',
-      'ballon_03@2x.png',
-      'ballon_04@2x.png',
+      'Jeux/Balloon/ballon_00@2x.png',
+      'Jeux/Balloon/ballon_01@2x.png',
+      'Jeux/Balloon/ballon_02@2x.png',
+      'Jeux/Balloon/ballon_03@2x.png',
+      'Jeux/Balloon/ballon_04@2x.png',
     ]);
-    _balloon = BalloonSprite();
+    _balloon = BalloonComponent();
     await add(_balloon);
   }
 
