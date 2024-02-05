@@ -1,12 +1,11 @@
 import 'dart:math';
-
+import 'package:baahbox/games/spaceShip/spaceShipGame.dart';
 import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
-import 'package:baahbox/games/spaceShip/components/star_component.dart';
+import 'package:baahbox/games/spaceShip/components/starComponent.dart';
 
-class StarBackGroundCreator extends Component with HasGameRef {
+class StarBackGroundCreator extends Component with HasGameRef<SpaceShipGame> {
   final gapSize = 12;
-
   late final SpriteSheet spriteSheet;
   Random random = Random();
 
@@ -19,9 +18,7 @@ class StarBackGroundCreator extends Component with HasGameRef {
       rows: 4,
       columns: 4,
     );
-
     final starGapTime = (game.size.y / gapSize) / StarComponent.speed;
-
     add(
       TimerComponent(
         period: starGapTime,
@@ -46,12 +43,13 @@ class StarBackGroundCreator extends Component with HasGameRef {
   void _createRowOfStars(double y) {
     const gapSize = 6;
     final starGap = game.size.x / gapSize;
-
-    for (var i = 0; i < gapSize; i++) {
-      _createStarAt(
-        starGap * i + (random.nextDouble() * starGap),
-        y + (random.nextDouble() * 20),
-      );
+    if (game.appController.isActive) {
+      for (var i = 0; i < gapSize; i++) {
+        _createStarAt(
+          starGap * i + (random.nextDouble() * starGap),
+          y + (random.nextDouble() * 20),
+        );
+      }
     }
   }
 

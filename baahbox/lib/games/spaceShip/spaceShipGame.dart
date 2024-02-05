@@ -13,8 +13,8 @@ import 'package:baahbox/constants/enums.dart';
 import 'package:baahbox/games/BBGame.dart';
 
 import 'package:flame/components.dart';
-import 'package:baahbox/games/spaceShip/components/MeteorManager.dart';
-import 'package:baahbox/games/spaceShip/components/star_background_creator.dart';
+import 'package:baahbox/games/spaceShip/components/MeteorCreator.dart';
+import 'package:baahbox/games/spaceShip/components/starBackgroundCreator.dart';
 import 'package:baahbox/games/spaceShip/components/lifeManager.dart';
 import 'package:flame/input.dart';
 
@@ -77,7 +77,7 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
       'Jeux/Spaceship/meteor_05@3x.png',
       'Jeux/Spaceship/meteor_06@3x.png',
       'Jeux/Spaceship/space_life@3x.png',
-      'Jeux/Spaceship/crash@3x.png',
+      'Jeux/Spaceship/crash.png',
     ]);
   }
 
@@ -85,10 +85,12 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
   @override
   void update(double dt) {
     super.update(dt);
-    if (state == GameState.running) {
-      refreshInput();
-      transformInputInOffset();
-      scoreText.text = 'Score: $score';
+    if (appController.isActive) {
+      if (state == GameState.running) {
+        refreshInput();
+        transformInputInOffset();
+        scoreText.text = 'Score: $score';
+      }
     }
   }
 
@@ -99,7 +101,7 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
   }
 
   void increaseScore() {
-    if (state == GameState.running) {
+    if (state == GameState.running && appController.isActive) {
       score++;
     }
   }

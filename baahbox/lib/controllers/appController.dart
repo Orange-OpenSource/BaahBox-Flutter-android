@@ -1,33 +1,104 @@
+import 'dart:ui';
+
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'dart:async';
 import 'dart:io' show Platform;
 import '../model/sensorInput.dart';
 import 'package:get/get.dart';
 
-class Controller extends GetxController {
-  static Controller get to => Get.find();
+class Controller extends FullLifeCycleController with FullLifeCycleMixin {
 
-  var _musclesInput = MusclesInput(0, 0).obs;
-  var _joystickInput = JoystickInput(0).obs;
-  var _isConnectedToBox = false.obs;
+static Controller get to => Get.find();
 
-  MusclesInput get musclesInput => _musclesInput.value;
-  JoystickInput get joystickInput => _joystickInput.value;
-  bool get isConnectedToBox => _isConnectedToBox.value;
+var _musclesInput = MusclesInput(0, 0).obs;
+var _joystickInput = JoystickInput(0).obs;
+var _isConnectedToBox = false.obs;
 
-  void setConnectionStateTo(bool isConnected) {
-    _isConnectedToBox.value = isConnected;
-  }
+var _isActive = false.obs;
 
-  void setMusclesTo(MusclesInput mi) {
-    _musclesInput.value = mi;
-  }
+MusclesInput get musclesInput => _musclesInput.value;
+JoystickInput get joystickInput => _joystickInput.value;
+bool get isConnectedToBox => _isConnectedToBox.value;
+bool get isActive => _isActive.value;
 
-  void setJoystickTo(JoystickInput ji) {
-    _joystickInput.value = ji;
-  }
 
-  void onClose() {
-    super.onClose();
-  }
+void setConnectionStateTo(bool isConnected) {
+  _isConnectedToBox.value = isConnected;
+}
+
+void setActivationStateTo(bool isActive) {
+  _isActive.value = isActive;
+}
+
+void setMusclesTo(MusclesInput mi) {
+  _musclesInput.value = mi;
+}
+
+void setJoystickTo(JoystickInput ji) {
+  _joystickInput.value = ji;
+}
+
+void onClose() {
+  super.onClose();
+}
+
+
+@override
+void onInit() {
+  super.onInit();
+  _isActive.value = true;
+}
+
+// Mandatory
+@override
+void onDetached() {
+  print('HomeController - onDetached called');
+  _isActive.value = false;
+}
+
+// Mandatory
+@override
+void onInactive() {
+  print('HomeController - onInative called');
+  _isActive.value = false;
+
+}
+
+// Mandatory
+@override
+void onPaused() {
+  print('HomeController - onPaused called');
+  _isActive.value = false;
+}
+
+// Mandatory
+@override
+void onResumed() {
+  print('HomeController - onResumed called');
+  _isActive.value = true;
+}
+
+// @override
+//   void didChangeAppLifecycleState(AppLifecycleState state) {
+//     switch (state) {
+//       case AppLifecycleState.resumed:
+//         log("App Resumed");
+//         instantSubmit();
+//         break;
+//       case AppLifecycleState.inactive:
+//         log("App InActive");
+//         break;
+//       case AppLifecycleState.paused:
+//         log("App Paused");
+//         break;
+//       case AppLifecycleState.detached:
+//         log("App Detached");
+//         break;
+//       case AppLifecycleState.hidden:
+//       // TODO: Handle this case.
+//         log("Hidden");
+//         break;
+//     }
+//   }
+
 }
