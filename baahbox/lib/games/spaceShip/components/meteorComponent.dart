@@ -47,6 +47,7 @@ class MeteorComponent extends SpriteComponent
     }
   }
   void disappear() {
+    game.add(ExplosionComponent(position: position));
     this.add(
         OpacityEffect.fadeOut(
             EffectController(duration: 0.75)

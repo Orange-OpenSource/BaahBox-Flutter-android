@@ -94,7 +94,7 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
 
   void onCollision() {
     if (state == GameState.running) {
-      //    lifeManager.looseOneLife();
+          lifeManager.looseOneLife();
     }
   }
 

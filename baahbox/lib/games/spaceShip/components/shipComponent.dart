@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flame/collisions.dart';
@@ -35,8 +36,7 @@ class ShipComponent extends SpriteComponent
     if (((offset > 0) && ((nextPositionX + (size.x / 2)) <= game.size.x)) ||
         ((offset < 0) && ((nextPositionX - (size.x / 2))) >= 0)) {
       setSpriteTo(offset > 0 ? 1 : 2);
-      add(
-          MoveEffect.by(Vector2(offset, 0), EffectController(duration: .3)));
+      add(MoveEffect.by(Vector2(offset, 0), EffectController(duration: .3)));
     } else {
       setSpriteTo(0);
     }
@@ -61,10 +61,15 @@ class ShipComponent extends SpriteComponent
   }
 
   void takeHit() {
-    disappear();
-    game.add(ExplosionComponent(position: position));
+    blink();
   }
 
+  void blink() {
+    add(OpacityEffect.to(
+        0,
+        EffectController(
+            duration: 0.5, reverseDuration: 1))); //fadeIn(EffectController(duration: 0.01)));
+  }
   @override
   void onCollisionStart(
     Set<Vector2> intersectionPoints,
@@ -75,21 +80,7 @@ class ShipComponent extends SpriteComponent
       other.takeHit();
       takeHit();
     }
-    appear();
   }
 
-  void disappear() {
-    var effect = ColorEffect(
-      const Color(0xFF00FF00),
-      const Offset(0.0, 0.8),
-      EffectController(duration: .5),
-    );
-    add(effect);
-   add(effect.reset());
-        //OpacityEffect.fadeOut(EffectController(duration: 0.05)));
-  }
 
-  void appear() {
-    add(OpacityEffect.to(1.0, EffectController(duration: 0.01))); //fadeIn(EffectController(duration: 0.01)));
-  }
 }
