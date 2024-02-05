@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:get/get.dart';
 import 'package:flame/game.dart';
 import 'package:baahbox/constants/enums.dart';
@@ -31,7 +33,7 @@ class BBGame extends FlameGame with PanDetector {
     if (overlays.isActive('Instructions')) {
       overlays.remove('Instructions');
     }
-    appController.setActivationStateTo(true);
+   // appController.setActivationStateTo(true);
     state = GameState.running;
   }
 
@@ -45,8 +47,10 @@ class BBGame extends FlameGame with PanDetector {
   }
 
   void resetGame() {
+    const duration = Duration(milliseconds: 300);
     overlays.clear();
     overlays.add('Instructions');
-    state = GameState.running;
+    sleep(duration);
+    startGame();
   }
 }

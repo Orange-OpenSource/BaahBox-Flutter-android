@@ -11,9 +11,8 @@ import 'package:baahbox/controllers/appController.dart';
 import 'package:get/get.dart';
 import 'package:baahbox/constants/enums.dart';
 import 'package:baahbox/games/BBGame.dart';
-
 import 'package:flame/components.dart';
-import 'package:baahbox/games/spaceShip/components/MeteorCreator.dart';
+import 'package:baahbox/games/spaceShip/components/MeteorManager.dart';
 import 'package:baahbox/games/spaceShip/components/starBackgroundCreator.dart';
 import 'package:baahbox/games/spaceShip/components/lifeManager.dart';
 import 'package:flame/input.dart';
@@ -25,6 +24,8 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
   late final TextComponent scoreText;
   late final LifeManager lifeManager;
   late final ScoreManager scoreManager;
+  late final MeteorManager meteorManager;
+  late final StarBackGroundCreator backgroundManager;
 
   int score = 0;
   var panInput = 0;
@@ -44,15 +45,17 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
     title = instructionTitle;
     subTitle = instructionSubtitle;
     await loadAssetsInCache();
-
     loadInfoComponents();
+    loadComponents();
+    super.onLoad();
+  }
+
+  void loadComponents() async {
     await add(ship = ShipComponent());
-    await add(MeteorCreator());
-    await add(StarBackGroundCreator());
     await add(lifeManager = LifeManager());
     await add(scoreManager = ScoreManager());
-
-    super.onLoad();
+    await add(meteorManager = MeteorManager());
+    await add(backgroundManager = StarBackGroundCreator());
   }
 
   void loadInfoComponents() {
@@ -64,6 +67,7 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
       ),
     ]);
   }
+
 
   Future<void> loadAssetsInCache() async {
     await Flame.images.loadAll(<String>[
@@ -96,7 +100,7 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
 
   void onCollision() {
     if (state == GameState.running) {
-          lifeManager.looseOneLife();
+      lifeManager.looseOneLife();
     }
   }
 
@@ -127,6 +131,8 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
   @override
   void resetGame() {
     super.resetGame();
+    meteorManager.clearTheSky();
+    score = 0;
     ship.initialize();
     lifeManager.createLifes();
     if (paused) {
