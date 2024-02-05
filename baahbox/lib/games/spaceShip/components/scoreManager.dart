@@ -8,6 +8,7 @@ class ScoreManager extends TimerComponent with HasGameRef<SpaceShipGame> {
 
   @override
   void onTick() {
+
     game.increaseScore();
   }
 }

@@ -30,7 +30,7 @@ class LifeManager extends Component with HasGameRef<SpaceShipGame> {
   }
 
   void looseOneLife() {
-    if (lifeArray.length > 0) {
+    if (lifeArray.length > 1) {
       lifeArray.last.disappear();
       lifeArray.removeLast();
     } else {
