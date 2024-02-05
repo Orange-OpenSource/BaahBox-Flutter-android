@@ -1,4 +1,7 @@
+import 'dart:math';
 import 'dart:ui';
+import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/services.dart';
@@ -7,15 +10,25 @@ import 'package:baahbox/controllers/appController.dart';
 import 'package:get/get.dart';
 import 'package:baahbox/constants/enums.dart';
 import 'package:baahbox/games/BBGame.dart';
-//import 'sheepComponent.dart';
+import 'package:baahbox/games/sheep/components/sheepComponent.dart';
+import 'package:baahbox/games/sheep/components/gateComponent.dart';
+import 'package:baahbox/games/sheep/components/floorComponent.dart';
+import 'package:baahbox/games/sheep/components/bimComponent.dart';
+import 'package:baahbox/games/sheep/components/statusSheepComponent.dart';
 
-class SheepGame extends BBGame with TapCallbacks {
+class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
   final Controller appController = Get.find();
 
-  //late SheepComponent _sheep;
+  late final SheepComponent sheep;
+  late final GateComponent gate;
+  late final FloorComponent floor;
+  late final BimComponent collision;
 
+  int score = 0;
   var panInput = 0;
+
   var input = 0;
+  double floorY = 0;
   var instructionTitle = 'Saute les barrières';
   var instructionSubtitle = 'en contractant ton muscle';
 
@@ -26,10 +39,10 @@ class SheepGame extends BBGame with TapCallbacks {
   Future<void> onLoad() async {
     title = instructionTitle;
     subTitle = instructionSubtitle;
+    floorY = (size.y * 0.7);
     super.onLoad();
     loadAssetsInCache();
-    //_balloon = BalloonComponent();
-    // await add(_balloon);
+    loadComponents();
   }
 
   Future<void> loadAssetsInCache() async {
@@ -37,7 +50,7 @@ class SheepGame extends BBGame with TapCallbacks {
       'Jeux/Sheep/bang.png',
       'Jeux/Sheep/bim.png',
       'Jeux/Sheep/gate.png',
-      'Jeux/Sheep/ground.png',
+      'Jeux/Sheep/floor.png',
       'Jeux/Sheep/sheep_01.png',
       'Jeux/Sheep/sheep_02.png',
       'Jeux/Sheep/sheep_03.png',
@@ -47,12 +60,18 @@ class SheepGame extends BBGame with TapCallbacks {
     ]);
   }
 
+  void loadComponents() async {
+    await add(sheep = SheepComponent(position: Vector2(size.x / 3, floorY)));
+    await add(gate = GateComponent(position: Vector2(size.x, floorY)));
+    await add(floor = FloorComponent(position: Vector2(size.x / 2, floorY)));
+    //await add(statusSheep = StatusSheepComponent());
+  }
+
   @override
   void update(double dt) {
     super.update(dt);
     if (state == GameState.running) {
       refreshInput();
-      updateOverlaysAndState();
     }
   }
 
@@ -60,35 +79,19 @@ class SheepGame extends BBGame with TapCallbacks {
     // todo deal with 2 muscles or joystick input
     if (appController.isConnectedToBox) {
       // The strength is in range [0...1024] -> Have it fit into [0...100]
-      input = appController.musclesInput.muscle1;
+      input = (appController.musclesInput.muscle1 ~/ 10);
     } else {
       input = panInput;
     }
   }
 
-
-  void updateOverlaysAndState() {
-    int coeff = (input / 100).toInt();
-    if (input < 300) {
-      title = instructionTitle;
-      subTitle = instructionSubtitle;
-    } else if (input < 800) {
-      title = feedback;
-      subTitle = '';
-      refreshWidget();
-    } else {
-      title = "Bravo";
-      subTitle = '';
-      endGame();
-    }
-  }
-
-
   @override
   void resetGame() {
     // TODO: implement resetGame
     super.resetGame();
-    // _balloon.initialize();
+    sheep.initialize();
+    gate.initialize();
+
   }
 
   @override
@@ -98,23 +101,15 @@ class SheepGame extends BBGame with TapCallbacks {
     super.endGame();
   }
 
-
   @override
   void onPanUpdate(DragUpdateInfo info) {
     if (appController.isConnectedToBox || state != GameState.running) {
       panInput = 0;
     } else {
       var yPos = info.eventPosition.global.y;
-      panInput = ((canvasSize.y - yPos) * 1024.0 / canvasSize.y).toInt();
-      print(
-          "panInput : ${panInput} :::  panY : ${yPos} vs game ${canvasSize.y}");
+      var nextY = min(yPos, floorY);
+      sheep.moveTo(nextY);
     }
-  }
-
-  @override
-  void onTapDown(TapDownEvent event) {
-    super.onTapDown(event);
-    print("state : $state ");
   }
 
 }

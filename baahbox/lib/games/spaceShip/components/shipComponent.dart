@@ -1,14 +1,9 @@
-import 'dart:io';
-import 'dart:ui';
-
-import 'package:baahbox/games/spaceShip/spaceShipGame.dart';
+import 'package:flame/flame.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:baahbox/games/spaceShip/components/meteorComponent.dart';
-import 'package:baahbox/games/spaceShip/components/explosionComponent.dart';
-import 'package:flame/flame.dart';
-import 'package:flame/effects.dart';
-import 'package:baahbox/constants/enums.dart';
+import 'package:baahbox/games/spaceShip/spaceShipGame.dart';
 
 class ShipComponent extends SpriteComponent
     with HasGameRef<SpaceShipGame>, CollisionCallbacks {
