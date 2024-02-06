@@ -1,14 +1,10 @@
 import 'dart:math';
-import 'dart:ui';
-
-import 'package:baahbox/games/sheep/components/bimComponent.dart';
 import 'package:flame/flame.dart';
-import 'package:flame/effects.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:baahbox/games/sheep/components/gateComponent.dart';
 import 'package:baahbox/games/sheep/sheepGame.dart';
-import '../../../constants/enums.dart';
+import 'package:baahbox/games/sheep/components/bimComponent.dart';
 
 class SheepComponent extends SpriteComponent //AnimationComponent
     with
@@ -35,14 +31,12 @@ class SheepComponent extends SpriteComponent //AnimationComponent
     super.onLoad();
     initialize();
     add(RectangleHitbox());
-    //animation = await getAnimation();
   }
 
   void initialize() {
     this.sprite = walkingSprite1;
     size = walkingSprite1.srcSize / 10;
     show();
-    // animation = getAnimation();
   }
 
   void hide() {
@@ -54,7 +48,7 @@ class SheepComponent extends SpriteComponent //AnimationComponent
   @override
   void update(double dt) {
     super.update(dt);
-    if (gameRef.state == GameState.running) {
+    if (gameRef.isRunning) {
       checkCostume();
     }
     goDown();

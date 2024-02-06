@@ -1,11 +1,9 @@
-import 'dart:math';
-
 import 'package:flame/components.dart';
-import 'package:baahbox/games/sheep/sheepGame.dart';
 import 'package:flame/flame.dart';
-import 'package:baahbox/constants/enums.dart';
+import 'package:baahbox/games/sheep/sheepGame.dart';
 
-class HappySheepComponent extends SpriteAnimationComponent with HasGameRef<SheepGame> {
+class HappySheepComponent extends SpriteAnimationComponent
+    with HasGameRef<SheepGame> {
   final happySprite1 =
       Sprite(Flame.images.fromCache('Jeux/Sheep/happy_sheep_01.png'));
   final happySprite2 =
@@ -17,17 +15,27 @@ class HappySheepComponent extends SpriteAnimationComponent with HasGameRef<Sheep
   @override
   Future<void> onLoad() async {
     setAlpha(0);
-    final sprites = [happySprite2, happySprite1, happySprite1, happySprite1, happySprite1].toList();
-     animation = SpriteAnimation.spriteList(sprites, stepTime: 0.5,);
+    final sprites = [
+      happySprite2,
+      happySprite1,
+      happySprite1,
+      happySprite1,
+      happySprite1,
+      happySprite1,
+      happySprite1,
+      happySprite1,
+      happySprite1
+    ].toList();
+    animation = SpriteAnimation.spriteList(
+      sprites,
+      stepTime: 0.2,
+    );
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    if (gameRef.state == GameState.won) {
-      setAlpha(255);
-    } else {
-      setAlpha(0);
-    }
+    var alpha = gameRef.isWon ? 255 : 0;
+    setAlpha(alpha);
   }
 }

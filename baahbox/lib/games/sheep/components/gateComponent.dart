@@ -1,15 +1,14 @@
-import 'package:baahbox/constants/enums.dart';
+import 'package:flame/flame.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:baahbox/games/sheep/components/bimComponent.dart';
 import 'package:baahbox/games/sheep/sheepGame.dart';
-import 'package:flame/flame.dart';
+
 
 class GateComponent extends SpriteComponent
     with HasGameRef<SheepGame>, CollisionCallbacks {
+
   static const speed = 50.0;
   late final Vector2 velocity;
-  static final Vector2 initialSize = Vector2.all(100);
   final Vector2 deltaPosition = Vector2.zero();
   final obstacleSprite = Sprite(Flame.images.fromCache('Jeux/Sheep/gate.png'));
   var isNewComer = true;
@@ -22,7 +21,7 @@ class GateComponent extends SpriteComponent
   }
 
   void resetPosition() {
-    position = Vector2(gameRef.size.x + size.x/2, gameRef.floorY);
+    position = Vector2(gameRef.size.x + size.x / 2, gameRef.floorY);
     isNewComer = true;
   }
 
@@ -36,7 +35,7 @@ class GateComponent extends SpriteComponent
   @override
   void update(double dt) {
     super.update(dt);
-    if (gameRef.state == GameState.running) {
+    if (gameRef.isRunning) {
       deltaPosition
         ..setFrom(velocity)
         ..scale(dt);
@@ -45,7 +44,7 @@ class GateComponent extends SpriteComponent
       if (x < -size.x / 2) {
         x = game.size.x + size.x;
         isNewComer = true;
-        gameRef.nbDisplayedGates +=1;
+        gameRef.nbDisplayedGates += 1;
       }
     }
   }

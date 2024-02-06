@@ -26,19 +26,19 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
   late final HappySheepComponent happySheep;
   late final TextComponent progressionText;
 
-  var gameObjective = 2;
-  var successfullJumps = 0;
-  var hasSheepStartedJumping = false;
-  var nbDisplayedGates = 0;
-  var sheepDidJumpOverGate = false;
-  var strengthValue = 0;
+  int gameObjective = 2;
+  int successfullJumps = 0;
+  int nbDisplayedGates = 0;
+  bool hasSheepStartedJumping = false;
+  bool sheepDidJumpOverGate = false;
+  int strengthValue = 0;
 
-  var panInput = 0;
-  var input = 0;
+  int panInput = 0;
+  int input = 0;
   double floorY = 0;
   var instructionTitle = 'Saute les barrières';
   var instructionSubtitle = 'en contractant ton muscle';
-  var feedbackTitleWon = 'tu as sauté toutes les barrières';
+  var feedbackTitleWon = 'Bravo! \ntu as sauté toutes les barrières';
   var feedbackTitleLost = "tu n'as pas sauté toutes les barrières";
 
   @override
@@ -69,12 +69,21 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
   void loadInfoComponents() {
     addAll([
       progressionText = TextComponent(
-        position: Vector2(size.x/10,size.y/10),
-        anchor: Anchor.bottomLeft,
+        position: Vector2(10,floorY+50),
+        anchor: Anchor.topLeft,
         priority: 1,
+
       ),
     ]);
   }
+
+
+  bool get isRunning => state == GameState.running;
+  bool get isGameOver => (state == GameState.won || state == GameState.lost);
+  bool get isWon => state == GameState.won;
+  bool get isLost => state == GameState.lost;
+  bool get isReady => state == GameState.ready;
+
   @override
   Future<void> onLoad() async {
     title = instructionTitle;
@@ -83,7 +92,7 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
     await loadAssetsInCache();
     loadComponents();
     loadInfoComponents();
-    progressionText.text = feedback;
+    progressionText.text = "";
     super.onLoad();
   }
 // ===================
@@ -93,18 +102,17 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
   @override
   void update(double dt) {
     super.update(dt);
-    if (state == GameState.running) {
+    if (isRunning) {
       refreshInput();
       if (isNewGateOnQueue()) {
         if (!isSheepOnFloor() && !sheepDidJumpOverGate) {
           setGameStateToWon(false);
-          feedback = "aie !  tu n'as sauté que ${successfullJumps} barrière(s)";
-          displayFeedBack();//.ended(Score(won: false, total: successfullJumps))
+          feedback = "il faut atterrir entre chaque barrière!";
+          progressionText.text = feedback;
         } else if (successfullJumps == gameObjective) {
-          setGameStateToWon(true); //.ended(Score(won: true, total: successfullJumps))
+          setGameStateToWon(true);
         }
-        feedback = "";
-        displayFeedBack();
+        //progressionText.text = "tu dois sauter ${gameObjective} barrière(s)";
         sheepDidJumpOverGate = false;
       } else {
         checkSheepAndGatePositions();
@@ -128,18 +136,15 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
           hasSheepStartedJumping &&
           !sheepDidJumpOverGate) {
         successfullJumps += 1;
-        feedback = "bravo tu as sauté ${successfullJumps} barrière(s) sur ${gameObjective}";
-        displayFeedBack();
+        feedback = "tu as sauté ${successfullJumps} barrière(s) sur ${gameObjective}";
+        progressionText.text = feedback;
         sheepDidJumpOverGate = true;
-        //configureScoreLabel(with: successfullJumps);
       }
       hasSheepStartedJumping = false;
       // startWalkingSheepAnimation()
       //configureLabelsForWalking()
     } else {
       hasSheepStartedJumping = true;
-      //stopWalkingSheepAnimation()
-      // sheep.texture = sheepJumpTexture
       if (isSheepBeyondTheGate()) {
         // configureLabelsToGoDown()
       } else {
@@ -171,6 +176,8 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
     sheepDidJumpOverGate = false;
     sheep.initialize();
     gate.resetPosition();
+    floor.setAlpha(255);
+    progressionText.text ="";
     if (paused) {
       resumeEngine();
     }
@@ -179,8 +186,11 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
   void setGameStateToWon(bool win) {
     state = win ? GameState.won : GameState.lost;
     feedback = win ? feedbackTitleWon : feedbackTitleLost;
-    if (win) {sheep.hide();}
-    displayFeedBack();
+    if (win) {
+      sheep.hide();
+      floor.setAlpha(0);
+      progressionText.text = "";//feedback;
+    }
     endGame();
   }
 
