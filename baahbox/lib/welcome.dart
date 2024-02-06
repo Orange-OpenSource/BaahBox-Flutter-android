@@ -63,7 +63,8 @@ class GameRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
         style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(game.baseColor.color),),
+            backgroundColor: MaterialStateProperty.all(game.baseColor.color),
+        shape:MaterialStateProperty.all(ContinuousRectangleBorder())),
         child: Container(
             alignment: Alignment.centerLeft,
             height: 110,
