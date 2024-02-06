@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flame/flame.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:baahbox/games/sheep/components/gateComponent.dart';
 import 'package:baahbox/games/sheep/sheepGame.dart';
 import 'package:baahbox/games/sheep/components/bimComponent.dart';
@@ -23,8 +24,10 @@ class SheepComponent extends SpriteComponent //AnimationComponent
       Sprite(Flame.images.fromCache('Jeux/Sheep/sheep_01.png'));
   final walkingSprite2 =
       Sprite(Flame.images.fromCache('Jeux/Sheep/sheep_02.png'));
-  final jumpSprite = Sprite(Flame.images.fromCache('Jeux/Sheep/sheep_jumping.png'));
-  final oupsSprite = Sprite(Flame.images.fromCache('Jeux/Sheep/sheep_bump.png'));
+  final jumpSprite =
+      Sprite(Flame.images.fromCache('Jeux/Sheep/sheep_jumping.png'));
+  final oupsSprite =
+      Sprite(Flame.images.fromCache('Jeux/Sheep/sheep_bump.png'));
 
   @override
   Future<void> onLoad() async {
@@ -39,12 +42,19 @@ class SheepComponent extends SpriteComponent //AnimationComponent
     show();
   }
 
+  void tremble() {
+    add(MoveByEffect(
+        Vector2(1, 0), EffectController(duration: 0.2, reverseDuration: 0.2)));
+  }
+
   void hide() {
     setAlpha(0);
   }
-   void show() {
+
+  void show() {
     setAlpha(255);
-   }
+  }
+
   @override
   void update(double dt) {
     super.update(dt);
@@ -66,7 +76,7 @@ class SheepComponent extends SpriteComponent //AnimationComponent
   }
 
   bool isBeyond(double xPos) {
-    return (position.x - size.x/2) > xPos;
+    return (position.x - size.x / 2) > xPos;
   }
 
   bool isOnFloor(double yPos) {
@@ -81,6 +91,7 @@ class SheepComponent extends SpriteComponent //AnimationComponent
     if (position.y < gameRef.floorY) {
       setSpriteTo(2);
     } else if (position.y == gameRef.floorY) {
+      tremble();
       var rng = new Random();
       var i = rng.nextInt(2);
       setSpriteTo(i);
@@ -109,7 +120,8 @@ class SheepComponent extends SpriteComponent //AnimationComponent
 
   void takeHit() {
     setSpriteTo(3);
-    game.add(BimComponent(position: Vector2(position.x+size.x, position.y-size.y-50)));
+    game.add(BimComponent(
+        position: Vector2(position.x + size.x, position.y - size.y - 50)));
     gameRef.setGameStateToWon(false);
   }
 

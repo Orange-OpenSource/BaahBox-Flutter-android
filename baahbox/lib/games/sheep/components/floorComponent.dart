@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/flame.dart';
 
 class FloorComponent extends SpriteComponent {
@@ -10,5 +11,10 @@ class FloorComponent extends SpriteComponent {
   @override
   Future<void> onLoad() async {
     this.sprite = floorSprite;
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
   }
 }

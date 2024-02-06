@@ -16,8 +16,14 @@ import 'package:baahbox/games/sheep/components/floorComponent.dart';
 import 'package:baahbox/games/sheep/components/bimComponent.dart';
 import 'package:baahbox/games/sheep/components/happySheepComponent.dart';
 
+import './background/horizon.dart';
+
+
 class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
   final Controller appController = Get.find();
+
+  late final Image spriteImage;
+  late final horizon = Horizon();
 
   late final SheepComponent sheep;
   late final GateComponent gate;
@@ -56,13 +62,16 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
       'Jeux/Sheep/sheep_bump.png',
       'Jeux/Sheep/happy_sheep_01.png',
       'Jeux/Sheep/happy_sheep_02.png',
+      'trex.png',
     ]);
   }
 
   void loadComponents() async {
+
+    add(horizon);
     await add(gate = GateComponent());
     await add(sheep = SheepComponent(position: Vector2(size.x / 2, floorY)));
-    await add(floor = FloorComponent(position: Vector2(size.x / 2, floorY), size: Vector2(size.x, 5.0)));
+    await add(floor = FloorComponent(position: Vector2(size.x / 2, floorY), size: Vector2(size.x+10, 5.0)));
     await add(happySheep = HappySheepComponent(position: Vector2(0, 0), size: Vector2(size.x/2, size.y/2)));
   }
 
@@ -112,11 +121,12 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
         } else if (successfullJumps == gameObjective) {
           setGameStateToWon(true);
         }
-        //progressionText.text = "tu dois sauter ${gameObjective} barrière(s)";
         sheepDidJumpOverGate = false;
       } else {
         checkSheepAndGatePositions();
       }
+    } else {
+      horizon.cloudManager.reset();
     }
   }
 
@@ -178,6 +188,7 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
     gate.resetPosition();
     floor.setAlpha(255);
     progressionText.text ="";
+    sheep.tremble();
     if (paused) {
       resumeEngine();
     }
