@@ -24,13 +24,12 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
   late final FloorComponent floor;
   late final BimComponent collision;
 
-  int score = 0;
   var panInput = 0;
-
   var input = 0;
   double floorY = 0;
   var instructionTitle = 'Saute les barrières';
   var instructionSubtitle = 'en contractant ton muscle';
+  var feedbackTitle = 'tu as sauté toutes les barrières';
 
   @override
   Color backgroundColor() => BBGameList.sheep.baseColor.color;
@@ -39,6 +38,7 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
   Future<void> onLoad() async {
     title = instructionTitle;
     subTitle = instructionSubtitle;
+    feedback = feedbackTitle;
     floorY = (size.y * 0.7);
     await loadAssetsInCache();
     loadComponents();
@@ -61,8 +61,8 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
   }
 
   void loadComponents() async {
+    await add(gate = GateComponent());
     await add(sheep = SheepComponent(position: Vector2(size.x / 3, floorY)));
-    await add(gate = GateComponent(position: Vector2(size.x, floorY)));
     await add(floor = FloorComponent(position: Vector2(size.x / 2, floorY)));
     //await add(statusSheep = StatusSheepComponent());
   }
@@ -87,17 +87,23 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
 
   @override
   void resetGame() {
-    // TODO: implement resetGame
+
     super.resetGame();
     sheep.initialize();
-    gate.initialize();
+    gate.resetPosition();
+    if (paused) {
+      resumeEngine();
+    }
+  }
 
+  void setGameStateToWon(bool win) {
+    state = win ? GameState.won : GameState.lost;
+    endGame();
   }
 
   @override
   void endGame() {
     // TODO: implement resetGame
-    state = GameState.won;
     super.endGame();
   }
 
@@ -111,5 +117,4 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
       sheep.moveTo(nextY);
     }
   }
-
 }

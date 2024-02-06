@@ -24,13 +24,9 @@ class OverlayBuilder {
 }
 
 class PreGameOverlay extends StatelessWidget {
-
   final BBGame game;
 
-  const PreGameOverlay({
-    super.key,
-    required this.game,
-  });
+  const PreGameOverlay({super.key, required this.game,});
 
   @override
   Widget build(BuildContext context) {

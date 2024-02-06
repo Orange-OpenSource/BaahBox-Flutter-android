@@ -15,7 +15,7 @@ class BBGame extends FlameGame with PanDetector {
   final double reactivity = 0.2; //todo enum (hardnesscoeff in ios)
   String title = "titre";
   String subTitle = "sous titre";
-  String feedback = "encore un effort";
+  String feedback = "encore un effort !";
 
   //Flame.device.fullScreen();
   Future<void> onLoad() async {

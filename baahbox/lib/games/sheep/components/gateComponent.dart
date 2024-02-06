@@ -13,21 +13,23 @@ class GateComponent extends SpriteComponent
   final Vector2 deltaPosition = Vector2.zero();
   final obstacleSprite = Sprite(Flame.images.fromCache('Jeux/Sheep/gate.png'));
 
-  GateComponent({required super.position})
-      : super(anchor: Anchor.bottomCenter, size: Vector2(10,80));
+  GateComponent() : super(anchor: Anchor.bottomCenter, size: Vector2(10, 80));
 
   @override
   Future<void> onLoad() async {
     initialize();
+    resetPosition();
+  }
+
+  void resetPosition() {
+    position = Vector2(gameRef.size.x + size.x/2, gameRef.floorY);
   }
 
   void initialize() {
     this.sprite = obstacleSprite;
-    this.size = obstacleSprite.originalSize/10;
+    this.size = obstacleSprite.originalSize / 10;
     add(RectangleHitbox(collisionType: CollisionType.passive));
-    velocity = Vector2(-1, 0)
-      ..scale(speed);
-
+    velocity = Vector2(-1, 0)..scale(speed);
   }
 
   @override
@@ -45,10 +47,8 @@ class GateComponent extends SpriteComponent
   }
 
   bool isVisible() {
-    return (x+size.x/2 > 0);
+    return (x + size.x / 2 > 0);
   }
 
-  void takeHit() {
-    //velocity = Vector2(0, 0);
-  }
+  void takeHit() {}
 }

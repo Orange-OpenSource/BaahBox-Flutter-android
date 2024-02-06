@@ -32,14 +32,12 @@ class SheepComponent extends SpriteComponent //AnimationComponent
   Future<void> onLoad() async {
     super.onLoad();
     initialize();
-    add(CircleHitbox());
+    add(RectangleHitbox());
     //animation = await getAnimation();
   }
   void initialize() {
     this.sprite = walkingSprite1;
     size = walkingSprite1.srcSize / 10;
-
-
    // animation = getAnimation();
   }
   @override
@@ -57,12 +55,12 @@ class SheepComponent extends SpriteComponent //AnimationComponent
     }
 
   void moveTo(double yPos) {
-    if (isYinGoodRange(yPos)) {
+    if (isPosInFrame(yPos)) {
       position.y = yPos;
     }
   }
 
-  bool isYinGoodRange(double y) {
+  bool isPosInFrame(double y) {
     return (y <= gameRef.floorY) &&
         ((y - size.y) > 0);
   }
@@ -93,7 +91,6 @@ class SheepComponent extends SpriteComponent //AnimationComponent
     }
   }
 
-
   SpriteAnimation getWalkingAnimation() {
     final sprites = walkingImages.map((image) => Sprite(image)).toList();
     return SpriteAnimation.spriteList(sprites, stepTime: 0.2);
@@ -101,9 +98,8 @@ class SheepComponent extends SpriteComponent //AnimationComponent
 
   void takeHit() {
    setSpriteTo(3);
-   gameRef.endGame();
+   gameRef.setGameStateToWon(false);
   }
-
 
   @override
   void onCollisionStart(
