@@ -14,7 +14,7 @@ import 'package:baahbox/games/sheep/components/sheepComponent.dart';
 import 'package:baahbox/games/sheep/components/gateComponent.dart';
 import 'package:baahbox/games/sheep/components/floorComponent.dart';
 import 'package:baahbox/games/sheep/components/bimComponent.dart';
-import 'package:baahbox/games/sheep/components/statusSheepComponent.dart';
+import 'package:baahbox/games/sheep/components/happySheepComponent.dart';
 
 class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
   final Controller appController = Get.find();
@@ -23,27 +23,26 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
   late final GateComponent gate;
   late final FloorComponent floor;
   late final BimComponent collision;
+  late final HappySheepComponent happySheep;
+  late final TextComponent progressionText;
+
+  var gameObjective = 2;
+  var successfullJumps = 0;
+  var hasSheepStartedJumping = false;
+  var nbDisplayedGates = 0;
+  var sheepDidJumpOverGate = false;
+  var strengthValue = 0;
 
   var panInput = 0;
   var input = 0;
   double floorY = 0;
   var instructionTitle = 'Saute les barrières';
   var instructionSubtitle = 'en contractant ton muscle';
-  var feedbackTitle = 'tu as sauté toutes les barrières';
+  var feedbackTitleWon = 'tu as sauté toutes les barrières';
+  var feedbackTitleLost = "tu n'as pas sauté toutes les barrières";
 
   @override
   Color backgroundColor() => BBGameList.sheep.baseColor.color;
-
-  @override
-  Future<void> onLoad() async {
-    title = instructionTitle;
-    subTitle = instructionSubtitle;
-    feedback = feedbackTitle;
-    floorY = (size.y * 0.7);
-    await loadAssetsInCache();
-    loadComponents();
-    super.onLoad();
-  }
 
   Future<void> loadAssetsInCache() async {
     await Flame.images.loadAll(<String>[
@@ -53,25 +52,63 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
       'Jeux/Sheep/floor.png',
       'Jeux/Sheep/sheep_01.png',
       'Jeux/Sheep/sheep_02.png',
-      'Jeux/Sheep/sheep_03.png',
-      'Jeux/Sheep/sheep_04.png',
-      'Jeux/Sheep/welcome_sheep_01.png',
-      'Jeux/Sheep/welcome_sheep_02.png',
+      'Jeux/Sheep/sheep_jumping.png',
+      'Jeux/Sheep/sheep_bump.png',
+      'Jeux/Sheep/happy_sheep_01.png',
+      'Jeux/Sheep/happy_sheep_02.png',
     ]);
   }
 
   void loadComponents() async {
     await add(gate = GateComponent());
-    await add(sheep = SheepComponent(position: Vector2(size.x / 3, floorY)));
-    await add(floor = FloorComponent(position: Vector2(size.x / 2, floorY)));
-    //await add(statusSheep = StatusSheepComponent());
+    await add(sheep = SheepComponent(position: Vector2(size.x / 2, floorY)));
+    await add(floor = FloorComponent(position: Vector2(size.x / 2, floorY), size: Vector2(size.x, 5.0)));
+    await add(happySheep = HappySheepComponent(position: Vector2(0, 0), size: Vector2(size.x/2, size.y/2)));
   }
+
+  void loadInfoComponents() {
+    addAll([
+      progressionText = TextComponent(
+        position: Vector2(size.x/10,size.y/10),
+        anchor: Anchor.bottomLeft,
+        priority: 1,
+      ),
+    ]);
+  }
+  @override
+  Future<void> onLoad() async {
+    title = instructionTitle;
+    subTitle = instructionSubtitle;
+    floorY = (size.y * 0.7);
+    await loadAssetsInCache();
+    loadComponents();
+    loadInfoComponents();
+    progressionText.text = feedback;
+    super.onLoad();
+  }
+// ===================
+  // MARK: - Game loop
+  // ===================
 
   @override
   void update(double dt) {
     super.update(dt);
     if (state == GameState.running) {
       refreshInput();
+      if (isNewGateOnQueue()) {
+        if (!isSheepOnFloor() && !sheepDidJumpOverGate) {
+          setGameStateToWon(false);
+          feedback = "aie !  tu n'as sauté que ${successfullJumps} barrière(s)";
+          displayFeedBack();//.ended(Score(won: false, total: successfullJumps))
+        } else if (successfullJumps == gameObjective) {
+          setGameStateToWon(true); //.ended(Score(won: true, total: successfullJumps))
+        }
+        feedback = "";
+        displayFeedBack();
+        sheepDidJumpOverGate = false;
+      } else {
+        checkSheepAndGatePositions();
+      }
     }
   }
 
@@ -85,10 +122,53 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
     }
   }
 
+  void checkSheepAndGatePositions() {
+    if (isSheepOnFloor()) {
+      if ((isSheepBeyondTheGate()) &&
+          hasSheepStartedJumping &&
+          !sheepDidJumpOverGate) {
+        successfullJumps += 1;
+        feedback = "bravo tu as sauté ${successfullJumps} barrière(s) sur ${gameObjective}";
+        displayFeedBack();
+        sheepDidJumpOverGate = true;
+        //configureScoreLabel(with: successfullJumps);
+      }
+      hasSheepStartedJumping = false;
+      // startWalkingSheepAnimation()
+      //configureLabelsForWalking()
+    } else {
+      hasSheepStartedJumping = true;
+      //stopWalkingSheepAnimation()
+      // sheep.texture = sheepJumpTexture
+      if (isSheepBeyondTheGate()) {
+        // configureLabelsToGoDown()
+      } else {
+        //  configureLabelsForJumpInProgress()
+      }
+    }
+  }
+
+
+  bool isNewGateOnQueue() {
+    return gate.isNewComer;
+  }
+
+  bool isSheepOnFloor() {
+    return sheep.isOnFloor(floorY);
+  }
+
+  bool isSheepBeyondTheGate() {
+    return sheep.isBeyond(gate.position.x);
+  }
+
+
+
   @override
   void resetGame() {
-
     super.resetGame();
+    successfullJumps = 0;
+    hasSheepStartedJumping = false;
+    sheepDidJumpOverGate = false;
     sheep.initialize();
     gate.resetPosition();
     if (paused) {
@@ -98,12 +178,14 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
 
   void setGameStateToWon(bool win) {
     state = win ? GameState.won : GameState.lost;
+    feedback = win ? feedbackTitleWon : feedbackTitleLost;
+    if (win) {sheep.hide();}
+    displayFeedBack();
     endGame();
   }
 
   @override
   void endGame() {
-    // TODO: implement resetGame
     super.endGame();
   }
 
@@ -117,4 +199,26 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
       sheep.moveTo(nextY);
     }
   }
+
+  // ===================
+  // MARK: - Parameters
+  // ===================
+
+  // @objc func loadParameters() {
+  //   threshold = ParameterDataManager.sharedInstance.threshold
+  //   gameObjective = ParameterDataManager.sharedInstance.numberOfFences
+  //
+  //   switch ParameterDataManager.sharedInstance.fenceVelocity {
+  //   case .slow:
+  //   speedRate = 1
+  //   case .average:
+  //   speedRate = 2
+  //   default:
+  //   speedRate = 3
+  //   }
+  //   // needed ??
+  //   if !isGameOnGoing {
+  //   configureScoreLabel(with: 0)
+  //   }
+  //   }
 }

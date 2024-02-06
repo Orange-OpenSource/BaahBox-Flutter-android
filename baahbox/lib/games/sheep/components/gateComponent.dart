@@ -12,7 +12,7 @@ class GateComponent extends SpriteComponent
   static final Vector2 initialSize = Vector2.all(100);
   final Vector2 deltaPosition = Vector2.zero();
   final obstacleSprite = Sprite(Flame.images.fromCache('Jeux/Sheep/gate.png'));
-
+  var isNewComer = true;
   GateComponent() : super(anchor: Anchor.bottomCenter, size: Vector2(10, 80));
 
   @override
@@ -23,6 +23,7 @@ class GateComponent extends SpriteComponent
 
   void resetPosition() {
     position = Vector2(gameRef.size.x + size.x/2, gameRef.floorY);
+    isNewComer = true;
   }
 
   void initialize() {
@@ -40,8 +41,11 @@ class GateComponent extends SpriteComponent
         ..setFrom(velocity)
         ..scale(dt);
       position += deltaPosition;
+      isNewComer = false;
       if (x < -size.x / 2) {
         x = game.size.x + size.x;
+        isNewComer = true;
+        gameRef.nbDisplayedGates +=1;
       }
     }
   }

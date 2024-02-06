@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:baahbox/games/sheep/components/bimComponent.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/collisions.dart';
@@ -10,8 +11,11 @@ import 'package:baahbox/games/sheep/sheepGame.dart';
 import '../../../constants/enums.dart';
 
 class SheepComponent extends SpriteComponent //AnimationComponent
-    with HasGameRef<SheepGame>, CollisionCallbacks {
-  SheepComponent({required super.position}): super(size: Vector2(75, 100), anchor: Anchor.bottomCenter);
+    with
+        HasGameRef<SheepGame>,
+        CollisionCallbacks {
+  SheepComponent({required super.position})
+      : super(size: Vector2(75, 100), anchor: Anchor.bottomCenter);
 
   final walkingImages = [
     Flame.images.fromCache('Jeux/Sheep/sheep_01.png'),
@@ -20,13 +24,11 @@ class SheepComponent extends SpriteComponent //AnimationComponent
   var walking1 = true;
 
   final walkingSprite1 =
-  Sprite(Flame.images.fromCache('Jeux/Sheep/sheep_01.png'));
+      Sprite(Flame.images.fromCache('Jeux/Sheep/sheep_01.png'));
   final walkingSprite2 =
-  Sprite(Flame.images.fromCache('Jeux/Sheep/sheep_02.png'));
-  final jumpSprite =
-  Sprite(Flame.images.fromCache('Jeux/Sheep/sheep_03.png'));
-  final oupsSprite =
-  Sprite(Flame.images.fromCache('Jeux/Sheep/sheep_04.png'));
+      Sprite(Flame.images.fromCache('Jeux/Sheep/sheep_02.png'));
+  final jumpSprite = Sprite(Flame.images.fromCache('Jeux/Sheep/sheep_jumping.png'));
+  final oupsSprite = Sprite(Flame.images.fromCache('Jeux/Sheep/sheep_bump.png'));
 
   @override
   Future<void> onLoad() async {
@@ -35,24 +37,33 @@ class SheepComponent extends SpriteComponent //AnimationComponent
     add(RectangleHitbox());
     //animation = await getAnimation();
   }
+
   void initialize() {
     this.sprite = walkingSprite1;
     size = walkingSprite1.srcSize / 10;
-   // animation = getAnimation();
+    show();
+    // animation = getAnimation();
   }
+
+  void hide() {
+    setAlpha(0);
+  }
+   void show() {
+    setAlpha(255);
+   }
   @override
   void update(double dt) {
     super.update(dt);
     if (gameRef.state == GameState.running) {
       checkCostume();
-      }
+    }
     goDown();
   }
 
   void goDown() {
-    var yPos = position.y +1;
-    position.y = min(yPos,gameRef.floorY);
-    }
+    var yPos = position.y + 1;
+    position.y = min(yPos, gameRef.floorY);
+  }
 
   void moveTo(double yPos) {
     if (isPosInFrame(yPos)) {
@@ -60,21 +71,27 @@ class SheepComponent extends SpriteComponent //AnimationComponent
     }
   }
 
-  bool isPosInFrame(double y) {
-    return (y <= gameRef.floorY) &&
-        ((y - size.y) > 0);
+  bool isBeyond(double xPos) {
+    return (position.x - size.x/2) > xPos;
   }
 
- void checkCostume() {
+  bool isOnFloor(double yPos) {
+    return position.y == yPos;
+  }
+
+  bool isPosInFrame(double y) {
+    return (y <= gameRef.floorY) && ((y - size.y) > 0);
+  }
+
+  void checkCostume() {
     if (position.y < gameRef.floorY) {
-   setSpriteTo(2);
-    }
-    else if (position.y == gameRef.floorY) {
-       var rng = new Random();
-       var i = rng.nextInt(2);
+      setSpriteTo(2);
+    } else if (position.y == gameRef.floorY) {
+      var rng = new Random();
+      var i = rng.nextInt(2);
       setSpriteTo(i);
     }
- }
+  }
 
   void setSpriteTo(int spriteNb) {
     switch (spriteNb) {
@@ -97,15 +114,16 @@ class SheepComponent extends SpriteComponent //AnimationComponent
   }
 
   void takeHit() {
-   setSpriteTo(3);
-   gameRef.setGameStateToWon(false);
+    setSpriteTo(3);
+    game.add(BimComponent(position: Vector2(position.x+size.x, position.y-size.y-50)));
+    gameRef.setGameStateToWon(false);
   }
 
   @override
   void onCollisionStart(
-      Set<Vector2> intersectionPoints,
-      PositionComponent other,
-      ) {
+    Set<Vector2> intersectionPoints,
+    PositionComponent other,
+  ) {
     super.onCollisionStart(intersectionPoints, other);
     if (other is GateComponent) {
       takeHit();
