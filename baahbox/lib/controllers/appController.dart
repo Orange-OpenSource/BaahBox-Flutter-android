@@ -67,6 +67,13 @@ class Controller extends FullLifeCycleController with FullLifeCycleMixin {
     print('HomeController - onPaused called');
     _isActive.value = false;
   }
+  // Mandatory
+
+  @override
+  void onHidden() {
+    print('HomeController - onhidden called');
+    _isActive.value = false;
+  }
 
 // Mandatory
   @override

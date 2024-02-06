@@ -49,6 +49,6 @@ class GateComponent extends SpriteComponent
   }
 
   void takeHit() {
-    velocity = Vector2(0, 0);
+    //velocity = Vector2(0, 0);
   }
 }

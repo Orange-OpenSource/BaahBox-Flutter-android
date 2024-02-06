@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flame/flame.dart';
 import 'package:flame/effects.dart';
@@ -12,7 +13,12 @@ class SheepComponent extends SpriteComponent //AnimationComponent
     with HasGameRef<SheepGame>, CollisionCallbacks {
   SheepComponent({required super.position}): super(size: Vector2(75, 100), anchor: Anchor.bottomCenter);
 
+  final walkingImages = [
+    Flame.images.fromCache('Jeux/Sheep/sheep_01.png'),
+    Flame.images.fromCache('Jeux/Sheep/sheep_02.png'),
+  ];
   var walking1 = true;
+
   final walkingSprite1 =
   Sprite(Flame.images.fromCache('Jeux/Sheep/sheep_01.png'));
   final walkingSprite2 =
@@ -32,6 +38,7 @@ class SheepComponent extends SpriteComponent //AnimationComponent
   void initialize() {
     this.sprite = walkingSprite1;
     size = walkingSprite1.srcSize / 10;
+
 
    // animation = getAnimation();
   }
@@ -87,8 +94,9 @@ class SheepComponent extends SpriteComponent //AnimationComponent
   }
 
 
-  SpriteAnimation getAnimation() {
-    return SpriteAnimation.spriteList([walkingSprite1, walkingSprite2], stepTime: 0.2);
+  SpriteAnimation getWalkingAnimation() {
+    final sprites = walkingImages.map((image) => Sprite(image)).toList();
+    return SpriteAnimation.spriteList(sprites, stepTime: 0.2);
   }
 
   void takeHit() {

@@ -40,9 +40,9 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
     title = instructionTitle;
     subTitle = instructionSubtitle;
     floorY = (size.y * 0.7);
-    super.onLoad();
-    loadAssetsInCache();
+    await loadAssetsInCache();
     loadComponents();
+    super.onLoad();
   }
 
   Future<void> loadAssetsInCache() async {
