@@ -17,9 +17,19 @@ class BBGame extends FlameGame with PanDetector {
   String subTitle = "sous titre";
   String feedback = "encore un effort !";
 
+  bool get isRunning => state == GameState.running;
+  bool get isGameOver => (state == GameState.won || state == GameState.lost);
+  bool get isWon => state == GameState.won;
+  bool get isLost => state == GameState.lost;
+  bool get isReady => state == GameState.ready;
+
   //Flame.device.fullScreen();
   Future<void> onLoad() async {
     await super.onLoad();
+    initializeGame();
+  }
+
+  void initializeGame() {
     overlays.clear();
     overlays.add('Instructions');
     overlays.add('PreGame');
@@ -30,7 +40,6 @@ class BBGame extends FlameGame with PanDetector {
     if (overlays.isActive('PreGame')) {
       overlays.remove('PreGame');
     }
-
     if (overlays.isActive('Instructions')) {
       overlays.remove('Instructions');
     }

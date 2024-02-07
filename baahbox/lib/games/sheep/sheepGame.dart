@@ -16,14 +16,14 @@ import 'package:baahbox/games/sheep/components/floorComponent.dart';
 import 'package:baahbox/games/sheep/components/bimComponent.dart';
 import 'package:baahbox/games/sheep/components/happySheepComponent.dart';
 
-import './background/horizon.dart';
+import 'package:baahbox/games/sheep/background/cloud_manager.dart';
 
 
 class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
   final Controller appController = Get.find();
 
   late final Image spriteImage;
-  late final horizon = Horizon();
+  late final CloudManager cloudManager = CloudManager();
 
   late final SheepComponent sheep;
   late final GateComponent gate;
@@ -68,7 +68,7 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
 
   void loadComponents() async {
 
-    add(horizon);
+    add(cloudManager);
     await add(gate = GateComponent());
     await add(sheep = SheepComponent(position: Vector2(size.x / 2, floorY)));
     await add(floor = FloorComponent(position: Vector2(size.x / 2, floorY), size: Vector2(size.x+10, 5.0)));
@@ -87,11 +87,6 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
   }
 
 
-  bool get isRunning => state == GameState.running;
-  bool get isGameOver => (state == GameState.won || state == GameState.lost);
-  bool get isWon => state == GameState.won;
-  bool get isLost => state == GameState.lost;
-  bool get isReady => state == GameState.ready;
 
   @override
   Future<void> onLoad() async {
@@ -126,7 +121,7 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
         checkSheepAndGatePositions();
       }
     } else {
-      horizon.cloudManager.reset();
+      cloudManager.reset();
     }
   }
 
@@ -181,6 +176,7 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
   @override
   void resetGame() {
     super.resetGame();
+    cloudManager.reset();
     successfullJumps = 0;
     hasSheepStartedJumping = false;
     sheepDidJumpOverGate = false;
@@ -207,7 +203,9 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
 
   @override
   void endGame() {
+    cloudManager.reset();
     super.endGame();
+
   }
 
   @override

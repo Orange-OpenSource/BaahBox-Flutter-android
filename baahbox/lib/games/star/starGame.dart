@@ -34,18 +34,17 @@ class StarGame extends BBGame with TapCallbacks {
       'Jeux/Star/jeu_etoile_02@2x.png',
     ]);
     _star = StarSprite();
-   await add(_star);
+    await add(_star);
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    if (state == GameState.running) {
+    if (isRunning) {
       refreshInput();
       updateOverlaysAndState();
     }
   }
-
 
   void refreshInput() {
     // todo deal with 2 muscles or joystick input
@@ -62,14 +61,11 @@ class StarGame extends BBGame with TapCallbacks {
     if (input < 300) {
       title = instructionTitle;
       subTitle = instructionSubtitle;
-    } else if (input < 750) {
-      title = feedback;
-      subTitle = '';
-      refreshWidget();
-    } else {
-      title = "Bravo";
-      subTitle = '';
-      endGame();
+    } else
+      if (input < 750) {
+        displayFeedBack();
+     } else {
+       endGame();
     }
   }
 
@@ -102,8 +98,6 @@ class StarGame extends BBGame with TapCallbacks {
           "panInput : ${panInput} :::  panY : ${yPos} vs game ${canvasSize.y}");
     }
   }
-
-
 
   @override
   void onTapDown(TapDownEvent event) {

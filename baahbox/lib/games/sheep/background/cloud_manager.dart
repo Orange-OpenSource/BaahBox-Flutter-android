@@ -6,19 +6,19 @@ import '../sheepGame.dart';
 class CloudManager extends PositionComponent with HasGameRef<SheepGame> {
   final double cloudFrequency = 0.5;
   final int maxClouds = 20;
-  final double bgCloudSpeed = 0.2;
+  final double bgCloudSpeed = 1;
 
   void addCloud() {
     final cloudPosition = Vector2(
-      gameRef.size.x + Cloud.initialSize.x + 10,
-      ((absolutePosition.y / 3 - (Cloud.maxSkyLevel - Cloud.minSkyLevel)) +
-              random.fromRange(Cloud.minSkyLevel, Cloud.maxSkyLevel)) -
-          absolutePosition.y,
+      gameRef.size.x/2, //+ Cloud.initialSize.x + 10,
+      (gameRef.floorY - (Cloud.maxSkyLevel - Cloud.minSkyLevel)
+          - random.fromRange(Cloud.minSkyLevel, Cloud.maxSkyLevel)),
+         // -absolutePosition.y,
     );
     add(Cloud(position: cloudPosition));
   }
 
-  double get cloudSpeed => bgCloudSpeed / 1000 * 100;//gameRef.currentSpeed;
+  double get cloudSpeed => bgCloudSpeed ;//gameRef.currentSpeed;
 
   @override
   void update(double dt) {
