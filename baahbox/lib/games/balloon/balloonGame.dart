@@ -17,9 +17,9 @@ class BalloonGame extends BBGame with TapCallbacks {
   var input = 0;
   var instructionTitle = 'Gonfle le ballon';
   var instructionSubtitle = 'en contractant ton muscle';
-  var feedback1 = "c'est parti !";
-  var feedback2 = 'encore un petit effort!';
-  var feedback3 = 'on y est presque !';
+  var feedback1 = "C'est parti !";
+  var feedback2 = 'Encore un petit effort!';
+  var feedback3 = 'On y est presque !';
 
   @override
   Color backgroundColor() => BBGameList.balloon.baseColor.color;
@@ -64,21 +64,15 @@ class BalloonGame extends BBGame with TapCallbacks {
   void updateOverlaysAndState() {
     int coeff = (input / 100).toInt();
     if (input < 300) {
-      // title = instructionTitle;
-      // subTitle = instructionSubtitle;
       feedback = feedback1;
-      refreshWidget();
     } else if (input < 500) {
       feedback = feedback2;
-      // title = feedback;
-      // subTitle = '';
-      refreshWidget();
     } else if (input < 800) {
       feedback = feedback3;
-      refreshWidget();
     } else {
       endGame();
     }
+    refreshWidget();
   }
 
   @override
