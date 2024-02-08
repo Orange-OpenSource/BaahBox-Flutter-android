@@ -15,9 +15,12 @@ import 'package:baahbox/games/spaceShip/components/MeteorManager.dart';
 import 'package:baahbox/games/spaceShip/components/starBackgroundCreator.dart';
 import 'package:baahbox/games/spaceShip/components/lifeManager.dart';
 import 'package:flame/input.dart';
+import 'package:baahbox/services/settings/settingsController.dart';
+
 
 class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
   final Controller appController = Get.find();
+  final SettingsController settingsController = Get.find();
 
   late final ShipComponent ship;
   late final TextComponent scoreText;

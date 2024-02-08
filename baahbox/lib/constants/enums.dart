@@ -1,17 +1,17 @@
 import 'dart:ui';
 
-enum Velocity {
-  slow(value: .5),
-  average(value: 1),
-  quick(value: 2);
+enum objectVelocity {
+  low(value: .5),
+  medium(value: 1),
+  high(value: 2);
 
-  const Velocity({required this.value});
+  const objectVelocity({required this.value});
   final double value;
 }
 
 enum Sensitivity {
   low,
-  average,
+  medium,
   high;
 }
 

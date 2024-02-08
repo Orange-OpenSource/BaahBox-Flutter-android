@@ -18,9 +18,11 @@ import 'package:baahbox/games/sheep/components/bimComponent.dart';
 import 'package:baahbox/games/sheep/components/happySheepComponent.dart';
 import 'package:baahbox/games/sheep/components/counterManager.dart';
 import 'package:baahbox/games/sheep/background/cloud_manager.dart';
+import 'package:baahbox/services/settings/settingsController.dart';
 
 class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
   final Controller appController = Get.find();
+  final SettingsController settingsController = Get.find();
 
   late final Image spriteImage;
   late final CloudManager cloudManager = CloudManager();
@@ -97,11 +99,11 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
   @override
   Future<void> onLoad() async {
     print("1 gateVelocity $gateVelocity, gates: $gameObjective");
-    var params = appController.sheepParams;
+    var params = settingsController.sheepParams;
     print(params["gateVelocity"]);
    gameObjective = params["numberOfGates"];
    gateVelocity = params["gateVelocity"].value;
-   var gateV = appController.sheepP.gateVelocity;
+   var gateV = settingsController.sheepP.gateVelocity;
 
    print("2 gateVelocity $gateVelocity, gates: $gameObjective gateV $gateV");
 

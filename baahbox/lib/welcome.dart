@@ -3,10 +3,12 @@ import 'package:get/get.dart';
 import 'package:baahbox/controllers/appController.dart';
 import 'package:baahbox/routes/routes.dart';
 import 'package:baahbox/constants/enums.dart';
+import 'package:baahbox/services/settings/settingsController.dart';
 import 'dart:ui';
-import 'package:baahbox/services/ble/getx_ble.dart';
+import 'package:baahbox/services/ble/getXble/getx_ble.dart';
 
-class WelcomePage extends StatelessWidget  with WidgetsBindingObserver {
+
+class WelcomePage extends StatelessWidget with WidgetsBindingObserver {
   const WelcomePage({Key? key}) : super(key: key);
 
   @override
@@ -14,6 +16,7 @@ class WelcomePage extends StatelessWidget  with WidgetsBindingObserver {
     final mainColor = BBColor.pinky.color;
     final Controller c = Get.put(Controller());
     final GetxBle bleController = Get.put(GetxBle());
+    final SettingsController settingsController = Get.put(SettingsController());
 
 
     return Scaffold(

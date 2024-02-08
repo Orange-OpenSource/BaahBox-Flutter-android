@@ -2,11 +2,52 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:baahbox/constants/enums.dart';
 
 class SettingsController extends GetxController {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final _status = Rx<RxStatus>(RxStatus.empty());
+
+  var sheepParameters = (
+  gateVelocity: objectVelocity.high,
+  numberOfGates: 5,
+  );
+
+  get sheepP => sheepParameters;
+  get sheepVel => sheepParameters.gateVelocity.value;
+
+  var parameters = {
+    "generic": {
+      "sensitivity": Sensitivity.medium,
+      "sensor": SensorType.muscle,
+      "numberOfSensors": 1,
+      "threshold": 0.2,
+      "demoMode": false,
+      "isSensor1On": true,
+      "isSensor2On": false,
+    },
+    "starShip": {
+      "asteroidVelocity": objectVelocity.low,
+      "NumberOfLives": 5,
+    },
+    "sheep": {
+      "gateVelocity": objectVelocity.medium,
+      "numberOfGates": 3,
+    },
+    "toad": {
+      "flySteadyTime": 3,
+      "numberOfFlies": 5,
+      "shootingType": ShootingType.automatic,
+    },
+  };
+
+
+  Map get params => parameters;
+  Map get sheepParams => params["sheep"];
+  Map get starShipParams => params["starShip"];
+  Map get toadShipParams => params["toad"];
+  Map get genericParams => params["generic"];
 
   RxStatus get status => _status.value;
 
@@ -24,6 +65,15 @@ class SettingsController extends GetxController {
     passwordController.dispose();
   }
 
+  void doTheRightThing(int? value) {
+    if (value != null) {
+    showMyToast("Entered radio $value ");
+    sheepParams["numberOfGates"] = value;
+    //
+    } else {
+      showMyToast("Null value !");
+    }
+  }
   bool _isValid() {
     if (emailController.text.trim().isEmpty) {
       showMyToast("Enter email id Error");
@@ -60,7 +110,6 @@ class SettingsController extends GetxController {
         _status.value = RxStatus.error(e.toString());
       }
     }
-
   }
 
   void showMyToast(String message) {

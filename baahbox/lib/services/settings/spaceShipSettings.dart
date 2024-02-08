@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'controllers/appController.dart';
+import '../../controllers/appController.dart';
 import 'package:baahbox/routes/routes.dart';
 
 class SpaceShipSettingsPage extends StatefulWidget {

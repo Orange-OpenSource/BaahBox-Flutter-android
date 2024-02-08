@@ -8,9 +8,11 @@ import 'package:flame/palette.dart';
 import 'dart:ui';
 import 'package:flame/events.dart';
 import 'package:flame/components.dart';
+import 'package:baahbox/services/settings/settingsController.dart';
 
 class BBGame extends FlameGame with PanDetector {
   final Controller appController = Get.find();
+
   GameState state = GameState.initializing;
   final double reactivity = 0.2; //todo enum (hardnesscoeff in ios)
   String title = "titre";

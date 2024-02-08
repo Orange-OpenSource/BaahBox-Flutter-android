@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'controllers/appController.dart';
+import '../../controllers/appController.dart';
 import 'package:baahbox/routes/routes.dart';
 
-
-class SheepSettingsPage extends StatefulWidget {
-  const SheepSettingsPage({Key? key}) : super(key: key);
+class ToadSettingsPage extends StatefulWidget {
+  const ToadSettingsPage({Key? key}) : super(key: key);
 
   @override
   _ValidationsState createState() => _ValidationsState();
 }
 
-class _ValidationsState extends State<SheepSettingsPage> {
+class _ValidationsState extends State<ToadSettingsPage> {
   @override
   Widget build(BuildContext context) {
     final nameController = TextEditingController();
@@ -22,7 +21,7 @@ class _ValidationsState extends State<SheepSettingsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sheep Settings'),
+        title: Text('Toad Settings'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

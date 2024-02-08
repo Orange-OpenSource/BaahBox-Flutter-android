@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:baahbox/model/sensorInput.dart';
 import 'package:baahbox/controllers/appController.dart';
 import 'package:baahbox/routes/routes.dart';
-import 'package:baahbox/services/ble/getx_ble.dart';
+import 'package:baahbox/services/ble/getXble/getx_ble.dart';
 
 class ConnectionPage extends StatefulWidget {
   const ConnectionPage({Key? key}) : super(key: key);

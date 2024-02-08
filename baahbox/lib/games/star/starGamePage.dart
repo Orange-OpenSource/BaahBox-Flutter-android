@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:flame/game.dart';
 import 'package:baahbox/controllers/appController.dart';
 import 'package:baahbox/games/overlayBuilder.dart';
+import 'package:baahbox/services/settings/settingsController.dart';
 
 class StarGamePage extends StatelessWidget {
   final Controller appController = Get.find();

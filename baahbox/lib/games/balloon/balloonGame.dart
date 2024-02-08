@@ -8,9 +8,12 @@ import 'package:get/get.dart';
 import 'package:baahbox/constants/enums.dart';
 import 'package:baahbox/games/BBGame.dart';
 import 'balloonComponent.dart';
+import 'package:baahbox/services/settings/settingsController.dart';
 
 class BalloonGame extends BBGame with TapCallbacks {
   final Controller appController = Get.find();
+  final SettingsController settingsController = Get.find();
+
   late BalloonComponent _balloon;
 
   var panInput = 0;
@@ -40,7 +43,6 @@ class BalloonGame extends BBGame with TapCallbacks {
     _balloon = BalloonComponent();
     await add(_balloon);
   }
-
 
   @override
   void update(double dt) {

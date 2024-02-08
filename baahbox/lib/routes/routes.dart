@@ -1,16 +1,16 @@
 import 'package:baahbox/welcome.dart';
-import 'package:baahbox/settings.dart';
-import 'package:baahbox/generalSettings.dart';
-import 'package:baahbox/spaceShipSettings.dart';
-import 'package:baahbox/sheepSettings.dart';
-import 'package:baahbox/toadSettings.dart';
+import 'package:baahbox/services/settings/settings.dart';
+import 'package:baahbox/services/settings/generalSettings.dart';
+import 'package:baahbox/services/settings/spaceShipSettings.dart';
+import 'package:baahbox/services/settings/sheepSettings.dart';
+import 'package:baahbox/services/settings/toadSettings.dart';
 import 'package:baahbox/games/balloon/balloonGamePage.dart';
 import 'package:baahbox/games/star/starGamePage.dart';
 import 'package:baahbox/games/testGamePage.dart';
 import 'package:baahbox/games/dino/dinoGamePage.dart';
 import 'package:baahbox/games/trex/trexGamePage.dart';
-import 'package:baahbox/services/bleConnectionPage.dart';
-import 'package:baahbox/services/connectionPage.dart';
+import 'package:baahbox/services/ble/bleConnectionPage.dart';
+import 'package:baahbox/services/ble/connectionPage.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:baahbox/games/spaceShip/spaceShipGamePage.dart';
 import 'package:baahbox/games/sheep/SheepGamePage.dart';
@@ -44,7 +44,7 @@ class BBRoutes {
   static List<GetPage> routes = [
     GetPage(page: () => const WelcomePage(), name: BBRoute.welcome.path),
     GetPage(page: () => const SettingsPage(), name: BBRoute.settings.path),
-    GetPage(page: () => const GeneralSettingsPage(), name: BBRoute.generalSettings.path),
+    GetPage(page: () => GeneralSettingsPage(), name: BBRoute.generalSettings.path),
     GetPage(page: () => const SheepSettingsPage(), name: BBRoute.sheepSettings.path),
     GetPage(page: () => const SpaceShipSettingsPage(), name: BBRoute.spaceShipSettings.path),
     GetPage(page: () => const ToadSettingsPage(), name: BBRoute.toadSettings.path),

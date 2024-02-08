@@ -9,9 +9,12 @@ import 'package:baahbox/controllers/appController.dart';
 import 'package:baahbox/constants/enums.dart';
 import 'package:baahbox/games/BBGame.dart';
 import 'starSprite.dart';
+import 'package:baahbox/services/settings/settingsController.dart';
 
 class StarGame extends BBGame with TapCallbacks {
   final Controller appController = Get.find();
+  final SettingsController settingsController = Get.find();
+
   late Size screenSize;
   late StarSprite _star;
 
