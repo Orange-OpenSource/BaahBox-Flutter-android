@@ -76,16 +76,18 @@ class GeneralSettingsPage extends GetView<SettingsController> {
                         ),
                       ]))),
           const SizedBox(
-            height: 24,
+            height: 12,
           ),
-          const Text(
+          const Padding(
+            padding: EdgeInsets.only(left: 16, top: 8),
+             child: const Text(
             'Capteur utilisé',
             style: TextStyle(
               fontSize: 16,
             ),
-          ),
+          )),
           Align(
-              alignment: Alignment.centerRight, child: SensorSegmentedSegment()),
+              alignment: Alignment.center, child: SensorSegmentedSegment()),
           const SizedBox(
             height: 24,
           ),
@@ -139,16 +141,18 @@ class GeneralSettingsPage extends GetView<SettingsController> {
                         ),
                       ]))),
           const SizedBox(
-            height: 24,
+            height: 8,
           ),
-          const Text(
+    Padding(
+    padding: const EdgeInsets.only(left: 16, top: 8),
+    child: const Text(
             'Sensibilité',
             style: TextStyle(
               fontSize: 16,
             ),
-          ),
+          )),
     Align(
-    alignment: Alignment.centerRight, child: SensitivitySegmentedSegment()),
+    alignment: Alignment.center, child: SensitivitySegmentedSegment()),
           const SizedBox(
             height: 24,
           ),
