@@ -1,24 +1,15 @@
-import 'dart:math';
 import 'package:flame/components.dart';
-import 'package:flame/sprite.dart';
 import 'package:baahbox/games/spaceShip/components/lifeComponent.dart';
 import 'package:baahbox/games/spaceShip/spaceShipGame.dart';
 
 class LifeManager extends Component with HasGameRef<SpaceShipGame> {
   final lifeNumber = 5;
   final lifeArray = [];
-
   final gapSize = 5;
 
   @override
   Future<void> onLoad() async {
     createLifes();
-  }
-
-  void _createLifeAt(double x, double y) {
-    final life = LifeComponent(position: Vector2(x, y));
-    lifeArray.add(life);
-    game.add(life);
   }
 
   void createLifes() {
@@ -27,6 +18,12 @@ class LifeManager extends Component with HasGameRef<SpaceShipGame> {
        var xpos = (25 + gapSize) * i;
       _createLifeAt(xpos + 10, game.size.y - 10);
     }
+  }
+
+  void _createLifeAt(double x, double y) {
+    final life = LifeComponent(position: Vector2(x, y));
+    lifeArray.add(life);
+    game.add(life);
   }
 
   void looseOneLife() {

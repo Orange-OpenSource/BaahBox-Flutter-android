@@ -16,7 +16,7 @@ class MeteorManager extends TimerComponent with HasGameRef<SpaceShipGame> {
 
   @override
   void onTick() {
-     if (gameRef.appController.isActive) {
+     if (gameRef.appController.isActive && !gameRef.isGameOver) {
       final _halfWidth = meteor1Sprite.originalSize.x / 10;
       game.addAll(
         List.generate(

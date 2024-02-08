@@ -1,5 +1,9 @@
 import 'package:baahbox/welcome.dart';
 import 'package:baahbox/settings.dart';
+import 'package:baahbox/generalSettings.dart';
+import 'package:baahbox/spaceShipSettings.dart';
+import 'package:baahbox/sheepSettings.dart';
+import 'package:baahbox/toadSettings.dart';
 import 'package:baahbox/games/balloon/balloonGamePage.dart';
 import 'package:baahbox/games/star/starGamePage.dart';
 import 'package:baahbox/games/testGamePage.dart';
@@ -28,6 +32,7 @@ enum BBRoute {
   toadSettings(path: "/toadSettings"),
   spaceShipSettings(path: "/spaceShipSettings");
 
+
   const BBRoute({required this.path});
   final String path;
 }
@@ -39,6 +44,10 @@ class BBRoutes {
   static List<GetPage> routes = [
     GetPage(page: () => const WelcomePage(), name: BBRoute.welcome.path),
     GetPage(page: () => const SettingsPage(), name: BBRoute.settings.path),
+    GetPage(page: () => const GeneralSettingsPage(), name: BBRoute.generalSettings.path),
+    GetPage(page: () => const SheepSettingsPage(), name: BBRoute.sheepSettings.path),
+    GetPage(page: () => const SpaceShipSettingsPage(), name: BBRoute.spaceShipSettings.path),
+    GetPage(page: () => const ToadSettingsPage(), name: BBRoute.toadSettings.path),
     GetPage(page: () => const ConnectionPage(), name: BBRoute.connection.path),
     GetPage(page: () => BalloonGamePage(), name: BBRoute.balloon.path),
     GetPage(page: () => TestGamePage(), name: BBRoute.testSensors.path),

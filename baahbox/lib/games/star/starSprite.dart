@@ -22,7 +22,8 @@ class StarSprite extends SpriteComponent with HasGameRef<StarGame> {
 
   void initialize() {
     this.sprite = starSprite;
-    position = gameRef.size / 2;
+    size = starSprite.srcSize / 5;
+    position = Vector2(gameRef.size.x / 2, gameRef.size.y/2-size.y/4);
     size = starSprite.srcSize / 5;
   }
 

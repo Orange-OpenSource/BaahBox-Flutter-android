@@ -12,7 +12,7 @@ class SheepComponent extends SpriteComponent //AnimationComponent
         HasGameRef<SheepGame>,
         CollisionCallbacks {
   SheepComponent({required super.position})
-      : super(size: Vector2(75, 100), anchor: Anchor.bottomCenter);
+      : super(size: Vector2(100, 100), anchor: Anchor.bottomCenter);
 
   final walkingImages = [
     Flame.images.fromCache('Jeux/Sheep/sheep_01.png'),
@@ -38,7 +38,9 @@ class SheepComponent extends SpriteComponent //AnimationComponent
 
   void initialize() {
     this.sprite = walkingSprite1;
-    size = walkingSprite1.srcSize / 10;
+    var ratio = walkingSprite1.srcSize.x / walkingSprite1.srcSize.y;
+    var width = gameRef.size.x/3;
+    size = Vector2(width,width/ratio); //walkingSprite1.srcSize / 10;
     show();
   }
 
@@ -121,7 +123,7 @@ class SheepComponent extends SpriteComponent //AnimationComponent
   void takeHit() {
     setSpriteTo(3);
     game.add(BimComponent(
-        position: Vector2(position.x + size.x, position.y - size.y - 50)));
+        position: Vector2(position.x + size.x/2, position.y - size.y - 20)));
     gameRef.setGameStateToWon(false);
   }
 

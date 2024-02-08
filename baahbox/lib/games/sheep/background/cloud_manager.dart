@@ -6,36 +6,54 @@ import '../sheepGame.dart';
 class CloudManager extends PositionComponent with HasGameRef<SheepGame> {
   final double cloudFrequency = 0.5;
   final int maxClouds = 20;
-  final double bgCloudSpeed = 1;
+  final double cloudSpeed = 1;
+  bool isRunning = false;
 
-  void addCloud() {
-    final cloudPosition = Vector2(
-      gameRef.size.x/2, //+ Cloud.initialSize.x + 10,
-      (gameRef.floorY - (Cloud.maxSkyLevel - Cloud.minSkyLevel)
-          - random.fromRange(Cloud.minSkyLevel, Cloud.maxSkyLevel)),
-         // -absolutePosition.y,
-    );
-    add(Cloud(position: cloudPosition));
+  @override
+  Future<void> onLoad() async {
+    start();
   }
-
-  double get cloudSpeed => bgCloudSpeed ;//gameRef.currentSpeed;
 
   @override
   void update(double dt) {
     super.update(dt);
-    final numClouds = children.length;
-    if (numClouds > 0) {
-      final lastCloud = children.last as Cloud;
-      if (numClouds < maxClouds &&
-          (gameRef.size.x / 2 - lastCloud.x) > lastCloud.cloudGap) {
+    if (gameRef.appController.isActive && isRunning) {
+      final numClouds = children.length;
+      if (numClouds > 0) {
+        final lastCloud = children.last as Cloud;
+        if (numClouds < maxClouds &&
+            (gameRef.size.x - lastCloud.x) > lastCloud.cloudGap) {
+          addCloud();
+        }
+      } else {
         addCloud();
       }
     } else {
-      addCloud();
+      clearTheSky();
     }
   }
 
-  void reset() {
+
+  void addCloud() {
+    final cloudPosition = Vector2(
+      gameRef.size.x,
+      (gameRef.floorY - (Cloud.maxSkyLevel - Cloud.minSkyLevel)
+          - random.fromRange(Cloud.minSkyLevel, Cloud.maxSkyLevel)),
+    );
+    add(Cloud(position: cloudPosition));
+  }
+
+
+  void clearTheSky() {
     removeAll(children);
+  }
+
+  void pause() {
+    clearTheSky();
+    isRunning = false;
+  }
+
+  void start() {
+    isRunning = true;
   }
 }

@@ -4,7 +4,6 @@ import 'package:baahbox/games/spaceShip/components/shipComponent.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
-import 'package:flame/text.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:baahbox/controllers/appController.dart';
@@ -34,7 +33,7 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
   var goLeft = false;
   var goRight = false;
   var instructionTitle = 'Evite les météorites';
-  var instructionSubtitle = 'en contractant le muscle de droite ou de gauche';
+  var instructionSubtitle = '';
 
   @override
   Color backgroundColor() => BBGameList.starship.baseColor.color;

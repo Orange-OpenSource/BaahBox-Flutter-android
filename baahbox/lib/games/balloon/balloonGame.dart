@@ -45,9 +45,11 @@ class BalloonGame extends BBGame with TapCallbacks {
   @override
   void update(double dt) {
     super.update(dt);
-    if (isRunning) {
-      refreshInput();
-      updateOverlaysAndState();
+    if (appController.isActive) {
+      if (isRunning) {
+        refreshInput();
+        updateOverlaysAndState();
+      }
     }
   }
 

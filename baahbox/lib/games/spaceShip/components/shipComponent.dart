@@ -22,9 +22,9 @@ class ShipComponent extends SpriteComponent
 
   void initialize() {
     sprite = normalShipSprite;
-    size = normalShipSprite.srcSize / 10;
+    size = normalShipSprite.srcSize / 13;
     position = Vector2(gameRef.size.x / 2,
-        (gameRef.size.y) / 2 + normalShipSprite.srcSize.y / 6);
+        (gameRef.size.y) / 2 + size.y );
     anchor = Anchor.center;
   }
 
