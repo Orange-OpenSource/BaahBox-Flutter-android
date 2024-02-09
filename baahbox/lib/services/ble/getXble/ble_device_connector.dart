@@ -11,19 +11,16 @@ class BleDeviceConnector extends GetxController {
     rxBleConnectionState.bindStream(_deviceConnectionController.stream);
   }
 
+  late StreamSubscription<ConnectionStateUpdate> _connection;
+  final _deviceConnectionController = StreamController<ConnectionStateUpdate>();
   final FlutterReactiveBle _ble;
-
   final void Function(String message) _logMessage;
-
   final rxBleConnectionState = Rx<ConnectionStateUpdate>(
       const ConnectionStateUpdate(
           deviceId: "",
           connectionState: DeviceConnectionState.disconnected,
           failure: null));
 
-  final _deviceConnectionController = StreamController<ConnectionStateUpdate>();
-
-  late StreamSubscription<ConnectionStateUpdate> _connection;
 
   Future<void> connect(String deviceMAC) async {
     _logMessage('Start connecting to $deviceMAC');

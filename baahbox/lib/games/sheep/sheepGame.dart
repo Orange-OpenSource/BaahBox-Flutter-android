@@ -41,7 +41,7 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
   bool hasSheepStartedJumping = false;
   bool sheepDidJumpOverGate = false;
   int strengthValue = 0;
-  double gateVelocity = 1.0;
+  int gateVelocity = 1;
 
   int panInput = 0;
   int input = 0;
@@ -74,7 +74,7 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
 
   Future<void> loadComponents() async {
 
-    await add(gate = GateComponent(speed: this.gateVelocity));
+    await add(gate = GateComponent(speedScale: this.gateVelocity));
     await add(cloudManager);
     await add(counterManager);
 
@@ -131,6 +131,7 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
     if (appController.isActive) {
       if (isRunning) {
         refreshInput();
+      transformInputInMove();
         if (isNewGateOnQueue()) {
           if (!isSheepOnFloor() && !sheepDidJumpOverGate) {
             setGameStateToWon(false);
@@ -148,6 +149,24 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
       }
     }
   }
+
+  void transformInputInMove() {
+    //   if input <= threshold { return }
+    //   var heightConstraint = (CGFloat(strengthValue) - CGFloat (hardnessCoeff*350)) / 1000
+//   if heightConstraint < 0 { heightConstraint = 0 }
+  final jumpHeigth = floorY * (1-(input/100));
+  print("florY: $floorY, height: $jumpHeigth");
+  sheep.moveTo(jumpHeigth);
+// let jumpheightWithConstraint = groundPosition.y + (maxHeigthJump * heightConstraint)
+// jumpTo(sprite: sheep, height: jumpheightWithConstraint)
+
+  }
+
+//  var heightConstraint = (CGFloat(strengthValue) - CGFloat (hardnessCoeff*350)) / 1000
+//  if heightConstraint < 0 { heightConstraint = 0 }
+// let jumpheightWithConstraint = groundPosition.y + (maxHeigthJump * heightConstraint)
+// jumpTo(sprite: sheep, height: jumpheightWithConstraint)
+
 
   void refreshInput() {
     // todo deal with 2 muscles or joystick input
@@ -263,25 +282,4 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
     // TODO: implement onDispose
     super.onDispose();
   }
-  // ===================
-  // MARK: - Parameters
-  // ===================
-
-  // @objc func loadParameters() {
-  //   threshold = ParameterDataManager.sharedInstance.threshold
-  //   gameObjective = ParameterDataManager.sharedInstance.numberOfFences
-  //
-  //   switch ParameterDataManager.sharedInstance.fenceVelocity {
-  //   case .slow:
-  //   speedRate = 1
-  //   case .average:
-  //   speedRate = 2
-  //   default:
-  //   speedRate = 3
-  //   }
-  //   // needed ??
-  //   if !isGameOnGoing {
-  //   configureScoreLabel(with: 0)
-  //   }
-  //   }
 }

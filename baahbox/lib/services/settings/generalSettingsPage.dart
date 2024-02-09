@@ -52,6 +52,11 @@ class GeneralSettingsPage extends GetView<SettingsController> {
             height: 15,
           ),
           const SwitchExample(title: "Mode démo"),
+          // SwitchListTile(
+          //   title: const Text('Floating Action Button'),
+          //   value: true,
+          //   onChanged: (bool val){}, //controller.doTheRightThing(v),
+          // ),
           const SizedBox(
             height: 24,
           ),
@@ -156,53 +161,53 @@ class GeneralSettingsPage extends GetView<SettingsController> {
           const SizedBox(
             height: 24,
           ),
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TextFormField(
-                    controller: controller.passwordController,
-                    decoration: InputDecoration(
-                      labelText: 'Enter password',
-                      border: const OutlineInputBorder(),
-                      isDense: true,
-                      hintText: 'Enter password',
-                    ),
-                  ),
-                  SliderExample(),
-
-                  RadioSensorChoice(),
-
-                  const SizedBox(
-                    height: 24,
-                  ),
-                  // Obx(() =>
-                  TextButton(
-                      //label: 'Sign in',
-                      onPressed: controller.onLogin,
-                      // isLoading: controller.status.isLoading,
-                      child: const Text("sign in"))
-                  //  )
-                ],
-              ),
-            ),
-          ),
-          const Padding(
-            padding: EdgeInsets.only(left: 32, top: 8),
-            child: Text(
-              'Sign In',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          IconButton(
-              icon: Image.asset('assets/images/Dashboard/settings_icon@2x.png',
-                  color: mainColor),
-              onPressed: () => Get.toNamed('/settings')),
+          // Card(
+          //   child: Padding(
+          //     padding: const EdgeInsets.all(16.0),
+          //     child: Column(
+          //       crossAxisAlignment: CrossAxisAlignment.start,
+          //       children: [
+          //         TextFormField(
+          //           controller: controller.passwordController,
+          //           decoration: InputDecoration(
+          //             labelText: 'Enter password',
+          //             border: const OutlineInputBorder(),
+          //             isDense: true,
+          //             hintText: 'Enter password',
+          //           ),
+          //         ),
+          //         SliderExample(),
+          //
+          //         RadioSensorChoice(),
+          //
+          //         const SizedBox(
+          //           height: 24,
+          //         ),
+          //         // Obx(() =>
+          //         TextButton(
+          //             //label: 'Sign in',
+          //             onPressed: controller.onLogin,
+          //             // isLoading: controller.status.isLoading,
+          //             child: const Text("sign in"))
+          //         //  )
+          //       ],
+          //     ),
+          //   ),
+          // ),
+          // const Padding(
+          //   padding: EdgeInsets.only(left: 32, top: 8),
+          //   child: Text(
+          //     'Sign In',
+          //     style: TextStyle(
+          //       fontSize: 18,
+          //       fontWeight: FontWeight.bold,
+          //     ),
+          //   ),
+          // ),
+          // IconButton(
+          //     icon: Image.asset('assets/images/Dashboard/settings_icon@2x.png',
+          //         color: mainColor),
+          //     onPressed: () => Get.toNamed('/settings')),
         ],
       ),
     );

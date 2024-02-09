@@ -32,7 +32,7 @@ class CounterManager extends Component with HasGameRef<SheepGame> {
     counterText.text = "Barrières: ";
     const gapSize = 2;
     for (var i = 0; i < gateNumber; i++) {
-      var xpos = (25 + gapSize) * i;
+      var xpos = (10 + gapSize) * i;
       _createMarkAt(xpos + 10, game.size.y - 10);
     }
   }

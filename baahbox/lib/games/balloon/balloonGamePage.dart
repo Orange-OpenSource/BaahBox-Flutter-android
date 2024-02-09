@@ -1,3 +1,4 @@
+import 'package:baahbox/constants/enums.dart';
 import 'balloonGame.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,10 +9,33 @@ import 'package:baahbox/games/overlayBuilder.dart';
 class BalloonGamePage extends StatelessWidget {
   final Controller appController = Get.find();
   final game = BalloonGame();
+  final mainColor = BBGameList.balloon.baseColor.color;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          foregroundColor: mainColor,
+          titleTextStyle: TextStyle(
+              color: mainColor, fontWeight: FontWeight.bold, fontSize: 25),
+          centerTitle: true,
+          title: Text("Fais exploser le ballon !"),
+          actions: [
+            Container(
+                width: 25,
+                child: Image.asset('assets/images/Dashboard/demo@2x.png',
+                    color: mainColor)),
+            SizedBox(
+              width: 15,
+            ),
+            IconButton(
+                icon: Image.asset(
+                    'assets/images/Dashboard/settings_icon@2x.png',
+                    color: mainColor),
+                onPressed: () => Get.toNamed('/settings')),
+          ],
+        ),
         body: Stack(children: [
           GameWidget(
             game: game,

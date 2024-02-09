@@ -8,24 +8,35 @@ class Controller extends FullLifeCycleController with FullLifeCycleMixin {
   var _musclesInput = MusclesInput(0, 0).obs;
   var _joystickInput = JoystickInput(0).obs;
   var _isConnectedToBox = false.obs;
+  var _connectedDeviceName = "".obs;
+  var _connectedDeviceId = "".obs;
 
   var _isActive = false.obs;
-
-
-
+  var _isDebugging = true.obs;
 
   // getters
+  String get connectedDeviceName=> _connectedDeviceName.value;
+  String get connectedDeviceId => _connectedDeviceId.value;
   MusclesInput get musclesInput => _musclesInput.value;
   JoystickInput get joystickInput => _joystickInput.value;
-
-  // functions
   bool get isConnectedToBox => _isConnectedToBox.value;
   bool get isActive => _isActive.value;
+  bool get isDebugging => _isDebugging.value;
+
+  // functions
+  void setDebugModeTo(bool isDebug) {
+    _isDebugging.value = isDebug;
+  }
 
   void setConnectionStateTo(bool isConnected) {
     _isConnectedToBox.value = isConnected;
   }
-
+  void setConnectedDeviceNameTo(String  deviceName) {
+    _connectedDeviceName.value = deviceName;
+  }
+  void setConnectedDeviceIdTo(String  deviceId) {
+    _connectedDeviceId.value = deviceId;
+  }
   void setActivationStateTo(bool activate) {
     _isActive.value = activate;
   }
@@ -46,6 +57,7 @@ class Controller extends FullLifeCycleController with FullLifeCycleMixin {
   void onInit() {
     super.onInit();
     _isActive.value = true;
+    _isDebugging.value = true;
   }
 
 // Mandatory

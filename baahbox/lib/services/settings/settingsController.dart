@@ -10,7 +10,7 @@ class SettingsController extends GetxController {
   final _status = Rx<RxStatus>(RxStatus.empty());
 
   var sheepParameters = (
-  gateVelocity: objectVelocity.high,
+  gateVelocity: ObjectVelocity.high,
   numberOfGates: 5,
   );
 
@@ -28,11 +28,11 @@ class SettingsController extends GetxController {
       "isSensor2On": false,
     },
     "starShip": {
-      "asteroidVelocity": objectVelocity.low,
+      "asteroidVelocity": ObjectVelocity.low,
       "NumberOfLives": 5,
     },
     "sheep": {
-      "gateVelocity": objectVelocity.medium,
+      "gateVelocity": ObjectVelocity.medium,
       "numberOfGates": 3,
     },
     "toad": {
@@ -74,6 +74,33 @@ class SettingsController extends GetxController {
       showMyToast("Null value !");
     }
   }
+  void setGateNumberTo(int? value) {
+    if (value != null) {
+      print("Entered $value ");
+      sheepParams["numberOfGates"] = value;
+      //
+    } else {
+      print("Null value !");
+    }
+  }
+
+  void setGateSpeedTo(int? value) {
+    if (value != null) {
+      print("Entered $value ");
+      switch (value) {
+        case 2:
+        sheepParams["gateVelocity"] = ObjectVelocity.medium;
+        case 3:
+          sheepParams["gateVelocity"] = ObjectVelocity.high;
+        default:
+          sheepParams["gateVelocity"] = ObjectVelocity.low;
+      }
+      //
+    } else {
+      print("Null value !");
+    }
+  }
+
   bool _isValid() {
     if (emailController.text.trim().isEmpty) {
       showMyToast("Enter email id Error");
