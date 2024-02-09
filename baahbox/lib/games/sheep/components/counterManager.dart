@@ -20,7 +20,7 @@ class CounterManager extends Component with HasGameRef<SheepGame> {
   void showCount() async {
     await gameRef.addAll([
       counterText = TextComponent(
-          position: Vector2(0, game.size.y - 50),
+          position: Vector2(5, game.size.y - 40),
           anchor: Anchor.bottomLeft,
           priority: 1,
           size: Vector2(50, 20)),
@@ -28,6 +28,7 @@ class CounterManager extends Component with HasGameRef<SheepGame> {
   }
 
   void createMarks(int nbGates) {
+    clearTheFields();
     gateNumber = nbGates;
     counterText.text = "Barrières: ";
     const gapSize = 2;
@@ -51,4 +52,10 @@ class CounterManager extends Component with HasGameRef<SheepGame> {
       counterText.text = "";
     }
   }
-}
+
+  void clearTheFields() {
+    for (var i = 0; i <= markArray.length+1; i++)
+     looseOneMark();
+    }
+  }
+
