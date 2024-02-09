@@ -1,14 +1,9 @@
-import 'dart:io';
-import 'dart:ui';
-
-import 'package:baahbox/games/spaceShip/spaceShipGame.dart';
+import 'package:flame/flame.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:baahbox/games/spaceShip/components/meteorComponent.dart';
-import 'package:baahbox/games/spaceShip/components/explosionComponent.dart';
-import 'package:flame/flame.dart';
-import 'package:flame/effects.dart';
-import 'package:baahbox/constants/enums.dart';
+import 'package:baahbox/games/spaceShip/spaceShipGame.dart';
 
 class ShipComponent extends SpriteComponent
     with HasGameRef<SpaceShipGame>, CollisionCallbacks {
@@ -27,9 +22,9 @@ class ShipComponent extends SpriteComponent
 
   void initialize() {
     sprite = normalShipSprite;
-    size = normalShipSprite.srcSize / 10;
+    size = normalShipSprite.srcSize / 13;
     position = Vector2(gameRef.size.x / 2,
-        (gameRef.size.y) / 2 + normalShipSprite.srcSize.y / 6);
+        (gameRef.size.y) / 2 + size.y );
     anchor = Anchor.center;
   }
 

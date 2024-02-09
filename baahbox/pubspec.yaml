@@ -19,28 +19,21 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  #sdk: '>=3.0.0'
   sdk: ">=3.0.0 <4.0.0"
-  #flutter: ">=3.13.0"
-
-# Dependencies specify other packages that your package needs in order to work.
-# To automatically upgrade your package dependencies to the latest versions
-# consider running `flutter pub upgrade --major-versions`. Alternatively,
-# dependencies can be manually updated by changing the version numbers below to
-# the latest version available on pub.dev. To see which dependencies have newer
-# versions available, run `flutter pub outdated`.
 dependencies:
-  #flame: ^1.14.0
+  flame: ^1.14.0
   flutter:
     sdk: flutter
   get:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
-  flutter_reactive_ble: ^5.0.3
+  cupertino_icons:
+  flutter_reactive_ble:
   location_permissions: ^4.0.0
-  flame: ^1.8.0
+  fluttertoast:
+  custom_sliding_segmented_control: ^1.8.1
+
   meta:
 
 dev_dependencies:
@@ -53,7 +46,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.0
+  flutter_lints: #^2.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -76,8 +69,8 @@ flutter:
      - assets/images/Jeux/Toad/
      - assets/images/Jeux/Star/
      - assets/images/Jeux/Sheep/
-     - assets/images/Jeux/rogue_shooter/
      - assets/images/Jeux/Spaceship/
+     - assets/images/Jeux/rogue_shooter/
      - assets/images/Particules/
      - assets/images/Splashscreen/
 

@@ -10,7 +10,6 @@ class BleDeviceInteractor extends GetxController {
         _logMessage = logMessage;
 
   final FlutterReactiveBle _ble;
-
   final void Function(String message) _logMessage;
 
   Future<List<DiscoveredService>> discoverServices(String deviceId) async {

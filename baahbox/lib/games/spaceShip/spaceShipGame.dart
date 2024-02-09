@@ -4,7 +4,6 @@ import 'package:baahbox/games/spaceShip/components/shipComponent.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
-import 'package:flame/text.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:baahbox/controllers/appController.dart';
@@ -16,9 +15,12 @@ import 'package:baahbox/games/spaceShip/components/MeteorManager.dart';
 import 'package:baahbox/games/spaceShip/components/starBackgroundCreator.dart';
 import 'package:baahbox/games/spaceShip/components/lifeManager.dart';
 import 'package:flame/input.dart';
+import 'package:baahbox/services/settings/settingsController.dart';
+
 
 class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
   final Controller appController = Get.find();
+  final SettingsController settingsController = Get.find();
 
   late final ShipComponent ship;
   late final TextComponent scoreText;
@@ -34,7 +36,7 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
   var goLeft = false;
   var goRight = false;
   var instructionTitle = 'Evite les météorites';
-  var instructionSubtitle = 'en contractant le muscle de droite ou de gauche';
+  var instructionSubtitle = '';
 
   @override
   Color backgroundColor() => BBGameList.starship.baseColor.color;

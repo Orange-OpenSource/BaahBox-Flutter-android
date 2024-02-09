@@ -9,9 +9,12 @@ import 'package:baahbox/controllers/appController.dart';
 import 'package:baahbox/constants/enums.dart';
 import 'package:baahbox/games/BBGame.dart';
 import 'starSprite.dart';
+import 'package:baahbox/services/settings/settingsController.dart';
 
 class StarGame extends BBGame with TapCallbacks {
   final Controller appController = Get.find();
+  final SettingsController settingsController = Get.find();
+
   late Size screenSize;
   late StarSprite _star;
 
@@ -34,18 +37,19 @@ class StarGame extends BBGame with TapCallbacks {
       'Jeux/Star/jeu_etoile_02@2x.png',
     ]);
     _star = StarSprite();
-   await add(_star);
+    await add(_star);
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    if (state == GameState.running) {
-      refreshInput();
-      updateOverlaysAndState();
+    if (appController.isActive) {
+      if (isRunning) {
+        refreshInput();
+        updateOverlaysAndState();
+      }
     }
   }
-
 
   void refreshInput() {
     // todo deal with 2 muscles or joystick input
@@ -62,14 +66,11 @@ class StarGame extends BBGame with TapCallbacks {
     if (input < 300) {
       title = instructionTitle;
       subTitle = instructionSubtitle;
-    } else if (input < 750) {
-      title = feedback;
-      subTitle = '';
-      refreshWidget();
-    } else {
-      title = "Bravo";
-      subTitle = '';
-      endGame();
+    } else
+      if (input < 750) {
+        displayFeedBack();
+     } else {
+       endGame();
     }
   }
 
@@ -102,8 +103,6 @@ class StarGame extends BBGame with TapCallbacks {
           "panInput : ${panInput} :::  panY : ${yPos} vs game ${canvasSize.y}");
     }
   }
-
-
 
   @override
   void onTapDown(TapDownEvent event) {

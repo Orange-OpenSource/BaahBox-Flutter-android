@@ -4,11 +4,15 @@ import 'package:flame/flame.dart';
 
 class BalloonComponent extends SpriteComponent with HasGameRef<BalloonGame> {
   BalloonComponent() : super(size: Vector2.all(16.0), anchor: Anchor.center);
-  final balloonstartSprite = Sprite(Flame.images.fromCache('Jeux/Balloon/ballon_00@2x.png'));
-  final balloonlowSprite = Sprite(Flame.images.fromCache('Jeux/Balloon/ballon_01@2x.png'));
+
+  final balloonstartSprite =
+      Sprite(Flame.images.fromCache('Jeux/Balloon/ballon_00@2x.png'));
+  final balloonlowSprite =
+      Sprite(Flame.images.fromCache('Jeux/Balloon/ballon_01@2x.png'));
   final balloonmediumSprite =
       Sprite(Flame.images.fromCache('Jeux/Balloon/ballon_02@2x.png'));
-  final balloonhighSprite = Sprite(Flame.images.fromCache('Jeux/Balloon/ballon_03@2x.png'));
+  final balloonhighSprite =
+      Sprite(Flame.images.fromCache('Jeux/Balloon/ballon_03@2x.png'));
   final balloonexplodeSprite =
       Sprite(Flame.images.fromCache('Jeux/Balloon/ballon_04@2x.png'));
 
@@ -51,8 +55,7 @@ class BalloonComponent extends SpriteComponent with HasGameRef<BalloonGame> {
       this.size = newSize / 4;
     } else if (coeff > 0) {
       var newSize = this.sprite?.srcSize ?? Vector2(400, 600);
-      this.size = newSize  * (coeff/1000).toDouble();
-
+      this.size = newSize * (coeff / 1000).toDouble();
     }
   }
 }

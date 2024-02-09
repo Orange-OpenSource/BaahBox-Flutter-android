@@ -8,24 +8,30 @@ import 'package:get/get.dart';
 import 'package:baahbox/constants/enums.dart';
 import 'package:baahbox/games/BBGame.dart';
 import 'balloonComponent.dart';
+import 'package:baahbox/services/settings/settingsController.dart';
 
 class BalloonGame extends BBGame with TapCallbacks {
   final Controller appController = Get.find();
+  final SettingsController settingsController = Get.find();
+
   late BalloonComponent _balloon;
 
   var panInput = 0;
   var input = 0;
   var instructionTitle = 'Gonfle le ballon';
   var instructionSubtitle = 'en contractant ton muscle';
-  var feedback = 'encore un petit effort!';
+  var feedback1 = "C'est parti !";
+  var feedback2 = 'Encore un petit effort!';
+  var feedback3 = 'On y est presque !';
 
   @override
-  Color backgroundColor() =>  BBGameList.balloon.baseColor.color;
+  Color backgroundColor() => BBGameList.balloon.baseColor.color;
 
   @override
   Future<void> onLoad() async {
     title = instructionTitle;
     subTitle = instructionSubtitle;
+    feedback = "";
     super.onLoad();
     await Flame.images.loadAll(<String>[
       'Jeux/Balloon/ballon_00@2x.png',
@@ -41,9 +47,11 @@ class BalloonGame extends BBGame with TapCallbacks {
   @override
   void update(double dt) {
     super.update(dt);
-    if (state == GameState.running) {
-      refreshInput();
-      updateOverlaysAndState();
+    if (appController.isActive) {
+      if (isRunning) {
+        refreshInput();
+        updateOverlaysAndState();
+      }
     }
   }
 
@@ -57,38 +65,37 @@ class BalloonGame extends BBGame with TapCallbacks {
     }
   }
 
-
   void updateOverlaysAndState() {
     int coeff = (input / 100).toInt();
     if (input < 300) {
-      title = instructionTitle;
-      subTitle = instructionSubtitle;
+      feedback = feedback1;
+    } else if (input < 500) {
+      feedback = feedback2;
     } else if (input < 800) {
-      title = feedback;
-      subTitle = '';
-      refreshWidget();
+      feedback = feedback3;
     } else {
-      title = "Bravo";
-      subTitle = '';
       endGame();
     }
+    refreshWidget();
   }
 
+  @override
+  void startGame() {
+    super.startGame();
+    displayFeedBack();
+  }
 
   @override
   void resetGame() {
-    // TODO: implement resetGame
     super.resetGame();
     _balloon.initialize();
   }
 
   @override
   void endGame() {
-    // TODO: implement resetGame
     state = GameState.won;
     super.endGame();
   }
-
 
   @override
   void onPanUpdate(DragUpdateInfo info) {

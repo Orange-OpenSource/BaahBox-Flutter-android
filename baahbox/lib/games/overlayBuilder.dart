@@ -24,13 +24,9 @@ class OverlayBuilder {
 }
 
 class PreGameOverlay extends StatelessWidget {
-
   final BBGame game;
 
-  const PreGameOverlay({
-    super.key,
-    required this.game,
-  });
+  const PreGameOverlay({super.key, required this.game,});
 
   @override
   Widget build(BuildContext context) {
@@ -106,18 +102,17 @@ class FeedbackOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Spacer(),
           Text(
             game.feedback,
             style: const TextStyle(
               color: Colors.white,
-              fontSize: 40,
-              fontWeight: FontWeight.bold,
+              fontSize: 20,
             ),
           ),
-          const SizedBox(height: 100),
+          const SizedBox(height: 120),
         ],
       ),
     );
@@ -146,7 +141,7 @@ class PostGameOverlay extends StatelessWidget {
             message,
             style: const TextStyle(
               color: Colors.white,
-              fontSize: 40,
+              fontSize: 30,
             ),
           ),
           const SizedBox(height: 35),

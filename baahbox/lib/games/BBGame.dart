@@ -8,18 +8,30 @@ import 'package:flame/palette.dart';
 import 'dart:ui';
 import 'package:flame/events.dart';
 import 'package:flame/components.dart';
+import 'package:baahbox/services/settings/settingsController.dart';
 
 class BBGame extends FlameGame with PanDetector {
   final Controller appController = Get.find();
+
   GameState state = GameState.initializing;
   final double reactivity = 0.2; //todo enum (hardnesscoeff in ios)
   String title = "titre";
   String subTitle = "sous titre";
-  String feedback = "encore un effort";
+  String feedback = "encore un effort !";
+
+  bool get isRunning => state == GameState.running;
+  bool get isGameOver => (state == GameState.won || state == GameState.lost);
+  bool get isWon => state == GameState.won;
+  bool get isLost => state == GameState.lost;
+  bool get isReady => state == GameState.ready;
 
   //Flame.device.fullScreen();
   Future<void> onLoad() async {
     await super.onLoad();
+    initializeGame();
+  }
+
+  void initializeGame() {
     overlays.clear();
     overlays.add('Instructions');
     overlays.add('PreGame');
@@ -27,12 +39,7 @@ class BBGame extends FlameGame with PanDetector {
   }
 
   void startGame() {
-    if (overlays.isActive('PreGame')) {
-      overlays.remove('PreGame');
-    }
-    if (overlays.isActive('Instructions')) {
-      overlays.remove('Instructions');
-    }
+    overlays.clear();
     appController.setActivationStateTo(true);
     state = GameState.running;
   }

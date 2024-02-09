@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'controllers/appController.dart';
+import '../../controllers/appController.dart';
 import 'package:baahbox/routes/routes.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -27,9 +27,21 @@ class SettingsPage extends StatelessWidget {
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-              ElevatedButton(
-                  onPressed: () => Get.toNamed(BBRoute.connection.path),
-                  child: Text('Connexion settings'))
+                  ElevatedButton(
+                      onPressed: () => Get.toNamed(BBRoute.connection.path),
+                      child: Text('Connexion settings')),
+                  ElevatedButton(
+                      onPressed: () => Get.toNamed(BBRoute.generalSettings.path),
+                      child: Text('General settings')),
+                  ElevatedButton(
+                      onPressed: () => Get.toNamed(BBRoute.sheepSettings.path),
+                      child: Text('Sheep settings')),
+                  ElevatedButton(
+                      onPressed: () => Get.toNamed(BBRoute.spaceShipSettings.path),
+                      child: Text('Space Ship settings')),
+                  ElevatedButton(
+                      onPressed: () => Get.toNamed(BBRoute.toadSettings.path),
+                      child: Text('Toad settings')),
             ])));
   }
 }

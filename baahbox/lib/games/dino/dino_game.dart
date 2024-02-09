@@ -17,8 +17,8 @@ class DinoGame extends FlameGame with KeyboardEvents{
     await add(_dinoWorld);
     await add(_dinoPlayer);
     _dinoPlayer.position = _dinoWorld.size / 1.5;
-    camera.followComponent(_dinoPlayer,
-        worldBounds: Rect.fromLTRB(0, 0, _dinoWorld.size.x, _dinoWorld.size.y));
+    camera.follow(_dinoPlayer);
+   // camera.setBounds(Rect.fromLTRB(0, 0, _dinoWorld.size.x, _dinoWorld.size.y));
 
   }
 

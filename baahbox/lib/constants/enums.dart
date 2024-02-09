@@ -1,5 +1,33 @@
 import 'dart:ui';
 
+enum ObjectVelocity {
+  low(value: 1),
+  medium(value: 2),
+  high(value: 3);
+
+  const ObjectVelocity({required this.value});
+  final int value;
+}
+
+enum Sensitivity {
+  low,
+  medium,
+  high;
+}
+
+enum ShootingType {
+  automatic,
+  manual;
+}
+
+enum SensorType {
+  muscle,
+  arcadeJoystick,
+  button,
+  digitalJoystick,
+  wheelChairJoystick;
+}
+
 enum BBColor implements Comparable<BBColor> {
   beurkGreen(sRGB: 0xFFCEAF17),
   blueGreen(sRGB: 0xFF085559),
