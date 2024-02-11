@@ -16,21 +16,15 @@ class GeneralSettingsPage extends GetView<SettingsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('General Settings'),
+        title: Text('Général'),
       ),
       body: ListView(
         children: [
           const Padding(
             padding: EdgeInsets.only(left: 32, top: 8),
-            // child: Text(
-            //   'Sign In',
-            //   style: TextStyle(
-            //     fontSize: 18,
-            //     fontWeight: FontWeight.bold,
-            //   ),
-            // ),
           ),
           Card(
+              shape: ContinuousRectangleBorder(),
               child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
@@ -51,16 +45,12 @@ class GeneralSettingsPage extends GetView<SettingsController> {
           const SizedBox(
             height: 15,
           ),
-          const SwitchExample(title: "Mode démo"),
-          // SwitchListTile(
-          //   title: const Text('Floating Action Button'),
-          //   value: true,
-          //   onChanged: (bool val){}, //controller.doTheRightThing(v),
-          // ),
+          const SwitchExample(title: "Mode démo:"),
           const SizedBox(
             height: 24,
           ),
           Card(
+              shape: ContinuousRectangleBorder(),
               child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
@@ -84,22 +74,23 @@ class GeneralSettingsPage extends GetView<SettingsController> {
             height: 12,
           ),
           const Padding(
-            padding: EdgeInsets.only(left: 16, top: 8),
-             child: const Text(
-            'Capteur utilisé',
-            style: TextStyle(
-              fontSize: 16,
-            ),
-          )),
-          Align(
-              alignment: Alignment.center, child: SensorSegmentedSegment()),
+              padding: EdgeInsets.only(left: 16, top: 8),
+              child: const Text(
+                'Capteur utilisé:',
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              )),
+          const Padding(
+              padding: EdgeInsets.only(right: 16, top: 8),
+              child: Align(
+                  alignment: Alignment.centerRight,
+                  child: SensorSegmentedSegment())),
           const SizedBox(
-            height: 24,
-          ),
-          const SizedBox(
-            height: 12,
+            height: 36,
           ),
           Card(
+              shape: ContinuousRectangleBorder(),
               child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
@@ -128,7 +119,8 @@ class GeneralSettingsPage extends GetView<SettingsController> {
           ),
           SwitchExample(title: "Muscle 2"),
           Card(
-              child: Padding(
+              shape: ContinuousRectangleBorder(),
+    child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -148,66 +140,22 @@ class GeneralSettingsPage extends GetView<SettingsController> {
           const SizedBox(
             height: 8,
           ),
-    Padding(
-    padding: const EdgeInsets.only(left: 16, top: 8),
-    child: const Text(
-            'Sensibilité',
-            style: TextStyle(
-              fontSize: 16,
-            ),
-          )),
-    Align(
-    alignment: Alignment.center, child: SensitivitySegmentedSegment()),
+          Padding(
+              padding: const EdgeInsets.only(left: 16, top: 8),
+              child: const Text(
+                'Sensibilité',
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              )),
+          const Padding(
+              padding: EdgeInsets.only(right: 16, top: 8),
+              child: Align(
+                  alignment: Alignment.centerRight,
+                  child: SensitivitySegmentedSegment())),
           const SizedBox(
             height: 24,
           ),
-          // Card(
-          //   child: Padding(
-          //     padding: const EdgeInsets.all(16.0),
-          //     child: Column(
-          //       crossAxisAlignment: CrossAxisAlignment.start,
-          //       children: [
-          //         TextFormField(
-          //           controller: controller.passwordController,
-          //           decoration: InputDecoration(
-          //             labelText: 'Enter password',
-          //             border: const OutlineInputBorder(),
-          //             isDense: true,
-          //             hintText: 'Enter password',
-          //           ),
-          //         ),
-          //         SliderExample(),
-          //
-          //         RadioSensorChoice(),
-          //
-          //         const SizedBox(
-          //           height: 24,
-          //         ),
-          //         // Obx(() =>
-          //         TextButton(
-          //             //label: 'Sign in',
-          //             onPressed: controller.onLogin,
-          //             // isLoading: controller.status.isLoading,
-          //             child: const Text("sign in"))
-          //         //  )
-          //       ],
-          //     ),
-          //   ),
-          // ),
-          // const Padding(
-          //   padding: EdgeInsets.only(left: 32, top: 8),
-          //   child: Text(
-          //     'Sign In',
-          //     style: TextStyle(
-          //       fontSize: 18,
-          //       fontWeight: FontWeight.bold,
-          //     ),
-          //   ),
-          // ),
-          // IconButton(
-          //     icon: Image.asset('assets/images/Dashboard/settings_icon@2x.png',
-          //         color: mainColor),
-          //     onPressed: () => Get.toNamed('/settings')),
         ],
       ),
     );

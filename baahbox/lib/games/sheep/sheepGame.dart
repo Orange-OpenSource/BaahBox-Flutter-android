@@ -238,7 +238,7 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
   }
 
   void configureLabelsForWalking() {
-    progressionText.text = "walking";
+    progressionText.text = "";
   }
 
   void configureLabelsToGoDown() {

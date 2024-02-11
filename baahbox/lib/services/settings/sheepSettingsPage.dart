@@ -24,6 +24,7 @@ class SheepSettingsPage extends GetView<SettingsController> {
             padding: EdgeInsets.only(left: 32, top: 8),
           ),
           Card(
+              shape: ContinuousRectangleBorder(),
               child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
@@ -43,6 +44,7 @@ class SheepSettingsPage extends GetView<SettingsController> {
             height: 24,
           ),
           Card(
+              shape: ContinuousRectangleBorder(),
               child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
