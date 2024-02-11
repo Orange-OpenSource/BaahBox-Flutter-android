@@ -63,7 +63,7 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
   void loadInfoComponents() {
     addAll([
       scoreText = TextComponent(
-        position: size,
+        position: Vector2(size.x-5, size.y-10),
         anchor: Anchor.bottomRight,
         priority: 1,
       ),

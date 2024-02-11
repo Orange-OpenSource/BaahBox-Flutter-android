@@ -50,11 +50,6 @@ class SpaceShipGamePage extends StatelessWidget {
             ),
           )
         ]),
-        floatingActionButton: FloatingActionButton(
-            onPressed: () => Get.back(),
-            tooltip: 'Go back',
-            child: const Icon(Icons.arrow_back)
-        )
     );
   }
 }

@@ -46,7 +46,7 @@ class WelcomePage extends StatelessWidget with WidgetsBindingObserver {
           child: ListView(
               padding: const EdgeInsets.all(0),
               children: <Widget>[
-            GameRow(BBGameList.star, BBRoute.star.path),
+           Expanded(child:  GameRow(BBGameList.star, BBRoute.star.path)),
             GameRow(BBGameList.balloon, BBRoute.balloon.path),
             GameRow(BBGameList.sheep, BBRoute.sheep.path),
             GameRow(BBGameList.starship, BBRoute.spaceShip.path),
@@ -70,8 +70,8 @@ class GameRow extends StatelessWidget {
         shape:MaterialStateProperty.all(ContinuousRectangleBorder())),
         child: Container(
             alignment: Alignment.centerLeft,
-            height: 110,
-            width: 400,
+            height: (Get.height/5)-10, ///110,
+            width: Get.width,
             child: Row(
                 children: [
               Image(

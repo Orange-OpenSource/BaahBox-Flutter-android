@@ -98,23 +98,59 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
 
   @override
   Future<void> onLoad() async {
-    var params = settingsController.sheepParams;
-   gameObjective = params["numberOfGates"];
-   gateVelocity = params["gateVelocity"].value;
-    title = 'Essaie de sauter $gameObjective barrière';
-    if (gameObjective > 1) {
-      title += 's';
-    }
-    subTitle = instructionSubtitle;
     floorY = (size.y * 0.7);
-
+    initializeParams();
     await loadAssetsInCache();
     await loadComponents();
     loadInfoComponents();
-    progressionText.text = "";
-    counterManager.createMarks(gameObjective);
+    initializeUI();
     super.onLoad();
   }
+
+  void initializeParams() {
+    successfulJumps = 0;
+    hasSheepStartedJumping = false;
+    sheepDidJumpOverGate = false;
+    var params = settingsController.sheepParams;
+    gameObjective = params["numberOfGates"];
+    gateVelocity = params["gateVelocity"].value;
+  }
+
+  void initializeUI() {
+    title = 'Essaie de sauter $gameObjective barrière';
+    if (gameObjective > 1) { title += 's';}
+    subTitle = instructionSubtitle;
+    progressionText.text = "";
+    counterManager.createMarks(gameObjective);
+  }
+
+  void resetComponents() {
+    counterManager.createMarks(gameObjective);
+    progressionText.text = "";
+    sheep.initialize();
+    gate.reset(gateVelocity);
+    floor.show();
+  }
+
+  @override
+  void startGame() {
+    initializeParams();
+    resetComponents();
+    super.startGame();
+  }
+
+  @override
+  void resetGame() {
+    super.resetGame();
+    initializeParams();
+    resetComponents();
+    cloudManager.start();
+    sheep.tremble();
+    if (paused) {
+      resumeEngine();
+    }
+  }
+
 // ===================
   // MARK: - Game loop
   // ===================
@@ -225,44 +261,6 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
     return sheep.isBeyond(gate.position.x);
   }
 
-  @override
-  void startGame() {
-    successfulJumps = 0;
-    hasSheepStartedJumping = false;
-    sheepDidJumpOverGate = false;
-    var params = settingsController.sheepParams;
-    gameObjective = params["numberOfGates"];
-    gateVelocity = params["gateVelocity"].value;
-    print("gates : $gameObjective, velocity: $gateVelocity");
-    counterManager.createMarks(gameObjective);
-    progressionText.text = "";
-    sheep.initialize();
-    gate.reset(gateVelocity);
-    super.startGame();
-  }
-
-  @override
-  void resetGame() {
-    super.resetGame();
-    successfulJumps = 0;
-    hasSheepStartedJumping = false;
-    sheepDidJumpOverGate = false;
-    var params = settingsController.sheepParams;
-    gameObjective = params["numberOfGates"];
-    gateVelocity = params["gateVelocity"].value;
-    print("gates : $gameObjective, velocity: $gateVelocity");
-    counterManager.createMarks(gameObjective);
-    progressionText.text = "";
-
-    sheep.initialize();
-    gate.reset(gateVelocity);
-    floor.show();
-    cloudManager.start();
-    sheep.tremble();
-    if (paused) {
-      resumeEngine();
-    }
-  }
 
   void setGameStateToWon(bool win) {
     state = win ? GameState.won : GameState.lost;
