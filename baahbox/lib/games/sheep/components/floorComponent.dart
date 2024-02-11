@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/flame.dart';
 
-class FloorComponent extends SpriteComponent {
+class FloorComponent extends SpriteComponent with HasVisibility {
   final _floorSprite = Sprite(Flame.images.fromCache('Jeux/Sheep/floor.png'));
 
   FloorComponent({required super.position, super.size})
@@ -14,11 +14,11 @@ class FloorComponent extends SpriteComponent {
   }
 
   void show() {
-    setAlpha(255);
+    isVisible = true;
   }
 
   void hide() {
-    setAlpha(0);
+    isVisible = false;
   }
   @override
   void update(double dt) {

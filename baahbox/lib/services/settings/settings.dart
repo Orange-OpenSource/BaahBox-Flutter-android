@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../controllers/appController.dart';
+import 'package:baahbox/controllers/appController.dart';
 import 'package:baahbox/routes/routes.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -15,9 +17,9 @@ class SettingsPage extends StatelessWidget {
               fontWeight: FontWeight.bold,
               fontSize: 25),
           centerTitle: true,
-          title: Text("Settings"),
+          title: Text("Réglages"),
           leading: IconButton(
-              icon: Icon( Icons.arrow_back,color: Colors.lightBlueAccent,),
+              icon: Icon(Icons.arrow_back),
               onPressed: () => Get.toNamed(BBRoute.welcome.path)
           ),
         ),
@@ -27,21 +29,86 @@ class SettingsPage extends StatelessWidget {
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  ElevatedButton(
-                      onPressed: () => Get.toNamed(BBRoute.connection.path),
-                      child: Text('Connexion settings')),
-                  ElevatedButton(
-                      onPressed: () => Get.toNamed(BBRoute.generalSettings.path),
-                      child: Text('General settings')),
-                  ElevatedButton(
-                      onPressed: () => Get.toNamed(BBRoute.sheepSettings.path),
-                      child: Text('Sheep settings')),
-                  ElevatedButton(
-                      onPressed: () => Get.toNamed(BBRoute.spaceShipSettings.path),
-                      child: Text('Space Ship settings')),
-                  ElevatedButton(
-                      onPressed: () => Get.toNamed(BBRoute.toadSettings.path),
-                      child: Text('Toad settings')),
+                   Card(
+                    shape: ContinuousRectangleBorder(),
+                    child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child:
+                                const Text('',),),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  ListTile(
+                    trailing: Icon(Icons.arrow_forward_outlined),
+                    dense: false,
+                    enabled: true,
+                    onTap: ()
+                      => Get.toNamed(BBRoute.connection.path),
+                    title: Text('Connexion'),
+                  ),
+                  Card(
+                    shape: ContinuousRectangleBorder(),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child:
+                      const Text('',),),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  ListTile(
+                    trailing: Icon(Icons.arrow_forward_outlined),
+                    dense: false,
+                    enabled: true,
+                    onTap: ()
+                    => Get.toNamed(BBRoute.generalSettings.path),
+                    title: Text('Général '),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Card(
+                    shape: ContinuousRectangleBorder(),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child:
+                      const Text('Gestion des jeux', style: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18)),),
+                  ),
+
+                  ListTile(
+                    trailing: Icon(Icons.arrow_forward_outlined),
+                    dense: false,
+                    enabled: true,
+                    onTap: ()
+                    => Get.toNamed(BBRoute.sheepSettings.path),
+                    title: Text('Saute mouton'),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  const Divider(height: 0,),
+                  ListTile(
+                    trailing: Icon(Icons.arrow_forward_outlined),
+                    dense: false,
+                    enabled: true,
+                    onTap: ()
+                    => Get.toNamed(BBRoute.spaceShipSettings.path),
+                    title: Text('Bataille de l\'espace'),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  const Divider(height: 0,),
+                  ListTile(
+                    trailing: Icon(Icons.arrow_forward_outlined),
+                    dense: false,
+                    enabled: true,
+                    onTap: ()
+                    => Get.toNamed(BBRoute.toadSettings.path),
+                    title: Text('Gobe les mouches'),
+                  ),
             ])));
   }
 }

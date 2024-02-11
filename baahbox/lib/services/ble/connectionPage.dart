@@ -206,10 +206,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
           centerTitle: true,
           title: Text("Connexion Bluetooth"),
           leading: IconButton(
-              icon: Icon(
-                Icons.arrow_back,
-                color: Colors.lightBlueAccent,
-              ),
+              icon: Icon(Icons.arrow_back,),
               onPressed: () {
                 bleController.scanner.stopScan();
                 Get.toNamed(BBRoute.welcome.path);
@@ -227,7 +224,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
               },
             ),
             SizedBox(
-              width: 15,
+              width: 25,
             ),
           ],
         ),
@@ -244,7 +241,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
                       padding: EdgeInsets.only(left:20),
                       child: Text(_connected
                       ? "Vous êtes connecté:"
-                      : "Sélectionnez votre Baah Box ",
+                      : "Sélectionnez votre Baah Box: ",
                       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)))),
               if (_connected)
                 ListTile(

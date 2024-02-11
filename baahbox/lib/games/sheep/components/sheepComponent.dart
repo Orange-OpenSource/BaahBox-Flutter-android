@@ -7,8 +7,8 @@ import 'package:baahbox/games/sheep/components/gateComponent.dart';
 import 'package:baahbox/games/sheep/sheepGame.dart';
 import 'package:baahbox/games/sheep/components/bimComponent.dart';
 
-class SheepComponent extends SpriteComponent //AnimationComponent
-    with
+class SheepComponent extends SpriteComponent
+    with  HasVisibility,
         HasGameRef<SheepGame>,
         CollisionCallbacks {
   SheepComponent({required super.position})
@@ -44,19 +44,6 @@ class SheepComponent extends SpriteComponent //AnimationComponent
     show();
   }
 
-  void tremble() {
-    add(MoveByEffect(
-        Vector2(1, 0), EffectController(duration: 0.2, reverseDuration: 0.2)));
-  }
-
-  void hide() {
-    setAlpha(0);
-  }
-
-  void show() {
-    setAlpha(255);
-  }
-
   @override
   void update(double dt) {
     super.update(dt);
@@ -64,6 +51,19 @@ class SheepComponent extends SpriteComponent //AnimationComponent
       checkCostume();
     }
     goDown();
+  }
+
+  void tremble() {
+    add(MoveByEffect(
+        Vector2(1, 0), EffectController(duration: 0.2, reverseDuration: 0.2)));
+  }
+
+  void hide() {
+    isVisible = false;
+  }
+
+  void show() {
+    isVisible = true;
   }
 
   void goDown() {

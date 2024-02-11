@@ -61,29 +61,29 @@ enum GameState {
 
 enum BBGameList {
   star(
-      title: 'Star',
+      title: "Fais briller le ciel !",
       mainAsset: 'assets/images/Dashboard/menu_etoile@2x.png',
       baseColor: BBColor.violet,
       numberOfSensors: 1),
   balloon(
-      title: 'Balloon',
+      title: 'Fais exploser le ballon !',
       mainAsset: 'assets/images/Dashboard/menu_ballon@2x.png',
       baseColor: BBColor.orange,
       numberOfSensors: 1),
   sheep(
-    title: 'Sheep',
+    title: 'Saute, mouton, saute !',
     mainAsset: 'assets/images/Dashboard/menu_mouton@2x.png',
     baseColor: BBColor.pinky,
     numberOfSensors: 1,
   ),
   starship(
-    title: 'StarShip',
+    title: "La bataille de l'espace",
     mainAsset: 'assets/images/Dashboard/menu_espace@2x.png',
     baseColor: BBColor.blueGreen,
     numberOfSensors: 2,
   ),
   toad(
-    title: 'toad',
+    title: 'Slurp',
     mainAsset: 'assets/images/Dashboard/menu_gobe@2x.png',
     baseColor: BBColor.greyGreen,
     numberOfSensors: 2,
