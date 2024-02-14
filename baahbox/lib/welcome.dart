@@ -45,12 +45,11 @@ class WelcomePage extends StatelessWidget with WidgetsBindingObserver {
         body: Container(
           child: ListView(
               padding: const EdgeInsets.all(0),
-              children: <Widget>[
-           Expanded(child:  GameRow(BBGameList.star, BBRoute.star.path)),
-            GameRow(BBGameList.balloon, BBRoute.balloon.path),
-            GameRow(BBGameList.sheep, BBRoute.sheep.path),
-            GameRow(BBGameList.starship, BBRoute.spaceShip.path),
-            GameRow(BBGameList.toad, BBRoute.toad.path),
+              children: <Widget>[GameRow(BBGameList.star, BBRoute.star.path),
+        GameRow(BBGameList.balloon, BBRoute.balloon.path),
+        GameRow(BBGameList.sheep, BBRoute.sheep.path),
+        GameRow(BBGameList.starship, BBRoute.spaceShip.path),
+        GameRow(BBGameList.toad, BBRoute.toad.path),
           ] //wrap
           ),
         ));
@@ -64,38 +63,49 @@ class GameRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
+    return
+        ElevatedButton(
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(game.baseColor.color),
         shape:MaterialStateProperty.all(ContinuousRectangleBorder())),
         child: Container(
             alignment: Alignment.centerLeft,
-            height: (Get.height/5)-10, ///110,
+            height: (Get.height/5)-10,
             width: Get.width,
+         //   padding: const EdgeInsets.all(0),
+
             child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
               Image(
                   alignment: Alignment.centerLeft,
                   image: AssetImage(game.mainAsset)),
-              Spacer(),
+                  Spacer(),
               Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
                       game.title,
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Colors.white, fontSize: 20.0),
                       textAlign: TextAlign.end,
-                      textScaleFactor: 2.0,
+
                     ),
                     SizedBox(height: 10),
-                    Image(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image(
                       alignment: Alignment.bottomRight,
                       image: AssetImage('assets/images/Dashboard/capteur.png'),
                       height: 25,
                       width: 25,
-                    )
-                  ])
+                    )]),
+                  ]),
+
+
             ])),
         onPressed: () => Get.toNamed(gamePath));
   }
