@@ -37,6 +37,7 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
   var goRight = false;
   var instructionTitle = 'Evite les météorites';
   var instructionSubtitle = '';
+  int threshold = 10;
 
   @override
   Color backgroundColor() => BBGameList.starship.baseColor.color;
@@ -86,6 +87,8 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
     ]);
   }
 
+  void initializeParams(){}
+
 // Game play
   @override
   void update(double dt) {
@@ -99,6 +102,33 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
     }
   }
 
+  // Box input
+  void refreshInput() {
+    // todo deal with joystick input
+    inputL = 0;
+    inputR = 0;
+    goLeft = false;
+    goRight = false;
+
+    if (appController.isConnectedToBox) {
+      // The strength is in range [0...1024] -> Have it fit into [0...100]
+      inputL = (appController.musclesInput.muscle1 ~/ 10);
+      inputR = (appController.musclesInput.muscle2 ~/ 10);
+      goLeft = (inputL >  threshold) && (inputL > inputR);
+      goRight = (inputR > threshold) && (inputR > inputL);
+    }
+  }
+
+
+  void transformInputInOffset() {
+    if (!goLeft && !goRight) {
+      return;
+    }
+    var offset = goLeft ? 2.0 : -2.0;
+    ship.moveBy(offset);
+  }
+
+
   void looseLife() {
     if (state == GameState.running) {
       lifeManager.looseOneLife();
@@ -111,27 +141,26 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
     }
   }
 
-  // Box input
-  void refreshInput() {
-    // todo deal with 2 muscles or joystick input
-    inputL = 0;
-    inputR = 0;
-    goLeft = false;
-    goRight = false;
-
-    if (appController.isConnectedToBox) {
-      // The strength is in range [0...1024] -> Have it fit into [0...100]
-      inputL = (appController.musclesInput.muscle1 ~/ 10);
-      inputR = (appController.musclesInput.muscle2 ~/ 10);
-      goLeft = (inputL > 10) && (inputL > inputR);
-      goRight = (inputR > 10) && (inputR > inputL);
-    }
-  }
 
 // Game State management
   @override
+  void startGame() {
+    initializeParams();
+    super.startGame();
+  }
+
+
+  @override
+  void endGame() {
+    state = GameState.lost;
+    super.endGame();
+  }
+
+
+  @override
   void resetGame() async {
     super.resetGame();
+    initializeParams();
     score = 0;
     meteorManager.clearTheSky();
     ship.initialize();
@@ -141,19 +170,7 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
     }
   }
 
-  @override
-  void endGame() {
-    state = GameState.lost;
-    super.endGame();
-  }
 
-  void transformInputInOffset() {
-    if (!goLeft && !goRight) {
-      return;
-    }
-    var offset = goLeft ? 2.0 : -2.0;
-    ship.moveBy(offset);
-  }
 
 // tap input (Demo mode)
   @override

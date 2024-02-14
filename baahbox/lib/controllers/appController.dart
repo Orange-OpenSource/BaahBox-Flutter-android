@@ -1,4 +1,3 @@
-import 'package:baahbox/constants/enums.dart';
 import 'package:baahbox/model/sensorInput.dart';
 import 'package:get/get.dart';
 
@@ -49,6 +48,7 @@ class Controller extends FullLifeCycleController with FullLifeCycleMixin {
     _joystickInput.value = ji;
   }
 
+@override
   void onClose() {
     super.onClose();
   }
@@ -70,7 +70,7 @@ class Controller extends FullLifeCycleController with FullLifeCycleMixin {
 // Mandatory
   @override
   void onInactive() {
-    print('appController - onInative called');
+    print('appController - onInactive called');
     _isActive.value = false;
   }
 
@@ -84,7 +84,7 @@ class Controller extends FullLifeCycleController with FullLifeCycleMixin {
 
   @override
   void onHidden() {
-    print('appController - onhidden called');
+    print('appController - onHidden called');
     _isActive.value = false;
   }
 

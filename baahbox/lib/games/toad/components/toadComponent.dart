@@ -1,11 +1,8 @@
-import 'dart:math';
+import 'dart:math' as math;
 import 'package:flame/flame.dart';
-import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame/effects.dart';
-import 'package:baahbox/games/sheep/components/gateComponent.dart';
 import 'package:baahbox/games/toad/toadGame.dart';
-import 'package:baahbox/games/sheep/components/bimComponent.dart';
+import 'package:flame/geometry.dart';
 
 class ToadComponent extends SpriteComponent
     with  HasVisibility,
@@ -13,13 +10,13 @@ class ToadComponent extends SpriteComponent
   ToadComponent()
       : super(size: Vector2(100, 100), anchor: Anchor.bottomCenter);
 
-  final toadSprite = Sprite(Flame.images.fromCache('Jeux/Toad/toad@2x.png'));
-  final toadBlinkSprite = Sprite(Flame.images.fromCache('Jeux/Toad/toad_blink@2x.png'));
+  final toadSprite = Sprite(Flame.images.fromCache('Jeux/Toad/toad@3x.png'));
+  final toadBlinkSprite = Sprite(Flame.images.fromCache('Jeux/Toad/toad_blink@3x.png'));
 
 
   final blinkingImages = [
-    Flame.images.fromCache('Jeux/Toad/toad@2x.png'),
-    Flame.images.fromCache('Jeux/Toad/toad_blink@2x.png'),
+    Flame.images.fromCache('Jeux/Toad/toad@3x.png'),
+    Flame.images.fromCache('Jeux/Toad/toad_blink@3x.png'),
   ];
 
   @override
@@ -34,17 +31,15 @@ class ToadComponent extends SpriteComponent
     var ratio = toadSprite.srcSize.x / toadSprite.srcSize.y;
     var width = gameRef.size.x/3;
     size = Vector2(width,width/ratio);
-    position =  Vector2(gameRef.size.x / 3, gameRef.size.y - size.y -50);
+    position =  Vector2(gameRef.size.x / 2, gameRef.size.y - size.y -50);
+    angle = nativeAngle;
     show();
   }
-
-
 
   @override
   void update(double dt) {
     super.update(dt);
   }
-
 
   void hide() {
     isVisible = false;
@@ -54,10 +49,12 @@ class ToadComponent extends SpriteComponent
     isVisible = true;
   }
 
-  void rotateBy(int angle) {
+  void rotateBy(int deltaAngle) {
     {
-      final effect = RotateEffect.by(angle.toDouble(), EffectController(duration: 0.1));
-      add(effect);
+      var newAngle = angle + (deltaAngle/ 180 * math.pi/2) ;
+      if ( newAngle> tau/4 || newAngle < -tau/4) { return ;}
+      angle = newAngle;
+
     }
   }
 
@@ -77,8 +74,7 @@ class ToadComponent extends SpriteComponent
 
   void hit() {
     //setSpriteTo(3);
-    game.add(BimComponent(
-        position: Vector2(position.x + size.x/2, position.y - size.y - 20)));
+   // game.add(BimComponent(
+    //    position: Vector2(position.x + size.x/2, position.y - size.y - 20)));
   }
-
 }

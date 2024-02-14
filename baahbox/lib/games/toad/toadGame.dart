@@ -1,9 +1,10 @@
-import 'dart:math';
+import 'dart:math' as math;
 import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
+import 'package:flame/geometry.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:baahbox/controllers/appController.dart';
@@ -18,53 +19,31 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
   final SettingsController settingsController = Get.find();
 
   late final Image spriteImage;
-  int input = 0;
-  int panInput = 0;
   late final ToadComponent toad;
+  // late final FlyComponent fly;
+  // late final FlyScoreManager flyScoreManager;
+  late final Vector2 toadPosition;
 
+  int score = 0;
+  int threshold = 10;
+  var panInput = 0;
+  var inputL = 0;
+  var inputR = 0;
+  var goLeft = false;
+  var goRight = false;
+  var shoot = false;
+  double floorY = 0.0;
+  var instructionTitle = 'Evite les météorites';
+  var instructionSubtitle = '';
 
   @override
   Color backgroundColor() => BBGameList.toad.baseColor.color;
 
-  Future<void> loadAssetsInCache() async {
-    await Flame.images.loadAll(<String>[
-      //'Jeux/Toad/crapaud@2x.png)',
-    'Jeux/Toad/crapaud@3x.png',
-    'Jeux/Toad/crapaud_compteur_mouche_plein@2x.png',
-    'Jeux/Toad/crapaud_compteur_mouche_plein@3x.png',
-    'Jeux/Toad/crapaud_compteur_mouche_vide@2x.png',
-    'Jeux/Toad/crapaud_compteur_mouche_vide@3x.png',
-    'Jeux/Toad/crapaud_langue@2x.png',
-    'Jeux/Toad/crapaud_langue@3x.png',
-    'Jeux/Toad/crapaud_mouche@2x.png',
-    'Jeux/Toad/crapaud_mouche@3x.png',
-    'Jeux/Toad/fly@2x.png',
-    'Jeux/Toad/fly@3x.png',
-    'Jeux/Toad/fly_point_0@2x.png',
-   'Jeux/Toad/fly_point_0@3x.png',
-    'Jeux/Toad/fly_point_1@2x.png',
-    'Jeux/Toad/fly_point_1@3x.png',
-    'Jeux/Toad/toad@2x.png',
-    'Jeux/Toad/toad@3x.png',
-    'Jeux/Toad/toad_blink@2x.png',
-    'Jeux/Toad/toad_blink@3x.png',
-    'Jeux/Toad/toad_menu@2x.png',
-    'Jeux/Toad/toad_menu@3x.png',
-    'Jeux/Toad/tongue@2x.png',
-    'Jeux/Toad/tongue@3x.png',
-    ]);
-  }
-
-  Future<void> loadComponents() async {
-    await add(toad = ToadComponent());
-  }
-
-  void loadInfoComponents() {
-  }
-
   @override
   Future<void> onLoad() async {
     initializeParams();
+    title = instructionTitle;
+    subTitle = instructionSubtitle;
     await loadAssetsInCache();
     await loadComponents();
     loadInfoComponents();
@@ -72,14 +51,99 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
     super.onLoad();
   }
 
-  void initializeParams() {
+  Future<void> loadComponents() async {
+    await add(toad = ToadComponent());
+    // await add(flyScoreManager = FlyScoreManager());
+    //   await add(tong = TongComponent());
+    // await add(fly = FlyComponent());
   }
+
+  void loadInfoComponents() {}
+
+  Future<void> loadAssetsInCache() async {
+    await Flame.images.loadAll(<String>[
+      'Jeux/Toad/crapaud@3x.png',
+      'Jeux/Toad/crapaud_compteur_mouche_plein@3x.png',
+      'Jeux/Toad/crapaud_compteur_mouche_vide@3x.png',
+      'Jeux/Toad/crapaud_langue@3x.png',
+      'Jeux/Toad/crapaud_mouche@3x.png',
+      'Jeux/Toad/fly@3x.png',
+      'Jeux/Toad/fly_point_0@3x.png',
+      'Jeux/Toad/fly_point_1@3x.png',
+      'Jeux/Toad/toad@3x.png',
+      'Jeux/Toad/toad_blink@3x.png',
+      'Jeux/Toad/toad_menu@3x.png',
+      'Jeux/Toad/tongue@3x.png',
+    ]);
+  }
+
+  void initializeParams() {}
 
   void initializeUI() {
     title = '';
     subTitle = '';
+    floorY = size.y - 75.0;
+    toadPosition = Vector2(floorY, size.x / 2);
   }
 
+// ===================
+  // MARK: - Game loop
+  // ===================
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    if (appController.isActive) {
+      if (state == GameState.running) {
+        refreshInput();
+        transformInputInAction();
+      }
+    }
+  }
+
+  void refreshInput() {
+    // todo deal with joystick input
+    inputL = 0;
+    inputR = 0;
+    goLeft = false;
+    goRight = false;
+
+    if (appController.isConnectedToBox) {
+      // The strength is in range [0...1024] -> Have it fit into [0...100]
+      inputR = (appController.musclesInput.muscle1 ~/ 10);
+      inputL = (appController.musclesInput.muscle2 ~/ 10);
+      //print("inputL= $inputL, inputR = $inputR");
+      goLeft = (inputL > threshold) && (inputL > inputR);
+      goRight = (inputR > threshold) && !goLeft;
+      shoot = (inputL > 99 && inputR > 99);
+    }
+  }
+
+  void startShooting() {}
+
+  void transformInputInAction() {
+    if (appController.isConnectedToBox) {
+      // Todo gérer strengthValue et hardnessCoeff
+      if (!goLeft && !goRight) {
+        return;
+      }
+      if (shoot) {
+        startShooting();
+        print("Shoot!");
+      } else {
+        var deltaAngle = goLeft ? -1 : 1;
+        toad.rotateBy(deltaAngle);
+      }
+    }
+  }
+
+  void increaseScore() {
+    if ((state == GameState.running) && (appController.isActive)) {
+      //    flyScoreManager.addOnefly();
+    }
+  }
+
+// Game State management
   void resetComponents() {
     toad.initialize();
   }
@@ -101,63 +165,34 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
     }
   }
 
-// ===================
-  // MARK: - Game loop
-  // ===================
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-    if (appController.isActive) {
-      if (isRunning) {
-        refreshInput();
-      transformInputInMove();
-      }
-    }
-  }
-
-  void transformInputInMove() {
-    if (appController.isConnectedToBox) { //   if input <= threshold { return }
-      //   var heightConstraint = (CGFloat(strengthValue) - CGFloat (hardnessCoeff*350)) / 1000
-//   if heightConstraint < 0 { heightConstraint = 0 }
-      final angle = 15;
-      // print("floorY: $floorY, height: $jumpHeigth");
-      toad.rotateBy(angle);
-    }
-// let jumpheightWithConstraint = groundPosition.y + (maxHeigthJump * heightConstraint)
-// jumpTo(sprite: sheep, height: jumpheightWithConstraint)
-
-  }
-
-//  var heightConstraint = (CGFloat(strengthValue) - CGFloat (hardnessCoeff*350)) / 1000
-//  if heightConstraint < 0 { heightConstraint = 0 }
-// let jumpheightWithConstraint = groundPosition.y + (maxHeigthJump * heightConstraint)
-// jumpTo(sprite: sheep, height: jumpheightWithConstraint)
-
-
-  void refreshInput() {
-    // todo deal with 2 muscles or joystick input
-    if (appController.isConnectedToBox) {
-      // The strength is in range [0...1024] -> Have it fit into [0...100]
-      input = (appController.musclesInput.muscle1 ~/ 10);
-    } else {
-      input = panInput;
-    }
-  }
-
-
-  void setGameStateToWon(bool win) {
-    state = win ? GameState.won : GameState.lost;
-    feedback = win ? "won" : "lost";
-    if (win) {
-      toad.hide();
-    }
-    endGame();
-  }
-
   @override
   void endGame() {
+    state = GameState.won;
+    //  toad.hide();
     super.endGame();
+  }
+
+  @override
+  void onDispose() {
+    // TODO: implement onDispose
+    super.onDispose();
+  }
+
+  // Demo mode
+  // tap input (Demo mode)
+  @override
+  void onTapDown(TapDownEvent event) {
+    if (state == GameState.running) {
+      var xTouch = event.localPosition.x;
+      var coeff = xTouch > size.x / 2 ? 1 : -1;
+      //Todo calculer cos angle / x
+      print("touchdown!  deltaAngle = $coeff * 5");
+
+      var newAngle = toad.angle + (coeff * 5/ 180 * math.pi);
+      if ( newAngle <  tau/4 && newAngle > -tau/4) {
+      toad.add(RotateEffect.to(newAngle, EffectController(duration: 0.5)));
+      //toad.rotateBy(coeff * 2);
+    }}
   }
 
   @override
@@ -165,15 +200,17 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
     if (appController.isConnectedToBox || state != GameState.running) {
       panInput = 0;
     } else {
-      var xPos = info.eventPosition.global.x;
-      var nextX = (xPos/360).toInt();
-      toad.rotateBy(nextX);
+      var xTouch = info.eventPosition.global.x;
+      var coeff = (xTouch > size.x / 2) ? 1 : -1;
+      //TOdo calculer cos angle / x
+      print("pan!  deltaAngle = $coeff * 5");
+      toad.rotateBy(coeff * 5);
+      // var newAngle = toad.angle + ((coeff * 5)/ 180 * math.pi);
+      // if ( newAngle <  15/9 && newAngle > -15/9) {
+      //   toad.add(RotateEffect.to(newAngle, EffectController(duration: 0.3)));
+      // }
+       var nAngle = toad.angle;
+      print("toad angle : $nAngle");
     }
-  }
-
-  @override
-  void onDispose() {
-    // TODO: implement onDispose
-    super.onDispose();
   }
 }

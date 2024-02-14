@@ -88,7 +88,7 @@ class GameRow extends StatelessWidget {
                   children: [
                     Text(
                       game.title,
-                      style: TextStyle(color: Colors.white, fontSize: 20.0),
+                      style: TextStyle(color: Colors.white, fontSize: 15.0),
                       textAlign: TextAlign.end,
 
                     ),
