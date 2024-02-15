@@ -40,7 +40,7 @@ class SheepComponent extends SpriteComponent
     this.sprite = walkingSprite1;
     var ratio = walkingSprite1.srcSize.x / walkingSprite1.srcSize.y;
     var width = gameRef.size.x/3;
-    size = Vector2(width,width/ratio); //walkingSprite1.srcSize / 10;
+    size = Vector2(width,width/ratio);
     show();
   }
 

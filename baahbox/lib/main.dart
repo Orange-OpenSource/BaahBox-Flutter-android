@@ -9,7 +9,8 @@ void main() {
         title: 'Baah Box Games!',
       //  home: const BleConnectionPage(),
         initialRoute: BBRoute.welcome.path,
-      getPages: BBRoutes.routes
+      getPages: BBRoutes.routes,
+       debugShowCheckedModeBanner: false,
      ),
   );
 }

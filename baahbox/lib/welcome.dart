@@ -72,7 +72,7 @@ class GameRow extends StatelessWidget {
             alignment: Alignment.centerLeft,
             height: (Get.height/5)-10,
             width: Get.width,
-         //   padding: const EdgeInsets.all(0),
+            padding: const EdgeInsets.all(0),
 
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
