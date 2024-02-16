@@ -118,10 +118,14 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
           inputR = (appController.musclesInput.muscle2 ~/ 10);
           goLeft = (inputL > threshold) && (inputL > inputR);
           goRight = (inputR > threshold) && (inputR > inputL);
+
         case SensorType.arcadeJoystick:
           var joystickInput = appController.joystickInput;
-          goLeft = joystickInput.left;
-          goRight = joystickInput.right;
+          goLeft = joystickInput.right;
+          goRight = joystickInput.left;
+          print("joystick : " + joystickInput.describe());
+          print("right : $goRight");
+          print("left : $goLeft");
 
         default:
       }

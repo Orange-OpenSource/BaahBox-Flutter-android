@@ -1,9 +1,9 @@
 import 'package:baahbox/welcome.dart';
-import 'package:baahbox/services/settings/settings.dart';
+import 'package:baahbox/services/settings/settingsPage.dart';
 import 'package:baahbox/services/settings/generalSettingsPage.dart';
-import 'package:baahbox/services/settings/spaceShipSettings.dart';
+import 'package:baahbox/services/settings/spaceShipSettingsPage.dart';
 import 'package:baahbox/services/settings/sheepSettingsPage.dart';
-import 'package:baahbox/services/settings/toadSettings.dart';
+import 'package:baahbox/services/settings/toadSettingsPage.dart';
 import 'package:baahbox/games/balloon/balloonGamePage.dart';
 import 'package:baahbox/games/star/starGamePage.dart';
 import 'package:baahbox/games/testGamePage.dart';

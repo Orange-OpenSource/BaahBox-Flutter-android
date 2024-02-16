@@ -69,9 +69,9 @@ class JoystickInput {
 
   JoystickInput(int input) {
     this.right = input & 0x08 == 0x08;
-    this.left = input & 0x08 == 0x04;
-    this.down = input & 0x08 == 0x02;
-    this.up = input & 0x08 == 0x01;
+    this.left = input & 0x04 == 0x04;
+    this.down = input & 0x02 == 0x02;
+    this.up = input & 0x01 == 0x01;
   }
   String describe() {
     return 'right: $right, left: $left, down: $down, up: $up';

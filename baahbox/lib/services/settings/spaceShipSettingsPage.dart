@@ -5,15 +5,15 @@ import 'package:baahbox/constants/enums.dart';
 import 'package:baahbox/services/settings/settingsController.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 
-class SheepSettingsPage extends GetView<SettingsController> {
-  final mainColor = BBColor.pinky.color;
+class SpaceShipSettingsPage extends GetView<SettingsController> {
+  final mainColor = BBColor.blueGreen.color;
   final SettingsController controller = Get.find();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Réglages du saute mouton'),
+        title: Text("Réglages de l'espace..."),
       ),
       body: ListView(
         children: [
@@ -28,7 +28,7 @@ class SheepSettingsPage extends GetView<SettingsController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Obx(() => Text(
-                          'Nombre de barrières: '+  controller.sheepSettings["numberOfGates"].toString(),
+                          'Nombre de vaisseaux: '+  controller.spaceShipSettings.numberOfShips.toString(),
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
                         )),
@@ -48,7 +48,7 @@ class SheepSettingsPage extends GetView<SettingsController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Vitesse des barrières',
+                          'Vitesse des astéroïdes',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -59,7 +59,7 @@ class SheepSettingsPage extends GetView<SettingsController> {
             height: 12,
           ),
           Align(
-              alignment: Alignment.center, child: GateSpeedSegmentedSegment()),
+              alignment: Alignment.center, child: SpeedSegmentedSegment()),
           const SizedBox(
             height: 24,
           ),
@@ -69,22 +69,22 @@ class SheepSettingsPage extends GetView<SettingsController> {
   }
 }
 
-class GateSpeedSegmentedSegment extends StatefulWidget {
-  const GateSpeedSegmentedSegment({super.key});
+class SpeedSegmentedSegment extends StatefulWidget {
+  const SpeedSegmentedSegment({super.key});
 
   @override
-  State<GateSpeedSegmentedSegment> createState() =>
-      _GateSpeedSegmentedSegmentState();
+  State<SpeedSegmentedSegment> createState() =>
+      _SpeedSegmentedSegmentState();
 }
 
-class _GateSpeedSegmentedSegmentState extends State<GateSpeedSegmentedSegment> {
+class _SpeedSegmentedSegmentState extends State<SpeedSegmentedSegment> {
   final SettingsController controller = Get.find();
 
   @override
   Widget build(BuildContext context) {
 
     return CustomSlidingSegmentedControl<ObjectVelocity>(
-      initialValue: controller.sheepSettings["gateVelocity"],
+      initialValue: controller.spaceShipSettings.asteroidVelocity,
       children: {
         ObjectVelocity.low: Text('Faible'),
         ObjectVelocity.medium: Text('Moyenne'),
@@ -112,7 +112,7 @@ class _GateSpeedSegmentedSegmentState extends State<GateSpeedSegmentedSegment> {
       duration: Duration(milliseconds: 300),
       curve: Curves.easeInToLinear,
       onValueChanged: (ObjectVelocity v) {
-        controller.setGateSpeedTo(v);
+        controller.setAsteroidSpeedTo(v);
       },
     );
   }
@@ -130,7 +130,7 @@ class _GateNumberSliderState extends State<GateNumberSlider> {
 
   @override
   Widget build(BuildContext context) {
-    final int _nbG = (controller.sheepSettings["numberOfGates"]);
+    final int _nbG = controller.spaceShipSettings.numberOfShips;
     double _value = _nbG.toDouble();
     return Slider(
       value: _value,
@@ -141,7 +141,7 @@ class _GateNumberSliderState extends State<GateNumberSlider> {
       onChanged: (double value) {
         setState(() {
           _value = value;
-          controller.setNumberOfGatesTo(value.toInt());
+          controller.setNumberOfShipsTo(value.toInt());
         });
       },
     );

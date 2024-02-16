@@ -10,17 +10,7 @@ class SettingsController extends GetxController {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final _status = Rx<RxStatus>(RxStatus.empty());
-
-  var _usedSensor = SensorType.none.obs;
-
-  // var sheepParameters = (
-  // gateVelocity: ObjectVelocity.high,
-  // numberOfGates: 5,
-  // );
-
- // get sheepP => sheepParameters;
- // get sheepVel => sheepParameters.gateVelocity.value;
-//  final myMap = <String, int>{}.obs;
+  var _currentSensorType = SensorType.none.obs;
 
 var _genericSettings = <String, Object>{
   "sensitivity": Sensitivity.medium,
@@ -32,10 +22,7 @@ var _genericSettings = <String, Object>{
   "isSensor2On": false,
   }.obs;
 
-var _spaceShipSettings = <String, Object>{
-  "asteroidVelocity": ObjectVelocity.low,
-  "NumberOfLives": 5,
-}.obs;
+var _spaceShipSettings = SpaceShipSettings().obs;
 
   var _sheepSettings = <String, Object>{
     "gateVelocity": ObjectVelocity.medium,
@@ -50,10 +37,10 @@ var _spaceShipSettings = <String, Object>{
 
 
 // getters
-  SensorType get usedSensor => _usedSensor.value;
+  SensorType get usedSensor => _currentSensorType.value;
 
   Map get sheepSettings => _sheepSettings;
-  Map get starShipSettings => _spaceShipSettings;
+  SpaceShipSettings get spaceShipSettings => _spaceShipSettings.value;
   Map get toadShipSettings => _toadSettings;
   Map get genericSettings => _genericSettings;
 
@@ -66,7 +53,7 @@ var _spaceShipSettings = <String, Object>{
        _spaceShipSettings,
        _toadSettings,
        _sheepSettings], (value) =>  {
-       print("update for $value !")
+       print("settings update:   $value !")
      });
     super.onInit();
 
@@ -84,7 +71,7 @@ var _spaceShipSettings = <String, Object>{
   }
 
   void setSensorTo(SensorType sensor) {
-    _usedSensor.value = sensor;
+    _currentSensorType.value = sensor;
   }
 
   void setMuscle1To(bool mu1) {
@@ -97,12 +84,22 @@ var _spaceShipSettings = <String, Object>{
 
   void setNumberOfGatesTo(int? value) {
     if (value != null) {
-    _sheepSettings["numberOfGates"] = value;
+    _sheepSettings["numberOfGates"] = value > 0 ? value : 1;
     } else {
       showMyToast("Null value !");
     }
   }
 
+  void setNumberOfShipsTo(int? value) {
+    if (value != null) {
+      _spaceShipSettings.value.numberOfShips = value > 0 ? value : 1;
+    } else {
+      showMyToast("Null value !");
+    }
+    print("ships to set : $value");
+    var ships = spaceShipSettings.numberOfShips;
+    print("shipSettings: $ships");
+  }
   void updateSensorTypeTo(SensorType? type) {
     if (type != null) {
       setSensorTo(type);
@@ -123,42 +120,13 @@ var _spaceShipSettings = <String, Object>{
       print("Null value !");
     }
   }
-
-  bool _isValid() {
-    if (emailController.text.trim().isEmpty) {
-      showMyToast("Enter email id Error");
-     // M.showToast('Enter email id', status: SnackBarStatus.error);
-      return false;
-    }
-    if (!emailController.text.trim().isEmail) {
-      showMyToast("Enter valid email id");
-     // M.showToast('Enter valid email id', status: SnackBarStatus.error);
-      return false;
-    }
-    if (passwordController.text.trim().isEmpty) {
-      showMyToast("Enter password");
-     // M.showToast('Enter password', status: SnackBarStatus.error);
-      return false;
-    }
-    return true;
-  }
-
-  Future<void> onLogin() async {
-    if (_isValid()) {
-      _status.value = RxStatus.loading();
-      try {
-        //Perform login logic here
-        showMyToast("On login :: Login successful");
-
-       // M.showToast('Login successful', status: SnackBarStatus.success);
-        _status.value = RxStatus.success();
-      } catch (e) {
-        e.printError();
-        showMyToast(e.toString());
-
-       // M.showToast(e.toString(), status: SnackBarStatus.error);
-        _status.value = RxStatus.error(e.toString());
-      }
+  void setAsteroidSpeedTo(ObjectVelocity? velocity) {
+    if (velocity != null) {
+      _spaceShipSettings.value.asteroidVelocity = velocity;
+      var speed = spaceShipSettings.asteroidVelocity;
+      print("asteroids: $speed");
+    } else {
+      print("Null value !");
     }
   }
 
@@ -178,4 +146,9 @@ var _spaceShipSettings = <String, Object>{
       ),
     );
   }
+}
+
+class SpaceShipSettings {
+  ObjectVelocity asteroidVelocity =  ObjectVelocity.low;
+  int numberOfShips = 5;
 }

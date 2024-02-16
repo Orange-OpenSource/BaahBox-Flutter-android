@@ -109,13 +109,24 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
     goRight = false;
 
     if (appController.isConnectedToBox) {
-      // The strength is in range [0...1024] -> Have it fit into [0...100]
-      inputR = (appController.musclesInput.muscle1 ~/ 10);
-      inputL = (appController.musclesInput.muscle2 ~/ 10);
-      //print("inputL= $inputL, inputR = $inputR");
-      goLeft = (inputL > threshold) && (inputL > inputR);
-      goRight = (inputR > threshold) && !goLeft;
-      shoot = (inputL > 99 && inputR > 99);
+      var sensorType = settingsController.usedSensor;
+      switch (sensorType) {
+        case SensorType.muscle: // The strength is in range [0...1024] -> Have it fit into [0...100]
+          inputR = (appController.musclesInput.muscle1 ~/ 10);
+          inputL = (appController.musclesInput.muscle2 ~/ 10);
+          //print("inputL= $inputL, inputR = $inputR");
+          goLeft = (inputL > threshold) && (inputL > inputR);
+          goRight = (inputR > threshold) && !goLeft;
+          shoot = (inputL > 99 && inputR > 99);
+
+        case SensorType.arcadeJoystick:
+          var joystickInput = appController.joystickInput;
+          goLeft = joystickInput.left;
+          goRight = joystickInput.right;
+
+        default:
+
+      }
     }
   }
 
