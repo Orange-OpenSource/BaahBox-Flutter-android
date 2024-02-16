@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:baahbox/controllers/appController.dart';
+import 'dart:ui';
 import 'package:baahbox/routes/routes.dart';
 import 'package:baahbox/constants/enums.dart';
-import 'package:baahbox/services/settings/settingsController.dart';
-import 'dart:ui';
-import 'package:baahbox/services/ble/getXble/getx_ble.dart';
-
 
 class WelcomePage extends StatelessWidget with WidgetsBindingObserver {
   const WelcomePage({Key? key}) : super(key: key);
@@ -14,10 +10,6 @@ class WelcomePage extends StatelessWidget with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     final mainColor = BBColor.pinky.color;
-    final Controller c = Get.put(Controller());
-    final GetxBle bleController = Get.put(GetxBle());
-    final SettingsController settingsController = Get.put(SettingsController());
-
 
     return Scaffold(
         appBar: AppBar(
@@ -26,6 +18,7 @@ class WelcomePage extends StatelessWidget with WidgetsBindingObserver {
               color: mainColor, fontWeight: FontWeight.bold, fontSize: 25),
           centerTitle: true,
           title: Text("Baah !"),
+          leading: null,
           actions: [
             Container(
                 width: 25,

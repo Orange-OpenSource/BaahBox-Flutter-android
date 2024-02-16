@@ -41,7 +41,7 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
   bool hasSheepStartedJumping = false;
   bool sheepDidJumpOverGate = false;
   int strengthValue = 0;
-  int gateVelocity = 1;
+  var gateVelocity = ObjectVelocity.low;
 
   int panInput = 0;
   int input = 0;
@@ -78,7 +78,7 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
     await add(cloudManager);
     await add(counterManager);
 
-    await add(sheep = SheepComponent(position: Vector2(size.x / 3, floorY)));
+    await add(sheep = SheepComponent(position: Vector2(size.x *2/5, floorY)));
     await add(floor = FloorComponent(
         position: Vector2(size.x / 2, floorY),
         size: Vector2(size.x + 10, 5.0)));
@@ -111,9 +111,9 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
     successfulJumps = 0;
     hasSheepStartedJumping = false;
     sheepDidJumpOverGate = false;
-    var params = settingsController.sheepParams;
-    gameObjective = params["numberOfGates"];
-    gateVelocity = params["gateVelocity"].value;
+    var params = settingsController.sheepSettings;
+    gameObjective = settingsController.sheepSettings["numberOfGates"];
+    gateVelocity = settingsController.sheepSettings["gateVelocity"];
   }
 
   void initializeUI() {

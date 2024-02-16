@@ -1,3 +1,4 @@
+import 'package:baahbox/constants/enums.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -7,11 +8,11 @@ import 'package:baahbox/games/sheep/sheepGame.dart';
 class GateComponent extends SpriteComponent
     with HasGameRef<SheepGame>, CollisionCallbacks {
 
-  late int speedScale;
+  late ObjectVelocity speedScale;
   final Vector2 deltaPosition = Vector2.zero();
   final obstacleSprite = Sprite(Flame.images.fromCache('Jeux/Sheep/gate.png'));
   var isNewComer = true;
-  late Vector2 velocity;
+  late Vector2 speed;
 
   GateComponent({required this.speedScale}) :
        super(anchor: Anchor.bottomCenter, size: Vector2(10, 80));
@@ -22,10 +23,10 @@ class GateComponent extends SpriteComponent
     resetPosition();
   }
 
-  void reset(int speedScale) {
+  void reset(ObjectVelocity speedScale) {
     resetPosition();
     this.speedScale = speedScale;
-    velocity = Vector2(-1, 0)..scale(this.speedScale * 100);
+    speed = Vector2(-1, 0)..scale(this.speedScale.value * 50);
   }
   void resetPosition() {
     position = Vector2(gameRef.size.x + size.x / 2, gameRef.floorY);
@@ -36,7 +37,7 @@ class GateComponent extends SpriteComponent
     this.sprite = obstacleSprite;
     this.size = obstacleSprite.originalSize / 10;
     add(RectangleHitbox(collisionType: CollisionType.passive));
-    velocity = Vector2(-1, 0)..scale(this.speedScale * 100);
+    speed = Vector2(-1, 0)..scale(this.speedScale.value * 50);
   }
 
   @override
@@ -44,7 +45,7 @@ class GateComponent extends SpriteComponent
     super.update(dt);
     if (gameRef.isRunning) {
       deltaPosition
-        ..setFrom(velocity)
+        ..setFrom(speed)
         ..scale(dt);
       position += deltaPosition;
 

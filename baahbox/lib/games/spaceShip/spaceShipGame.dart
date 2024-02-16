@@ -17,7 +17,6 @@ import 'package:baahbox/games/spaceShip/components/lifeManager.dart';
 import 'package:flame/input.dart';
 import 'package:baahbox/services/settings/settingsController.dart';
 
-
 class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
   final Controller appController = Get.find();
   final SettingsController settingsController = Get.find();
@@ -64,7 +63,7 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
   void loadInfoComponents() {
     addAll([
       scoreText = TextComponent(
-        position: Vector2(size.x-5, size.y-10),
+        position: Vector2(size.x - 5, size.y - 10),
         anchor: Anchor.bottomRight,
         priority: 1,
       ),
@@ -87,7 +86,7 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
     ]);
   }
 
-  void initializeParams(){}
+  void initializeParams() {}
 
 // Game play
   @override
@@ -111,14 +110,23 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
     goRight = false;
 
     if (appController.isConnectedToBox) {
-      // The strength is in range [0...1024] -> Have it fit into [0...100]
-      inputL = (appController.musclesInput.muscle1 ~/ 10);
-      inputR = (appController.musclesInput.muscle2 ~/ 10);
-      goLeft = (inputL >  threshold) && (inputL > inputR);
-      goRight = (inputR > threshold) && (inputR > inputL);
+      var sensorType = settingsController.usedSensor;
+      switch (sensorType) {
+        case SensorType.muscle:
+          // The strength is in range [0...1024] -> Have it fit into [0...100]
+          inputL = (appController.musclesInput.muscle1 ~/ 10);
+          inputR = (appController.musclesInput.muscle2 ~/ 10);
+          goLeft = (inputL > threshold) && (inputL > inputR);
+          goRight = (inputR > threshold) && (inputR > inputL);
+        case SensorType.arcadeJoystick:
+          var joystickInput = appController.joystickInput;
+          goLeft = joystickInput.left;
+          goRight = joystickInput.right;
+
+        default:
+      }
     }
   }
-
 
   void transformInputInOffset() {
     if (!goLeft && !goRight) {
@@ -127,7 +135,6 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
     var offset = goLeft ? 2.0 : -2.0;
     ship.moveBy(offset);
   }
-
 
   void looseLife() {
     if (state == GameState.running) {
@@ -141,7 +148,6 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
     }
   }
 
-
 // Game State management
   @override
   void startGame() {
@@ -149,13 +155,11 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
     super.startGame();
   }
 
-
   @override
   void endGame() {
     state = GameState.lost;
     super.endGame();
   }
-
 
   @override
   void resetGame() async {
@@ -169,8 +173,6 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
       resumeEngine();
     }
   }
-
-
 
 // tap input (Demo mode)
   @override

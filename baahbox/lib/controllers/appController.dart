@@ -1,4 +1,5 @@
 import 'package:baahbox/model/sensorInput.dart';
+import 'package:baahbox/constants/enums.dart';
 import 'package:get/get.dart';
 
 class Controller extends FullLifeCycleController with FullLifeCycleMixin {
@@ -13,6 +14,7 @@ class Controller extends FullLifeCycleController with FullLifeCycleMixin {
   var _isActive = false.obs;
   var _isDebugging = true.obs;
 
+
   // getters
   String get connectedDeviceName=> _connectedDeviceName.value;
   String get connectedDeviceId => _connectedDeviceId.value;
@@ -26,6 +28,7 @@ class Controller extends FullLifeCycleController with FullLifeCycleMixin {
   void setDebugModeTo(bool isDebug) {
     _isDebugging.value = isDebug;
   }
+
 
   void setConnectionStateTo(bool isConnected) {
     _isConnectedToBox.value = isConnected;

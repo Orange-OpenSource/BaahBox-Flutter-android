@@ -1,58 +1,76 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:baahbox/constants/enums.dart';
+import 'package:baahbox/controllers/appController.dart';
 
 class SettingsController extends GetxController {
+  final Controller appController = Get.find();
+
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final _status = Rx<RxStatus>(RxStatus.empty());
 
-  var sheepParameters = (
-  gateVelocity: ObjectVelocity.high,
-  numberOfGates: 5,
-  );
+  var _usedSensor = SensorType.none.obs;
 
-  get sheepP => sheepParameters;
-  get sheepVel => sheepParameters.gateVelocity.value;
+  // var sheepParameters = (
+  // gateVelocity: ObjectVelocity.high,
+  // numberOfGates: 5,
+  // );
 
-  var parameters = {
-    "generic": {
-      "sensitivity": Sensitivity.medium,
-      "sensor": SensorType.muscle,
-      "numberOfSensors": 1,
-      "threshold": 0.2,
-      "demoMode": false,
-      "isSensor1On": true,
-      "isSensor2On": false,
-    },
-    "starShip": {
-      "asteroidVelocity": ObjectVelocity.low,
-      "NumberOfLives": 5,
-    },
-    "sheep": {
-      "gateVelocity": ObjectVelocity.medium,
-      "numberOfGates": 3,
-    },
-    "toad": {
-      "flySteadyTime": 3,
-      "numberOfFlies": 5,
-      "shootingType": ShootingType.automatic,
-    },
-  };
+ // get sheepP => sheepParameters;
+ // get sheepVel => sheepParameters.gateVelocity.value;
+//  final myMap = <String, int>{}.obs;
+
+var _genericSettings = <String, Object>{
+  "sensitivity": Sensitivity.medium,
+  "sensor": SensorType.muscle,
+  "numberOfSensors": 1,
+  "threshold": 0.2,
+  "demoMode": false,
+  "isSensor1On": true,
+  "isSensor2On": false,
+  }.obs;
+
+var _spaceShipSettings = <String, Object>{
+  "asteroidVelocity": ObjectVelocity.low,
+  "NumberOfLives": 5,
+}.obs;
+
+  var _sheepSettings = <String, Object>{
+    "gateVelocity": ObjectVelocity.medium,
+    "numberOfGates": 3,
+  }.obs;
+
+  var _toadSettings = <String, Object>{
+    "flySteadyTime": 3,
+    "numberOfFlies": 5,
+    "shootingType": ShootingType.automatic,
+  }.obs;
 
 
-  Map get params => parameters;
-  Map get sheepParams => params["sheep"];
-  Map get starShipParams => params["starShip"];
-  Map get toadShipParams => params["toad"];
-  Map get genericParams => params["generic"];
+// getters
+  SensorType get usedSensor => _usedSensor.value;
+
+  Map get sheepSettings => _sheepSettings;
+  Map get starShipSettings => _spaceShipSettings;
+  Map get toadShipSettings => _toadSettings;
+  Map get genericSettings => _genericSettings;
 
   RxStatus get status => _status.value;
 
   @override
-  void onInit() {}
+  void onInit() async {
+     everAll([
+       _genericSettings,
+       _spaceShipSettings,
+       _toadSettings,
+       _sheepSettings], (value) =>  {
+       print("update for $value !")
+     });
+    super.onInit();
+
+  }
 
   @override
   void onReady() {
@@ -65,37 +83,42 @@ class SettingsController extends GetxController {
     passwordController.dispose();
   }
 
-  void doTheRightThing(int? value) {
+  void setSensorTo(SensorType sensor) {
+    _usedSensor.value = sensor;
+  }
+
+  void setMuscle1To(bool mu1) {
+    _genericSettings["isSensor1On"] = mu1;
+  }
+
+  void setMuscle2To(bool mu2) {
+    _genericSettings["isSensor2On"] = mu2;
+  }
+
+  void setNumberOfGatesTo(int? value) {
     if (value != null) {
-    showMyToast("Entered radio $value ");
-    sheepParams["numberOfGates"] = value;
-    //
+    _sheepSettings["numberOfGates"] = value;
     } else {
       showMyToast("Null value !");
     }
   }
-  void setGateNumberTo(int? value) {
-    if (value != null) {
-      print("Entered $value ");
-      sheepParams["numberOfGates"] = value;
-      //
-    } else {
-      print("Null value !");
+
+  void updateSensorTypeTo(SensorType? type) {
+    if (type != null) {
+      setSensorTo(type);
+      _genericSettings["sensor"] = type;
     }
   }
 
-  void setGateSpeedTo(int? value) {
-    if (value != null) {
-      print("Entered $value ");
-      switch (value) {
-        case 2:
-        sheepParams["gateVelocity"] = ObjectVelocity.medium;
-        case 3:
-          sheepParams["gateVelocity"] = ObjectVelocity.high;
-        default:
-          sheepParams["gateVelocity"] = ObjectVelocity.low;
-      }
-      //
+  void updateSensitivityTo(Sensitivity? sensitivity) {
+    if (sensitivity != null) {
+      _genericSettings["sensitivity"] = sensitivity;
+    }
+  }
+
+  void setGateSpeedTo(ObjectVelocity? velocity) {
+    if (velocity != null) {
+        _sheepSettings["gateVelocity"] = velocity;
     } else {
       print("Null value !");
     }
@@ -125,7 +148,7 @@ class SettingsController extends GetxController {
       _status.value = RxStatus.loading();
       try {
         //Perform login logic here
-        showMyToast("Login successful");
+        showMyToast("On login :: Login successful");
 
        // M.showToast('Login successful', status: SnackBarStatus.success);
         _status.value = RxStatus.success();
@@ -140,13 +163,19 @@ class SettingsController extends GetxController {
   }
 
   void showMyToast(String message) {
-    Fluttertoast.showToast(
-        msg: message,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        textColor: Colors.white,
-        fontSize: 16.0
+    Get.snackbar(
+      "Baaaaah !",
+      message,
+      snackPosition: SnackPosition.TOP,
+      colorText: Colors.white,
+      borderRadius: 10,
+      backgroundColor:  BBGameList.sheep.baseColor.color,
+      icon: Image.asset(
+        "assets/images/icon/logo_baah_40.png",
+        height: 40,
+        width: 40,
+        //color: Colors.white,
+      ),
     );
   }
 }

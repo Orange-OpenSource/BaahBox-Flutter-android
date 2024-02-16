@@ -46,7 +46,7 @@ class SheepGamePage extends StatelessWidget {
               'PostGame': OverlayBuilder.postGame,
             },
             loadingBuilder: (_) => const Center(
-              child: Text('Loading'),
+              child: Text('...'),
             ),
           )
         ]),

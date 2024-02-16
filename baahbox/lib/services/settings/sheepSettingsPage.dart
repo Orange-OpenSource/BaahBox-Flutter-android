@@ -11,6 +11,7 @@ import 'package:custom_sliding_segmented_control/custom_sliding_segmented_contro
 
 class SheepSettingsPage extends GetView<SettingsController> {
   final mainColor = BBColor.pinky.color;
+  final SettingsController controller = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +31,11 @@ class SheepSettingsPage extends GetView<SettingsController> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Nombre de barrières',
+                        Obx(() => Text(
+                          'Nombre de barrières: '+  controller.sheepSettings["numberOfGates"].toString(),
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
+                        )),
                       ]))),
           const SizedBox(
             height: 15,
@@ -85,15 +86,13 @@ class _GateSpeedSegmentedSegmentState extends State<GateSpeedSegmentedSegment> {
 
   @override
   Widget build(BuildContext context) {
-    final  speed = (controller.sheepParams["gateVelocity"]) as ObjectVelocity;
-    int displayValue = speed.value;
 
-    return CustomSlidingSegmentedControl<int>(
-      initialValue: displayValue,
+    return CustomSlidingSegmentedControl<ObjectVelocity>(
+      initialValue: controller.sheepSettings["gateVelocity"],
       children: {
-        1: Text('Faible'),
-        2: Text('Moyenne'),
-        3: Text('Elevée'),
+        ObjectVelocity.low: Text('Faible'),
+        ObjectVelocity.medium: Text('Moyenne'),
+        ObjectVelocity.high: Text('Elevée'),
       },
       decoration: BoxDecoration(
         color: CupertinoColors.lightBackgroundGray,
@@ -116,8 +115,7 @@ class _GateSpeedSegmentedSegmentState extends State<GateSpeedSegmentedSegment> {
       ),
       duration: Duration(milliseconds: 300),
       curve: Curves.easeInToLinear,
-      onValueChanged: (int v) {
-        displayValue = v;
+      onValueChanged: (ObjectVelocity v) {
         controller.setGateSpeedTo(v);
       },
     );
@@ -136,7 +134,7 @@ class _GateNumberSliderState extends State<GateNumberSlider> {
 
   @override
   Widget build(BuildContext context) {
-    final int _nbG = (controller.sheepParams["numberOfGates"]);
+    final int _nbG = (controller.sheepSettings["numberOfGates"]);
     double _value = _nbG.toDouble();
     return Slider(
       value: _value,
@@ -147,7 +145,7 @@ class _GateNumberSliderState extends State<GateNumberSlider> {
       onChanged: (double value) {
         setState(() {
           _value = value;
-          controller.setGateNumberTo(value.toInt());
+          controller.setNumberOfGatesTo(value.toInt());
         });
       },
     );

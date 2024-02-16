@@ -10,9 +10,12 @@ enum ObjectVelocity {
 }
 
 enum Sensitivity {
-  low,
-  medium,
-  high;
+  low(value: 1),
+  medium(value: 2),
+  high(value: 3);
+
+  const Sensitivity({required this.value});
+  final int value;
 }
 
 enum ShootingType {
@@ -21,6 +24,7 @@ enum ShootingType {
 }
 
 enum SensorType {
+  none,
   muscle,
   arcadeJoystick,
   button,
