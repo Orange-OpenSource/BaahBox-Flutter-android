@@ -1,4 +1,6 @@
+import 'dart:math';
 import 'dart:ui';
+import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
@@ -14,28 +16,31 @@ import 'package:baahbox/services/settings/settingsController.dart';
 class StarGame extends BBGame with TapCallbacks {
   final Controller appController = Get.find();
   final SettingsController settingsController = Get.find();
+  late final TextComponent scoreText;
 
   late Size screenSize;
   late StarSprite _star;
 
   var panInput = 0;
   var input = 0;
-  var instructionTitle = 'Fais briller l\'étoile';
-  var instructionSubtitle = 'en contractant ton muscle';
-  var feedback = 'encore un effort!';
+  final instructionTitle = 'Fais briller l\'étoile';
+  final instructionSubtitle = 'en contractant ton muscle';
+  final feedBackTitle = 'encore un effort!';
   @override
   Color backgroundColor() => BBGameList.star.baseColor.color;
 
   @override
   Future<void> onLoad() async {
-    title = instructionTitle;
-    subTitle = instructionSubtitle;
-
     await super.onLoad();
     await Flame.images.loadAll(<String>[
       'Jeux/Star/jeu_etoile_01@2x.png',
       'Jeux/Star/jeu_etoile_02@2x.png',
     ]);
+    loadInfoComponents();
+    title = instructionTitle;
+    subTitle = instructionSubtitle;
+    feedback = feedBackTitle;
+    input = 0;
     _star = StarSprite();
     await add(_star);
   }
@@ -46,16 +51,39 @@ class StarGame extends BBGame with TapCallbacks {
     if (appController.isActive) {
       if (isRunning) {
         refreshInput();
+        scoreText.text = 'Score: $input';
         updateOverlaysAndState();
       }
     }
   }
 
+  void loadInfoComponents() {
+    addAll([
+      scoreText = TextComponent(
+        position: Vector2(size.x - 5, size.y - 10),
+        anchor: Anchor.bottomRight,
+        priority: 1,
+      ),
+    ]);
+  }
+
   void refreshInput() {
-    // todo deal with 2 muscles or joystick input
+    // Todo : deal with threshod and sensitivity
     if (appController.isConnectedToBox) {
-      // The strength is in range [0...1024] -> Have it fit into [0...100]
-      input = appController.musclesInput.muscle1;
+      var sensorType = settingsController.usedSensor;
+      switch (sensorType) {
+        case SensorType.muscle:
+        // The strength is in range [0...1024] -> Have it fit into [0...100]
+          input = appController.musclesInput.muscle1;
+        case SensorType.arcadeJoystick:
+          var joystickInput = appController.joystickInput;
+          if (joystickInput.up && input < 1000) {
+            input += 8;
+          } else if  (input >= 10) {
+              input -= 5;
+          }
+        default:
+      }
     } else {
       input = panInput;
     }
@@ -66,11 +94,10 @@ class StarGame extends BBGame with TapCallbacks {
     if (input < 300) {
       title = instructionTitle;
       subTitle = instructionSubtitle;
-    } else
-      if (input < 750) {
-        displayFeedBack();
-     } else {
-       endGame();
+    } else if (input < 750) {
+      displayFeedBack();
+    } else {
+      endGame();
     }
   }
 
@@ -79,17 +106,21 @@ class StarGame extends BBGame with TapCallbacks {
   }
 
   @override
-  void resetGame() {
-    // TODO: implement resetGame
-    super.resetGame();
+  void startGame() {
     _star.initialize();
+    input =0;
+    super.startGame();
   }
 
   @override
   void endGame() {
-    // TODO: implement resetGame
     state = GameState.won;
     super.endGame();
+  }
+
+  @override
+  void resetGame() {
+    super.resetGame();
   }
 
   @override

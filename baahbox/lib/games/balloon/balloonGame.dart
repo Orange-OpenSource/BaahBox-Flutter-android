@@ -40,6 +40,7 @@ class BalloonGame extends BBGame with TapCallbacks {
       'Jeux/Balloon/ballon_03@2x.png',
       'Jeux/Balloon/ballon_04@2x.png',
     ]);
+    input = 0;
     _balloon = BalloonComponent();
     await add(_balloon);
   }
@@ -56,10 +57,22 @@ class BalloonGame extends BBGame with TapCallbacks {
   }
 
   void refreshInput() {
-    // todo deal with 2 muscles or joystick input
+    // Todo : deal with threshod and sensitivity
     if (appController.isConnectedToBox) {
-      // The strength is in range [0...1024] -> Have it fit into [0...100]
-      input = appController.musclesInput.muscle1;
+      var sensorType = settingsController.usedSensor;
+      switch (sensorType) {
+        case SensorType.muscle:
+        // The strength is in range [0...1024] -> Have it fit into [0...100]
+          input = appController.musclesInput.muscle1;
+        case SensorType.arcadeJoystick:
+          var joystickInput = appController.joystickInput;
+          if (joystickInput.up && input < 1000) {
+            input += 8;
+          } else if  (input >= 10) {
+            input -= 5;
+          }
+        default:
+      }
     } else {
       input = panInput;
     }
@@ -81,6 +94,8 @@ class BalloonGame extends BBGame with TapCallbacks {
 
   @override
   void startGame() {
+    input =0;
+    _balloon.initialize();
     super.startGame();
     displayFeedBack();
   }
@@ -88,7 +103,7 @@ class BalloonGame extends BBGame with TapCallbacks {
   @override
   void resetGame() {
     super.resetGame();
-    _balloon.initialize();
+
   }
 
   @override

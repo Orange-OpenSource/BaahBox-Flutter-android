@@ -38,7 +38,7 @@ class StarSprite extends SpriteComponent with HasGameRef<StarGame> {
   @override
   void update(double dt) {
     super.update(dt);
-    if (gameRef.input > 750) {
+    if (gameRef.input >= 750) {
       setTo(shiningStarSprite);
     } else {
       setTo(starSprite);
