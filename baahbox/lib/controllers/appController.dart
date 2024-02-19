@@ -1,5 +1,24 @@
-import 'package:baahbox/constants/enums.dart';
+/*
+ * Baah Box
+ * Copyright (c) 2024. Orange SA
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 import 'package:baahbox/model/sensorInput.dart';
+import 'package:baahbox/constants/enums.dart';
 import 'package:get/get.dart';
 
 class Controller extends FullLifeCycleController with FullLifeCycleMixin {
@@ -14,6 +33,7 @@ class Controller extends FullLifeCycleController with FullLifeCycleMixin {
   var _isActive = false.obs;
   var _isDebugging = true.obs;
 
+
   // getters
   String get connectedDeviceName=> _connectedDeviceName.value;
   String get connectedDeviceId => _connectedDeviceId.value;
@@ -27,6 +47,7 @@ class Controller extends FullLifeCycleController with FullLifeCycleMixin {
   void setDebugModeTo(bool isDebug) {
     _isDebugging.value = isDebug;
   }
+
 
   void setConnectionStateTo(bool isConnected) {
     _isConnectedToBox.value = isConnected;
@@ -49,6 +70,7 @@ class Controller extends FullLifeCycleController with FullLifeCycleMixin {
     _joystickInput.value = ji;
   }
 
+@override
   void onClose() {
     super.onClose();
   }
@@ -70,7 +92,7 @@ class Controller extends FullLifeCycleController with FullLifeCycleMixin {
 // Mandatory
   @override
   void onInactive() {
-    print('appController - onInative called');
+    print('appController - onInactive called');
     _isActive.value = false;
   }
 
@@ -84,7 +106,7 @@ class Controller extends FullLifeCycleController with FullLifeCycleMixin {
 
   @override
   void onHidden() {
-    print('appController - onhidden called');
+    print('appController - onHidden called');
     _isActive.value = false;
   }
 

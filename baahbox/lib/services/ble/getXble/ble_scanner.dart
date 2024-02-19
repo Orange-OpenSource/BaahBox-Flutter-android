@@ -1,3 +1,22 @@
+/*
+ * Baah Box
+ * Copyright (c) 2024. Orange SA
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 import 'dart:async';
 
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
@@ -25,7 +44,7 @@ class BleScanner extends GetxController {
   final void Function(String message) _logMessage;
 
   void startScan(BleScannerFilter filter) {
-    _logMessage('Start ble discovery');
+    _logMessage('Recherche des équipements BLE');
     _devices.clear();
     _subscription?.cancel();
     _subscription = _ble
@@ -47,7 +66,7 @@ class BleScanner extends GetxController {
         }
       }
       _pushState();
-    }, onError: (Object e) => _logMessage('Device scan fails with error: $e'));
+    }, onError: (Object e) => _logMessage('Erreur lors de la recherche BLE: $e'));
     _pushState();
   }
 
@@ -61,7 +80,7 @@ class BleScanner extends GetxController {
   }
 
   Future<void> stopScan() async {
-    _logMessage('Stop ble discovery');
+    _logMessage('Arrêt de la recherche BLE');
 
     await _subscription?.cancel();
     _subscription = null;

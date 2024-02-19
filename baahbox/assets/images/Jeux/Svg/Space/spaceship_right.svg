@@ -1,0 +1,20 @@
+<!--
+  - Baah Box
+  - Copyright (c) 2024. Orange SA
+  -
+  -   This program is free software: you can redistribute it and/or modify
+  -   it under the terms of the GNU General Public License as published by
+  -   the Free Software Foundation, either version 3 of the License, or
+  -   (at your option) any later version.
+  -
+  -   This program is distributed in the hope that it will be useful,
+  -   but WITHOUT ANY WARRANTY; without even the implied warranty of
+  -   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  -   GNU General Public License for more details.
+  -
+  -   You should have received a copy of the GNU General Public License
+  -   along with this program. If not, see <http://www.gnu.org/licenses/>.
+  -
+  -->
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 290.32 388.16"><defs><style>.cls-1{fill:#fff;}.cls-2{fill:#6d6a66;}.cls-3{fill:#ffd15c;}</style></defs><title>spaceship_right</title><g id="Calque_2" data-name="Calque 2"><g id="Calque_2-2" data-name="Calque 2"><polygon class="cls-1" points="187.85 165.28 273.23 221.1 273.24 181.01 290.31 181.01 290.31 295.01 187.85 295 170.77 230 187.85 165.28"/><polygon class="cls-1" points="17.08 146.01 17.08 200.11 102.46 165.28 119.54 221.03 102.46 295 0 295.01 0 146.01 17.08 146.01"/><path class="cls-1" d="M139.18,8l6-8,6,8C174.87,38.86,187.85,80,187.85,123.72V295H102.46V123.72C102.46,80,115.44,38.86,139.18,8Z"/><rect class="cls-2" x="136.62" y="71.68" width="17.08" height="67"/><rect class="cls-2" x="136.62" y="250.35" width="17.08" height="67"/><path class="cls-2" d="M170.77,261.51v67H222v-67C222,243,210.56,228,196.39,228S170.77,243,170.77,261.51Z"/><path class="cls-2" d="M68.31,261.51v67h51.23v-67c0-18.54-11.44-33.5-25.61-33.5S68.31,243,68.31,261.51Z"/><path class="cls-3" d="M93.9,388.16c2.95-6.65,6.48-13.36,6.69-13.78l3.73-7.16,2.46,8a44.08,44.08,0,0,0,2.55,6.66c4-10.73,5.28-28.17,5.43-34.91L115,336.7l5.74,7.13a29.88,29.88,0,0,1,4.63,8.15,16.39,16.39,0,0,0,2-7c.61-8.75-4.72-18.72-7.79-23.23H68.25c-2.38,3.62-8.44,13.78-7.79,23.29a17.2,17.2,0,0,0,2,7,28.6,28.6,0,0,1,4.62-8.15l5.72-7.16L73,347.05c.15,6.74,1.46,24.18,5.43,34.91A49.43,49.43,0,0,0,81,375.31l2.46-8.05,3.73,7.16C87.4,374.77,91,381.51,93.9,388.16Z"/><path class="cls-3" d="M196.37,388.16c2.94-6.65,6.47-13.36,6.69-13.78l3.72-7.16,2.46,8a45.19,45.19,0,0,0,2.55,6.66c4-10.73,5.29-28.17,5.43-34.91l.25-10.32,5.74,7.13a29.56,29.56,0,0,1,4.62,8.15,16.39,16.39,0,0,0,2-7c.61-8.75-4.72-18.72-7.79-23.23H170.72c-2.39,3.62-8.45,13.78-7.79,23.29a17.19,17.19,0,0,0,2,7,28.6,28.6,0,0,1,4.62-8.15l5.72-7.16.25,10.38c.14,6.74,1.46,24.18,5.42,34.91a47.92,47.92,0,0,0,2.56-6.65l2.46-8.05,3.72,7.16C189.87,374.77,193.42,381.51,196.37,388.16Z"/><ellipse class="cls-1" cx="281.79" cy="183.16" rx="8.52" ry="11.15"/><ellipse class="cls-1" cx="8.52" cy="148.16" rx="8.52" ry="11.15"/><ellipse class="cls-2" cx="145.16" cy="250.35" rx="8.52" ry="11.15"/><ellipse class="cls-2" cx="145.16" cy="71.68" rx="8.52" ry="11.15"/></g></g></svg>

@@ -1,0 +1,20 @@
+<!--
+  - Baah Box
+  - Copyright (c) 2024. Orange SA
+  -
+  -   This program is free software: you can redistribute it and/or modify
+  -   it under the terms of the GNU General Public License as published by
+  -   the Free Software Foundation, either version 3 of the License, or
+  -   (at your option) any later version.
+  -
+  -   This program is distributed in the hope that it will be useful,
+  -   but WITHOUT ANY WARRANTY; without even the implied warranty of
+  -   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  -   GNU General Public License for more details.
+  -
+  -   You should have received a copy of the GNU General Public License
+  -   along with this program. If not, see <http://www.gnu.org/licenses/>.
+  -
+  -->
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 139.64 142.68"><defs><style>.cls-1{fill:#ffd15c;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:4px;}</style></defs><title>space_life</title><g id="Calque_2" data-name="Calque 2"><g id="Calque_2-2" data-name="Calque 2"><path class="cls-1" d="M137.64,107.4V60.3h0v-.76h-.08a4,4,0,0,0-7.81,0h-.09V81l-39.9-20V46.2A57.79,57.79,0,0,0,72.61,4.87L69.82,2,67,4.87A57.8,57.8,0,0,0,49.87,46.2V61.05L10,81V59.53H9.89a4,4,0,0,0-7.81,0H2v.76H2V107.4H33.91v9.54h0c-1.44,1.61-3.93,5.17-3.64,8.3a4.92,4.92,0,0,0,.94,2.51,10.45,10.45,0,0,1,2.16-2.91L36,122.29l.11,3.69c.07,2.41.68,8.64,2.53,12.47a13.47,13.47,0,0,0,1.2-2.37L41,133.2l1.74,2.56c.1.14,1.75,2.54,3.12,4.92,1.38-2.38,3-4.79,3.14-4.91l1.74-2.56,1.15,2.88a15.11,15.11,0,0,0,1.19,2.37C55,134.63,55.58,128.4,55.65,126l.11-3.71,2.67,2.56a9.86,9.86,0,0,1,2.16,2.91,5,5,0,0,0,.92-2.49c.31-3.4-2.52-7-3.63-8.32h0V107.4h8v8h8v-8h8v9.54h0c-1.43,1.61-3.92,5.17-3.64,8.3a4.92,4.92,0,0,0,.94,2.51,10.66,10.66,0,0,1,2.16-2.91l2.69-2.55L84,126c.07,2.41.68,8.64,2.54,12.47a14.28,14.28,0,0,0,1.19-2.37l1.15-2.88,1.74,2.56c.1.14,1.75,2.54,3.12,4.92,1.38-2.38,3-4.79,3.14-4.91l1.74-2.56,1.15,2.88a15.11,15.11,0,0,0,1.19,2.37c1.86-3.83,2.47-10.06,2.54-12.47l.11-3.71,2.68,2.56a10.23,10.23,0,0,1,2.16,2.91,5.14,5.14,0,0,0,.92-2.49c.3-3.4-2.53-7-3.64-8.32h0V107.4Z"/></g></g></svg>

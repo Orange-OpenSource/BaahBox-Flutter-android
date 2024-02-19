@@ -21,25 +21,27 @@ version: 1.0.0+1
 environment:
   sdk: ">=3.0.0 <4.0.0"
 dependencies:
-  flame: ^1.14.0
+  flame: ^1.15.0
   flutter:
     sdk: flutter
   get:
+  get_storage:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons:
   flutter_reactive_ble:
   location_permissions: ^4.0.0
-  fluttertoast:
   custom_sliding_segmented_control: ^1.8.1
 
   meta:
+  auto_size_text:
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_launcher_icons:
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

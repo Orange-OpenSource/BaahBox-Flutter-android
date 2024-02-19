@@ -1,0 +1,20 @@
+<!--
+  - Baah Box
+  - Copyright (c) 2024. Orange SA
+  -
+  -   This program is free software: you can redistribute it and/or modify
+  -   it under the terms of the GNU General Public License as published by
+  -   the Free Software Foundation, either version 3 of the License, or
+  -   (at your option) any later version.
+  -
+  -   This program is distributed in the hope that it will be useful,
+  -   but WITHOUT ANY WARRANTY; without even the implied warranty of
+  -   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  -   GNU General Public License for more details.
+  -
+  -   You should have received a copy of the GNU General Public License
+  -   along with this program. If not, see <http://www.gnu.org/licenses/>.
+  -
+  -->
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500.25 500.94"><g id="Calque_2" data-name="Calque 2"><g id="Calque_2-2" data-name="Calque 2"><path d="M495.74,11.94h0a26.57,26.57,0,0,0-35.19-8.52c-42.28,23.35-147.82,40.9-192.9,48.4l-4.07.67C159.67,69.8,76.54,166.28,51.79,298.26L49.84,308.7C39.62,363.55,28,425.72,4.53,460.55a26,26,0,0,0-4,19.72A25.36,25.36,0,0,0,11.4,496.59a25.75,25.75,0,0,0,14.33,4.35,25.35,25.35,0,0,0,15.42-5.2l5.54-4.3c16.71-13.08,32.5-25.43,83.82-38.26,11.28-2.82,23-5.4,35.13-8.06,62.42-13.74,133.18-29.32,198.87-87.71,59.27-52.68,83.51-156.49,99.55-225.19A448.79,448.79,0,0,1,477.7,81.13a329.28,329.28,0,0,1,18.9-40.91A26.66,26.66,0,0,0,495.74,11.94Zm-110,52.34S177.63,89.06,63.3,377.16C63.3,377.16,66.23,67.21,385.78,64.28ZM403.5,68S192.4,197.16,70.3,404.49C70.3,404.49,146.9,158.51,403.5,68Zm0,8.07S226.3,325.82,75.33,411.62C75.33,411.62,285.34,157.57,403.5,76.11Zm15.59,0c-83.23,259-327,342.52-327,342.52C296,290.76,419.09,76.11,419.09,76.11ZM119.64,424.86C404.42,302.48,423.35,93.73,423.35,93.73,429.39,413.23,119.64,424.86,119.64,424.86Z"/></g></g></svg>

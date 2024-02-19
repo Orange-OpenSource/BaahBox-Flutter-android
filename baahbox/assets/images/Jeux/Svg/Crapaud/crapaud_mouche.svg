@@ -1,0 +1,20 @@
+<!--
+  - Baah Box
+  - Copyright (c) 2024. Orange SA
+  -
+  -   This program is free software: you can redistribute it and/or modify
+  -   it under the terms of the GNU General Public License as published by
+  -   the Free Software Foundation, either version 3 of the License, or
+  -   (at your option) any later version.
+  -
+  -   This program is distributed in the hope that it will be useful,
+  -   but WITHOUT ANY WARRANTY; without even the implied warranty of
+  -   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  -   GNU General Public License for more details.
+  -
+  -   You should have received a copy of the GNU General Public License
+  -   along with this program. If not, see <http://www.gnu.org/licenses/>.
+  -
+  -->
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 118.17 85.26"><defs><style>.cls-1{fill:#246a6d;}.cls-2,.cls-3{fill:#fff;}.cls-2{opacity:0.44;}</style></defs><title>crapaud_mouche</title><g id="Calque_2" data-name="Calque 2"><g id="Calque_2-2" data-name="Calque 2"><ellipse class="cls-1" cx="54.63" cy="63.74" rx="21.5" ry="29.75" transform="translate(-11.43 115.55) rotate(-87.5)"/><path class="cls-2" d="M57.93,50.05S53.54,4.27,96,3.45,117,51.51,57.93,50.05Z"/><path class="cls-2" d="M57.2,50S65.55,4.79,23.37.28-1.74,46.34,57.2,50Z"/><path class="cls-3" d="M68.71,45.29a13.25,13.25,0,0,0-10.78,4.76,15.91,15.91,0,1,0-1,15.6A13.29,13.29,0,1,0,68.71,45.29Z"/><circle cx="50.71" cy="57.24" r="7.41"/><circle cx="63.16" cy="57.78" r="6.33"/></g></g></svg>

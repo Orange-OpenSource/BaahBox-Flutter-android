@@ -1,0 +1,20 @@
+<!--
+  - Baah Box
+  - Copyright (c) 2024. Orange SA
+  -
+  -   This program is free software: you can redistribute it and/or modify
+  -   it under the terms of the GNU General Public License as published by
+  -   the Free Software Foundation, either version 3 of the License, or
+  -   (at your option) any later version.
+  -
+  -   This program is distributed in the hope that it will be useful,
+  -   but WITHOUT ANY WARRANTY; without even the implied warranty of
+  -   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  -   GNU General Public License for more details.
+  -
+  -   You should have received a copy of the GNU General Public License
+  -   along with this program. If not, see <http://www.gnu.org/licenses/>.
+  -
+  -->
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 379.64 388.16"><defs><style>.cls-1{fill:#fff;}.cls-2{fill:#6d6a66;}.cls-3{fill:#ffd15c;}</style></defs><title>spaceship_nml</title><g id="Calque_2" data-name="Calque 2"><g id="Calque_2-2" data-name="Calque 2"><polygon class="cls-1" points="133.99 165.28 22.34 221.1 22.33 161.01 0 161.01 0.01 295.01 133.99 295 156.32 230 133.99 165.28"/><polygon class="cls-1" points="357.31 161.01 357.31 221.11 245.65 165.28 223.32 221.03 245.65 295 379.64 295.01 379.64 161.01 357.31 161.01"/><path class="cls-1" d="M197.64,8l-7.82-8L182,8a161.75,161.75,0,0,0-48,115.68V295H245.65V123.72A161.78,161.78,0,0,0,197.64,8Z"/><rect class="cls-2" x="178.65" y="71.68" width="22.33" height="67"/><rect class="cls-2" x="178.65" y="250.35" width="22.33" height="67"/><path class="cls-2" d="M156.32,261.51v67h-67v-67a33.5,33.5,0,1,1,67,0Z"/><path class="cls-2" d="M290.32,261.51v67h-67v-67a33.5,33.5,0,0,1,67,0Z"/><path class="cls-3" d="M256.85,388.16c-3.85-6.65-8.47-13.36-8.75-13.78l-4.87-7.16-3.22,8a38,38,0,0,1-3.34,6.66c-5.19-10.73-6.9-28.17-7.1-34.91l-.31-10.32-7.51,7.13A28.82,28.82,0,0,0,215.7,352a13.6,13.6,0,0,1-2.64-7c-.8-8.75,6.17-18.72,10.18-23.23h67.15c3.12,3.62,11,13.78,10.18,23.29a14.3,14.3,0,0,1-2.57,7,27.88,27.88,0,0,0-6.05-8.15l-7.48-7.16-.32,10.38c-.19,6.74-1.91,24.18-7.09,34.91a42.49,42.49,0,0,1-3.35-6.65l-3.21-8.05-4.87,7.16C265.34,374.77,260.7,381.51,256.85,388.16Z"/><path class="cls-3" d="M122.86,388.16c-3.85-6.65-8.47-13.36-8.76-13.78l-4.86-7.16-3.22,8a38,38,0,0,1-3.34,6.66c-5.19-10.73-6.91-28.17-7.1-34.91l-.31-10.32-7.51,7.13A28.82,28.82,0,0,0,81.71,352a13.6,13.6,0,0,1-2.64-7c-.8-8.75,6.17-18.72,10.18-23.23H156.4c3.12,3.62,11,13.78,10.18,23.29a14.22,14.22,0,0,1-2.58,7,27.83,27.83,0,0,0-6-8.15l-7.48-7.16-.32,10.38c-.19,6.74-1.91,24.18-7.1,34.91a43.49,43.49,0,0,1-3.34-6.65l-3.21-8.05-4.87,7.16C131.35,374.77,126.71,381.51,122.86,388.16Z"/><circle class="cls-1" cx="11.15" cy="163.16" r="11.15" transform="translate(-112.11 55.67) rotate(-45)"/><circle class="cls-1" cx="368.5" cy="163.16" r="11.15" transform="translate(125.04 484.31) rotate(-76.72)"/><circle class="cls-2" cx="189.82" cy="250.35" r="11.15" transform="translate(-121.42 207.55) rotate(-45)"/><circle class="cls-2" cx="189.82" cy="71.68" r="11.15" transform="translate(76.44 239.96) rotate(-76.72)"/></g></g></svg>

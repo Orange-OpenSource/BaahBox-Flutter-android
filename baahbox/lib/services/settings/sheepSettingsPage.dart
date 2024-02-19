@@ -1,16 +1,32 @@
+/*
+ * Baah Box
+ * Copyright (c) 2024. Orange SA
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:baahbox/constants/enums.dart';
-import 'package:baahbox/controllers/appController.dart';
-import 'package:baahbox/routes/routes.dart';
 import 'package:baahbox/services/settings/settingsController.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 
 class SheepSettingsPage extends GetView<SettingsController> {
   final mainColor = BBColor.pinky.color;
+  final SettingsController controller = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +46,11 @@ class SheepSettingsPage extends GetView<SettingsController> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Nombre de barrières',
+                        Obx(() => Text(
+                          'Nombre de barrières: '+  controller.sheepSettings["numberOfGates"].toString(),
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
+                        )),
                       ]))),
           const SizedBox(
             height: 15,
@@ -85,15 +101,13 @@ class _GateSpeedSegmentedSegmentState extends State<GateSpeedSegmentedSegment> {
 
   @override
   Widget build(BuildContext context) {
-    final  speed = (controller.sheepParams["gateVelocity"]) as ObjectVelocity;
-    int displayValue = speed.value;
 
-    return CustomSlidingSegmentedControl<int>(
-      initialValue: displayValue,
+    return CustomSlidingSegmentedControl<ObjectVelocity>(
+      initialValue: controller.sheepSettings["gateVelocity"],
       children: {
-        1: Text('Faible'),
-        2: Text('Moyenne'),
-        3: Text('Elevée'),
+        ObjectVelocity.low: Text('Faible'),
+        ObjectVelocity.medium: Text('Moyenne'),
+        ObjectVelocity.high: Text('Elevée'),
       },
       decoration: BoxDecoration(
         color: CupertinoColors.lightBackgroundGray,
@@ -116,8 +130,7 @@ class _GateSpeedSegmentedSegmentState extends State<GateSpeedSegmentedSegment> {
       ),
       duration: Duration(milliseconds: 300),
       curve: Curves.easeInToLinear,
-      onValueChanged: (int v) {
-        displayValue = v;
+      onValueChanged: (ObjectVelocity v) {
         controller.setGateSpeedTo(v);
       },
     );
@@ -136,7 +149,7 @@ class _GateNumberSliderState extends State<GateNumberSlider> {
 
   @override
   Widget build(BuildContext context) {
-    final int _nbG = (controller.sheepParams["numberOfGates"]);
+    final int _nbG = (controller.sheepSettings["numberOfGates"]);
     double _value = _nbG.toDouble();
     return Slider(
       value: _value,
@@ -147,7 +160,7 @@ class _GateNumberSliderState extends State<GateNumberSlider> {
       onChanged: (double value) {
         setState(() {
           _value = value;
-          controller.setGateNumberTo(value.toInt());
+          controller.setNumberOfGatesTo(value.toInt());
         });
       },
     );

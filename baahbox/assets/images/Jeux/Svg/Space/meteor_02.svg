@@ -1,0 +1,20 @@
+<!--
+  - Baah Box
+  - Copyright (c) 2024. Orange SA
+  -
+  -   This program is free software: you can redistribute it and/or modify
+  -   it under the terms of the GNU General Public License as published by
+  -   the Free Software Foundation, either version 3 of the License, or
+  -   (at your option) any later version.
+  -
+  -   This program is distributed in the hope that it will be useful,
+  -   but WITHOUT ANY WARRANTY; without even the implied warranty of
+  -   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  -   GNU General Public License for more details.
+  -
+  -   You should have received a copy of the GNU General Public License
+  -   along with this program. If not, see <http://www.gnu.org/licenses/>.
+  -
+  -->
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 395.48 358.82"><defs><style>.cls-1{fill:#6d6a66;}</style></defs><title>meteor_02</title><g id="Calque_2" data-name="Calque 2"><g id="Calque_2-2" data-name="Calque 2"><path class="cls-1" d="M299,15.49c29.4,19,78.1,19.51,92.25,48.9s-11.53,84-14.08,116.47c-2.31,29.36,15.11,90.29-2,116.77-14.63,22.65-125.36,24.81-146.65,38.51-36.71,23.63-11.13,25.77-54.34,19.95-25.94-3.5-75.51-25.85-98.94-41-25.33-16.36-3.74-25.94-16.95-51.35S3.5,217.36.34,186.52c-2.86-28,13-56.74,16.75-86.36C19,85.34,65.28,82.46,68.54,67.74,76.76,30.62,86.08,13.74,122.6,5,155.57-3,195.33-1,233.31,8,265.43,15.55,274.65-.26,299,15.49Z"/><path d="M153.74,161.2A64.63,64.63,0,0,1,83.59,269.77c-30-19.37-49.58-52.72-30.21-82.7S123.76,141.83,153.74,161.2Z"/><path d="M182.3,4.7c31.21,8.61,37.49,49.59,23.42,70.88s-47.38,24.06-74.39,6.2S80.34,32.28,99.1,15C111.85,3.23,153.65-3.19,182.3,4.7Z"/><path d="M385.94,61.76c8.9,5.75,11.14,18.11,5,27.61s-18.33,12.54-27.23,6.79-14.53-15.94-8.39-25.44S377,56,385.94,61.76Z"/><path d="M303.5,98.47a32.31,32.31,0,1,1-35.07,54.28c-15-9.68-24.79-26.36-15.1-41.35S288.51,88.78,303.5,98.47Z"/><path d="M261,286.92c-6.34-25.75,27.19-69.74,52.95-76.08A48,48,0,0,1,372.05,246c6.34,25.75-.06,53.77-25.81,60.11S267.34,312.67,261,286.92Z"/></g></g></svg>

@@ -1,3 +1,22 @@
+/*
+ * Baah Box
+ * Copyright (c) 2024. Orange SA
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,7 +27,7 @@ import 'package:baahbox/services/settings/settingsController.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 
 class GeneralSettingsPage extends GetView<SettingsController> {
-  // final SettingsController controller = Get.find();
+  final SettingsController controller = Get.find();
   final mainColor = BBColor.pinky.color;
   double _currentSliderValue = 1;
 
@@ -97,7 +116,7 @@ class GeneralSettingsPage extends GetView<SettingsController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Muscle de travail',
+                          'Muscle utilisé',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -113,11 +132,27 @@ class GeneralSettingsPage extends GetView<SettingsController> {
           const SizedBox(
             height: 12,
           ),
-          SwitchExample(title: "Muscle 1"),
+          ListTile(
+              title: Text("Muscle1"),
+              trailing: Obx(() => Switch(
+                value: controller.genericSettings["isSensor1On"],
+                activeColor: Colors.red,
+                onChanged: (bool val) {
+                  controller.setMuscle1To(val);
+                },
+              ))),
           const SizedBox(
             height: 5,
           ),
-          SwitchExample(title: "Muscle 2"),
+          ListTile(
+          title: Text("Muscle2"),
+          trailing: Obx(() => Switch(
+          value: controller.genericSettings["isSensor2On"],
+          activeColor: Colors.red,
+          onChanged: (bool val) {
+            controller.setMuscle2To(val);
+          },
+          ))),
           Card(
               shape: ContinuousRectangleBorder(),
     child: Padding(
@@ -176,12 +211,12 @@ class _SensitivitySegmentedSegmentState
 
   @override
   Widget build(BuildContext context) {
-    return CustomSlidingSegmentedControl<int>(
-      initialValue: 2,
+    return CustomSlidingSegmentedControl<Sensitivity>(
+      initialValue: Sensitivity.medium,
       children: {
-        1: Text('Faible'),
-        2: Text('Moyenne'),
-        3: Text('Elevée'),
+        Sensitivity.low: Text('Faible'),
+        Sensitivity.medium: Text('Moyenne'),
+        Sensitivity.high: Text('Elevée'),
       },
       decoration: BoxDecoration(
         color: CupertinoColors.lightBackgroundGray,
@@ -204,9 +239,8 @@ class _SensitivitySegmentedSegmentState
       ),
       duration: Duration(milliseconds: 300),
       curve: Curves.easeInToLinear,
-      onValueChanged: (v) {
-        print(v);
-        //controller.doTheRightThing(v);
+      onValueChanged: (sensitivity) {
+        controller.updateSensitivityTo(sensitivity);
       },
     );
   }
@@ -224,12 +258,14 @@ class _SensorSegmentedSegmentState extends State<SensorSegmentedSegment> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomSlidingSegmentedControl<int>(
-      initialValue: 2,
+    final sensorType = (controller.genericSettings["sensor"] as SensorType);
+    var displayValue = sensorType;
+    return CustomSlidingSegmentedControl<SensorType>(
+      initialValue: sensorType,
       children: {
-        1: Text('Muscle'),
-        2: Text('Joystick'),
-        3: Text('Button'),
+        SensorType.muscle: Text('Muscle'),
+        SensorType.arcadeJoystick: Text('Joystick'),
+        SensorType.button: Text('Button'),
       },
       decoration: BoxDecoration(
         color: CupertinoColors.lightBackgroundGray,
@@ -254,7 +290,7 @@ class _SensorSegmentedSegmentState extends State<SensorSegmentedSegment> {
       curve: Curves.easeInToLinear,
       onValueChanged: (v) {
         print(v);
-        // controller.doTheRightThing(v);
+        controller.updateSensorTypeTo(v);
       },
     );
   }
@@ -282,7 +318,7 @@ class _RadioSensorChoiceState extends State<RadioSensorChoice> {
             onChanged: (int? value) {
               setState(() {
                 _value = value ?? 0;
-                controller.doTheRightThing(value);
+                controller.setNumberOfGatesTo(value);
               });
             },
           ),
@@ -295,7 +331,7 @@ class _RadioSensorChoiceState extends State<RadioSensorChoice> {
             onChanged: (int? value) {
               setState(() {
                 _value = value ?? 0;
-                controller.doTheRightThing(value);
+                controller.setNumberOfGatesTo(value);
               });
             },
           ),
@@ -308,7 +344,7 @@ class _RadioSensorChoiceState extends State<RadioSensorChoice> {
             onChanged: (int? value) {
               setState(() {
                 _value = value ?? 0;
-                controller.doTheRightThing(value);
+                controller.setNumberOfGatesTo(value);
               });
             },
           ),

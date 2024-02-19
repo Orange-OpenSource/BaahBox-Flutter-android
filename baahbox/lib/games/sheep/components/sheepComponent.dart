@@ -1,3 +1,22 @@
+/*
+ * Baah Box
+ * Copyright (c) 2024. Orange SA
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 import 'dart:math';
 import 'package:flame/flame.dart';
 import 'package:flame/collisions.dart';
@@ -40,7 +59,7 @@ class SheepComponent extends SpriteComponent
     this.sprite = walkingSprite1;
     var ratio = walkingSprite1.srcSize.x / walkingSprite1.srcSize.y;
     var width = gameRef.size.x/3;
-    size = Vector2(width,width/ratio); //walkingSprite1.srcSize / 10;
+    size = Vector2(width,width/ratio);
     show();
   }
 

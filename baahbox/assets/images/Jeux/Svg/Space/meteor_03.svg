@@ -1,0 +1,20 @@
+<!--
+  - Baah Box
+  - Copyright (c) 2024. Orange SA
+  -
+  -   This program is free software: you can redistribute it and/or modify
+  -   it under the terms of the GNU General Public License as published by
+  -   the Free Software Foundation, either version 3 of the License, or
+  -   (at your option) any later version.
+  -
+  -   This program is distributed in the hope that it will be useful,
+  -   but WITHOUT ANY WARRANTY; without even the implied warranty of
+  -   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  -   GNU General Public License for more details.
+  -
+  -   You should have received a copy of the GNU General Public License
+  -   along with this program. If not, see <http://www.gnu.org/licenses/>.
+  -
+  -->
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 277.77 373.09"><defs><style>.cls-1{fill:#6d6a66;}</style></defs><title>meteor_03</title><g id="Calque_2" data-name="Calque 2"><g id="Calque_2-2" data-name="Calque 2"><path class="cls-1" d="M267.2,167.33c0,36.22,18.62,78.82,6.44,107.61-6.06,14.34-37.41,46.61-52.21,54.32s-20.4,5.83-30.66,13.83-16.77,11.85-30.87,27c-11.29,12.11-52.87-16-62.91-16-11.66,0-14.85,28.48-33.12-1.33-12-19.58-35.78-68.82-42.33-73.1-28.48-18.63,10.54-58.3-2.76-99.12C10.81,156,0,170,0,141.12c0-31.19,28.9-24.87,16.94-60.36-5.05-15,14.45-19.2,17.65-38.82C37.07,26.7,40.65,12.6,48.23,3.82,64-14.38,69.49,39.05,88.77,25.7c9.65-6.68,34.88-9.76,45-15.2,25.52-13.69,39.3-15.07,58.77,11.73C201.1,34,208.87,48.49,215.67,64.64c7.18,17-6.18,18.21-1.36,37.74C222.23,134.54,267.2,137.3,267.2,167.33Z"/><path d="M262,176.56a50.31,50.31,0,1,1-100.62,0c0-27.79,13.52-54.69,41.31-54.69S262,148.77,262,176.56Z"/><path d="M71.34,254.27a25.16,25.16,0,1,1-50.31,0c0-13.89,6.76-27.34,20.65-27.34S71.34,240.38,71.34,254.27Z"/><path d="M167.14,338.11a25.16,25.16,0,1,1-50.31,0c0-13.89,6.77-27.34,20.66-27.34S167.14,324.22,167.14,338.11Z"/><path d="M123.29,154.43c0,13.89-30,43.66-43.91,43.66a25.16,25.16,0,0,1-25.16-25.15c0-13.9,13.73-37.28,27.62-37.28S123.29,140.54,123.29,154.43Z"/><path d="M255.68,279.43c0,13.89-30.08,44.15-44,44.15s-27.31-29.17-27.31-43.06,6.77-27.34,20.66-27.34S255.68,265.54,255.68,279.43Z"/><path d="M115.74,19.61c19.15,7.72,31.65,48.91,23.93,68.06A37.38,37.38,0,0,1,91,108.36C71.88,100.64,57.1,83.85,64.82,64.7S96.59,11.89,115.74,19.61Z"/></g></g></svg>

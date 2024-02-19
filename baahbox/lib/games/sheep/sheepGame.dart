@@ -1,6 +1,24 @@
+/*
+ * Baah Box
+ * Copyright (c) 2024. Orange SA
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 import 'dart:math';
 import 'dart:ui';
-import 'package:baahbox/games/trex/game_over.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
@@ -41,7 +59,7 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
   bool hasSheepStartedJumping = false;
   bool sheepDidJumpOverGate = false;
   int strengthValue = 0;
-  int gateVelocity = 1;
+  var gateVelocity = ObjectVelocity.low;
 
   int panInput = 0;
   int input = 0;
@@ -51,7 +69,6 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
   var endTitle = 's';
   var feedbackTitleWon = 'Bravo! \ntu as sauté toutes les barrières';
   var feedbackTitleLost = "Tu n'as pas sauté toutes les barrières";
-
 
   @override
   Color backgroundColor() => BBGameList.sheep.baseColor.color;
@@ -73,12 +90,12 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
   }
 
   Future<void> loadComponents() async {
-
     await add(gate = GateComponent(speedScale: this.gateVelocity));
     await add(cloudManager);
     await add(counterManager);
 
-    await add(sheep = SheepComponent(position: Vector2(size.x / 3, floorY)));
+    await add(
+        sheep = SheepComponent(position: Vector2(size.x * 2 / 5, floorY)));
     await add(floor = FloorComponent(
         position: Vector2(size.x / 2, floorY),
         size: Vector2(size.x + 10, 5.0)));
@@ -111,14 +128,16 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
     successfulJumps = 0;
     hasSheepStartedJumping = false;
     sheepDidJumpOverGate = false;
-    var params = settingsController.sheepParams;
-    gameObjective = params["numberOfGates"];
-    gateVelocity = params["gateVelocity"].value;
+    var params = settingsController.sheepSettings;
+    gameObjective = settingsController.sheepSettings["numberOfGates"];
+    gateVelocity = settingsController.sheepSettings["gateVelocity"];
   }
 
   void initializeUI() {
     title = 'Essaie de sauter $gameObjective barrière';
-    if (gameObjective > 1) { title += 's';}
+    if (gameObjective > 1) {
+      title += 's';
+    }
     subTitle = instructionSubtitle;
     progressionText.text = "";
     counterManager.createMarks(gameObjective);
@@ -161,7 +180,7 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
     if (appController.isActive) {
       if (isRunning) {
         refreshInput();
-      transformInputInMove();
+        transformInputInMove();
         if (isNewGateOnQueue()) {
           if (!isSheepOnFloor() && !sheepDidJumpOverGate) {
             setGameStateToWon(false);
@@ -181,23 +200,34 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
   }
 
   void transformInputInMove() {
-    if (appController.isConnectedToBox) { //   if input <= threshold { return }
+    if (appController.isConnectedToBox) {
+      //   if input <= threshold { return }
       //   var heightConstraint = (CGFloat(strengthValue) - CGFloat (hardnessCoeff*350)) / 1000
 //   if heightConstraint < 0 { heightConstraint = 0 }
-      final jumpHeigth = floorY * (1 - (input / 100));
-      // print("floorY: $floorY, height: $jumpHeigth");
-      sheep.moveTo(jumpHeigth);
+      var sensorType = settingsController.usedSensor;
+      switch (sensorType) {
+        case SensorType.muscle:
+          final jumpHeigth = floorY * (1 - (input / 100));
+          // print("floorY: $floorY, height: $jumpHeigth");
+          sheep.moveTo(jumpHeigth);
+        case SensorType.arcadeJoystick:
+          var joystickInput = appController.joystickInput;
+          if (joystickInput.up) {
+            sheep.moveTo(sheep.y - 3);
+          } else if (joystickInput.down) {
+            sheep.moveTo(sheep.y + 3);
+          }
+        default:
+      }
     }
 // let jumpheightWithConstraint = groundPosition.y + (maxHeigthJump * heightConstraint)
 // jumpTo(sprite: sheep, height: jumpheightWithConstraint)
-
   }
 
 //  var heightConstraint = (CGFloat(strengthValue) - CGFloat (hardnessCoeff*350)) / 1000
 //  if heightConstraint < 0 { heightConstraint = 0 }
 // let jumpheightWithConstraint = groundPosition.y + (maxHeigthJump * heightConstraint)
 // jumpTo(sprite: sheep, height: jumpheightWithConstraint)
-
 
   void refreshInput() {
     // todo deal with 2 muscles or joystick input
@@ -260,7 +290,6 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
   bool isSheepBeyondTheGate() {
     return sheep.isBeyond(gate.position.x);
   }
-
 
   void setGameStateToWon(bool win) {
     state = win ? GameState.won : GameState.lost;

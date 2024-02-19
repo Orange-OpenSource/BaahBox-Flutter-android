@@ -1,58 +1,82 @@
+/*
+ * Baah Box
+ * Copyright (c) 2024. Orange SA
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:baahbox/constants/enums.dart';
+import 'package:baahbox/controllers/appController.dart';
 
 class SettingsController extends GetxController {
+  final Controller appController = Get.find();
+
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final _status = Rx<RxStatus>(RxStatus.empty());
+  var _currentSensorType = SensorType.none.obs;
 
-  var sheepParameters = (
-  gateVelocity: ObjectVelocity.high,
-  numberOfGates: 5,
-  );
+var _genericSettings = <String, Object>{
+  "sensitivity": Sensitivity.medium,
+  "sensor": SensorType.muscle,
+  "numberOfSensors": 1,
+  "threshold": 0.2,
+  "demoMode": false,
+  "isSensor1On": true,
+  "isSensor2On": false,
+  }.obs;
 
-  get sheepP => sheepParameters;
-  get sheepVel => sheepParameters.gateVelocity.value;
+var _spaceShipSettings = SpaceShipSettings().obs;
 
-  var parameters = {
-    "generic": {
-      "sensitivity": Sensitivity.medium,
-      "sensor": SensorType.muscle,
-      "numberOfSensors": 1,
-      "threshold": 0.2,
-      "demoMode": false,
-      "isSensor1On": true,
-      "isSensor2On": false,
-    },
-    "starShip": {
-      "asteroidVelocity": ObjectVelocity.low,
-      "NumberOfLives": 5,
-    },
-    "sheep": {
-      "gateVelocity": ObjectVelocity.medium,
-      "numberOfGates": 3,
-    },
-    "toad": {
-      "flySteadyTime": 3,
-      "numberOfFlies": 5,
-      "shootingType": ShootingType.automatic,
-    },
-  };
+  var _sheepSettings = <String, Object>{
+    "gateVelocity": ObjectVelocity.medium,
+    "numberOfGates": 3,
+  }.obs;
+
+  var _toadSettings = <String, Object>{
+    "flySteadyTime": 3,
+    "numberOfFlies": 5,
+    "shootingType": ShootingType.automatic,
+  }.obs;
 
 
-  Map get params => parameters;
-  Map get sheepParams => params["sheep"];
-  Map get starShipParams => params["starShip"];
-  Map get toadShipParams => params["toad"];
-  Map get genericParams => params["generic"];
+// getters
+  SensorType get usedSensor => _currentSensorType.value;
+
+  Map get sheepSettings => _sheepSettings;
+  SpaceShipSettings get spaceShipSettings => _spaceShipSettings.value;
+  Map get toadShipSettings => _toadSettings;
+  Map get genericSettings => _genericSettings;
 
   RxStatus get status => _status.value;
 
   @override
-  void onInit() {}
+  void onInit() async {
+     everAll([
+       _genericSettings,
+       _spaceShipSettings,
+       _toadSettings,
+       _sheepSettings], (value) =>  {
+       print("settings update:   $value !")
+     });
+    super.onInit();
+
+  }
 
   @override
   void onReady() {
@@ -65,88 +89,85 @@ class SettingsController extends GetxController {
     passwordController.dispose();
   }
 
-  void doTheRightThing(int? value) {
+  void setSensorTo(SensorType sensor) {
+    _currentSensorType.value = sensor;
+  }
+
+  void setMuscle1To(bool mu1) {
+    _genericSettings["isSensor1On"] = mu1;
+  }
+
+  void setMuscle2To(bool mu2) {
+    _genericSettings["isSensor2On"] = mu2;
+  }
+
+  void setNumberOfGatesTo(int? value) {
     if (value != null) {
-    showMyToast("Entered radio $value ");
-    sheepParams["numberOfGates"] = value;
-    //
+    _sheepSettings["numberOfGates"] = value > 0 ? value : 1;
     } else {
       showMyToast("Null value !");
     }
   }
-  void setGateNumberTo(int? value) {
+
+  void setNumberOfShipsTo(int? value) {
     if (value != null) {
-      print("Entered $value ");
-      sheepParams["numberOfGates"] = value;
-      //
+      _spaceShipSettings.value.numberOfShips = value > 0 ? value : 1;
+    } else {
+      showMyToast("Null value !");
+    }
+    print("ships to set : $value");
+    var ships = spaceShipSettings.numberOfShips;
+    print("shipSettings: $ships");
+  }
+  void updateSensorTypeTo(SensorType? type) {
+    if (type != null) {
+      setSensorTo(type);
+      _genericSettings["sensor"] = type;
+    }
+  }
+
+  void updateSensitivityTo(Sensitivity? sensitivity) {
+    if (sensitivity != null) {
+      _genericSettings["sensitivity"] = sensitivity;
+    }
+  }
+
+  void setGateSpeedTo(ObjectVelocity? velocity) {
+    if (velocity != null) {
+        _sheepSettings["gateVelocity"] = velocity;
     } else {
       print("Null value !");
     }
   }
-
-  void setGateSpeedTo(int? value) {
-    if (value != null) {
-      print("Entered $value ");
-      switch (value) {
-        case 2:
-        sheepParams["gateVelocity"] = ObjectVelocity.medium;
-        case 3:
-          sheepParams["gateVelocity"] = ObjectVelocity.high;
-        default:
-          sheepParams["gateVelocity"] = ObjectVelocity.low;
-      }
-      //
+  void setAsteroidSpeedTo(ObjectVelocity? velocity) {
+    if (velocity != null) {
+      _spaceShipSettings.value.asteroidVelocity = velocity;
+      var speed = spaceShipSettings.asteroidVelocity;
+      print("asteroids: $speed");
     } else {
       print("Null value !");
-    }
-  }
-
-  bool _isValid() {
-    if (emailController.text.trim().isEmpty) {
-      showMyToast("Enter email id Error");
-     // M.showToast('Enter email id', status: SnackBarStatus.error);
-      return false;
-    }
-    if (!emailController.text.trim().isEmail) {
-      showMyToast("Enter valid email id");
-     // M.showToast('Enter valid email id', status: SnackBarStatus.error);
-      return false;
-    }
-    if (passwordController.text.trim().isEmpty) {
-      showMyToast("Enter password");
-     // M.showToast('Enter password', status: SnackBarStatus.error);
-      return false;
-    }
-    return true;
-  }
-
-  Future<void> onLogin() async {
-    if (_isValid()) {
-      _status.value = RxStatus.loading();
-      try {
-        //Perform login logic here
-        showMyToast("Login successful");
-
-       // M.showToast('Login successful', status: SnackBarStatus.success);
-        _status.value = RxStatus.success();
-      } catch (e) {
-        e.printError();
-        showMyToast(e.toString());
-
-       // M.showToast(e.toString(), status: SnackBarStatus.error);
-        _status.value = RxStatus.error(e.toString());
-      }
     }
   }
 
   void showMyToast(String message) {
-    Fluttertoast.showToast(
-        msg: message,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        textColor: Colors.white,
-        fontSize: 16.0
+    Get.snackbar(
+      "Baaaaah !",
+      message,
+      snackPosition: SnackPosition.TOP,
+      colorText: Colors.white,
+      borderRadius: 10,
+      backgroundColor:  BBGameList.sheep.baseColor.color,
+      icon: Image.asset(
+        "assets/images/icon/logo_baah_40.png",
+        height: 40,
+        width: 40,
+        //color: Colors.white,
+      ),
     );
   }
+}
+
+class SpaceShipSettings {
+  ObjectVelocity asteroidVelocity =  ObjectVelocity.low;
+  int numberOfShips = 5;
 }

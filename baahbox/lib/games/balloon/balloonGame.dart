@@ -1,3 +1,22 @@
+/*
+ * Baah Box
+ * Copyright (c) 2024. Orange SA
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 import 'dart:ui';
 import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
@@ -40,6 +59,7 @@ class BalloonGame extends BBGame with TapCallbacks {
       'Jeux/Balloon/ballon_03@2x.png',
       'Jeux/Balloon/ballon_04@2x.png',
     ]);
+    input = 0;
     _balloon = BalloonComponent();
     await add(_balloon);
   }
@@ -56,10 +76,22 @@ class BalloonGame extends BBGame with TapCallbacks {
   }
 
   void refreshInput() {
-    // todo deal with 2 muscles or joystick input
+    // Todo : deal with threshod and sensitivity
     if (appController.isConnectedToBox) {
-      // The strength is in range [0...1024] -> Have it fit into [0...100]
-      input = appController.musclesInput.muscle1;
+      var sensorType = settingsController.usedSensor;
+      switch (sensorType) {
+        case SensorType.muscle:
+        // The strength is in range [0...1024] -> Have it fit into [0...100]
+          input = appController.musclesInput.muscle1;
+        case SensorType.arcadeJoystick:
+          var joystickInput = appController.joystickInput;
+          if (joystickInput.up && input < 1000) {
+            input += 8;
+          } else if  (input >= 10) {
+            input -= 5;
+          }
+        default:
+      }
     } else {
       input = panInput;
     }
@@ -81,6 +113,8 @@ class BalloonGame extends BBGame with TapCallbacks {
 
   @override
   void startGame() {
+    input =0;
+    _balloon.initialize();
     super.startGame();
     displayFeedBack();
   }
@@ -88,7 +122,7 @@ class BalloonGame extends BBGame with TapCallbacks {
   @override
   void resetGame() {
     super.resetGame();
-    _balloon.initialize();
+
   }
 
   @override
