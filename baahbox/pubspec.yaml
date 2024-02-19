@@ -35,11 +35,13 @@ dependencies:
   custom_sliding_segmented_control: ^1.8.1
 
   meta:
+  auto_size_text:
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_launcher_icons:
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

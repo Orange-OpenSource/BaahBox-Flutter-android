@@ -1,3 +1,22 @@
+/*
+ * Baah Box
+ * Copyright (c) 2024. Orange SA
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 import 'package:baahbox/welcome.dart';
 import 'package:baahbox/services/settings/settingsPage.dart';
 import 'package:baahbox/services/settings/generalSettingsPage.dart';
@@ -6,9 +25,6 @@ import 'package:baahbox/services/settings/sheepSettingsPage.dart';
 import 'package:baahbox/services/settings/toadSettingsPage.dart';
 import 'package:baahbox/games/balloon/balloonGamePage.dart';
 import 'package:baahbox/games/star/starGamePage.dart';
-import 'package:baahbox/games/testGamePage.dart';
-import 'package:baahbox/games/dino/dinoGamePage.dart';
-import 'package:baahbox/games/trex/trexGamePage.dart';
 import 'package:baahbox/services/ble/connectionPage.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:baahbox/games/spaceShip/spaceShipGamePage.dart';
@@ -22,8 +38,6 @@ enum BBRoute {
   sheep(path: "/sheep"),
   spaceShip(path: "/spaceShip"),
   toad(path: "/toad"),
-  dino(path: "/dino"),
-  trex(path: "/trex"),
   testSensors(path: "/testSensors"),
   settings(path: "/settings"),
   connection(path: "/connection"),
@@ -50,8 +64,6 @@ class BBRoutes {
     GetPage(page: () =>  ToadSettingsPage(), name: BBRoute.toadSettings.path),
     GetPage(page: () => const ConnectionPage(), name: BBRoute.connection.path),
     GetPage(page: () => BalloonGamePage(), name: BBRoute.balloon.path),
-    GetPage(page: () => TestGamePage(), name: BBRoute.testSensors.path),
-    GetPage(page: () => DinoGamePage(), name: BBRoute.dino.path),
     GetPage(page: () => ToadGamePage(), name: BBRoute.toad.path),
     GetPage(page: () => SheepGamePage(), name: BBRoute.sheep.path),
     GetPage(page: () => SpaceShipGamePage(), name: BBRoute.spaceShip.path),
