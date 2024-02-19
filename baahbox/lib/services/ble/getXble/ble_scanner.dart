@@ -25,7 +25,7 @@ class BleScanner extends GetxController {
   final void Function(String message) _logMessage;
 
   void startScan(BleScannerFilter filter) {
-    _logMessage('Start ble discovery');
+    _logMessage('Recherche des équipements BLE');
     _devices.clear();
     _subscription?.cancel();
     _subscription = _ble
@@ -47,7 +47,7 @@ class BleScanner extends GetxController {
         }
       }
       _pushState();
-    }, onError: (Object e) => _logMessage('Device scan fails with error: $e'));
+    }, onError: (Object e) => _logMessage('Erreur lors de la recherche BLE: $e'));
     _pushState();
   }
 
@@ -61,7 +61,7 @@ class BleScanner extends GetxController {
   }
 
   Future<void> stopScan() async {
-    _logMessage('Stop ble discovery');
+    _logMessage('Arrêt de la recherche BLE');
 
     await _subscription?.cancel();
     _subscription = null;

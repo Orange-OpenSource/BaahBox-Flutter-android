@@ -130,19 +130,19 @@ class _ConnectionPageState extends State<ConnectionPage> {
         (bleController.connector.rxBleConnectionState.value.connectionState ==
             DeviceConnectionState.disconnected)) {
       bleController.connector.connect(deviceId);
-      _logTexts = "trying connection to ${deviceName}\n";
+      _logTexts = "Essai de connexion avec ${deviceName}\n";
       bleController.connector.rxBleConnectionState.listen((event) {
         var id = event.deviceId.toString();
 
         switch (event.connectionState) {
           case DeviceConnectionState.connecting:
             {
-              _logTexts = "${_logTexts} Connecting to $id\n";
+              _logTexts = "${_logTexts}Connexion en cours ${deviceName}\n";
               break;
             }
           case DeviceConnectionState.connected:
             {
-              _logTexts = "${_logTexts}Connected to $deviceName, $id\n";
+              _logTexts = "${_logTexts}Connecté à $deviceName\n";
               _rxCharacteristic = QualifiedCharacteristic(
                   characteristicId: characteristicUuid,
                   serviceId: serviceUuid,
@@ -156,12 +156,12 @@ class _ConnectionPageState extends State<ConnectionPage> {
             }
           case DeviceConnectionState.disconnecting:
             {
-              _logTexts = "${_logTexts}Disconnecting from $id\n";
+              _logTexts = "${_logTexts}Déconnexion de ${deviceName}\n";
               break;
             }
           case DeviceConnectionState.disconnected:
             {
-              _logTexts = "${_logTexts}Disconnected from $id\n";
+              _logTexts = "${_logTexts}Déconnecté de ${deviceName} \n";
               appController.setConnectedDeviceIdTo("");
               appController.setConnectedDeviceNameTo("");
               _startScan();
@@ -172,7 +172,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
       });
     } else {
       bleController.bleLogger.addToLog(
-          "device already connected: ${bleController.connector.rxBleConnectionState.value.deviceId}");
+          "Appareil déjà connecté: ${bleController.connector.rxBleConnectionState.value.deviceId}");
     }
   }
 
@@ -202,7 +202,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
           titleTextStyle: TextStyle(
               color: Colors.blueGrey,
               fontWeight: FontWeight.bold,
-              fontSize: 25),
+              fontSize: 18),
           centerTitle: true,
           title: Text("Connexion Bluetooth"),
           leading: IconButton(
@@ -296,12 +296,12 @@ class _ConnectionPageState extends State<ConnectionPage> {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
                     border: Border.all(color: Colors.blue, width: 2)),
-                height: 45,
+                height: 90,
                 child: _connected
                     ? Obx(() => Padding(
                         padding: EdgeInsets.all(10),
                         child:
-                            Text(appController.musclesInput.describe().obs())))
+                            Text(appController.musclesInput.describe() + "\n" + appController.joystickInput.describe())))
                     : const Text(""),
               ),
               SizedBox(

@@ -23,24 +23,24 @@ class BleDeviceConnector extends GetxController {
 
 
   Future<void> connect(String deviceMAC) async {
-    _logMessage('Start connecting to $deviceMAC');
+    _logMessage('Démarrage de la connexion avec $deviceMAC');
     _connection = _ble.connectToDevice(id: deviceMAC).listen(
       (update) {
         _logMessage(
-            'ConnectionState for device $deviceMAC : ${update.connectionState}');
+            'Etat de la connexion avec $deviceMAC : ${update.connectionState}');
         _deviceConnectionController.add(update);
       },
       onError: (Object e) =>
-          _logMessage('Connecting to device $deviceMAC resulted in error $e'),
+          _logMessage('Erreur lors de la connexion à  $deviceMAC:  $e'),
     );
   }
 
   Future<void> disconnect(String deviceMAC) async {
     try {
-      _logMessage('disconnecting to device: $deviceMAC');
+      _logMessage('Déconnexion de : $deviceMAC');
       await _connection.cancel();
     } on Exception catch (e, _) {
-      _logMessage("Error disconnecting from a device: $e");
+      _logMessage("Erreur lors de la déconnexion de $deviceMAC: $e");
     } finally {
       // Since [_connection] subscription is terminated, the "disconnected" state cannot be received and propagated
       _deviceConnectionController.add(
