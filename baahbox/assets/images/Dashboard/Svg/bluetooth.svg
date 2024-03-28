@@ -1,0 +1,20 @@
+<!--
+  - Baah Box
+  - Copyright (c) 2024. Orange SA
+  -
+  -   This program is free software: you can redistribute it and/or modify
+  -   it under the terms of the GNU General Public License as published by
+  -   the Free Software Foundation, either version 3 of the License, or
+  -   (at your option) any later version.
+  -
+  -   This program is distributed in the hope that it will be useful,
+  -   but WITHOUT ANY WARRANTY; without even the implied warranty of
+  -   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  -   GNU General Public License for more details.
+  -
+  -   You should have received a copy of the GNU General Public License
+  -   along with this program. If not, see <http://www.gnu.org/licenses/>.
+  -
+  -->
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 27.2 50"><defs><style>.cls-1{fill:#f98885;}</style></defs><title>bluetooth</title><g id="Calque_2" data-name="Calque 2"><g id="Calque_2-2" data-name="Calque 2"><path class="cls-1" d="M11.37,30.35l-.24.23L3.84,37.87A2.22,2.22,0,0,1,.66,38a2.19,2.19,0,0,1,0-3.17q3.23-3.25,6.46-6.47l3.09-3.09c.08-.07.18-.12.33-.23a2.73,2.73,0,0,1-.35-.27L.78,15.29a2.2,2.2,0,1,1,3-3.2L8.5,16.8l2.61,2.61.26.24v-.39c0-5.59,0-11.19,0-16.79a2.25,2.25,0,0,1,4-1.64l7.79,7.79,3.31,3.32a2.18,2.18,0,0,1,0,3.33Q21.71,20,17,24.74a1.84,1.84,0,0,1-.34.26,3.55,3.55,0,0,1,.34.26q4.77,4.75,9.52,9.52a2.19,2.19,0,0,1,.23,3,2,2,0,0,1-.28.3L15.35,49.16a2.32,2.32,0,0,1-2.64.66,2.18,2.18,0,0,1-1.34-2.09V30.35Zm4.41-10.71,6-6-6-6Zm6,16.78-6-6v12Z"/></g></g></svg>

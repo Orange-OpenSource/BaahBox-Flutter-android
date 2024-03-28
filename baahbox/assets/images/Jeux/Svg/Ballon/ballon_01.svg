@@ -1,0 +1,20 @@
+<!--
+  - Baah Box
+  - Copyright (c) 2024. Orange SA
+  -
+  -   This program is free software: you can redistribute it and/or modify
+  -   it under the terms of the GNU General Public License as published by
+  -   the Free Software Foundation, either version 3 of the License, or
+  -   (at your option) any later version.
+  -
+  -   This program is distributed in the hope that it will be useful,
+  -   but WITHOUT ANY WARRANTY; without even the implied warranty of
+  -   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  -   GNU General Public License for more details.
+  -
+  -   You should have received a copy of the GNU General Public License
+  -   along with this program. If not, see <http://www.gnu.org/licenses/>.
+  -
+  -->
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200.49 301.26"><defs><style>.cls-1{fill:#fff;}</style></defs><title>ballon_01</title><g id="Calque_2" data-name="Calque 2"><g id="Calque_2-2" data-name="Calque 2"><path class="cls-1" d="M200.49,106.23c0,58.66-44.88,129.49-100.24,129.49S0,164.89,0,106.23,44.88,0,100.25,0,200.49,47.56,200.49,106.23Z"/><path class="cls-1" d="M127.5,290.21h-2.33c-2.57-11.7-5-21.54-7.45-29.73h0l0-.08c-.33-1.12-.65-2.2-1-3.26-2-7.88-4.63-27.37,16.78-31.91,0,0-37.41-61.49-66.51,0,0,0,20.42,5.52,13.21,35.25h0c-2.63,11.58-4.43,23.15-5.35,29.73H73a5.53,5.53,0,0,0,0,11.05H127.5a5.53,5.53,0,0,0,0-11.05Z"/></g></g></svg>

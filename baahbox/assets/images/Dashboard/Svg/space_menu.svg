@@ -1,0 +1,20 @@
+<!--
+  - Baah Box
+  - Copyright (c) 2024. Orange SA
+  -
+  -   This program is free software: you can redistribute it and/or modify
+  -   it under the terms of the GNU General Public License as published by
+  -   the Free Software Foundation, either version 3 of the License, or
+  -   (at your option) any later version.
+  -
+  -   This program is distributed in the hope that it will be useful,
+  -   but WITHOUT ANY WARRANTY; without even the implied warranty of
+  -   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  -   GNU General Public License for more details.
+  -
+  -   You should have received a copy of the GNU General Public License
+  -   along with this program. If not, see <http://www.gnu.org/licenses/>.
+  -
+  -->
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 176.05 180"><defs><style>.cls-1{fill:#fff;}.cls-2{fill:#6d6a66;}.cls-3{fill:#ffd15c;}</style></defs><title>space_menu</title><g id="Calque_2" data-name="Calque 2"><g id="Calque_2-2" data-name="Calque 2"><polygon class="cls-1" points="62.13 76.64 10.36 102.53 10.36 74.67 0 74.67 0.01 136.8 62.13 136.8 72.49 106.66 62.13 76.64"/><polygon class="cls-1" points="165.69 74.67 165.69 102.53 113.91 76.64 103.56 102.5 113.91 136.8 176.05 136.8 176.05 74.67 165.69 74.67"/><path class="cls-1" d="M91.65,3.73,88,0,84.4,3.73A75,75,0,0,0,62.13,57.37V136.8h51.78V57.37A75,75,0,0,0,91.65,3.73Z"/><rect class="cls-2" x="82.84" y="33.24" width="10.36" height="31.07"/><rect class="cls-2" x="82.85" y="116.09" width="10.36" height="31.07"/><path class="cls-2" d="M72.49,121.27v31.07H41.42V121.27a15.54,15.54,0,1,1,31.07,0Z"/><path class="cls-2" d="M134.63,121.27v31.07H103.56V121.27a15.54,15.54,0,1,1,31.07,0Z"/><path class="cls-3" d="M119.11,180c-1.79-3.08-3.93-6.2-4.06-6.39l-2.26-3.32L111.3,174a17.86,17.86,0,0,1-1.55,3.09c-2.41-5-3.2-13.06-3.29-16.19l-.15-4.78-3.48,3.3a13.56,13.56,0,0,0-2.81,3.78A6.33,6.33,0,0,1,98.8,160c-.37-4.06,2.86-8.68,4.72-10.77h31.14c1.45,1.68,5.12,6.39,4.72,10.8a6.69,6.69,0,0,1-1.19,3.23,13,13,0,0,0-2.81-3.78l-3.46-3.32-.15,4.81c-.09,3.13-.89,11.22-3.29,16.19a18.85,18.85,0,0,1-1.55-3.08l-1.49-3.74-2.26,3.32C123.05,173.79,120.89,176.92,119.11,180Z"/><path class="cls-3" d="M57,180c-1.78-3.08-3.92-6.2-4.06-6.39l-2.25-3.32L49.16,174a18.69,18.69,0,0,1-1.54,3.09c-2.41-5-3.21-13.06-3.3-16.19l-.14-4.78-3.49,3.3a13.51,13.51,0,0,0-2.8,3.78A6.33,6.33,0,0,1,36.67,160c-.37-4.06,2.86-8.68,4.72-10.77H72.53c1.44,1.68,5.12,6.39,4.72,10.8a6.6,6.6,0,0,1-1.2,3.23,12.91,12.91,0,0,0-2.8-3.78l-3.47-3.32-.15,4.81c-.09,3.13-.88,11.22-3.29,16.19A19.69,19.69,0,0,1,64.79,174L63.3,170.3,61,173.62C60.91,173.79,58.76,176.92,57,180Z"/><circle class="cls-1" cx="5.17" cy="75.66" r="5.17" transform="translate(-51.99 25.82) rotate(-45)"/><circle class="cls-1" cx="170.88" cy="75.66" r="5.17" transform="translate(57.98 224.59) rotate(-76.72)"/><circle class="cls-2" cx="88.02" cy="116.09" r="5.17" transform="translate(-56.31 96.24) rotate(-45)"/><circle class="cls-2" cx="88.02" cy="33.24" r="5.17" transform="translate(35.45 111.27) rotate(-76.72)"/></g></g></svg>
