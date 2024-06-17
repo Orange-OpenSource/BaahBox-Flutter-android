@@ -75,7 +75,7 @@ flutter:
      - assets/images/Particules/
      - assets/images/Splashscreen/
      - assets/legals/termsOfUse.pdf
-     - assets/legals/
+     - assets/legals/legalNotices.pdf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
