@@ -37,17 +37,12 @@ class SettingsPage extends StatelessWidget {
               fontSize: 25),
           centerTitle: true,
           title: Text("Réglages"),
-          // leading: IconButton(
-          //     icon: Icon(Icons.arrow_back),
-          //     onPressed: () => Get.toNamed(BBRoute.welcome.path)
-          // ),
         ),
         backgroundColor: Colors.white,
-        body: Container(
-            child: Column(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
+        body:ListView(
+    padding: const EdgeInsets.all(0),
+    children:
+            [
                    Card(
                     shape: ContinuousRectangleBorder(),
                     child: Padding(
@@ -128,6 +123,24 @@ class SettingsPage extends StatelessWidget {
                     => Get.toNamed(BBRoute.toadSettings.path),
                     title: Text('Gobe les mouches'),
                   ),
-            ])));
+              Card(
+                shape: ContinuousRectangleBorder(),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child:
+                  const Text('',),),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              ListTile(
+                trailing: Icon(Icons.arrow_forward_outlined),
+                dense: false,
+                enabled: true,
+                onTap: ()
+                => Get.toNamed(BBRoute.termsAndConditions.path),
+                title: Text('A propos'),
+              ),
+            ]));
   }
 }

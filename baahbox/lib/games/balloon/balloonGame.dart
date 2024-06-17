@@ -53,11 +53,11 @@ class BalloonGame extends BBGame with TapCallbacks {
     feedback = "";
     super.onLoad();
     await Flame.images.loadAll(<String>[
-      'Jeux/Balloon/ballon_00@2x.png',
-      'Jeux/Balloon/ballon_01@2x.png',
-      'Jeux/Balloon/ballon_02@2x.png',
-      'Jeux/Balloon/ballon_03@2x.png',
-      'Jeux/Balloon/ballon_04@2x.png',
+      'Games/Balloon/ballon_00@2x.png',
+      'Games/Balloon/ballon_01@2x.png',
+      'Games/Balloon/ballon_02@2x.png',
+      'Games/Balloon/ballon_03@2x.png',
+      'Games/Balloon/ballon_04@2x.png',
     ]);
     input = 0;
     _balloon = BalloonComponent();
@@ -78,12 +78,12 @@ class BalloonGame extends BBGame with TapCallbacks {
   void refreshInput() {
     // Todo : deal with threshod and sensitivity
     if (appController.isConnectedToBox) {
-      var sensorType = settingsController.usedSensor;
+      var sensorType = settingsController.currentSensor;
       switch (sensorType) {
-        case SensorType.muscle:
+        case Sensor.muscle:
         // The strength is in range [0...1024] -> Have it fit into [0...100]
           input = appController.musclesInput.muscle1;
-        case SensorType.arcadeJoystick:
+        case Sensor.arcadeJoystick:
           var joystickInput = appController.joystickInput;
           if (joystickInput.up && input < 1000) {
             input += 8;

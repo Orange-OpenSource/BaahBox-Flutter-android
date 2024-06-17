@@ -36,7 +36,7 @@ class LifeManager extends Component with HasGameRef<SpaceShipGame> {
 
   void createLifes() {
     const gapSize = 6;
-    for (var i = 0; i < settingsController.spaceShipSettings.numberOfShips; i++) {
+    for (var i = 0; i < settingsController.spaceShipSettings["numberOfShips"]; i++) {
        var xpos = (25 + gapSize) * i;
       _createLifeAt(xpos + 10, game.size.y - 10);
     }

@@ -34,19 +34,19 @@ class SheepComponent extends SpriteComponent
       : super(size: Vector2(100, 100), anchor: Anchor.bottomCenter);
 
   final walkingImages = [
-    Flame.images.fromCache('Jeux/Sheep/sheep_01.png'),
-    Flame.images.fromCache('Jeux/Sheep/sheep_02.png'),
+    Flame.images.fromCache('Games/Sheep/sheep_01.png'),
+    Flame.images.fromCache('Games/Sheep/sheep_02.png'),
   ];
   var walking1 = true;
 
   final walkingSprite1 =
-      Sprite(Flame.images.fromCache('Jeux/Sheep/sheep_01.png'));
+      Sprite(Flame.images.fromCache('Games/Sheep/sheep_01.png'));
   final walkingSprite2 =
-      Sprite(Flame.images.fromCache('Jeux/Sheep/sheep_02.png'));
+      Sprite(Flame.images.fromCache('Games/Sheep/sheep_02.png'));
   final jumpSprite =
-      Sprite(Flame.images.fromCache('Jeux/Sheep/sheep_jumping.png'));
+      Sprite(Flame.images.fromCache('Games/Sheep/sheep_jumping.png'));
   final oupsSprite =
-      Sprite(Flame.images.fromCache('Jeux/Sheep/sheep_bump.png'));
+      Sprite(Flame.images.fromCache('Games/Sheep/sheep_bump.png'));
 
   @override
   Future<void> onLoad() async {

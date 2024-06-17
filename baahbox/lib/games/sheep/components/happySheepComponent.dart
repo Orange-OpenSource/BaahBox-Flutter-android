@@ -24,9 +24,9 @@ import 'package:baahbox/games/sheep/sheepGame.dart';
 class HappySheepComponent extends SpriteAnimationComponent
     with HasGameRef<SheepGame> {
   final happySprite1 =
-      Sprite(Flame.images.fromCache('Jeux/Sheep/happy_sheep_01.png'));
+      Sprite(Flame.images.fromCache('Games/Sheep/happy_sheep_01.png'));
   final happySprite2 =
-      Sprite(Flame.images.fromCache('Jeux/Sheep/happy_sheep_02.png'));
+      Sprite(Flame.images.fromCache('Games/Sheep/happy_sheep_02.png'));
 
   HappySheepComponent({required super.position, super.size})
       : super(anchor: Anchor.topLeft);

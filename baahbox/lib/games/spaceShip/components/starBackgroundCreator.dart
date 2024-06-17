@@ -33,7 +33,7 @@ class StarBackGroundCreator extends Component with HasGameRef<SpaceShipGame> {
   @override
   Future<void> onLoad() async {
     spriteSheet = SpriteSheet.fromColumnsAndRows(
-      image: await game.images.load('Jeux/rogue_shooter/stars.png'),
+      image: await game.images.load('Games/rogue_shooter/stars.png'),
       rows: 4,
       columns: 4,
     );

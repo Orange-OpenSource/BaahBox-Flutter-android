@@ -22,7 +22,7 @@ import 'package:flame/effects.dart';
 import 'package:flame/flame.dart';
 
 class FloorComponent extends SpriteComponent with HasVisibility {
-  final _floorSprite = Sprite(Flame.images.fromCache('Jeux/Sheep/floor.png'));
+  final _floorSprite = Sprite(Flame.images.fromCache('Games/Sheep/floor.png'));
 
   FloorComponent({required super.position, super.size})
       : super(anchor: Anchor.bottomCenter);

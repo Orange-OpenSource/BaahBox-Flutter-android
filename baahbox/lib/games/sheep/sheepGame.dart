@@ -75,16 +75,16 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
 
   Future<void> loadAssetsInCache() async {
     await Flame.images.loadAll(<String>[
-      'Jeux/Sheep/bang.png',
-      'Jeux/Sheep/bim.png',
-      'Jeux/Sheep/gate.png',
-      'Jeux/Sheep/floor.png',
-      'Jeux/Sheep/sheep_01.png',
-      'Jeux/Sheep/sheep_02.png',
-      'Jeux/Sheep/sheep_jumping.png',
-      'Jeux/Sheep/sheep_bump.png',
-      'Jeux/Sheep/happy_sheep_01.png',
-      'Jeux/Sheep/happy_sheep_02.png',
+      'Games/Sheep/bang.png',
+      'Games/Sheep/bim.png',
+      'Games/Sheep/gate.png',
+      'Games/Sheep/floor.png',
+      'Games/Sheep/sheep_01.png',
+      'Games/Sheep/sheep_02.png',
+      'Games/Sheep/sheep_jumping.png',
+      'Games/Sheep/sheep_bump.png',
+      'Games/Sheep/happy_sheep_01.png',
+      'Games/Sheep/happy_sheep_02.png',
       'trex.png',
     ]);
   }
@@ -178,6 +178,7 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
   void update(double dt) {
     super.update(dt);
     if (appController.isActive) {
+      appController.updateConnectionState();
       if (isRunning) {
         refreshInput();
         transformInputInMove();
@@ -204,13 +205,12 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
       //   if input <= threshold { return }
       //   var heightConstraint = (CGFloat(strengthValue) - CGFloat (hardnessCoeff*350)) / 1000
 //   if heightConstraint < 0 { heightConstraint = 0 }
-      var sensorType = settingsController.usedSensor;
-      switch (sensorType) {
-        case SensorType.muscle:
+      var sensor = settingsController.currentSensor;
+      switch (sensor) {
+        case Sensor.muscle:
           final jumpHeigth = floorY * (1 - (input / 100));
-          // print("floorY: $floorY, height: $jumpHeigth");
           sheep.moveTo(jumpHeigth);
-        case SensorType.arcadeJoystick:
+        case Sensor.arcadeJoystick:
           var joystickInput = appController.joystickInput;
           if (joystickInput.up) {
             sheep.moveTo(sheep.y - 3);
@@ -234,7 +234,9 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
     if (appController.isConnectedToBox) {
       // The strength is in range [0...1024] -> Have it fit into [0...100]
       input = (appController.musclesInput.muscle1 ~/ 10);
-    } else {
+      print("sheep: input= $input");
+
+    } else { // demo mode
       input = panInput;
     }
   }
