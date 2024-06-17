@@ -178,7 +178,7 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
 
   void transformInputInAction() {
     if (appController.isConnectedToBox) {
-      // Todo gérer strengthValue et hardnessCoeff
+      // Todo handle strengthValue et hardnessCoeff
       if (!goLeft && !goRight && !shoot) {
         return;
       }
@@ -187,9 +187,6 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
       } else {
         var deltaAngle = goLeft ? -1 : 1;
         toad.rotateBy(deltaAngle);
-        // if (settingsController.toadSettings["iShootingModeAutomatic"]) {
-        //   toad.checkFlies();
-       // }
       }
     }
   }
@@ -243,28 +240,6 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
   }
 
   // Demo mode
-
-  // doubletap
-  @override
-  void onLongTapDown(TapDownEvent) {
-    if (state == GameState.running) {
-      startShooting();
-    }
-  }
-
-  // tap input (Demo mode)
-  @override
-  void onTapDown(TapDownEvent event) {
-    if (state == GameState.running) {
-      var xTouch = event.localPosition.x;
-      var coeff = xTouch > size.x / 2 ? 1 : -1;
-      var newAngle = toad.angle + (coeff * 5 / 180 * math.pi);
-      if (newAngle < tau / 4 && newAngle > -tau / 4) {
-        toad.add(RotateEffect.to(newAngle, EffectController(duration: 0.5)));
-      }
-    }
-  }
-
   @override
   void onPanUpdate(DragUpdateInfo info) {
     if (appController.isConnectedToBox || state != GameState.running) {
@@ -272,11 +247,7 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
     } else {
       var xTouch = info.eventPosition.global.x;
       var coeff = (xTouch > size.x / 2) ? 1 : -1;
-      toad.rotateBy(coeff * 5);
-      // var newAngle = toad.angle + ((coeff * 5)/ 180 * math.pi);
-      // if ( newAngle <  15/9 && newAngle > -15/9) {
-      //   toad.add(RotateEffect.to(newAngle, EffectController(duration: 0.3)));
-      // }
+      toad.rotateBy(coeff * 2);
       var nAngle = toad.angle;
       toad.checkFlies();
     }
