@@ -17,6 +17,7 @@
  *
  */
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter/cupertino.dart';
@@ -32,7 +33,7 @@ class SpaceShipSettingsPage extends GetView<SettingsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Réglages de l'espace..."),
+        title: AutoSizeText("Réglages de l'espace", maxLines: 1),
       ),
       body: ListView(
         children: [
@@ -47,7 +48,7 @@ class SpaceShipSettingsPage extends GetView<SettingsController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Obx(() => Text(
-                          'Nombre de vaisseaux: '+  controller.spaceShipSettings.numberOfShips.toString(),
+                          'Nombre de vaisseaux: '+  controller.spaceShipSettings["numberOfShips"].toString(),
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
                         )),
@@ -103,7 +104,7 @@ class _SpeedSegmentedSegmentState extends State<SpeedSegmentedSegment> {
   Widget build(BuildContext context) {
 
     return CustomSlidingSegmentedControl<ObjectVelocity>(
-      initialValue: controller.spaceShipSettings.asteroidVelocity,
+      initialValue: controller.spaceShipSettings["asteroidVelocity"],
       children: {
         ObjectVelocity.low: Text('Faible'),
         ObjectVelocity.medium: Text('Moyenne'),
@@ -149,7 +150,7 @@ class _GateNumberSliderState extends State<GateNumberSlider> {
 
   @override
   Widget build(BuildContext context) {
-    final int _nbG = controller.spaceShipSettings.numberOfShips;
+    final int _nbG = controller.spaceShipSettings["numberOfShips"];
     double _value = _nbG.toDouble();
     return Slider(
       value: _value,

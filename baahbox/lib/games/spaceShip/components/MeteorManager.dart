@@ -24,11 +24,13 @@ import 'package:flame/flame.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/geometry.dart';
 import 'package:baahbox/games/spaceShip/components/meteorComponent.dart';
+import 'package:baahbox/services/settings/settingsController.dart';
+
 
 class MeteorManager extends TimerComponent with HasGameRef<SpaceShipGame> {
   final Random random = Random();
   final meteor1Sprite =
-      Sprite(Flame.images.fromCache('Jeux/Spaceship/meteor_01@3x.png'));
+      Sprite(Flame.images.fromCache('Games/Spaceship/meteor_01@3x.png'));
 
   MeteorManager() : super(period: 2, repeat: true);
 
@@ -37,11 +39,13 @@ class MeteorManager extends TimerComponent with HasGameRef<SpaceShipGame> {
   void onTick() {
      if (gameRef.appController.isActive && !gameRef.isGameOver) {
       final _halfWidth = meteor1Sprite.originalSize.x / 10;
+      final accelerationRate = gameRef.settingsController.spaceShipSettings["asteroidVelocity"].value/2;
+
       game.addAll(
         List.generate(
           1,
               (index) =>
-          MeteorComponent(
+          MeteorComponent(accelerationRate: accelerationRate,
             position: Vector2(
               _halfWidth + (game.size.x - _halfWidth) * random.nextDouble(),
               0,

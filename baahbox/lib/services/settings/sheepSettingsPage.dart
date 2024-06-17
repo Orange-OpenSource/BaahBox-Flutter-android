@@ -17,6 +17,7 @@
  *
  */
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter/cupertino.dart';
@@ -32,7 +33,7 @@ class SheepSettingsPage extends GetView<SettingsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Réglages du saute mouton'),
+        title: AutoSizeText('Réglages du saute mouton', maxLines: 1),
       ),
       body: ListView(
         children: [

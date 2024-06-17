@@ -33,11 +33,11 @@ class ShipComponent extends SpriteComponent
         );
 
   final normalShipSprite =
-      Sprite(Flame.images.fromCache('Jeux/Spaceship/spaceship_nml@3x.png'));
+      Sprite(Flame.images.fromCache('Games/Spaceship/spaceship_nml@3x.png'));
   final rightShipSprite =
-      Sprite(Flame.images.fromCache('Jeux/Spaceship/spaceship_right@3x.png'));
+      Sprite(Flame.images.fromCache('Games/Spaceship/spaceship_right@3x.png'));
   final leftShipSprite =
-      Sprite(Flame.images.fromCache('Jeux/Spaceship/spaceship_left@3x.png'));
+      Sprite(Flame.images.fromCache('Games/Spaceship/spaceship_left@3x.png'));
 
   void initialize() {
     sprite = normalShipSprite;

@@ -29,7 +29,7 @@ class GateComponent extends SpriteComponent
 
   late ObjectVelocity speedScale;
   final Vector2 deltaPosition = Vector2.zero();
-  final obstacleSprite = Sprite(Flame.images.fromCache('Jeux/Sheep/gate.png'));
+  final obstacleSprite = Sprite(Flame.images.fromCache('Games/Sheep/gate.png'));
   var isNewComer = true;
   late Vector2 speed;
 
@@ -45,7 +45,7 @@ class GateComponent extends SpriteComponent
   void reset(ObjectVelocity speedScale) {
     resetPosition();
     this.speedScale = speedScale;
-    speed = Vector2(-1, 0)..scale(this.speedScale.value * 50);
+    speed = Vector2(-1, 0)..scale(this.speedScale.value * 30);
   }
   void resetPosition() {
     position = Vector2(gameRef.size.x + size.x / 2, gameRef.floorY);
@@ -56,7 +56,7 @@ class GateComponent extends SpriteComponent
     this.sprite = obstacleSprite;
     this.size = obstacleSprite.originalSize / 10;
     add(RectangleHitbox(collisionType: CollisionType.passive));
-    speed = Vector2(-1, 0)..scale(this.speedScale.value * 50);
+    speed = Vector2(-1, 0)..scale(this.speedScale.value * 30);
   }
 
   @override

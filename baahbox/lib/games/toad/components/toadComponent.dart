@@ -18,6 +18,8 @@
  */
 
 import 'dart:math' as math;
+import 'dart:math';
+import 'dart:core';
 import 'package:flame/flame.dart';
 import 'package:flame/components.dart';
 import 'package:baahbox/games/toad/toadGame.dart';
@@ -29,28 +31,42 @@ class ToadComponent extends SpriteComponent
   ToadComponent()
       : super(size: Vector2(100, 100), anchor: Anchor.bottomCenter);
 
-  final toadSprite = Sprite(Flame.images.fromCache('Jeux/Toad/toad@3x.png'));
-  final toadBlinkSprite = Sprite(Flame.images.fromCache('Jeux/Toad/toad_blink@3x.png'));
-
+  final toadSprite = Sprite(Flame.images.fromCache('Games/Toad/toad.png'));
+  final toadBlinkSprite = Sprite(Flame.images.fromCache('Games/Toad/toad_blink.png'));
 
   final blinkingImages = [
-    Flame.images.fromCache('Jeux/Toad/toad@3x.png'),
-    Flame.images.fromCache('Jeux/Toad/toad_blink@3x.png'),
+    Flame.images.fromCache('Games/Toad/toad.png'),
+    Flame.images.fromCache('Games/Toad/toad_blink.png'),
   ];
+
+  late final _binkTimer = TimerComponent(
+    period: .25,
+    onTick: setSpriteTo,
+    autoStart: false,
+  );
+
+  late final _shootTimer = TimerComponent(
+    period: 1.0,
+    onTick: resetToadShooting,
+    autoStart: false,
+  );
+  final Vector2 deltaPosition = Vector2.zero();
 
   @override
   Future<void> onLoad() async {
     super.onLoad();
+    await add(_binkTimer);
+    await add(_shootTimer);
     initialize();
-
   }
 
   void initialize() {
     this.sprite = toadSprite;
     var ratio = toadSprite.srcSize.x / toadSprite.srcSize.y;
-    var width = gameRef.size.x/3;
+    var width = gameRef.size.x * 3/8;
     size = Vector2(width,width/ratio);
-    position =  Vector2(gameRef.size.x / 2, gameRef.size.y - size.y -50);
+    anchor = Anchor.center;
+    position =  Vector2(gameRef.size.x / 2, gameRef.size.y - size.y -150);
     angle = nativeAngle;
     show();
   }
@@ -68,16 +84,45 @@ class ToadComponent extends SpriteComponent
     isVisible = true;
   }
 
+  void blink() {
+    setSpriteTo(spriteNb: 1);
+    _binkTimer.timer.start();
+  }
+
+  void jump() {}
+  void resetToadShooting() {
+    gameRef.isToadShooting = false;
+  }
+
   void rotateBy(int deltaAngle) {
     {
-      var newAngle = angle + (deltaAngle/ 180 * math.pi/2) ;
+      var delta = (deltaAngle/ 180 * math.pi/2);
+      var newAngle = angle + delta;
       if ( newAngle> tau/4 || newAngle < -tau/4) { return ;}
+      for (double interAngle = 0; interAngle < delta; interAngle++) {
+        angle = angle + interAngle;
+      }
       angle = newAngle;
 
     }
   }
 
-  void setSpriteTo(int spriteNb) {
+  bool checkFlies({bool automaticMode = true}) {
+   bool gotOne = false;
+    for (double x in gameRef.flyNet.keys) {
+      var _flyX = gameRef.flyNet[x]!;
+      var target = Vector2(x, _flyX);
+      var angleToTarget = angleTo(target);
+       var deltaAngle = automaticMode ?  pi / 360 : pi/ 90;
+      if (angleToTarget.abs() <= deltaAngle) {
+        shoot(distance: position.distanceTo(target));
+        gotOne = true;
+      }
+    }
+    return gotOne;
+  }
+
+  void setSpriteTo({int spriteNb = 0}) {
     switch (spriteNb) {
       case 1:
         sprite = toadBlinkSprite;
@@ -91,7 +136,13 @@ class ToadComponent extends SpriteComponent
     return SpriteAnimation.spriteList(sprites, stepTime: 1);
   }
 
-  void hit() {
+  void shoot({double distance = 300.0}) {
+    gameRef.isToadShooting = true;
+    gameRef.tongue.priority = -1;
+    gameRef.tongue.showAtAngle(angle, distance);
+    blink();
+    _shootTimer.timer.start();
+    // animateToadForShooting();
     //setSpriteTo(3);
    // game.add(BimComponent(
     //    position: Vector2(position.x + size.x/2, position.y - size.y - 20)));

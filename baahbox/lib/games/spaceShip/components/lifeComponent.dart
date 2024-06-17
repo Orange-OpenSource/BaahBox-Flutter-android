@@ -21,9 +21,7 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/flame.dart';
 
-class LifeComponent extends SpriteComponent
-    with HasGameRef {
-
+class LifeComponent extends SpriteComponent with HasGameRef {
   LifeComponent({required Vector2 position})
       : super(
     size: Vector2(75, 100),
@@ -31,7 +29,7 @@ class LifeComponent extends SpriteComponent
     anchor: Anchor.bottomLeft,
   );
 
-  final lifeSprite = Sprite(Flame.images.fromCache('Jeux/Spaceship/space_life@3x.png'));
+  final lifeSprite = Sprite(Flame.images.fromCache('Games/Spaceship/space_life@3x.png'));
 
   @override
   Future<void> onLoad() async {
