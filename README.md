@@ -1,4 +1,7 @@
 # BaahBox-Flutter
-Flutter app (WIP) to pair an android phone with a "BaahBox". This application provides games to help children &amp; 
-adults who need training or re-education for their injured or missing limbs.
+Français | English
+------------- | -------------
+[![BaahBoxPix](https://github.com/Orange-OpenSource/BaahBox-Arduino/blob/dev/documentation/img/fr.jpg)](https://github.com/Orange-OpenSource/BaahBox-Arduino/blob/dev/documentation/fr/README.md) | [![BaahBoxPix](https://github.com/Orange-OpenSource/BaahBox-Arduino/blob/dev/documentation/img/en.jpg)](https://github.com/Orange-OpenSource/BaahBox-Arduino/blob/dev/documentation/en/README.md)| Content 
 
+
+![BaahBoxPix](https://github.com/Orange-OpenSource/BaahBox-Arduino/blob/dev/documentation/img/photoBaaBox.jpg)
