@@ -19,6 +19,7 @@
 
 import 'package:baahbox/welcome.dart';
 import 'package:baahbox/services/settings/settingsPage.dart';
+import 'package:baahbox/services/settings/termsAndConditionsPage.dart';
 import 'package:baahbox/services/settings/generalSettingsPage.dart';
 import 'package:baahbox/services/settings/spaceShipSettingsPage.dart';
 import 'package:baahbox/services/settings/sheepSettingsPage.dart';
@@ -30,6 +31,8 @@ import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:baahbox/games/spaceShip/spaceShipGamePage.dart';
 import 'package:baahbox/games/sheep/sheepGamePage.dart';
 import 'package:baahbox/games/toad/toadGamePage.dart';
+import 'package:baahbox/services/settings/termsOfUsePage.dart';
+import 'package:baahbox/services/settings/legalInformationsPage.dart';
 
 enum BBRoute {
   welcome(path: "/"),
@@ -44,8 +47,10 @@ enum BBRoute {
   generalSettings(path: "/generalSettings"),
   sheepSettings(path: "/sheepSettings"),
   toadSettings(path: "/toadSettings"),
-  spaceShipSettings(path: "/spaceShipSettings");
-
+  spaceShipSettings(path: "/spaceShipSettings"),
+  termsAndConditions(path: "/termsAndConditions"),
+  cgu(path: "/cgu"),
+  legals(path: "/legals");
 
   const BBRoute({required this.path});
   final String path;
@@ -68,5 +73,8 @@ class BBRoutes {
     GetPage(page: () => SheepGamePage(), name: BBRoute.sheep.path),
     GetPage(page: () => SpaceShipGamePage(), name: BBRoute.spaceShip.path),
     GetPage(page: () => StarGamePage(), name: BBRoute.star.path),
+    GetPage(page: () => const TermsAndConditionsPage(), name: BBRoute.termsAndConditions.path),
+    GetPage(page: () => const TermsOfUsePage(), name: BBRoute.cgu.path),
+    GetPage(page: () => const LegalInformationsPage(), name: BBRoute.legals.path),
   ];
 }

@@ -19,95 +19,161 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../controllers/appController.dart';
-import 'package:baahbox/routes/routes.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:baahbox/constants/enums.dart';
+import 'package:baahbox/services/settings/settingsController.dart';
+import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 
-class ToadSettingsPage extends StatefulWidget {
-  const ToadSettingsPage({Key? key}) : super(key: key);
+class ToadSettingsPage extends GetView<SettingsController> {
+  final mainColor = BBGameList.toad.baseColor.color;
+  final SettingsController controller = Get.find();
 
-  @override
-  _ValidationsState createState() => _ValidationsState();
-}
-
-class _ValidationsState extends State<ToadSettingsPage> {
   @override
   Widget build(BuildContext context) {
-    final nameController = TextEditingController();
-
-    final pwdController = TextEditingController();
-
-    final emailController = TextEditingController();
-
     return Scaffold(
       appBar: AppBar(
-        title: Text('Toad Settings'),
+        title: AutoSizeText("Réglages du crapaud", maxLines: 1),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            TextFormField(
-              controller: nameController,
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5)),
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5)),
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5)),
-                  hintText: ' name...'),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            TextFormField(
-              controller: pwdController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                hintText: ' phone',
-                border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-                enabledBorder:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-                focusedBorder:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            TextFormField(
-              controller: emailController,
-              decoration: InputDecoration(
-                hintText: ' email...,',
-                border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-                enabledBorder:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-                focusedBorder:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-              ),
-            ),
-            TextButton(
-                onPressed: () {
-                  setState(() {
-                    GetUtils.isLengthGreaterThan(nameController.text, 6)
-                        ? print('Name is valid')
-                        : print('Name is invalid!!!');
-
-                    GetUtils.isPhoneNumber(pwdController.text)
-                        ? print('Phone Number')
-                        : print('Not a Phone Number');
-
-                    GetUtils.isEmail(emailController.text)
-                        ? print('Email is valid')
-                        : print('Email is invalid!!!');
-                  });
+      body: ListView(
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(left: 32, top: 8),
+          ),
+          Card(
+              shape: ContinuousRectangleBorder(),
+              child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Obx(() => Text(
+                              'Nombre de mouches: ' +
+                                  controller.toadSettings["numberOfFlies"]
+                                      .toString(),
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            )),
+                      ]))),
+          const SizedBox(
+            height: 15,
+          ),
+          FlyNumberSlider(),
+          const SizedBox(
+            height: 24,
+          ),
+          Card(
+              shape: ContinuousRectangleBorder(),
+              child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Obx(() => Text(
+                          'Temps pendant lequel les mouches ne bougent pas (en s): ' +
+                              controller.toadSettings["flySteadyTime"].round().toString(),
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        )),
+                      ]))),
+          const SizedBox(
+            height: 12,
+          ),
+          FlyDurationSlider(),
+          const SizedBox(
+            height: 24,
+          ),
+          Card(
+              shape: ContinuousRectangleBorder(),
+              child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                         Text(
+                          'Mode de tirs: ',
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ]))),
+          const SizedBox(
+            height: 12,
+          ),
+          ListTile(
+              title: Text("Tirs automatiques"),
+              trailing: Obx(() => Switch(
+                value: controller.toadSettings["iShootingModeAutomatic"],
+                activeColor: Colors.red,
+                onChanged: (bool val) {
+                  controller.setToadShootingModeToAutomatic(val);
                 },
-                child: const Text("Validate"))
-          ],
-        ),
+              ))),
+          const SizedBox(
+            height: 5,
+          ),
+        ],
       ),
+    );
+  }
+}
+
+
+class FlyDurationSlider extends StatefulWidget {
+  const FlyDurationSlider({super.key});
+
+  @override
+  State<FlyDurationSlider> createState() => _FlyDurationSliderState();
+}
+
+class _FlyDurationSliderState extends State<FlyDurationSlider> {
+  final SettingsController controller = Get.find();
+
+  @override
+  Widget build(BuildContext context) {
+    final double _flyDuration = controller.toadSettings["flySteadyTime"];
+    double _value = _flyDuration;
+    return Slider(
+      value: _value,
+      min: 1,
+      max: 5,
+      divisions: 5,
+      label: _value.floor().toString(),
+      onChanged: (double value) {
+        setState(() {
+          _value = value.floorToDouble();
+          controller.setFlyDurationTo(_value);
+        });
+      },
+    );
+  }
+}
+
+
+class FlyNumberSlider extends StatefulWidget {
+  const FlyNumberSlider({super.key});
+
+  @override
+  State<FlyNumberSlider> createState() => _FlyNumberSliderState();
+}
+
+class _FlyNumberSliderState extends State<FlyNumberSlider> {
+  final SettingsController controller = Get.find();
+
+  @override
+  Widget build(BuildContext context) {
+    final int _nbF = controller.toadSettings["numberOfFlies"];
+    double _value = _nbF.toDouble();
+    return Slider(
+      value: _value,
+      min: 1.0,
+      max: 10.0,
+      divisions: 10,
+      label: _value.round().toString(),
+      onChanged: (double value) {
+        setState(() {
+          _value = value;
+          controller.setNumberOfFliesTo(value.toInt());
+        });
+      },
     );
   }
 }

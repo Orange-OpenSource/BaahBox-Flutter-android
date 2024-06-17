@@ -91,17 +91,17 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
 
   Future<void> loadAssetsInCache() async {
     await Flame.images.loadAll(<String>[
-      'Jeux/Spaceship/spaceship_left@3x.png',
-      'Jeux/Spaceship/spaceship_right@3x.png',
-      'Jeux/Spaceship/spaceship_nml@3x.png',
-      'Jeux/Spaceship/meteor_01@3x.png',
-      'Jeux/Spaceship/meteor_02@3x.png',
-      'Jeux/Spaceship/meteor_03@3x.png',
-      'Jeux/Spaceship/meteor_04@3x.png',
-      'Jeux/Spaceship/meteor_05@3x.png',
-      'Jeux/Spaceship/meteor_06@3x.png',
-      'Jeux/Spaceship/space_life@3x.png',
-      'Jeux/Spaceship/crash.png',
+      'Games/Spaceship/spaceship_left@3x.png',
+      'Games/Spaceship/spaceship_right@3x.png',
+      'Games/Spaceship/spaceship_nml@3x.png',
+      'Games/Spaceship/meteor_01@3x.png',
+      'Games/Spaceship/meteor_02@3x.png',
+      'Games/Spaceship/meteor_03@3x.png',
+      'Games/Spaceship/meteor_04@3x.png',
+      'Games/Spaceship/meteor_05@3x.png',
+      'Games/Spaceship/meteor_06@3x.png',
+      'Games/Spaceship/space_life@3x.png',
+      'Games/Spaceship/crash.png',
     ]);
   }
 
@@ -112,6 +112,7 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
   void update(double dt) {
     super.update(dt);
     if (appController.isActive) {
+      appController.updateConnectionState();
       if (state == GameState.running) {
         refreshInput();
         transformInputInOffset();
@@ -129,16 +130,16 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
     goRight = false;
 
     if (appController.isConnectedToBox) {
-      var sensorType = settingsController.usedSensor;
+      var sensorType = settingsController.currentSensor;
       switch (sensorType) {
-        case SensorType.muscle:
+        case Sensor.muscle:
           // The strength is in range [0...1024] -> Have it fit into [0...100]
           inputL = (appController.musclesInput.muscle1 ~/ 10);
           inputR = (appController.musclesInput.muscle2 ~/ 10);
           goLeft = (inputL > threshold) && (inputL > inputR);
           goRight = (inputR > threshold) && (inputR > inputL);
 
-        case SensorType.arcadeJoystick:
+        case Sensor.arcadeJoystick:
           var joystickInput = appController.joystickInput;
           goLeft = joystickInput.right;
           goRight = joystickInput.left;

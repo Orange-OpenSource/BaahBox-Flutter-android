@@ -27,15 +27,13 @@ import 'package:baahbox/services/ble/getXble/getx_ble.dart';
 
 void main() async {
   await GetStorage.init();
-  final Controller c = Get.put(Controller());
   final GetxBle bleController = Get.put(GetxBle());
+  final Controller c = Get.put(Controller());
   final SettingsController settingsController = Get.put(SettingsController());
 
   return runApp(
-
      GetMaterialApp(
         title: 'Baah Box Games!',
-      //  home: const BleConnectionPage(),
         initialRoute: BBRoute.welcome.path,
       getPages: BBRoutes.routes,
        debugShowCheckedModeBanner: false,

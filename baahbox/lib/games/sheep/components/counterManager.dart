@@ -18,11 +18,13 @@
  */
 
 import 'dart:math';
+import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:baahbox/games/sheep/components/markComponent.dart';
 import 'package:baahbox/games/sheep/sheepGame.dart';
 import 'package:flame/text.dart';
+import 'package:flutter/material.dart';
 
 class CounterManager extends Component with HasGameRef<SheepGame> {
   final markArray = [];
@@ -35,14 +37,21 @@ class CounterManager extends Component with HasGameRef<SheepGame> {
     showCount();
     createMarks(gateNumber);
   }
+  final regular = TextPaint(
+    style: TextStyle(
+      fontSize: 20.0,
+      color: Colors.white,
+    ),
+  );
+
 
   void showCount() async {
     await gameRef.addAll([
       counterText = TextComponent(
-          position: Vector2(5, game.size.y - 40),
+          position: Vector2(2, game.size.y - 30),
+          textRenderer: regular,
           anchor: Anchor.bottomLeft,
-          priority: 1,
-          size: Vector2(50, 20)),
+          size: Vector2(10, 15)),
     ]);
   }
 

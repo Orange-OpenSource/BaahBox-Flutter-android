@@ -17,3 +17,92 @@
  *
  */
 
+import 'dart:io';
+import 'dart:math' as math;
+import 'package:baahbox/games/toad/components/tongueComponent.dart';
+import 'package:flame/collisions.dart';
+import 'package:flame/effects.dart';
+import 'package:flame/flame.dart';
+import 'package:flame/components.dart';
+import 'package:baahbox/games/toad/toadGame.dart';
+import 'package:baahbox/services/settings/settingsController.dart';
+
+
+
+class FlyComponent extends SpriteComponent
+    with  HasVisibility, HasGameRef<ToadGame>, CollisionCallbacks {
+  double flightDuration = 5.0;
+  final flySprite = Sprite(Flame.images.fromCache('Games/Toad/fly.png'));
+  late final _AppearanceTimer = TimerComponent(
+    period: flightDuration,
+    onTick: disappear,
+    autoStart: false,
+  );
+
+  late final _gotShotTimer = TimerComponent(
+    period: .25,
+    onTick: disappear,
+    autoStart: false,
+  );
+
+  FlyComponent(this.flightDuration) : super(anchor: Anchor.center);
+
+  @override
+  Future<void> onLoad() async {
+    super.onLoad();
+    await add(_AppearanceTimer);
+    await add(_gotShotTimer);
+    initialize();
+  }
+
+  void initialize()  async {
+    this.sprite = flySprite;
+   // this.flightDuration = flightDuration;
+    var ratio = flySprite.srcSize.x / flySprite.srcSize.y;
+    var width = 75.00;//gameRef.size.x/10;
+    size = Vector2(width,width/ratio);
+    anchor = Anchor.center;
+    add(CircleHitbox());
+    gameRef.registerToFlyNet(position);
+    show();
+    _AppearanceTimer.timer.start();
+  }
+
+  void setPositionTo(Vector2 newPosition){
+    gameRef.unRegisterFromFlyNet(position);
+    position = newPosition;
+    gameRef.registerToFlyNet(position);
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+  }
+
+  void hide() {
+    isVisible = false;
+  }
+
+  void show() {
+    isVisible = true;
+  }
+
+  void disappear() {
+    hide();
+    gameRef.unRegisterFromFlyNet(position);
+    removeFromParent();
+  }
+
+  @override
+  void onCollisionStart(
+      Set<Vector2> intersectionPoints,
+      PositionComponent other,
+      ) {
+    super.onCollisionStart(intersectionPoints, other);
+    if (other is TongueComponent) {
+      other.takeHit();
+      _gotShotTimer.timer.start();
+    }
+  }
+}
+

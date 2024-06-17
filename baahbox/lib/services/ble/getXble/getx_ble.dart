@@ -48,4 +48,10 @@ class GetxBle extends GetxController {
     connector = BleDeviceConnector(ble: ble, logMessage: bleLogger.addToLog);
     interactor = BleDeviceInteractor(ble: ble, logMessage: bleLogger.addToLog);
   }
+
+  bool isBLEDeviceConnected() {
+    return
+        connector.rxBleConnectionState.value.connectionState ==
+        DeviceConnectionState.connected;
+  }
 }

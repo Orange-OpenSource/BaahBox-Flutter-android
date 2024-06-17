@@ -78,4 +78,6 @@ class BleDeviceConnector extends GetxController {
     await _deviceConnectionController.close();
     super.onClose();
   }
+
+
 }

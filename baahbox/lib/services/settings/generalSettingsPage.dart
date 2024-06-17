@@ -22,14 +22,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:baahbox/constants/enums.dart';
 import 'package:baahbox/controllers/appController.dart';
-import 'package:baahbox/routes/routes.dart';
 import 'package:baahbox/services/settings/settingsController.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 
 class GeneralSettingsPage extends GetView<SettingsController> {
   final SettingsController controller = Get.find();
+  final Controller appController = Get.find();
+
   final mainColor = BBColor.pinky.color;
-  double _currentSliderValue = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -37,36 +37,10 @@ class GeneralSettingsPage extends GetView<SettingsController> {
       appBar: AppBar(
         title: Text('Général'),
       ),
-      body: ListView(
+      body: appController.isConnectedToBox ? ListView(
         children: [
           const Padding(
             padding: EdgeInsets.only(left: 32, top: 8),
-          ),
-          Card(
-              shape: ContinuousRectangleBorder(),
-              child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Mode',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        const Text(
-                          'Sélectionnez le mode d\'utilisation',
-                          style: TextStyle(
-                            fontSize: 12,
-                          ),
-                        ),
-                      ]))),
-          const SizedBox(
-            height: 15,
-          ),
-          const SwitchExample(title: "Mode démo:"),
-          const SizedBox(
-            height: 24,
           ),
           Card(
               shape: ContinuousRectangleBorder(),
@@ -108,7 +82,7 @@ class GeneralSettingsPage extends GetView<SettingsController> {
           const SizedBox(
             height: 36,
           ),
-          Card(
+    Obx(() =>  appController.currentSensor == Sensor.muscle ? Card(
               shape: ContinuousRectangleBorder(),
               child: Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -128,11 +102,13 @@ class GeneralSettingsPage extends GetView<SettingsController> {
                             fontSize: 12,
                           ),
                         ),
-                      ]))),
+                      ]))):  const SizedBox(
+            height: 12,
+          )),
           const SizedBox(
             height: 12,
           ),
-          ListTile(
+    Obx(() => appController.currentSensor == Sensor.muscle ? ListTile(
               title: Text("Muscle1"),
               trailing: Obx(() => Switch(
                 value: controller.genericSettings["isSensor1On"],
@@ -140,11 +116,13 @@ class GeneralSettingsPage extends GetView<SettingsController> {
                 onChanged: (bool val) {
                   controller.setMuscle1To(val);
                 },
-              ))),
+              ))): const SizedBox(
+    height: 5,
+    )),
           const SizedBox(
             height: 5,
           ),
-          ListTile(
+    Obx(() => appController.currentSensor == Sensor.muscle ? ListTile(
           title: Text("Muscle2"),
           trailing: Obx(() => Switch(
           value: controller.genericSettings["isSensor2On"],
@@ -152,47 +130,78 @@ class GeneralSettingsPage extends GetView<SettingsController> {
           onChanged: (bool val) {
             controller.setMuscle2To(val);
           },
-          ))),
-          Card(
-              shape: ContinuousRectangleBorder(),
-    child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Sensibilité',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        const Text(
-                          'Paramétrez la sensibilité des capteurs',
-                          style: TextStyle(
-                            fontSize: 12,
-                          ),
-                        ),
-                      ]))),
-          const SizedBox(
-            height: 8,
-          ),
-          Padding(
-              padding: const EdgeInsets.only(left: 16, top: 8),
-              child: const Text(
-                'Sensibilité',
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              )),
-          const Padding(
-              padding: EdgeInsets.only(right: 16, top: 8),
-              child: Align(
-                  alignment: Alignment.centerRight,
-                  child: SensitivitySegmentedSegment())),
-          const SizedBox(
-            height: 24,
-          ),
+          ))):  const SizedBox(
+            height: 5,
+          )),
+    //       Card(
+    //           shape: ContinuousRectangleBorder(),
+    // child: Padding(
+    //               padding: const EdgeInsets.all(16.0),
+    //               child: Column(
+    //                   crossAxisAlignment: CrossAxisAlignment.start,
+    //                   children: [
+    //                     const Text(
+    //                       'Sensibilité',
+    //                       style: TextStyle(
+    //                           fontSize: 16, fontWeight: FontWeight.bold),
+    //                     ),
+    //                     const Text(
+    //                       'Paramétrez la sensibilité des capteurs',
+    //                       style: TextStyle(
+    //                         fontSize: 12,
+    //                       ),
+    //                     ),
+    //                   ]))),
+    //       const SizedBox(
+    //         height: 8,
+    //       ),
+    //       Padding(
+    //           padding: const EdgeInsets.only(left: 16, top: 8),
+    //           child: const Text(
+    //             'Sensibilité',
+    //             style: TextStyle(
+    //               fontSize: 16,
+    //             ),
+    //           )),
+    //       const Padding(
+    //           padding: EdgeInsets.only(right: 16, top: 8),
+    //           child: Align(
+    //               alignment: Alignment.centerRight,
+    //               child: SensitivitySegmentedSegment())),
+    //       const SizedBox(
+    //         height: 24,
+    //       ),
         ],
-      ),
+      ) :
+      ListView(
+          children: [
+      const Padding(
+      padding: EdgeInsets.only(left: 32, top: 8),
+    ),
+    Card(
+    shape: ContinuousRectangleBorder(),
+    child: Padding(
+    padding: const EdgeInsets.all(16.0),
+    child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+    const Text(
+    'Mode démo activé',
+    style: TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+    ),
+    ),
+    const Text(
+    'Aucun boitier BaahBox connecté',
+    style: TextStyle(
+    fontSize: 12,
+    ),
+    ),
+    ]))),
+    const SizedBox(
+    height: 12,
+    ),],)
     );
   }
 }
@@ -258,14 +267,14 @@ class _SensorSegmentedSegmentState extends State<SensorSegmentedSegment> {
 
   @override
   Widget build(BuildContext context) {
-    final sensorType = (controller.genericSettings["sensor"] as SensorType);
+    final sensorType = (controller.genericSettings["sensor"] as Sensor);
     var displayValue = sensorType;
-    return CustomSlidingSegmentedControl<SensorType>(
+    return CustomSlidingSegmentedControl<Sensor>(
       initialValue: sensorType,
       children: {
-        SensorType.muscle: Text('Muscle'),
-        SensorType.arcadeJoystick: Text('Joystick'),
-        SensorType.button: Text('Button'),
+        Sensor.muscle: Text('Muscle'),
+        Sensor.arcadeJoystick: Text('Joystick'),
+        Sensor.button: Text('Button'),
       },
       decoration: BoxDecoration(
         color: CupertinoColors.lightBackgroundGray,
@@ -290,7 +299,7 @@ class _SensorSegmentedSegmentState extends State<SensorSegmentedSegment> {
       curve: Curves.easeInToLinear,
       onValueChanged: (v) {
         print(v);
-        controller.updateSensorTypeTo(v);
+        controller.updateSensorTo(v);
       },
     );
   }

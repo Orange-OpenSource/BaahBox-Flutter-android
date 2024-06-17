@@ -35,9 +35,10 @@ class MeteorComponent extends SpriteComponent
     with HasGameRef<SpaceShipGame>, CollisionCallbacks {
   static const speed = 100;
   static final Vector2 initialSize = Vector2.all(100);
+  double accelerationRate = 1.0;
   final Controller appController = Get.find();
 
-  MeteorComponent({required super.position}) : super(anchor: Anchor.center);
+  MeteorComponent({required super.position, required this.accelerationRate}) : super(anchor: Anchor.center);
 
   @override
   Future<void> onLoad() async {
@@ -48,7 +49,7 @@ class MeteorComponent extends SpriteComponent
   void initialize() {
     var rng = new Random();
     var i = rng.nextInt(6) + 1;
-    var imageName = 'Jeux/Spaceship/meteor_0$i@3x.png';
+    var imageName = 'Games/Spaceship/meteor_0$i@3x.png';
     final newSprite = Sprite(Flame.images.fromCache(imageName));
     this.sprite = newSprite;
     this.size = newSprite.originalSize / 10;
@@ -57,7 +58,7 @@ class MeteorComponent extends SpriteComponent
   @override
   void update(double dt) {
     super.update(dt);
-      y += speed * dt;
+      y += speed * dt * accelerationRate ;
       if (isNotVisible() || !gameRef.appController.isActive || gameRef.state == GameState.lost ) {
         removeFromParent();
       }

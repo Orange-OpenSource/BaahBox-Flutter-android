@@ -22,13 +22,24 @@ import 'package:get/get.dart';
 import 'dart:ui';
 import 'package:baahbox/routes/routes.dart';
 import 'package:baahbox/constants/enums.dart';
+import 'package:baahbox/controllers/appController.dart';
 
-class WelcomePage extends StatelessWidget with WidgetsBindingObserver {
+
+class WelcomePage extends StatefulWidget with WidgetsBindingObserver {
   const WelcomePage({Key? key}) : super(key: key);
 
+
+  @override
+  State<WelcomePage> createState() => _WelcomePageState();
+}
+
+class _WelcomePageState extends State<WelcomePage> {
   @override
   Widget build(BuildContext context) {
     final mainColor = BBColor.pinky.color;
+    double h = (Get.height/5)-10;
+    double w = Get.width;
+    final Controller appController = Get.find();
 
     return Scaffold(
         appBar: AppBar(
@@ -37,19 +48,17 @@ class WelcomePage extends StatelessWidget with WidgetsBindingObserver {
               color: mainColor, fontWeight: FontWeight.bold, fontSize: 25),
           centerTitle: true,
           title: Text("Baah !"),
-          leading: null,
+         // leading: null,
           automaticallyImplyLeading: false,
           actions: [
             Container(
                 width: 25,
-                child: Image.asset('assets/images/Dashboard/demo@2x.png',
-                    color: mainColor)),
-            SizedBox(
-              width: 15,
-            ),
+                child: Obx(() => Image.asset(appController.currentSensor.asset,
+                    color: mainColor))),
             IconButton(
                 icon: Image.asset(
-                    'assets/images/Dashboard/settings_icon@2x.png',
+                    'assets/images/Dashboard/settings_icon.png',
+                    width: 25, height: 25,
                     color: mainColor),
                 onPressed: () => Get.toNamed('/settings')),
           ],
@@ -58,11 +67,13 @@ class WelcomePage extends StatelessWidget with WidgetsBindingObserver {
         body: Container(
           child: ListView(
               padding: const EdgeInsets.all(0),
-              children: <Widget>[GameRow(BBGameList.star, BBRoute.star.path),
-        GameRow(BBGameList.balloon, BBRoute.balloon.path),
-        GameRow(BBGameList.sheep, BBRoute.sheep.path),
-        GameRow(BBGameList.starship, BBRoute.spaceShip.path),
-        GameRow(BBGameList.toad, BBRoute.toad.path),
+              children: <Widget>[
+                GameRow(BBGameList.star, BBRoute.star.path, 160, 1400),
+
+        GameRow(BBGameList.balloon, BBRoute.balloon.path, 160, 1400),
+        GameRow(BBGameList.sheep, BBRoute.sheep.path, 160, 1400),
+        GameRow(BBGameList.starship, BBRoute.spaceShip.path,160, 1400),
+        GameRow(BBGameList.toad, BBRoute.toad.path, 160, 1400),
           ] //wrap
           ),
         ));
@@ -70,56 +81,57 @@ class WelcomePage extends StatelessWidget with WidgetsBindingObserver {
 }
 
 class GameRow extends StatelessWidget {
-  GameRow(this.game, this.gamePath);
+  GameRow(this.game, this.gamePath, this.height, this.width);
   final String gamePath;
   final BBGameList game;
+  final double height;
+  final double width;
 
   @override
   Widget build(BuildContext context) {
     return
-        ElevatedButton(
-        style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(game.baseColor.color),
-        shape:MaterialStateProperty.all(ContinuousRectangleBorder())),
-        child: Container(
-            alignment: Alignment.centerLeft,
-            height: (Get.height/5)-10,
-            width: Get.width,
-            padding: const EdgeInsets.all(0),
+      ElevatedButton(
+          style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(game.baseColor.color),
+              shape:MaterialStateProperty.all(ContinuousRectangleBorder())),
+          child: Container(
+              alignment: Alignment.centerLeft,
+              height: height, //(Get.height/5)-10,
+              width: width,
+              padding: const EdgeInsets.all(0),
 
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-              Image(
-                  alignment: Alignment.centerLeft,
-                  image: AssetImage(game.mainAsset)),
-                  Spacer(),
-              Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.end,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(
-                      game.title,
-                      style: TextStyle(color: Colors.white, fontSize: 15.0),
-                      textAlign: TextAlign.end,
-
-                    ),
-                    SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Image(
-                      alignment: Alignment.bottomRight,
-                      image: AssetImage('assets/images/Dashboard/capteur.png'),
-                      height: 25,
-                      width: 25,
-                    )]),
-                  ]),
-
-
-            ])),
-        onPressed: () => Get.toNamed(gamePath));
+                    Image(
+                        alignment: Alignment.centerLeft,
+                        image: AssetImage(game.mainAsset),
+                        width: 60),
+                    Spacer(),
+                    Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                              game.title,
+                              style: TextStyle(color: Colors.white, fontSize: 15.0),
+                              textAlign: TextAlign.end,
+                              maxLines: 2
+                          ),
+                          SizedBox(height: 10),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Image(
+                                  alignment: Alignment.bottomRight,
+                                  image: AssetImage('assets/images/Dashboard/capteur.png'),
+                                  height: 25,
+                                  width: 25,
+                                )]),
+                        ]),
+                  ])),
+          onPressed: () => Get.toNamed(gamePath));
   }
 }

@@ -52,10 +52,10 @@ class StarGame extends BBGame with TapCallbacks {
   Future<void> onLoad() async {
     await super.onLoad();
     await Flame.images.loadAll(<String>[
-      'Jeux/Star/jeu_etoile_01@2x.png',
-      'Jeux/Star/jeu_etoile_02@2x.png',
+      'Games/Star/game_star.png',
+      'Games/Star/game_star_shining.png',
     ]);
-    loadInfoComponents();
+   // loadInfoComponents();
     title = instructionTitle;
     subTitle = instructionSubtitle;
     feedback = feedBackTitle;
@@ -68,9 +68,10 @@ class StarGame extends BBGame with TapCallbacks {
   void update(double dt) {
     super.update(dt);
     if (appController.isActive) {
+      appController.updateConnectionState();
       if (isRunning) {
         refreshInput();
-        scoreText.text = 'Score: $input';
+       //scoreText.text = 'Score: $input';
         updateOverlaysAndState();
       }
     }
@@ -89,12 +90,12 @@ class StarGame extends BBGame with TapCallbacks {
   void refreshInput() {
     // Todo : deal with threshod and sensitivity
     if (appController.isConnectedToBox) {
-      var sensorType = settingsController.usedSensor;
+      var sensorType = settingsController.currentSensor;
       switch (sensorType) {
-        case SensorType.muscle:
+        case Sensor.muscle:
         // The strength is in range [0...1024] -> Have it fit into [0...100]
           input = appController.musclesInput.muscle1;
-        case SensorType.arcadeJoystick:
+        case Sensor.arcadeJoystick:
           var joystickInput = appController.joystickInput;
           if (joystickInput.up && input < 1000) {
             input += 8;
@@ -127,7 +128,7 @@ class StarGame extends BBGame with TapCallbacks {
   @override
   void startGame() {
     _star.initialize();
-    input =0;
+    input = 0;
     super.startGame();
   }
 
@@ -149,14 +150,14 @@ class StarGame extends BBGame with TapCallbacks {
     } else {
       var yPos = info.eventPosition.global.y;
       panInput = ((canvasSize.y - yPos) * 1024.0 / canvasSize.y).toInt();
-      print(
-          "panInput : ${panInput} :::  panY : ${yPos} vs game ${canvasSize.y}");
+      // print(
+      //     "panInput : ${panInput} :::  panY : ${yPos} vs game ${canvasSize.y}");
     }
   }
 
   @override
   void onTapDown(TapDownEvent event) {
     super.onTapDown(event);
-    print("state : $state ");
+   // print("state : $state ");
   }
 }
