@@ -235,7 +235,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
               fontWeight: FontWeight.bold,
               fontSize: 18),
           centerTitle: true,
-          title: Text("Connexion Bluetooth"),
+          title: Text("Connexion"),
           leading: IconButton(
               icon: Icon(Icons.arrow_back,),
               onPressed: () {

@@ -33,6 +33,7 @@ class FlyComponent extends SpriteComponent
     with  HasVisibility, HasGameRef<ToadGame>, CollisionCallbacks {
   double flightDuration = 5.0;
   final flySprite = Sprite(Flame.images.fromCache('Games/Toad/fly.png'));
+
   late final _AppearanceTimer = TimerComponent(
     period: flightDuration,
     onTick: disappear,
@@ -59,7 +60,7 @@ class FlyComponent extends SpriteComponent
     this.sprite = flySprite;
    // this.flightDuration = flightDuration;
     var ratio = flySprite.srcSize.x / flySprite.srcSize.y;
-    var width = 75.00;//gameRef.size.x/10;
+    var width = 50.00;//gameRef.size.x/10;
     size = Vector2(width,width/ratio);
     anchor = Anchor.center;
     add(CircleHitbox());
@@ -101,6 +102,7 @@ class FlyComponent extends SpriteComponent
     super.onCollisionStart(intersectionPoints, other);
     if (other is TongueComponent) {
       other.takeHit();
+      gameRef.looseScore();
       _gotShotTimer.timer.start();
     }
   }

@@ -54,7 +54,9 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
   var goLeft = false;
   var goRight = false;
   var instructionTitle = 'Evite les météorites';
-  var instructionSubtitle = '';
+  var instructionSubtitleMuscle = 'en contractant tes muscles';
+  var instructionSubtitleJoystick = 'pousse le joystick à gauche ou à droite';
+  var instructionSubtitleFinger = 'glisse le doigt à gauche ou à droite';
   int threshold = 10;
 
   @override
@@ -64,7 +66,7 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
   @override
   Future<void> onLoad() async {
     title = instructionTitle;
-    subTitle = instructionSubtitle;
+    setInstructions();
     await loadAssetsInCache();
     loadInfoComponents();
     loadComponents();
@@ -117,6 +119,8 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
         refreshInput();
         transformInputInOffset();
         scoreText.text = 'Score: $score';
+      } else {
+        setInstructions();
       }
     }
   }

@@ -51,7 +51,7 @@ class CounterManager extends Component with HasGameRef<SheepGame> {
           position: Vector2(2, game.size.y - 30),
           textRenderer: regular,
           anchor: Anchor.bottomLeft,
-          size: Vector2(10, 15)),
+          size: Vector2(8, 15)),
     ]);
   }
 

@@ -163,9 +163,9 @@ class PostGameOverlay extends StatelessWidget {
               fontSize: 30,
             ),
           ),
-          const SizedBox(height: 35),
+          const SizedBox(height: 25),
           _resetButton(context, game),
-          const SizedBox(height: 20),
+          const SizedBox(height: 30),
         ],
       ),
     );

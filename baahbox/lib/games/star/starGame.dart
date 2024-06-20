@@ -43,7 +43,10 @@ class StarGame extends BBGame with TapCallbacks {
   var panInput = 0;
   var input = 0;
   final instructionTitle = 'Fais briller l\'étoile';
-  final instructionSubtitle = 'en contractant ton muscle';
+  var instructionSubtitleMuscle = 'en contractant ton muscle';
+  var instructionSubtitleJoystick = 'pousse le joystick en haut';
+  var instructionSubtitleFinger = 'glisse le doigt de bas en haut';
+
   final feedBackTitle = 'encore un effort!';
   @override
   Color backgroundColor() => BBGameList.star.baseColor.color;
@@ -57,7 +60,7 @@ class StarGame extends BBGame with TapCallbacks {
     ]);
    // loadInfoComponents();
     title = instructionTitle;
-    subTitle = instructionSubtitle;
+    setInstructions();
     feedback = feedBackTitle;
     input = 0;
     _star = StarSprite();
@@ -73,6 +76,9 @@ class StarGame extends BBGame with TapCallbacks {
         refreshInput();
        //scoreText.text = 'Score: $input';
         updateOverlaysAndState();
+      }
+      else {
+        setInstructions();
       }
     }
   }
@@ -113,7 +119,7 @@ class StarGame extends BBGame with TapCallbacks {
     int coeff = (input / 100).toInt();
     if (input < 300) {
       title = instructionTitle;
-      subTitle = instructionSubtitle;
+      setInstructions();
     } else if (input < 750) {
       displayFeedBack();
     } else {

@@ -144,7 +144,5 @@ class ToadComponent extends SpriteComponent
     _shootTimer.timer.start();
     // animateToadForShooting();
     //setSpriteTo(3);
-   // game.add(BimComponent(
-    //    position: Vector2(position.x + size.x/2, position.y - size.y - 20)));
   }
 }
