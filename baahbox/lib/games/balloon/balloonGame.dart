@@ -79,23 +79,7 @@ class BalloonGame extends BBGame with TapCallbacks {
       }
     }
   }
-
-  // void setInstructions() {
-  //   if (appController.isConnectedToBox) {
-  //     var sensorType = appController.currentSensor;
-  //     switch (sensorType) {
-  //       case Sensor.muscle:
-  //         subTitle = instructionSubtitleMuscle;
-  //       case Sensor.arcadeJoystick:
-  //         subTitle = instructionSubtitleJoystick;
-  //       default:
-  //         subTitle = instructionSubtitleFinger;
-  //     }
-  //   } else {
-  //     subTitle = instructionSubtitleFinger;
-  //   }
-  // }
-
+  
   void refreshInput() {
     // Todo : deal with threshod and sensitivity
     if (appController.isConnectedToBox) {
