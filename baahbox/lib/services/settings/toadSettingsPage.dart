@@ -164,9 +164,9 @@ class _FlyNumberSliderState extends State<FlyNumberSlider> {
     double _value = _nbF.toDouble();
     return Slider(
       value: _value,
-      min: 1.0,
+      min: 3.0,
       max: 10.0,
-      divisions: 10,
+      divisions: 7,
       label: _value.round().toString(),
       onChanged: (double value) {
         setState(() {

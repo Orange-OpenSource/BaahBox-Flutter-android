@@ -19,6 +19,7 @@
 
 import 'dart:math' as math;
 import 'dart:ui';
+import 'package:baahbox/games/toad/components/flyScoreComponent.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
@@ -35,6 +36,8 @@ import 'package:baahbox/games/toad/components/toadComponent.dart';
 import 'package:baahbox/services/settings/settingsController.dart';
 import 'package:baahbox/games/toad/components/flyComponent.dart';
 import 'package:baahbox/games/toad/components/tongueComponent.dart';
+import 'package:baahbox/games/toad/components/flyManager.dart';
+
 
 class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
   final Controller appController = Get.find();
@@ -43,7 +46,7 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
   late final Image spriteImage;
   late final ToadComponent toad;
   late final TongueComponent tongue;
-  // late final FlyScoreManager flyScoreManager;
+  late final FlyManager flyManager;
   late final SpawnComponent flyLauncher;
   late final FlyComponent myFly;
 
@@ -59,7 +62,9 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
   double floorY = 0.0;
   var flyNet = Map<double, double>();
   var instructionTitle = 'Gobe les mouches';
-  var instructionSubtitle = '';
+  var instructionSubtitleMuscle = 'en contractant tes muscles';
+  var instructionSubtitleJoystick = 'pousse le joystick à gauche ou à droite';
+  var instructionSubtitleFinger = 'glisse le doigt à gauche ou à droite';
 
   @override
   Color backgroundColor() => BBGameList.toad.baseColor.color;
@@ -68,7 +73,7 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
   Future<void> onLoad() async {
     initializeParams();
     title = instructionTitle;
-    subTitle = instructionSubtitle;
+    setInstructions();
     await loadAssetsInCache();
     await loadComponents();
     loadInfoComponents();
@@ -81,10 +86,7 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
     await add(tongue = TongueComponent(position: toad.position));
     var skyLimit = toad.position.y - toad.size.y;
     flyLauncher = loadFlyLauncher(skyLimit);
-    //  myFly = FlyComponent(size: Vector2(50,50));
-    // myFly = FlyComponent();
-
-    // await add(flyScoreManager = FlyScoreManager());
+    await add(flyManager = FlyManager());
   }
 
   SpawnComponent loadFlyLauncher(double yLimit) {
@@ -119,7 +121,7 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
 
   void initializeUI() {
     title = '';
-    subTitle = '';
+    setInstructions();
     floorY = size.y - 150.0;
   }
 
@@ -138,6 +140,8 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
         if (settingsController.toadSettings["iShootingModeAutomatic"]) {
           toad.checkFlies();
         }
+      } else {
+       setInstructions();
       }
     }
   }
@@ -191,9 +195,10 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
     }
   }
 
-  void increaseScore() {
-    if ((state == GameState.running) && (appController.isActive)) {
-      //    flyScoreManager.addOnefly();
+
+  void looseScore() {
+    if (state == GameState.running) {
+          flyManager.looseOneScore();
     }
   }
 
@@ -203,14 +208,14 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
     clearTheSky();
     flyNet = Map();
     add(flyLauncher);
+    clearScore();
+    flyManager.createScores();
   }
 
   @override
   void startGame() {
     initializeParams();
     resetComponents();
-    //add(myFly);
-    //myFly.setPositionTo(Vector2(200, 100));
     super.startGame();
   }
 
@@ -219,6 +224,7 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
     super.resetGame();
     initializeParams();
     resetComponents();
+
     if (paused) {
       resumeEngine();
     }
@@ -261,6 +267,13 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
     }
   }
 
+  void clearScore() {
+    for (var child in children) {
+      if (child is FlyScoreComponent) {
+        child.disappear();
+      }
+    }
+  }
   void registerToFlyNet(Vector2 position) {
     flyNet[position.x] = position.y; //todo mettre l'angle et la distance
   }

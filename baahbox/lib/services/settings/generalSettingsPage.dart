@@ -186,14 +186,14 @@ class GeneralSettingsPage extends GetView<SettingsController> {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
     const Text(
-    'Mode démo activé',
+    'Mode sans connexion activé',
     style: TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.bold,
     ),
     ),
     const Text(
-    'Aucun boitier BaahBox connecté',
+    "S'il n'y a pas de boitier BaahBox connecté, \nvous pouvez quand même jouer!\nFaites glisser votre doigt vers le haut, la gauche ou la droite pour jouer.",
     style: TextStyle(
     fontSize: 12,
     ),

@@ -38,7 +38,9 @@ class BalloonGame extends BBGame with TapCallbacks {
   var panInput = 0;
   var input = 0;
   var instructionTitle = 'Gonfle le ballon';
-  var instructionSubtitle = 'en contractant ton muscle';
+  var instructionSubtitleMuscle = 'en contractant ton muscle';
+  var instructionSubtitleJoystick = 'pousse le joystick en haut';
+  var instructionSubtitleFinger = 'glisse le doigt de bas en haut';
   var feedback1 = "C'est parti !";
   var feedback2 = 'Encore un petit effort!';
   var feedback3 = 'On y est presque !';
@@ -49,7 +51,7 @@ class BalloonGame extends BBGame with TapCallbacks {
   @override
   Future<void> onLoad() async {
     title = instructionTitle;
-    subTitle = instructionSubtitle;
+    setInstructions();
     feedback = "";
     super.onLoad();
     await Flame.images.loadAll(<String>[
@@ -67,13 +69,32 @@ class BalloonGame extends BBGame with TapCallbacks {
   @override
   void update(double dt) {
     super.update(dt);
+
     if (appController.isActive) {
       if (isRunning) {
         refreshInput();
         updateOverlaysAndState();
+      } else {
+        setInstructions();
       }
     }
   }
+
+  // void setInstructions() {
+  //   if (appController.isConnectedToBox) {
+  //     var sensorType = appController.currentSensor;
+  //     switch (sensorType) {
+  //       case Sensor.muscle:
+  //         subTitle = instructionSubtitleMuscle;
+  //       case Sensor.arcadeJoystick:
+  //         subTitle = instructionSubtitleJoystick;
+  //       default:
+  //         subTitle = instructionSubtitleFinger;
+  //     }
+  //   } else {
+  //     subTitle = instructionSubtitleFinger;
+  //   }
+  // }
 
   void refreshInput() {
     // Todo : deal with threshod and sensitivity

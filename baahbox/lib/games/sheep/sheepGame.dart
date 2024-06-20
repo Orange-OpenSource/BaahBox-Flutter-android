@@ -65,7 +65,10 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
   int input = 0;
   double floorY = 0;
   var instructionTitle = '';
-  var instructionSubtitle = '';
+  var instructionSubtitleMuscle = 'en contractant ton muscle';
+  var instructionSubtitleJoystick = 'pousse le joystick en haut';
+  var instructionSubtitleFinger = 'glisse le doigt de bas en haut';
+
   var endTitle = 's';
   var feedbackTitleWon = 'Bravo! \ntu as sauté toutes les barrières';
   var feedbackTitleLost = "Tu n'as pas sauté toutes les barrières";
@@ -138,7 +141,7 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
     if (gameObjective > 1) {
       title += 's';
     }
-    subTitle = instructionSubtitle;
+    setInstructions();
     progressionText.text = "";
     counterManager.createMarks(gameObjective);
   }
