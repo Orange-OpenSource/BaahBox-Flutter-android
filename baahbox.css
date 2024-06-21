@@ -1,0 +1,59 @@
+/***********************************************************************/
+/*                                                                     */
+/* BaahBox - Copyright © 2024 ORANGE.                                  */
+/*                                                                     */
+/* use apple fonts for dynamic types                                   */
+/* see https://useyourloaf.com/blog/using-dynamic-type-with-web-views/ */
+/***********************************************************************/
+
+body {
+    background: white;
+    font-family: 'roboto', 'helvetica', 'arial', sans-serif;
+}
+
+img.logo {
+    width: 40px;
+    height: 40px;
+}
+
+#header{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+h1 {
+    font: -apple-system-headline;
+    text-align: left;
+    margin-left: 16px;
+}
+
+h2 {
+    font: -apple-system-subheadline;
+    text-align: left;
+    margin-left: 16px;
+    font-weight: bold;
+}
+
+h3 {
+    font: -apple-system-footnote;
+    text-align: left;
+    margin-left: 15px;
+}
+
+p {
+    font: -apple-system-body;
+    text-align: left;
+    margin-left: 16px;
+    margin-right: 10px;
+}
+
+ul {
+    font: -apple-system-body;
+}
+
+strong {
+    font: -apple-system-body;
+    font-weight: bold;
+}
+
