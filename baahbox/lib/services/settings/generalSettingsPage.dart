@@ -25,6 +25,8 @@ import 'package:baahbox/controllers/appController.dart';
 import 'package:baahbox/services/settings/settingsController.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 
+import 'generalSettingsMusclePage.dart';
+
 class GeneralSettingsPage extends GetView<SettingsController> {
   final SettingsController controller = Get.find();
   final Controller appController = Get.find();
@@ -82,95 +84,7 @@ class GeneralSettingsPage extends GetView<SettingsController> {
           const SizedBox(
             height: 36,
           ),
-    Obx(() =>  appController.currentSensor == Sensor.muscle ? Card(
-              shape: ContinuousRectangleBorder(),
-              child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Muscle utilisé',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const Text(
-                          'Sélectionnez le ou les muscles à travailler',
-                          style: TextStyle(
-                            fontSize: 12,
-                          ),
-                        ),
-                      ]))):  const SizedBox(
-            height: 12,
-          )),
-          const SizedBox(
-            height: 12,
-          ),
-    Obx(() => appController.currentSensor == Sensor.muscle ? ListTile(
-              title: Text("Muscle1"),
-              trailing: Obx(() => Switch(
-                value: controller.genericSettings["isSensor1On"],
-                activeColor: Colors.red,
-                onChanged: (bool val) {
-                  controller.setMuscle1To(val);
-                },
-              ))): const SizedBox(
-    height: 5,
-    )),
-          const SizedBox(
-            height: 5,
-          ),
-    Obx(() => appController.currentSensor == Sensor.muscle ? ListTile(
-          title: Text("Muscle2"),
-          trailing: Obx(() => Switch(
-          value: controller.genericSettings["isSensor2On"],
-          activeColor: Colors.red,
-          onChanged: (bool val) {
-            controller.setMuscle2To(val);
-          },
-          ))):  const SizedBox(
-            height: 5,
-          )),
-    //       Card(
-    //           shape: ContinuousRectangleBorder(),
-    // child: Padding(
-    //               padding: const EdgeInsets.all(16.0),
-    //               child: Column(
-    //                   crossAxisAlignment: CrossAxisAlignment.start,
-    //                   children: [
-    //                     const Text(
-    //                       'Sensibilité',
-    //                       style: TextStyle(
-    //                           fontSize: 16, fontWeight: FontWeight.bold),
-    //                     ),
-    //                     const Text(
-    //                       'Paramétrez la sensibilité des capteurs',
-    //                       style: TextStyle(
-    //                         fontSize: 12,
-    //                       ),
-    //                     ),
-    //                   ]))),
-    //       const SizedBox(
-    //         height: 8,
-    //       ),
-    //       Padding(
-    //           padding: const EdgeInsets.only(left: 16, top: 8),
-    //           child: const Text(
-    //             'Sensibilité',
-    //             style: TextStyle(
-    //               fontSize: 16,
-    //             ),
-    //           )),
-    //       const Padding(
-    //           padding: EdgeInsets.only(right: 16, top: 8),
-    //           child: Align(
-    //               alignment: Alignment.centerRight,
-    //               child: SensitivitySegmentedSegment())),
-    //       const SizedBox(
-    //         height: 24,
-    //       ),
+          MuscleSettingsView()
         ],
       ) :
       ListView(
