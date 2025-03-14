@@ -16,7 +16,7 @@ class BleMonitorView extends GetView<GetxBle> {
         padding: EdgeInsets.all(20),
         child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
           Text("État du bluetooth :",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal)),
+              style: Theme.of(context).textTheme.bodyMedium),
           Obx(() => Text(
               switch (controller.bleStatusMonitor.rxBleStatus.value) {
                 BleStatus.unsupported =>
@@ -30,28 +30,29 @@ class BleMonitorView extends GetView<GetxBle> {
                 BleStatus.ready => "Bluetooth actif",
                 _ => "Bluetooth dans un état inconnu"
               },
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
-          Obx(() => controller.bleStatusMonitor.rxBleStatus.value==BleStatus.unauthorized  ? ElevatedButton(
-              onPressed: () {
-                _askPermissions();
-              },
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.blue)),
-              child:Text("Permissions")) :  SizedBox(
-            height: 0,
-          )),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge
+                  ?.copyWith(fontWeight: FontWeight.bold))),
+          Obx(() => controller.bleStatusMonitor.rxBleStatus.value ==
+                  BleStatus.unauthorized
+              ? FilledButton(
+                  onPressed: () {
+                    _askPermissions();
+                  },
+                  child: const Text("Permissions"))
+              : SizedBox(height: 0)),
           SizedBox(
             height: 15,
           ),
           Text("Recherche de BaahBox :",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal)),
-          Obx(() => ElevatedButton(
-              onPressed: () {
+          Obx(() => FilledButton(
+              onPressed: controller.bleStatusMonitor.rxBleStatus.value ==
+                  BleStatus.ready ? () {
                 _startOrStopScan();
-              },
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                      controller.bleStatusMonitor.rxBleStatus.value==BleStatus.ready ? Colors.blue : Colors.grey)),
+              } : null,
+
               child: controller.scanner.rxBleScannerState.value.scanIsInProgress
                   ? Padding(
                       padding: const EdgeInsets.all(5.0),
@@ -66,8 +67,6 @@ class BleMonitorView extends GetView<GetxBle> {
                             height: 20,
                             width: 20,
                             child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation(Colors.white),
-                              backgroundColor: Colors.blue,
                               strokeWidth: 3,
                             ),
                           )
@@ -93,12 +92,13 @@ class BleMonitorView extends GetView<GetxBle> {
         bool hasPermanentlyDenied = statuses.entries.any((entry) {
           return entry.value.isPermanentlyDenied;
         });
-        if(hasPermanentlyDenied==true) {
+        if (hasPermanentlyDenied == true) {
           openAppSettings();
         }
       }
     }
   }
+
   void _startOrStopScan() async {
     if (controller.scanner.rxBleScannerState.value.scanIsInProgress)
       await controller.scanner.stopScan();
@@ -106,10 +106,10 @@ class BleMonitorView extends GetView<GetxBle> {
       bool canStart = false;
       if (controller.bleStatusMonitor.rxBleStatus.value == BleStatus.ready)
         canStart = true;
-          //   if (permission == PermissionStatus.granted) goForIt = true;
-         else if (Platform.isIOS) {
-          canStart = true;
-        }
+      //   if (permission == PermissionStatus.granted) goForIt = true;
+      else if (Platform.isIOS) {
+        canStart = true;
+      }
       if (canStart)
         controller.scanner
             .startScan(BleScannerFilter(serviceId: [serviceUuid]));

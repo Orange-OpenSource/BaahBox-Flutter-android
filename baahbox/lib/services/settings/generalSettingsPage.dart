@@ -36,134 +36,128 @@ class GeneralSettingsPage extends GetView<SettingsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Général'),
-      ),
-      body: appController.isConnectedToBox ? ListView(
-        children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 32, top: 8),
-          ),
-          Card(
-              shape: ContinuousRectangleBorder(),
-              child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Type de capteur',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
+        appBar: AppBar(
+          title: Text('Général'),
+        ),
+        body: appController.isConnectedToBox
+            ? ListView(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(left: 32, top: 8),
+                  ),
+                  Card(
+                      shape: ContinuousRectangleBorder(),
+                      child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Type de capteur',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const Text(
+                                  'Précisez le type de capteur utilisé',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ]))),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  const Padding(
+                      padding: EdgeInsets.only(left: 16, top: 8),
+                      child: const Text(
+                        'Capteur utilisé:',
+                        style: TextStyle(
+                          fontSize: 16,
                         ),
-                        const Text(
-                          'Précisez le type de capteur utilisé',
-                          style: TextStyle(
-                            fontSize: 12,
-                          ),
-                        ),
-                      ]))),
-          const SizedBox(
-            height: 12,
-          ),
-          const Padding(
-              padding: EdgeInsets.only(left: 16, top: 8),
-              child: const Text(
-                'Capteur utilisé:',
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              )),
-          const Padding(
-              padding: EdgeInsets.only(right: 16, top: 8),
-              child: Align(
-                  alignment: Alignment.centerRight,
-                  child: SensorSegmentedSegment())),
-          const SizedBox(
-            height: 36,
-          ),
-          MuscleSettingsView()
-        ],
-      ) :
-      ListView(
-          children: [
-      const Padding(
-      padding: EdgeInsets.only(left: 32, top: 8),
-    ),
-    Card(
-    shape: ContinuousRectangleBorder(),
-    child: Padding(
-    padding: const EdgeInsets.all(16.0),
-    child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-    const Text(
-    'Mode sans connexion activé',
-    style: TextStyle(
-    fontSize: 16,
-    fontWeight: FontWeight.bold,
-    ),
-    ),
-    const Text(
-    "S'il n'y a pas de boitier BaahBox connecté, \nvous pouvez quand même jouer!\nFaites glisser votre doigt vers le haut, la gauche ou la droite pour jouer.",
-    style: TextStyle(
-    fontSize: 12,
-    ),
-    ),
-    ]))),
-    const SizedBox(
-    height: 12,
-    ),],)
-    );
+                      )),
+                  const Padding(
+                      padding: EdgeInsets.only(right: 16, top: 8),
+                      child: Align(
+                          alignment: Alignment.centerRight,
+                          child: SensorSegmentedSegment())),
+                  const SizedBox(
+                    height: 36,
+                  ),
+                  MuscleSettingsView()
+                ],
+              )
+            : ListView(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(left: 32, top: 8),
+                  ),
+                  Card(
+                      shape: ContinuousRectangleBorder(),
+                      child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Mode sans connexion activé',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const Text(
+                                  "S'il n'y a pas de boitier BaahBox connecté, \nvous pouvez quand même jouer!\nFaites glisser votre doigt vers le haut, la gauche ou la droite pour jouer.",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ]))),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                ],
+              ));
   }
 }
+
 
 class SensitivitySegmentedSegment extends StatefulWidget {
   const SensitivitySegmentedSegment({super.key});
 
   @override
-  State<SensitivitySegmentedSegment> createState() =>
-      _SensitivitySegmentedSegmentState();
+  State<SensitivitySegmentedSegment> createState() => _SensitivitySegmentedSegmentState();
 }
 
-class _SensitivitySegmentedSegmentState
-    extends State<SensitivitySegmentedSegment> {
+class _SensitivitySegmentedSegmentState extends State<SensitivitySegmentedSegment> {
+  Sensitivity selection = Sensitivity.medium;
   final SettingsController controller = Get.find();
-
   @override
   Widget build(BuildContext context) {
-    return CustomSlidingSegmentedControl<Sensitivity>(
-      initialValue: Sensitivity.medium,
-      children: {
-        Sensitivity.low: Text('Faible'),
-        Sensitivity.medium: Text('Moyenne'),
-        Sensitivity.high: Text('Elevée'),
-      },
-      decoration: BoxDecoration(
-        color: CupertinoColors.lightBackgroundGray,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      thumbDecoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(6),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(.3),
-            blurRadius: 4.0,
-            spreadRadius: 1.0,
-            offset: Offset(
-              0.0,
-              2.0,
-            ),
-          ),
-        ],
-      ),
-      duration: Duration(milliseconds: 300),
-      curve: Curves.easeInToLinear,
-      onValueChanged: (sensitivity) {
-        controller.updateSensitivityTo(sensitivity);
+    return SegmentedButton<Sensitivity>(
+      segments: const <ButtonSegment<Sensitivity>>[
+        ButtonSegment<Sensitivity>(
+          value: Sensitivity.low,
+          label: Text('Faible'),
+        ),
+  ButtonSegment<Sensitivity>(
+  value: Sensitivity.medium,
+  label: Text('Moyenne'),
+  ),ButtonSegment<Sensitivity>(
+  value: Sensitivity.high,
+  label: Text('Elevée'),
+  ),
+      ],
+      selected: <Sensitivity>{selection},
+      onSelectionChanged: (Set<Sensitivity> newSelection) {
+        setState(() {
+          // By default there is only a single segment that can be
+          // selected at one time, so its value is always the first
+          // item in the selected set.
+          selection = newSelection.first;
+          controller.updateSensitivityTo(selection);
+        });
       },
     );
   }
@@ -181,43 +175,37 @@ class _SensorSegmentedSegmentState extends State<SensorSegmentedSegment> {
 
   @override
   Widget build(BuildContext context) {
-    final sensorType = (controller.genericSettings["sensor"] as Sensor);
-    var displayValue = sensorType;
-    return CustomSlidingSegmentedControl<Sensor>(
-      initialValue: sensorType,
-      children: {
-        Sensor.muscle: Text('Muscle'),
-        Sensor.arcadeJoystick: Text('Joystick'),
-        Sensor.button: Text('Button'),
-      },
-      decoration: BoxDecoration(
-        color: CupertinoColors.lightBackgroundGray,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      thumbDecoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(6),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(.3),
-            blurRadius: 4.0,
-            spreadRadius: 1.0,
-            offset: Offset(
-              0.0,
-              2.0,
-            ),
-          ),
-        ],
-      ),
-      duration: Duration(milliseconds: 300),
-      curve: Curves.easeInToLinear,
-      onValueChanged: (v) {
-        print(v);
-        controller.updateSensorTo(v);
+    Sensor selection = (controller.genericSettings["sensor"] as Sensor) ?? Sensor.muscle ;
+    return SegmentedButton<Sensor>(
+      segments: const <ButtonSegment<Sensor>>[
+        ButtonSegment<Sensor>(
+          value: Sensor.muscle,
+          label: Text('Muscle'),
+        ),
+        ButtonSegment<Sensor>(
+          value: Sensor.arcadeJoystick,
+          label: Text('Joystick'),
+        ),ButtonSegment<Sensor>(
+          value: Sensor.button,
+          label: Text('Button'),
+        ),
+      ],
+      selected: <Sensor>{selection},
+      onSelectionChanged: (Set<Sensor> newSelection) {
+        setState(() {
+          // By default there is only a single segment that can be
+          // selected at one time, so its value is always the first
+          // item in the selected set.
+          selection = newSelection.first;
+          print(selection);
+          controller.updateSensorTo(selection);
+        });
       },
     );
   }
 }
+
+
 
 class RadioSensorChoice extends StatefulWidget {
   const RadioSensorChoice({super.key});
@@ -235,7 +223,7 @@ class _RadioSensorChoiceState extends State<RadioSensorChoice> {
       children: [
         ListTile(
           title: Text("button"),
-          leading: Radio(
+          leading: Radio.adaptive(
             groupValue: _value,
             value: 1,
             onChanged: (int? value) {
@@ -248,7 +236,7 @@ class _RadioSensorChoiceState extends State<RadioSensorChoice> {
         ),
         ListTile(
           title: Text("joystick"),
-          leading: Radio(
+          leading: Radio.adaptive(
             groupValue: _value,
             value: 2,
             onChanged: (int? value) {
@@ -261,7 +249,7 @@ class _RadioSensorChoiceState extends State<RadioSensorChoice> {
         ),
         ListTile(
           title: Text("muscle"),
-          leading: Radio(
+          leading: Radio.adaptive(
             groupValue: _value,
             value: 3,
             onChanged: (int? value) {
@@ -289,7 +277,7 @@ class _SliderExampleState extends State<SliderExample> {
 
   @override
   Widget build(BuildContext context) {
-    return Slider(
+    return Slider.adaptive(
       value: _currentSliderValue,
       max: 100,
       divisions: 5,
@@ -320,10 +308,10 @@ class _SwitchExampleState extends State<SwitchExample> {
   Widget build(BuildContext context) {
     return ListTile(
         title: Text(title),
-        trailing: Switch(
+        trailing: Switch.adaptive(
           // This bool value toggles the switch.
           value: light,
-          activeColor: Colors.red,
+          activeColor: Theme.of(context).colorScheme.primary,
           onChanged: (bool value) {
             // This is called when the user toggles the switch.
             setState(() {

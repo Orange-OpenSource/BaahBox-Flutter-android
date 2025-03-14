@@ -27,120 +27,102 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
-          titleTextStyle: TextStyle(
-              color: Colors.blueGrey,
-              fontWeight: FontWeight.bold,
-              fontSize: 25),
-          centerTitle: true,
           title: Text("Réglages"),
         ),
-        backgroundColor: Colors.white,
-        body:ListView(
-    padding: const EdgeInsets.all(0),
-    children:
-            [
-                   Card(
-                    shape: ContinuousRectangleBorder(),
-                    child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child:
-                                const Text('',),),
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  ListTile(
-                    trailing: Icon(Icons.arrow_forward_outlined),
-                    dense: false,
-                    enabled: true,
-                    onTap: ()
-                      => Get.toNamed(BBRoute.connection.path),
-                    title: Text('Connexion'),
-                  ),
-                  Card(
-                    shape: ContinuousRectangleBorder(),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child:
-                      const Text('',),),
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  ListTile(
-                    trailing: Icon(Icons.arrow_forward_outlined),
-                    dense: false,
-                    enabled: true,
-                    onTap: ()
-                    => Get.toNamed(BBRoute.generalSettings.path),
-                    title: Text('Général '),
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  Card(
-                    shape: ContinuousRectangleBorder(),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child:
-                      const Text('Gestion des jeux', style: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18)),),
-                  ),
-
-                  ListTile(
-                    trailing: Icon(Icons.arrow_forward_outlined),
-                    dense: false,
-                    enabled: true,
-                    onTap: ()
-                    => Get.toNamed(BBRoute.sheepSettings.path),
-                    title: Text('Saute mouton'),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  const Divider(height: 0,),
-                  ListTile(
-                    trailing: Icon(Icons.arrow_forward_outlined),
-                    dense: false,
-                    enabled: true,
-                    onTap: ()
-                    => Get.toNamed(BBRoute.spaceShipSettings.path),
-                    title: Text('Bataille de l\'espace'),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  const Divider(height: 0,),
-                  ListTile(
-                    trailing: Icon(Icons.arrow_forward_outlined),
-                    dense: false,
-                    enabled: true,
-                    onTap: ()
-                    => Get.toNamed(BBRoute.toadSettings.path),
-                    title: Text('Gobe les mouches'),
-                  ),
-              Card(
-                shape: ContinuousRectangleBorder(),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child:
-                  const Text('',),),
+        body: ListView(padding: const EdgeInsets.all(0), children: [
+          Card(
+            shape: ContinuousRectangleBorder(),
+            child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text('Paramètres',
+                    style: Theme.of(context).textTheme.titleMedium)),
+          ),
+          ListTile(
+              trailing: Icon(Icons.arrow_forward_outlined),
+              dense: false,
+              enabled: true,
+              onTap: () => Get.toNamed(BBRoute.connection.path),
+              title: Text('Connexion',
+                  style: Theme.of(context).textTheme.bodyLarge)),
+          const SizedBox(
+            height: 15,
+          ),
+          ListTile(
+            trailing: Icon(Icons.arrow_forward_outlined),
+            dense: false,
+            enabled: true,
+            onTap: () => Get.toNamed(BBRoute.generalSettings.path),
+            title:
+                Text('Général', style: Theme.of(context).textTheme.bodyLarge),
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          Card(
+            shape: ContinuousRectangleBorder(),
+            child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text('Gestion des jeux',
+                    style: Theme.of(context).textTheme.titleMedium)),
+          ),
+          ListTile(
+            trailing: Icon(Icons.arrow_forward_outlined),
+            dense: false,
+            enabled: true,
+            onTap: () => Get.toNamed(BBRoute.sheepSettings.path),
+            title: Text('Saute mouton',
+                style: Theme.of(context).textTheme.bodyLarge),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          const Divider(
+            height: 0,
+          ),
+          ListTile(
+            trailing: Icon(Icons.arrow_forward_outlined),
+            dense: false,
+            enabled: true,
+            onTap: () => Get.toNamed(BBRoute.spaceShipSettings.path),
+            title: Text('Bataille de l\'espace',
+                style: Theme.of(context).textTheme.bodyLarge),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          const Divider(
+            height: 0,
+          ),
+          ListTile(
+            trailing: Icon(Icons.arrow_forward_outlined),
+            dense: false,
+            enabled: true,
+            onTap: () => Get.toNamed(BBRoute.toadSettings.path),
+            title: Text('Gobe les mouches',
+                style: Theme.of(context).textTheme.bodyLarge),
+          ),
+          Card(
+            shape: ContinuousRectangleBorder(),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: const Text(
+                '',
               ),
-              const SizedBox(
-                height: 15,
-              ),
-              ListTile(
-                trailing: Icon(Icons.arrow_forward_outlined),
-                dense: false,
-                enabled: true,
-                onTap: ()
-                => Get.toNamed(BBRoute.termsAndConditions.path),
-                title: Text('A propos'),
-              ),
-            ]));
+            ),
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          ListTile(
+            trailing: Icon(Icons.arrow_forward_outlined),
+            dense: false,
+            enabled: true,
+            onTap: () => Get.toNamed(BBRoute.termsAndConditions.path),
+            title:
+                Text('A propos', style: Theme.of(context).textTheme.bodyLarge),
+          ),
+        ]));
   }
 }

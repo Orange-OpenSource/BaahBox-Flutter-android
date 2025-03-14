@@ -39,7 +39,6 @@ class SpaceShipGamePage extends StatelessWidget {
           foregroundColor: mainColor,
           titleTextStyle: TextStyle(
               color: mainColor, fontWeight: FontWeight.bold, fontSize: 25),
-          centerTitle: true,
           title:  AutoSizeText("La bataille de l'espace ", maxLines: 1),
           actions: [
             Container(

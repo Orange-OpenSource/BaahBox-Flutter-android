@@ -49,7 +49,6 @@ class _LegalInformationPageState extends State<LegalInformationsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('Informations légales'),
         actions: <Widget>[

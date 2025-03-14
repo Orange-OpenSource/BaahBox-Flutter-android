@@ -89,12 +89,13 @@ class SheepSettingsPage extends GetView<SettingsController> {
   }
 }
 
+
+
 class GateSpeedSegmentedSegment extends StatefulWidget {
   const GateSpeedSegmentedSegment({super.key});
 
   @override
-  State<GateSpeedSegmentedSegment> createState() =>
-      _GateSpeedSegmentedSegmentState();
+  State<GateSpeedSegmentedSegment> createState() => _GateSpeedSegmentedSegmentState();
 }
 
 class _GateSpeedSegmentedSegmentState extends State<GateSpeedSegmentedSegment> {
@@ -102,37 +103,31 @@ class _GateSpeedSegmentedSegmentState extends State<GateSpeedSegmentedSegment> {
 
   @override
   Widget build(BuildContext context) {
-
-    return CustomSlidingSegmentedControl<ObjectVelocity>(
-      initialValue: controller.sheepSettings["gateVelocity"],
-      children: {
-        ObjectVelocity.low: Text('Faible'),
-        ObjectVelocity.medium: Text('Moyenne'),
-        ObjectVelocity.high: Text('Elevée'),
-      },
-      decoration: BoxDecoration(
-        color: CupertinoColors.lightBackgroundGray,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      thumbDecoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(6),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(.3),
-            blurRadius: 4.0,
-            spreadRadius: 1.0,
-            offset: Offset(
-              0.0,
-              2.0,
-            ),
-          ),
-        ],
-      ),
-      duration: Duration(milliseconds: 300),
-      curve: Curves.easeInToLinear,
-      onValueChanged: (ObjectVelocity v) {
-        controller.setGateSpeedTo(v);
+    ObjectVelocity selection = (controller.sheepSettings["gateVelocity"]) ?? ObjectVelocity.low ;
+    return SegmentedButton<ObjectVelocity>(
+      segments: const <ButtonSegment<ObjectVelocity>>[
+        ButtonSegment<ObjectVelocity>(
+          value: ObjectVelocity.low,
+          label: Text('Faible'),
+        ),
+        ButtonSegment<ObjectVelocity>(
+          value: ObjectVelocity.medium,
+          label: Text('Moyenne'),
+        ),
+  ButtonSegment<ObjectVelocity>(
+  value: ObjectVelocity.high,
+  label: Text('Elevée'),
+  )
+      ],
+      selected: <ObjectVelocity>{selection},
+      onSelectionChanged: (Set<ObjectVelocity> newSelection) {
+        setState(() {
+          // By default there is only a single segment that can be
+          // selected at one time, so its value is always the first
+          // item in the selected set.
+          selection = newSelection.first;
+          controller.setGateSpeedTo(selection);
+        });
       },
     );
   }
@@ -152,7 +147,7 @@ class _GateNumberSliderState extends State<GateNumberSlider> {
   Widget build(BuildContext context) {
     final int _nbG = (controller.sheepSettings["numberOfGates"]);
     double _value = _nbG.toDouble();
-    return Slider(
+    return Slider.adaptive(
       value: _value,
       min: 1.0,
       max: 10.0,

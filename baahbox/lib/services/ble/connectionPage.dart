@@ -217,25 +217,18 @@ class _ConnectionPageState extends State<ConnectionPage> {
     }
   }
 
+  Future<bool> _onBackPressed() {
+    bleController.scanner.stopScan();
+    //Get.toNamed(BBRoute.welcome.path);
+    Navigator.of(context).pop(true);
+    return Future<bool>.value(true);
+  }
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(BuildContext context) => WillPopScope(
+  onWillPop: _onBackPressed,
+  child: Scaffold(
         appBar: AppBar(
-            backgroundColor: Colors.white,
-            shadowColor: Theme.of(context).colorScheme.shadow,
-            titleTextStyle: TextStyle(
-                color: Colors.blueGrey,
-                fontWeight: FontWeight.bold,
-                fontSize: 18),
-            centerTitle: true,
-            title: Text("Connexion"),
-            leading: IconButton(
-                icon: Icon(
-                  Icons.arrow_back,
-                ),
-                onPressed: () {
-                  bleController.scanner.stopScan();
-                  Get.toNamed(BBRoute.welcome.path);
-                })),
+            title: Text("Connexion")),
         body: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -342,5 +335,5 @@ class _ConnectionPageState extends State<ConnectionPage> {
             ],
           ),
         ),
-      );
+      ));
 }

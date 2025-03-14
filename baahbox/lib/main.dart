@@ -17,6 +17,7 @@
  *
  */
 
+import 'package:baahbox/constants/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:baahbox/routes/routes.dart';
 import 'package:get/get.dart';
@@ -37,6 +38,9 @@ void main() async {
         initialRoute: BBRoute.welcome.path,
       getPages: BBRoutes.routes,
        debugShowCheckedModeBanner: false,
+       //theme: ThemeData.light(useMaterial3: true) ,
+       theme:ThemeData(colorSchemeSeed: BBColor.pinky.color, useMaterial3: true),
+       darkTheme: ThemeData.dark()
      ),
   );
 }

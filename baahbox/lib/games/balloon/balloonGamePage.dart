@@ -39,7 +39,6 @@ class BalloonGamePage extends StatelessWidget {
           foregroundColor: mainColor,
           titleTextStyle: TextStyle(
               color: mainColor, fontWeight: FontWeight.bold, fontSize: 25),
-          centerTitle: false,
           title: AutoSizeText("Fais exploser le ballon !", maxLines: 1),
           actions: [
             Container(
