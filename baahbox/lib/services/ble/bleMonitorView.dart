@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'getXble/getx_ble.dart';
 import 'dart:io' show Platform;
+import 'package:device_info_plus/device_info_plus.dart';
 
 class BleMonitorView extends GetView<GetxBle> {
   final Uuid serviceUuid = Uuid.parse('6E400001-B5A3-F393-E0A9-E50E24DCCA9E');
@@ -16,7 +17,7 @@ class BleMonitorView extends GetView<GetxBle> {
         padding: EdgeInsets.all(20),
         child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
           Text("État du bluetooth :",
-              style: Theme.of(context).textTheme.bodyMedium),
+              style: Theme.of(context).textTheme.bodyLarge),
           Obx(() => Text(
               switch (controller.bleStatusMonitor.rxBleStatus.value) {
                 BleStatus.unsupported =>
@@ -46,13 +47,14 @@ class BleMonitorView extends GetView<GetxBle> {
             height: 15,
           ),
           Text("Recherche de BaahBox :",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal)),
+              style: Theme.of(context).textTheme.bodyLarge),
           Obx(() => FilledButton(
               onPressed: controller.bleStatusMonitor.rxBleStatus.value ==
-                  BleStatus.ready ? () {
-                _startOrStopScan();
-              } : null,
-
+                      BleStatus.ready
+                  ? () {
+                      _startOrStopScan();
+                    }
+                  : null,
               child: controller.scanner.rxBleScannerState.value.scanIsInProgress
                   ? Padding(
                       padding: const EdgeInsets.all(5.0),
@@ -67,6 +69,7 @@ class BleMonitorView extends GetView<GetxBle> {
                             height: 20,
                             width: 20,
                             child: CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation(Theme.of(context).colorScheme.onPrimary),
                               strokeWidth: 3,
                             ),
                           )
@@ -81,13 +84,13 @@ class BleMonitorView extends GetView<GetxBle> {
     if (controller.bleStatusMonitor.rxBleStatus.value ==
         BleStatus.unauthorized) {
       if (Platform.isAndroid) {
-        Map<Permission, PermissionStatus> statuses = await [
-          Permission.bluetoothScan,
-          Permission.bluetoothAdvertise,
-          Permission.bluetoothConnect,
-          Permission.locationWhenInUse,
-          Permission.location
-        ].request();
+        DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+        AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+        Map<Permission, PermissionStatus> statuses =
+            (androidInfo.version.sdkInt <= 30)
+                ? await [Permission.location].request()
+                : await [Permission.bluetoothScan, Permission.bluetoothConnect]
+                    .request();
 
         bool hasPermanentlyDenied = statuses.entries.any((entry) {
           return entry.value.isPermanentlyDenied;

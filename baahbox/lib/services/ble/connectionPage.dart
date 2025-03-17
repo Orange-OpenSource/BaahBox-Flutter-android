@@ -242,8 +242,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
                           _connected
                               ? "Vous êtes connecté:"
                               : "Sélectionnez votre Baah Box: ",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold)))),
+                          style: Theme.of(context).textTheme.bodyLarge))),
               if (_connected)
                 ListTile(
                   leading: Image.asset('assets/images/Dashboard/tick.png',
@@ -254,8 +253,10 @@ class _ConnectionPageState extends State<ConnectionPage> {
                     _disconnect();
                   },
                   title: Text(appController.connectedDeviceName,
-                      style: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.bold)),
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyLarge
+                          ?.copyWith(fontWeight: FontWeight.bold)),
                   subtitle: Text(appController.connectedDeviceId),
                 ),
               SizedBox(
@@ -267,8 +268,10 @@ class _ConnectionPageState extends State<ConnectionPage> {
                     child: Padding(
                         padding: EdgeInsets.only(left: 20),
                         child: Text("Aucune BaahBox trouvée.",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold))))
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge
+                                ?.copyWith(fontWeight: FontWeight.bold))))
               else
                 Container(
                     margin: const EdgeInsets.all(5.0),

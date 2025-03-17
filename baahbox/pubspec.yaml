@@ -35,6 +35,8 @@ dependencies:
   permission_handler:
   custom_sliding_segmented_control: ^1.8.1
 
+  device_info_plus: ^9.1.2
+
   meta:
   auto_size_text:
   pdfx: ^2.6.0
