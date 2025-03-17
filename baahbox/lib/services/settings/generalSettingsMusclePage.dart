@@ -36,35 +36,27 @@ class MuscleSettingsView extends GetView<SettingsController> {
           const SizedBox(
             height: 12,
           ),
-          Obx(() => controller.currentSensor == Sensor.muscle
-              ? ListTile(
-                  title: Text("Muscle1"),
-                  trailing: Obx(() => Switch(
-                        value: controller.genericSettings["isSensor1On"],
-                        activeColor: Colors.red,
-                        onChanged: (bool val) {
-                          controller.setMuscle1To(val);
-                        },
-                      )))
-              : const SizedBox(
-                  height: 5,
-                )),
+          ListTile(
+              title: Text("Muscle1"),
+              trailing: Obx(() => Switch(
+                    value: controller.genericSettings["isSensor1On"],
+                    activeColor: Colors.red,
+                    onChanged: (bool val) {
+                      controller.setMuscle1To(val);
+                    },
+                  ))),
           const SizedBox(
             height: 5,
           ),
-          Obx(() => controller.currentSensor == Sensor.muscle
-              ? ListTile(
-                  title: Text("Muscle2"),
-                  trailing: Obx(() => Switch(
-                        value: controller.genericSettings["isSensor2On"],
-                        activeColor: Colors.red,
-                        onChanged: (bool val) {
-                          controller.setMuscle2To(val);
-                        },
-                      )))
-              : const SizedBox(
-                  height: 5,
-                ))
+          ListTile(
+              title: Text("Muscle2"),
+              trailing: Obx(() => Switch(
+                    value: controller.genericSettings["isSensor2On"],
+                    activeColor: Colors.red,
+                    onChanged: (bool val) {
+                      controller.setMuscle2To(val);
+                    },
+                  )))
         ]));
   }
 }

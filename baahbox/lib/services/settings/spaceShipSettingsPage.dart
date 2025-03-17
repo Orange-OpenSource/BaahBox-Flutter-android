@@ -102,7 +102,7 @@ class _SpeedSegmentedSegmentState extends State<SpeedSegmentedSegment> {
 
   @override
   Widget build(BuildContext context) {
-    ObjectVelocity selection = (controller.sheepSettings["gateVelocity"]) ?? ObjectVelocity.low ;
+    ObjectVelocity selection = (controller.spaceShipSettings["asteroidVelocity"]) ?? ObjectVelocity.low ;
     return SegmentedButton<ObjectVelocity>(
       segments: const <ButtonSegment<ObjectVelocity>>[
         ButtonSegment<ObjectVelocity>(

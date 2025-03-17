@@ -48,10 +48,12 @@ class SheepSettingsPage extends GetView<SettingsController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Obx(() => Text(
-                          'Nombre de barrières: '+  controller.sheepSettings["numberOfGates"].toString(),
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        )),
+                              'Nombre de barrières: ' +
+                                  controller.sheepSettings["numberOfGates"]
+                                      .toString(),
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            )),
                       ]))),
           const SizedBox(
             height: 15,
@@ -89,13 +91,12 @@ class SheepSettingsPage extends GetView<SettingsController> {
   }
 }
 
-
-
 class GateSpeedSegmentedSegment extends StatefulWidget {
   const GateSpeedSegmentedSegment({super.key});
 
   @override
-  State<GateSpeedSegmentedSegment> createState() => _GateSpeedSegmentedSegmentState();
+  State<GateSpeedSegmentedSegment> createState() =>
+      _GateSpeedSegmentedSegmentState();
 }
 
 class _GateSpeedSegmentedSegmentState extends State<GateSpeedSegmentedSegment> {
@@ -103,7 +104,8 @@ class _GateSpeedSegmentedSegmentState extends State<GateSpeedSegmentedSegment> {
 
   @override
   Widget build(BuildContext context) {
-    ObjectVelocity selection = (controller.sheepSettings["gateVelocity"]) ?? ObjectVelocity.low ;
+    ObjectVelocity selection =
+        (controller.sheepSettings["gateVelocity"]) ?? ObjectVelocity.low;
     return SegmentedButton<ObjectVelocity>(
       segments: const <ButtonSegment<ObjectVelocity>>[
         ButtonSegment<ObjectVelocity>(
@@ -114,10 +116,10 @@ class _GateSpeedSegmentedSegmentState extends State<GateSpeedSegmentedSegment> {
           value: ObjectVelocity.medium,
           label: Text('Moyenne'),
         ),
-  ButtonSegment<ObjectVelocity>(
-  value: ObjectVelocity.high,
-  label: Text('Elevée'),
-  )
+        ButtonSegment<ObjectVelocity>(
+          value: ObjectVelocity.high,
+          label: Text('Elevée'),
+        )
       ],
       selected: <ObjectVelocity>{selection},
       onSelectionChanged: (Set<ObjectVelocity> newSelection) {

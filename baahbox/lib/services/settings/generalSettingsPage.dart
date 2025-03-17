@@ -85,7 +85,10 @@ class GeneralSettingsPage extends GetView<SettingsController> {
                   const SizedBox(
                     height: 36,
                   ),
-                  MuscleSettingsView()
+                  Obx(()=> controller.currentSensor == Sensor.muscle ? MuscleSettingsView() :  const SizedBox(
+                    height: 0,
+                  ))
+
                 ],
               )
             : ListView(
@@ -122,15 +125,16 @@ class GeneralSettingsPage extends GetView<SettingsController> {
   }
 }
 
-
 class SensitivitySegmentedSegment extends StatefulWidget {
   const SensitivitySegmentedSegment({super.key});
 
   @override
-  State<SensitivitySegmentedSegment> createState() => _SensitivitySegmentedSegmentState();
+  State<SensitivitySegmentedSegment> createState() =>
+      _SensitivitySegmentedSegmentState();
 }
 
-class _SensitivitySegmentedSegmentState extends State<SensitivitySegmentedSegment> {
+class _SensitivitySegmentedSegmentState
+    extends State<SensitivitySegmentedSegment> {
   Sensitivity selection = Sensitivity.medium;
   final SettingsController controller = Get.find();
   @override
@@ -141,13 +145,14 @@ class _SensitivitySegmentedSegmentState extends State<SensitivitySegmentedSegmen
           value: Sensitivity.low,
           label: Text('Faible'),
         ),
-  ButtonSegment<Sensitivity>(
-  value: Sensitivity.medium,
-  label: Text('Moyenne'),
-  ),ButtonSegment<Sensitivity>(
-  value: Sensitivity.high,
-  label: Text('Elevée'),
-  ),
+        ButtonSegment<Sensitivity>(
+          value: Sensitivity.medium,
+          label: Text('Moyenne'),
+        ),
+        ButtonSegment<Sensitivity>(
+          value: Sensitivity.high,
+          label: Text('Elevée'),
+        ),
       ],
       selected: <Sensitivity>{selection},
       onSelectionChanged: (Set<Sensitivity> newSelection) {
@@ -175,7 +180,8 @@ class _SensorSegmentedSegmentState extends State<SensorSegmentedSegment> {
 
   @override
   Widget build(BuildContext context) {
-    Sensor selection = (controller.genericSettings["sensor"] as Sensor) ?? Sensor.muscle ;
+    Sensor selection =
+        (controller.genericSettings["sensor"] as Sensor) ?? Sensor.muscle;
     return SegmentedButton<Sensor>(
       segments: const <ButtonSegment<Sensor>>[
         ButtonSegment<Sensor>(
@@ -185,7 +191,8 @@ class _SensorSegmentedSegmentState extends State<SensorSegmentedSegment> {
         ButtonSegment<Sensor>(
           value: Sensor.arcadeJoystick,
           label: Text('Joystick'),
-        ),ButtonSegment<Sensor>(
+        ),
+        ButtonSegment<Sensor>(
           value: Sensor.button,
           label: Text('Button'),
         ),
@@ -204,8 +211,6 @@ class _SensorSegmentedSegmentState extends State<SensorSegmentedSegment> {
     );
   }
 }
-
-
 
 class RadioSensorChoice extends StatefulWidget {
   const RadioSensorChoice({super.key});
