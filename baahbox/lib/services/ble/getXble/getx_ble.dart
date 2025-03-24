@@ -47,6 +47,17 @@ class GetxBle extends GetxController {
     scanner = BleScanner(ble: ble, logMessage: bleLogger.addToLog);
     connector = BleDeviceConnector(ble: ble, logMessage: bleLogger.addToLog);
     interactor = BleDeviceInteractor(ble: ble, logMessage: bleLogger.addToLog);
+    init();
+  }
+
+  void init() {
+    bleStatusMonitor.rxBleStatus.listen((status) {
+      if(status!=BleStatus.ready)
+        scanner.stopScan();
+    })..onError((error, stackTrace) => {
+      if(scanner.rxBleScannerState.value.scanIsInProgress==true)
+        scanner.stopScan()
+    });
   }
 
   bool isBLEDeviceConnected() {

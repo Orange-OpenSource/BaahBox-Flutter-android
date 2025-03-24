@@ -39,7 +39,6 @@ class StarGamePage extends StatelessWidget {
           foregroundColor: mainColor,
           titleTextStyle: TextStyle(
               color: mainColor, fontWeight: FontWeight.bold, fontSize: 25),
-          centerTitle: true,
           title: AutoSizeText("Fais briller l'étoile !", maxLines: 1),
           actions: [
             Container(

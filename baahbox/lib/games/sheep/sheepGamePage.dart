@@ -39,7 +39,6 @@ class SheepGamePage extends StatelessWidget {
           foregroundColor: mainColor,
           titleTextStyle: TextStyle(
               color: mainColor, fontWeight: FontWeight.bold, fontSize: 25),
-          centerTitle: true,
           title:  AutoSizeText("Saute, Mouton, saute !", maxLines: 1),
           actions: [
             Container(

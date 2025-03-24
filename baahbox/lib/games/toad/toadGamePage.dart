@@ -39,7 +39,6 @@ class ToadGamePage extends StatelessWidget {
           foregroundColor: mainColor,
           titleTextStyle: TextStyle(
               color: mainColor, fontWeight: FontWeight.bold, fontSize: 20),
-          centerTitle: true,
           title: AutoSizeText("Slurp !", maxLines: 1),
           actions: [
             Container(

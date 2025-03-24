@@ -43,10 +43,6 @@ class _WelcomePageState extends State<WelcomePage> {
 
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
-          titleTextStyle: TextStyle(
-              color: mainColor, fontWeight: FontWeight.bold, fontSize: 25),
-          centerTitle: true,
           title: Text("Baah !"),
          // leading: null,
           automaticallyImplyLeading: false,
@@ -63,7 +59,6 @@ class _WelcomePageState extends State<WelcomePage> {
                 onPressed: () => Get.toNamed('/settings')),
           ],
         ),
-        backgroundColor: Colors.white,
         body: Container(
           child: ListView(
               padding: const EdgeInsets.all(0),
