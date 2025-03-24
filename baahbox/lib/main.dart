@@ -18,6 +18,8 @@
  */
 
 import 'package:baahbox/constants/enums.dart';
+import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:baahbox/routes/routes.dart';
 import 'package:get/get.dart';
@@ -25,22 +27,38 @@ import 'package:baahbox/controllers/appController.dart';
 import 'package:baahbox/services/settings/settingsController.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:baahbox/services/ble/getXble/getx_ble.dart';
+import 'dart:io' show Platform;
 
 void main() async {
   await GetStorage.init();
   final GetxBle bleController = Get.put(GetxBle());
   final Controller c = Get.put(Controller());
   final SettingsController settingsController = Get.put(SettingsController());
-
-  return runApp(
-     GetMaterialApp(
-        title: 'Baah Box Games!',
-        initialRoute: BBRoute.welcome.path,
-      getPages: BBRoutes.routes,
-       debugShowCheckedModeBanner: false,
-       //theme: ThemeData.light(useMaterial3: true) ,
-       theme:ThemeData(colorSchemeSeed: BBColor.pinky.color, useMaterial3: true),
-       darkTheme: ThemeData.dark()
-     ),
+  runApp(
+    DevicePreview(
+      enabled: !kReleaseMode && !Platform.isAndroid && !Platform.isIOS,
+      builder: (context) => const BaahBoxApp(), // Wrap your app
+    ),
   );
 }
+
+class BaahBoxApp extends StatelessWidget {
+  const BaahBoxApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GetMaterialApp(
+        title: 'Baah Box Games!',
+        initialRoute: BBRoute.welcome.path,
+        getPages: BBRoutes.routes,
+        debugShowCheckedModeBanner: false,
+        //theme: ThemeData.light(useMaterial3: true) ,
+        theme: ThemeData(
+            colorSchemeSeed: BBColor.pinky.color, useMaterial3: true),
+        darkTheme: ThemeData.dark(),
+        useInheritedMediaQuery: true,
+        locale: DevicePreview.locale(context),
+        builder: DevicePreview.appBuilder);
+  }
+}
+
