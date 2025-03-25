@@ -27,7 +27,10 @@ import 'package:baahbox/model/sensorInput.dart';
 import 'package:baahbox/controllers/appController.dart';
 import 'package:baahbox/routes/routes.dart';
 import 'package:baahbox/services/ble/getXble/getx_ble.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+import 'bleMonitorView.dart';
 
 class ConnectionPage extends StatefulWidget {
   const ConnectionPage({Key? key}) : super(key: key);
@@ -51,7 +54,6 @@ class _ConnectionPageState extends State<ConnectionPage> {
   final Uuid characteristicUuid =
       Uuid.parse('6E400003-B5A3-F393-E0A9-E50E24DCCA9E');
 
-  bool _scanning = false;
   bool _connected = false;
   String _logTexts = "";
 
@@ -86,23 +88,14 @@ class _ConnectionPageState extends State<ConnectionPage> {
     bleController.bleLogger.addToLog("waiting for BLE ready");
     bleController.ble.statusStream.listen((event) {
       bleController.bleLogger.addToLog("bleStatus updated");
-      switch (event) {
-        // Connected
-        case BleStatus.ready:
-          {
-            bleController.bleLogger.addToLog("starting Scanning");
-            bleController.scanner.rxBleScannerState.listen((scannerState) {
-              _scanning = scannerState.scanIsInProgress;
-              _foundBleUARTDevices = scannerState.discoveredDevices;
-              refreshScreen();
-            });
-            _startScan();
-            break;
-          }
-        default:
-          {
-            bleController.bleLogger.addToLog("ble not ready");
-          }
+
+      // Connected
+      if (event == BleStatus.ready) {
+        bleController.bleLogger.addToLog("starting Scanning");
+        bleController.scanner.rxBleScannerState.listen((scannerState) {
+          _foundBleUARTDevices = scannerState.discoveredDevices;
+          refreshScreen();
+        });
       }
     });
   }
@@ -116,15 +109,16 @@ class _ConnectionPageState extends State<ConnectionPage> {
     bool goForIt = false;
     //PermissionStatus permission;
     if (Platform.isAndroid) {
-      Map<Permission, PermissionStatus> statuses = await
-      [ Permission.bluetoothScan,
+      Map<Permission, PermissionStatus> statuses = await [
+        Permission.bluetoothScan,
         Permission.bluetoothAdvertise,
         Permission.bluetoothConnect,
-      Permission.locationWhenInUse, Permission.location].
-      request();
+        Permission.locationWhenInUse,
+        Permission.location
+      ].request();
       goForIt = true;
 
-   //   if (permission == PermissionStatus.granted) goForIt = true;
+      //   if (permission == PermissionStatus.granted) goForIt = true;
     } else if (Platform.isIOS) {
       goForIt = true;
     }
@@ -135,8 +129,6 @@ class _ConnectionPageState extends State<ConnectionPage> {
 
       bleController.scanner
           .startScan(BleScannerFilter(serviceId: [serviceUuid]));
-    } else {
-      await showNoPermissionDialog();
     }
   }
 
@@ -219,61 +211,39 @@ class _ConnectionPageState extends State<ConnectionPage> {
   void updateControllerWith(List<int> data) {
     var tuples = computeData(data);
     for ((MusclesInput, JoystickInput) tuple in tuples) {
-    //  print("${tuple.$1.describe()}, ${tuple.$2.describe()}");
+      //  print("${tuple.$1.describe()}, ${tuple.$2.describe()}");
       appController.setJoystickTo(tuple.$2);
       appController.setMusclesTo(tuple.$1);
     }
   }
 
+  Future<bool> _onBackPressed() {
+    bleController.scanner.stopScan();
+    //Get.toNamed(BBRoute.welcome.path);
+    Navigator.of(context).pop(true);
+    return Future<bool>.value(true);
+  }
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(BuildContext context) => WillPopScope(
+  onWillPop: _onBackPressed,
+  child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
-          shadowColor: Theme.of(context).colorScheme.shadow,
-          titleTextStyle: TextStyle(
-              color: Colors.blueGrey,
-              fontWeight: FontWeight.bold,
-              fontSize: 18),
-          centerTitle: true,
-          title: Text("Connexion"),
-          leading: IconButton(
-              icon: Icon(Icons.arrow_back,),
-              onPressed: () {
-                bleController.scanner.stopScan();
-                Get.toNamed(BBRoute.welcome.path);
-              }),
-          actions: [
-            IconButton(
-              icon: Image.asset('assets/images/Dashboard/bluetooth.png',
-                  color: Colors.lightBlueAccent, height: 20, width: 20),
-              onPressed: () {
-                if (_scanning) {
-                  bleController.scanner.stopScan();
-                } else {
-                  _startScan();
-                }
-              },
-            ),
-            SizedBox(
-              width: 25,
-            ),
-          ],
-        ),
+            title: Text("Connexion")),
         body: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              SizedBox(
-                height: 15,
-              ),
+              BleMonitorView(),
               Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                      padding: EdgeInsets.only(left:20),
-                      child: Text(_connected
-                      ? "Vous êtes connecté:"
-                      : "Sélectionnez votre Baah Box: ",
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)))),
+                      padding: EdgeInsets.only(left: 20),
+                      child: Text(
+                          _connected
+                              ? "Vous êtes connecté:"
+                              : "Sélectionnez votre Baah Box: ",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold)))),
               if (_connected)
                 ListTile(
                   leading: Image.asset('assets/images/Dashboard/tick.png',
@@ -291,36 +261,46 @@ class _ConnectionPageState extends State<ConnectionPage> {
               SizedBox(
                 height: 15,
               ),
-              Container(
-                  margin: const EdgeInsets.all(5.0),
-                  height: 75,
-                  child: ListView.builder(
-                    itemCount: _foundBleUARTDevices.length,
-                    itemBuilder: (context, index) => ListTile(
-                      leading: isDeviceConnectedToApp(
-                              _foundBleUARTDevices[index].id)
-                          ? const Icon(Icons.link, color: Colors.blue)
-                          : const Icon(Icons
-                              .link_off_outlined),
-                      dense: false,
-                      enabled: true,
-                      onTap: () async {
-                        !_connected ? onConnectDevice(index) : _disconnect();
-                      },
-                      title: Text(_foundBleUARTDevices[index].name,
-                          style: TextStyle(
-                              color: _connected ? Colors.black : Colors.blue)),
-                      subtitle: Text(
-                        _foundBleUARTDevices[index].id,
+              if (_foundBleUARTDevices.length <= 0)
+                Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                        padding: EdgeInsets.only(left: 20),
+                        child: Text("Aucune BaahBox trouvée.",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold))))
+              else
+                Container(
+                    margin: const EdgeInsets.all(5.0),
+                    height: 75,
+                    child: ListView.builder(
+                      itemCount: _foundBleUARTDevices.length,
+                      itemBuilder: (context, index) => ListTile(
+                        leading: isDeviceConnectedToApp(
+                                _foundBleUARTDevices[index].id)
+                            ? const Icon(Icons.link, color: Colors.blue)
+                            : const Icon(Icons.link_off_outlined),
+                        dense: false,
+                        enabled: true,
+                        onTap: () async {
+                          !_connected ? onConnectDevice(index) : _disconnect();
+                        },
+                        title: Text(_foundBleUARTDevices[index].name,
+                            style: TextStyle(
+                                color:
+                                    _connected ? Colors.black : Colors.blue)),
+                        subtitle: Text(
+                          _foundBleUARTDevices[index].id,
+                        ),
                       ),
-                    ),
-                  )),
+                    )),
               SizedBox(
                 height: 10,
               ),
               Padding(
                   padding: EdgeInsets.all(5),
-                  child: const Text("Données reçues:", textAlign:TextAlign.left )),
+                  child:
+                      const Text("Données reçues:", textAlign: TextAlign.left)),
               Container(
                 margin: const EdgeInsets.all(5.0),
                 width: 1400,
@@ -331,8 +311,9 @@ class _ConnectionPageState extends State<ConnectionPage> {
                 child: _connected
                     ? Obx(() => Padding(
                         padding: EdgeInsets.all(10),
-                        child:
-                            Text(appController.musclesInput.describe() + "\n" + appController.joystickInput.describe())))
+                        child: Text(appController.musclesInput.describe() +
+                            "\n" +
+                            appController.joystickInput.describe())))
                     : const Text(""),
               ),
               SizedBox(
@@ -354,30 +335,5 @@ class _ConnectionPageState extends State<ConnectionPage> {
             ],
           ),
         ),
-      );
-
-  Future<void> showNoPermissionDialog() async => showDialog<void>(
-        context: context,
-        barrierDismissible: false, // user must tap button!
-        builder: (BuildContext context) => AlertDialog(
-          title: const Text('No location permission '),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                const Text('No location permission granted.'),
-                const Text(
-                    'Location permission is required for BLE to function.'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Acknowledge'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        ),
-      );
+      ));
 }

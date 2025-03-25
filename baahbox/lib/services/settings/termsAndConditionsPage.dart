@@ -29,29 +29,13 @@ class TermsAndConditionsPage extends StatelessWidget {
 
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
-          titleTextStyle: TextStyle(
-              color: Colors.blueGrey,
-              fontWeight: FontWeight.bold,
-              fontSize: 25),
-          centerTitle: true,
           title: Text("A propos"),
         ),
-        backgroundColor: Colors.white,
         body:ListView(
             padding: const EdgeInsets.all(0),
             children:
             [
-              Card(
-                shape: ContinuousRectangleBorder(),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child:
-                  const Text('',),),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
+
               ListTile(
                 trailing: Icon(Icons.arrow_forward_outlined),
                 dense: false,
