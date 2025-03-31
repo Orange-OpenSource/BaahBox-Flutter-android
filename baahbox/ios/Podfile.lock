@@ -7,14 +7,15 @@ PODS:
     - FlutterMacOS
   - pdfx (1.0.0):
     - Flutter
-  - permission_handler_apple (9.1.1):
+  - permission_handler_apple (9.3.0):
     - Flutter
-  - Protobuf (3.22.3)
+  - Protobuf (3.29.3)
   - reactive_ble_mobile (0.0.1):
     - Flutter
+    - FlutterMacOS
     - Protobuf (~> 3.5)
     - SwiftProtobuf (~> 1.0)
-  - SwiftProtobuf (1.21.0)
+  - SwiftProtobuf (1.29.0)
 
 DEPENDENCIES:
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
@@ -22,7 +23,7 @@ DEPENDENCIES:
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - pdfx (from `.symlinks/plugins/pdfx/ios`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
-  - reactive_ble_mobile (from `.symlinks/plugins/reactive_ble_mobile/ios`)
+  - reactive_ble_mobile (from `.symlinks/plugins/reactive_ble_mobile/darwin`)
 
 SPEC REPOS:
   trunk:
@@ -41,17 +42,17 @@ EXTERNAL SOURCES:
   permission_handler_apple:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
   reactive_ble_mobile:
-    :path: ".symlinks/plugins/reactive_ble_mobile/ios"
+    :path: ".symlinks/plugins/reactive_ble_mobile/darwin"
 
 SPEC CHECKSUMS:
-  device_info_plus: 335f3ce08d2e174b9fdc3db3db0f4e3b1f66bd89
-  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  path_provider_foundation: 608fcb11be570ce83519b076ab6a1fffe2474f05
+  device_info_plus: 71ffc6ab7634ade6267c7a93088ed7e4f74e5896
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
   pdfx: 77f4dddc48361fbb01486fa2bdee4532cbb97ef3
-  permission_handler_apple: 3787117e48f80715ff04a3830ca039283d6a4f29
-  Protobuf: d03938d5f7e974a97964fb0567771e36fbe9ecce
-  reactive_ble_mobile: 027a1eb013960fbedab38150e314254fdce8887f
-  SwiftProtobuf: afced68785854575756db965e9da52bbf3dc45e7
+  permission_handler_apple: 4ed2196e43d0651e8ff7ca3483a069d469701f2d
+  Protobuf: e2de96d939c642ce8da186343ff8929b35223212
+  reactive_ble_mobile: ea97709e18fa6f0b0592909725d7ae7e1c595b64
+  SwiftProtobuf: b7aa08087e2ab6d162862d143020091254095f69
 
 PODFILE CHECKSUM: c4c93c5f6502fe2754f48404d3594bf779584011
 
