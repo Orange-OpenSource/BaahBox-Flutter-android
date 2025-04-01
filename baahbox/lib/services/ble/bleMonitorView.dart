@@ -68,6 +68,7 @@ class BleMonitorView extends GetView<GetxBle> {
                             width: 20,
                             child: CircularProgressIndicator(
                               strokeWidth: 3,
+                              color: Theme.of(context).colorScheme.onPrimary
                             ),
                           )
                         ],

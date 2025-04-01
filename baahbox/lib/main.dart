@@ -39,7 +39,13 @@ void main() async {
       getPages: BBRoutes.routes,
        debugShowCheckedModeBanner: false,
        //theme: ThemeData.light(useMaterial3: true) ,
-       theme:ThemeData(colorSchemeSeed: BBColor.pinky.color, useMaterial3: true),
+       theme:ThemeData(
+           colorScheme: ColorScheme.fromSeed(
+             seedColor: BBColor.violet.color,
+             secondary: BBColor.pinky.color,  // Overrides the secondary color
+           )
+          , useMaterial3: true
+       ),
        darkTheme: ThemeData.dark()
      ),
   );

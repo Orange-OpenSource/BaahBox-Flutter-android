@@ -23,7 +23,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:baahbox/constants/enums.dart';
 import 'package:baahbox/services/settings/settingsController.dart';
-import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 
 class ToadSettingsPage extends GetView<SettingsController> {
   final mainColor = BBGameList.toad.baseColor.color;
@@ -70,11 +69,13 @@ class ToadSettingsPage extends GetView<SettingsController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Obx(() => Text(
-                          'Temps pendant lequel les mouches ne bougent pas (en s): ' +
-                              controller.toadSettings["flySteadyTime"].round().toString(),
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        )),
+                              'Temps pendant lequel les mouches ne bougent pas (en s): ' +
+                                  controller.toadSettings["flySteadyTime"]
+                                      .round()
+                                      .toString(),
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            )),
                       ]))),
           const SizedBox(
             height: 12,
@@ -90,23 +91,21 @@ class ToadSettingsPage extends GetView<SettingsController> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                         Text(
+                        Text(
                           'Mode de tirs: ',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                       ]))),
           const SizedBox(
             height: 12,
           ),
-          ListTile(
+          Obx(() => SwitchListTile.adaptive(
               title: Text("Tirs automatiques"),
-              trailing: Obx(() => Switch(
-                value: controller.toadSettings["iShootingModeAutomatic"],
-                activeColor: Colors.red,
-                onChanged: (bool val) {
-                  controller.setToadShootingModeToAutomatic(val);
-                },
-              ))),
+              value: controller.toadSettings["iShootingModeAutomatic"],
+              onChanged: (bool newValue) {
+                controller.setToadShootingModeToAutomatic(newValue);
+              })),
           const SizedBox(
             height: 5,
           ),
@@ -115,7 +114,6 @@ class ToadSettingsPage extends GetView<SettingsController> {
     );
   }
 }
-
 
 class FlyDurationSlider extends StatefulWidget {
   const FlyDurationSlider({super.key});
@@ -131,12 +129,15 @@ class _FlyDurationSliderState extends State<FlyDurationSlider> {
   Widget build(BuildContext context) {
     final double _flyDuration = controller.toadSettings["flySteadyTime"];
     double _value = _flyDuration;
-    return Slider(
+    return Slider.adaptive(
       value: _value,
       min: 1,
       max: 5,
       divisions: 5,
       label: _value.floor().toString(),
+      semanticFormatterCallback: (double newValue) {
+        return '${newValue.round()} secondes';
+      },
       onChanged: (double value) {
         setState(() {
           _value = value.floorToDouble();
@@ -146,7 +147,6 @@ class _FlyDurationSliderState extends State<FlyDurationSlider> {
     );
   }
 }
-
 
 class FlyNumberSlider extends StatefulWidget {
   const FlyNumberSlider({super.key});
@@ -162,12 +162,15 @@ class _FlyNumberSliderState extends State<FlyNumberSlider> {
   Widget build(BuildContext context) {
     final int _nbF = controller.toadSettings["numberOfFlies"];
     double _value = _nbF.toDouble();
-    return Slider(
+    return Slider.adaptive(
       value: _value,
       min: 3.0,
       max: 10.0,
       divisions: 7,
       label: _value.round().toString(),
+      semanticFormatterCallback: (double newValue) {
+        return '${newValue.round()}';
+      },
       onChanged: (double value) {
         setState(() {
           _value = value;
