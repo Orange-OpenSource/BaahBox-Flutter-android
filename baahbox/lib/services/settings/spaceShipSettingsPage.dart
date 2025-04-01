@@ -23,7 +23,7 @@ import 'package:get/get.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:baahbox/constants/enums.dart';
 import 'package:baahbox/services/settings/settingsController.dart';
-import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
+
 
 class SpaceShipSettingsPage extends GetView<SettingsController> {
   final mainColor = BBColor.blueGreen.color;
@@ -79,7 +79,7 @@ class SpaceShipSettingsPage extends GetView<SettingsController> {
             height: 12,
           ),
           Align(
-              alignment: Alignment.center, child: SpeedSegmentedSegment()),
+              alignment: Alignment.center, child: SpeedSelectionView()),
           const SizedBox(
             height: 24,
           ),
@@ -90,44 +90,52 @@ class SpaceShipSettingsPage extends GetView<SettingsController> {
 }
 
 
-class SpeedSegmentedSegment extends StatefulWidget {
-  const SpeedSegmentedSegment({super.key});
+
+class SpeedSelectionView extends StatefulWidget {
+  const SpeedSelectionView({super.key});
 
   @override
-  State<SpeedSegmentedSegment> createState() => _SpeedSegmentedSegmentState();
+  State<SpeedSelectionView> createState() => _SpeedSelectionViewState();
 }
 
-class _SpeedSegmentedSegmentState extends State<SpeedSegmentedSegment> {
+class _SpeedSelectionViewState extends State<SpeedSelectionView> {
   final SettingsController controller = Get.find();
-
+  late ObjectVelocity? _selection;
+  void onSelectionChanged (ObjectVelocity? value) {
+    setState(() {
+      _selection = value;
+      if (value != null) {
+        controller.setAsteroidSpeedTo(value);
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
-    ObjectVelocity selection = (controller.spaceShipSettings["asteroidVelocity"]) ?? ObjectVelocity.low ;
-    return SegmentedButton<ObjectVelocity>(
-      segments: const <ButtonSegment<ObjectVelocity>>[
-        ButtonSegment<ObjectVelocity>(
-          value: ObjectVelocity.low,
-          label: Text('Faible'),
-        ),
-        ButtonSegment<ObjectVelocity>(
-          value: ObjectVelocity.medium,
-          label: Text('Moyenne'),
-        ),
-        ButtonSegment<ObjectVelocity>(
-          value: ObjectVelocity.high,
-          label: Text('Elevée'),
-        )
+    _selection =
+        (controller.spaceShipSettings["asteroidVelocity"]) ?? ObjectVelocity.low;
+    return Column(
+      children: <Widget>[
+        RadioListTile.adaptive(
+            title:const Text('Faible'),
+            value: ObjectVelocity.low,
+            groupValue: _selection,
+            toggleable: true,
+            onChanged:  onSelectionChanged),
+        RadioListTile.adaptive(
+            title:const Text('Moyenne'),
+            value: ObjectVelocity.medium,
+            groupValue: _selection,
+            toggleable: true,
+            onChanged: onSelectionChanged),
+
+        RadioListTile.adaptive(
+            title:const Text('Elevée'),
+            value: ObjectVelocity.high,
+            groupValue: _selection,
+            toggleable: true,
+            onChanged: onSelectionChanged),
+
       ],
-      selected: <ObjectVelocity>{selection},
-      onSelectionChanged: (Set<ObjectVelocity> newSelection) {
-        setState(() {
-          // By default there is only a single segment that can be
-          // selected at one time, so its value is always the first
-          // item in the selected set.
-          selection = newSelection.first;
-          controller.setAsteroidSpeedTo(selection);
-        });
-      },
     );
   }
 }
@@ -152,6 +160,9 @@ class _GateNumberSliderState extends State<GateNumberSlider> {
       max: 10.0,
       divisions: 10,
       label: _value.round().toString(),
+      semanticFormatterCallback: (double newValue) {
+        return '${newValue.round()} vaisseaux';
+      },
       onChanged: (double value) {
         setState(() {
           _value = value;

@@ -71,6 +71,7 @@ class BleMonitorView extends GetView<GetxBle> {
                             child: CircularProgressIndicator(
                               valueColor: AlwaysStoppedAnimation(Theme.of(context).colorScheme.onPrimary),
                               strokeWidth: 3,
+                              color: Theme.of(context).colorScheme.onPrimary
                             ),
                           )
                         ],

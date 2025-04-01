@@ -32,7 +32,7 @@ class MeteorManager extends TimerComponent with HasGameRef<SpaceShipGame> {
   final meteor1Sprite =
       Sprite(Flame.images.fromCache('Games/Spaceship/meteor_01@3x.png'));
 
-  MeteorManager() : super(period: 2, repeat: true);
+  MeteorManager() : super(period: 3, repeat: true);
 
 
   @override
