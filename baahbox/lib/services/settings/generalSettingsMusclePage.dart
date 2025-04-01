@@ -36,27 +36,21 @@ class MuscleSettingsView extends GetView<SettingsController> {
           const SizedBox(
             height: 12,
           ),
-          ListTile(
-              title: Text("Muscle1"),
-              trailing: Obx(() => Switch(
-                    value: controller.genericSettings["isSensor1On"],
-                    activeColor: Colors.red,
-                    onChanged: (bool val) {
-                      controller.setMuscle1To(val);
-                    },
-                  ))),
+          Obx(() => SwitchListTile.adaptive(
+              title: const Text("Muscle1"),
+              value: controller.genericSettings["isSensor1On"],
+              onChanged: (bool newValue) {
+                controller.setMuscle1To(newValue);
+              })),
           const SizedBox(
             height: 5,
           ),
-          ListTile(
-              title: Text("Muscle2"),
-              trailing: Obx(() => Switch(
-                    value: controller.genericSettings["isSensor2On"],
-                    activeColor: Colors.red,
-                    onChanged: (bool val) {
-                      controller.setMuscle2To(val);
-                    },
-                  )))
+          Obx(() => SwitchListTile.adaptive(
+              title: const Text("Muscle2"),
+              value: controller.genericSettings["isSensor2On"],
+              onChanged: (bool newValue) {
+                controller.setMuscle2To(newValue);
+              })),
         ]));
   }
 }

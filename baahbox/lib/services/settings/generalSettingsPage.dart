@@ -23,7 +23,6 @@ import 'package:get/get.dart';
 import 'package:baahbox/constants/enums.dart';
 import 'package:baahbox/controllers/appController.dart';
 import 'package:baahbox/services/settings/settingsController.dart';
-import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 
 import 'generalSettingsMusclePage.dart';
 
@@ -81,14 +80,15 @@ class GeneralSettingsPage extends GetView<SettingsController> {
                       padding: EdgeInsets.only(right: 16, top: 8),
                       child: Align(
                           alignment: Alignment.centerRight,
-                          child: SensorSegmentedSegment())),
+                          child: SensitivitySelectionView())),
                   const SizedBox(
                     height: 36,
                   ),
-                  Obx(()=> controller.currentSensor == Sensor.muscle ? MuscleSettingsView() :  const SizedBox(
-                    height: 0,
-                  ))
-
+                  Obx(() => controller.currentSensor == Sensor.muscle
+                      ? MuscleSettingsView()
+                      : const SizedBox(
+                          height: 0,
+                        ))
                 ],
               )
             : ListView(
@@ -125,89 +125,51 @@ class GeneralSettingsPage extends GetView<SettingsController> {
   }
 }
 
-class SensitivitySegmentedSegment extends StatefulWidget {
-  const SensitivitySegmentedSegment({super.key});
+class SensitivitySelectionView extends StatefulWidget {
+  const SensitivitySelectionView({super.key});
 
   @override
-  State<SensitivitySegmentedSegment> createState() =>
-      _SensitivitySegmentedSegmentState();
+  State<SensitivitySelectionView> createState() =>
+      _SensitivitySelectionViewState();
 }
 
-class _SensitivitySegmentedSegmentState
-    extends State<SensitivitySegmentedSegment> {
-  Sensitivity selection = Sensitivity.medium;
+class _SensitivitySelectionViewState extends State<SensitivitySelectionView> {
   final SettingsController controller = Get.find();
-  @override
-  Widget build(BuildContext context) {
-    return SegmentedButton<Sensitivity>(
-      segments: const <ButtonSegment<Sensitivity>>[
-        ButtonSegment<Sensitivity>(
-          value: Sensitivity.low,
-          label: Text('Faible'),
-        ),
-        ButtonSegment<Sensitivity>(
-          value: Sensitivity.medium,
-          label: Text('Moyenne'),
-        ),
-        ButtonSegment<Sensitivity>(
-          value: Sensitivity.high,
-          label: Text('Elevée'),
-        ),
-      ],
-      selected: <Sensitivity>{selection},
-      onSelectionChanged: (Set<Sensitivity> newSelection) {
-        setState(() {
-          // By default there is only a single segment that can be
-          // selected at one time, so its value is always the first
-          // item in the selected set.
-          selection = newSelection.first;
-          controller.updateSensitivityTo(selection);
-        });
-      },
-    );
+  late Sensitivity? _selection;
+  void onSelectionChanged (Sensitivity? value) {
+    setState(() {
+      _selection = value;
+      if (value != null) {
+        controller.updateSensitivityTo(value);
+      }
+    });
   }
-}
-
-class SensorSegmentedSegment extends StatefulWidget {
-  const SensorSegmentedSegment({super.key});
-
-  @override
-  State<SensorSegmentedSegment> createState() => _SensorSegmentedSegmentState();
-}
-
-class _SensorSegmentedSegmentState extends State<SensorSegmentedSegment> {
-  final SettingsController controller = Get.find();
-
   @override
   Widget build(BuildContext context) {
-    Sensor selection =
-        (controller.genericSettings["sensor"] as Sensor) ?? Sensor.muscle;
-    return SegmentedButton<Sensor>(
-      segments: const <ButtonSegment<Sensor>>[
-        ButtonSegment<Sensor>(
-          value: Sensor.muscle,
-          label: Text('Muscle'),
-        ),
-        ButtonSegment<Sensor>(
-          value: Sensor.arcadeJoystick,
-          label: Text('Joystick'),
-        ),
-        ButtonSegment<Sensor>(
-          value: Sensor.button,
-          label: Text('Button'),
-        ),
+    _selection =  Sensitivity.medium;
+    return Column(
+      children: <Widget>[
+        RadioListTile.adaptive(
+            title:const Text('Faible'),
+            value: Sensitivity.low,
+            groupValue: _selection,
+            toggleable: true,
+            onChanged:  onSelectionChanged),
+        RadioListTile.adaptive(
+            title:const Text('Moyenne'),
+            value: Sensitivity.medium,
+            groupValue: _selection,
+            toggleable: true,
+            onChanged: onSelectionChanged),
+
+        RadioListTile.adaptive(
+            title:const Text('Elevée'),
+            value: Sensitivity.high,
+            groupValue: _selection,
+            toggleable: true,
+            onChanged: onSelectionChanged),
+
       ],
-      selected: <Sensor>{selection},
-      onSelectionChanged: (Set<Sensor> newSelection) {
-        setState(() {
-          // By default there is only a single segment that can be
-          // selected at one time, so its value is always the first
-          // item in the selected set.
-          selection = newSelection.first;
-          print(selection);
-          controller.updateSensorTo(selection);
-        });
-      },
     );
   }
 }

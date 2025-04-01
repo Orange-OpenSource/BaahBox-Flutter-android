@@ -51,22 +51,30 @@
             android:value="2" />
 
    </application>
+    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
+
+    <!-- required for API 18 - 30 -->
+    <uses-permission
+        android:name="android.permission.BLUETOOTH"
+        android:maxSdkVersion="30" />
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_ADMIN"
+        android:maxSdkVersion="30" />
+
+    <!-- required for API 23 - 30 -->
+    <uses-permission-sdk-23
+        android:name="android.permission.ACCESS_COARSE_LOCATION"
+        android:maxSdkVersion="30" />
+    <uses-permission-sdk-23
+        android:name="android.permission.ACCESS_FINE_LOCATION"
+        android:maxSdkVersion="30" />
+
 
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" android:usesPermissionFlags="neverForLocation" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- android:maxSdkVersion="30" / -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!--android:maxSdkVersion="30" / -->
 
-    <!-- Permissions options for the `nearby devices` group -->
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
+    <!-- Needed only if your app communicates with already-paired Bluetooth
+         devices. -->
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
-    <uses-permission android:name="android.permission.NEARBY_WIFI_DEVICES" />
-
-
-    <!--    &lt;!&ndash; Request legacy Bluetooth permissions on older devices. &ndash;&gt;-->
-    <!-- uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="33" / -->
-<!--    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"  android:maxSdkVersion="30" />-->
-<!--    <uses-permission android:name="android.permission.BLUETOOTH"  />-->
 
 
 </manifest>

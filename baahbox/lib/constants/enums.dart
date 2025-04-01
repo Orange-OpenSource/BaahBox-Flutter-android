@@ -113,6 +113,12 @@ enum BBGameList {
     mainAsset: 'assets/images/Dashboard/menu_toad.png',
     baseColor: BBColor.greyGreen,
     numberOfSensors: 2,
+  ),
+  maze(
+    title: 'Labyrinthe',
+    mainAsset: 'assets/images/Dashboard/menu_toad.png',
+    baseColor: BBColor.lightGreen,
+    numberOfSensors: 1,
   );
 
   const BBGameList({

@@ -33,11 +33,14 @@ dependencies:
   cupertino_icons:
   flutter_reactive_ble: ^5.4.0
   permission_handler:
-  custom_sliding_segmented_control: ^1.8.5
+
+  device_info_plus: ^10.1.2
 
   meta:
   auto_size_text:
   pdfx: ^2.8.0
+
+  device_preview: ^1.1.0
 
 dev_dependencies:
   flutter_test:

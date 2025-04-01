@@ -23,7 +23,6 @@ import 'package:get/get.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:baahbox/constants/enums.dart';
 import 'package:baahbox/services/settings/settingsController.dart';
-import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 
 class SheepSettingsPage extends GetView<SettingsController> {
   final mainColor = BBColor.pinky.color;
@@ -81,7 +80,7 @@ class SheepSettingsPage extends GetView<SettingsController> {
             height: 12,
           ),
           Align(
-              alignment: Alignment.center, child: GateSpeedSegmentedSegment()),
+              alignment: Alignment.center, child: GateSpeedSelectionView()),
           const SizedBox(
             height: 24,
           ),
@@ -91,49 +90,55 @@ class SheepSettingsPage extends GetView<SettingsController> {
   }
 }
 
-class GateSpeedSegmentedSegment extends StatefulWidget {
-  const GateSpeedSegmentedSegment({super.key});
+class GateSpeedSelectionView extends StatefulWidget {
+  const GateSpeedSelectionView({super.key});
 
   @override
-  State<GateSpeedSegmentedSegment> createState() =>
-      _GateSpeedSegmentedSegmentState();
+  State<GateSpeedSelectionView> createState() => _GateSpeedSelectionViewState();
 }
 
-class _GateSpeedSegmentedSegmentState extends State<GateSpeedSegmentedSegment> {
+class _GateSpeedSelectionViewState extends State<GateSpeedSelectionView> {
   final SettingsController controller = Get.find();
-
+  late ObjectVelocity? _selection;
+  void onSelectionChanged (ObjectVelocity? value) {
+    setState(() {
+      _selection = value;
+      if (value != null) {
+        controller.setGateSpeedTo(value);
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
-    ObjectVelocity selection =
+    _selection =
         (controller.sheepSettings["gateVelocity"]) ?? ObjectVelocity.low;
-    return SegmentedButton<ObjectVelocity>(
-      segments: const <ButtonSegment<ObjectVelocity>>[
-        ButtonSegment<ObjectVelocity>(
-          value: ObjectVelocity.low,
-          label: Text('Faible'),
-        ),
-        ButtonSegment<ObjectVelocity>(
-          value: ObjectVelocity.medium,
-          label: Text('Moyenne'),
-        ),
-        ButtonSegment<ObjectVelocity>(
-          value: ObjectVelocity.high,
-          label: Text('Elevée'),
-        )
+    return Column(
+      children: <Widget>[
+        RadioListTile.adaptive(
+            title:const Text('Faible'),
+            value: ObjectVelocity.low,
+            groupValue: _selection,
+            toggleable: true,
+            onChanged:  onSelectionChanged),
+        RadioListTile.adaptive(
+            title:const Text('Moyenne'),
+            value: ObjectVelocity.medium,
+            groupValue: _selection,
+            toggleable: true,
+            onChanged: onSelectionChanged),
+
+        RadioListTile.adaptive(
+            title:const Text('Elevée'),
+            value: ObjectVelocity.high,
+            groupValue: _selection,
+            toggleable: true,
+            onChanged: onSelectionChanged),
+
       ],
-      selected: <ObjectVelocity>{selection},
-      onSelectionChanged: (Set<ObjectVelocity> newSelection) {
-        setState(() {
-          // By default there is only a single segment that can be
-          // selected at one time, so its value is always the first
-          // item in the selected set.
-          selection = newSelection.first;
-          controller.setGateSpeedTo(selection);
-        });
-      },
     );
   }
 }
+
 
 class GateNumberSlider extends StatefulWidget {
   const GateNumberSlider({super.key});
@@ -155,6 +160,9 @@ class _GateNumberSliderState extends State<GateNumberSlider> {
       max: 10.0,
       divisions: 10,
       label: _value.round().toString(),
+      semanticFormatterCallback: (double newValue) {
+        return '${newValue.round()} barrière';
+      },
       onChanged: (double value) {
         setState(() {
           _value = value;
