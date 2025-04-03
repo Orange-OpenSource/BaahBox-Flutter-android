@@ -80,7 +80,7 @@ class GeneralSettingsPage extends GetView<SettingsController> {
                       padding: EdgeInsets.only(right: 16, top: 8),
                       child: Align(
                           alignment: Alignment.centerRight,
-                          child: SensitivitySelectionView())),
+                          child: RadioSensorChoice())),
                   const SizedBox(
                     height: 36,
                   ),
@@ -182,49 +182,42 @@ class RadioSensorChoice extends StatefulWidget {
 
 class _RadioSensorChoiceState extends State<RadioSensorChoice> {
   final SettingsController controller = Get.find();
-  int _value = 1;
-
+  late Sensor? _selection;
+  void onSelectionChanged (Sensor? value) {
+    setState(() {
+      _selection = value;
+      if (value != null) {
+        controller.updateSensorTo(value);
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
+    _selection = controller.genericSettings["sensor"];
     return Column(
       children: [
         ListTile(
           title: Text("button"),
           leading: Radio.adaptive(
-            groupValue: _value,
-            value: 1,
-            onChanged: (int? value) {
-              setState(() {
-                _value = value ?? 0;
-                controller.setNumberOfGatesTo(value);
-              });
-            },
+            groupValue: _selection,
+            value: Sensor.button,
+            onChanged: onSelectionChanged,
           ),
         ),
         ListTile(
           title: Text("joystick"),
           leading: Radio.adaptive(
-            groupValue: _value,
-            value: 2,
-            onChanged: (int? value) {
-              setState(() {
-                _value = value ?? 0;
-                controller.setNumberOfGatesTo(value);
-              });
-            },
+            groupValue: _selection,
+            value: Sensor.arcadeJoystick,
+            onChanged: onSelectionChanged,
           ),
         ),
         ListTile(
           title: Text("muscle"),
           leading: Radio.adaptive(
-            groupValue: _value,
-            value: 3,
-            onChanged: (int? value) {
-              setState(() {
-                _value = value ?? 0;
-                controller.setNumberOfGatesTo(value);
-              });
-            },
+            groupValue: _selection,
+            value: Sensor.muscle,
+            onChanged: onSelectionChanged,
           ),
         ),
       ],
