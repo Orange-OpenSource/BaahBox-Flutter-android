@@ -33,7 +33,6 @@ dependencies:
   cupertino_icons:
   flutter_reactive_ble: ^5.4.0
   permission_handler:
-  custom_sliding_segmented_control: ^1.8.5
 
   meta:
   auto_size_text:
