@@ -19,6 +19,8 @@
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/experimental.dart';
+import 'package:flame/extensions.dart';
 import 'package:flutter/rendering.dart';
 
 import '../MazeFactory.dart';
@@ -30,12 +32,13 @@ class MazeComponent extends PositionComponent with HasVisibility,
     HasGameReference<MazeGame> {
 
   late final MazeFactory mazeController;
-  late Vector2 exitPosition;
-  late Vector2 startPosition;
+  late Rectangle exitCell;
+  late Rectangle startCell;
   late Vector2 cellSize;
+  late double mazeWallWidth;
+  late bool isVertical;
 
-
-MazeComponent({  required this.mazeController, required super.position, super.size})
+MazeComponent({  required this.mazeController, required this.isVertical, required super.position, super.size})
       : super(anchor: Anchor.topLeft);
 
   @override
@@ -51,42 +54,60 @@ MazeComponent({  required this.mazeController, required super.position, super.si
   }
 
   Future<void> initialize() async {
-
     removeAll(children.query());
-
-    var cellUnitX = (size.x-20) / MazeFactory.NB_COL;
-    var cellUnitY = (size.y-20) / MazeFactory.NB_ROW;
+    double startOffset = 20;
+    double topOffset = 20;
+    var cellUnitX = (size.x-2*startOffset) / (isVertical ? MazeFactory.NB_COL : MazeFactory.NB_COL+2);
+    var cellUnitY = (size.y-topOffset) / (isVertical ? MazeFactory.NB_ROW+2 : MazeFactory.NB_ROW);
     var cellRefUnit = cellUnitX < cellUnitY ? cellUnitX : cellUnitY;
+    mazeWallWidth = cellRefUnit/10;
     cellSize = Vector2(cellRefUnit, cellRefUnit);
-    Vector2 wallSizeHorizontal = Vector2(cellRefUnit, cellRefUnit/10);
-    Vector2 wallSizeVertical = Vector2(cellRefUnit/10, cellRefUnit);
+    Vector2 wallSizeHorizontal = Vector2(cellRefUnit, mazeWallWidth);
+    Vector2 wallSizeVertical = Vector2(mazeWallWidth, cellRefUnit);
     int currentCell = 0;
 
-    exitPosition = Vector2(10,10);
-    startPosition = Vector2(10+cellSize.x*(MazeFactory.NB_COL-1)+cellRefUnit/4,10+cellSize.y*(MazeFactory.NB_ROW-1)+cellRefUnit/4);
+    if(isVertical) {
+      startCell =
+          Rectangle.fromLTWH(x+startOffset, y+topOffset, cellRefUnit, cellRefUnit);
+      exitCell = Rectangle.fromLTWH(
+          startOffset + cellSize.x * (MazeFactory.NB_COL - 1),
+          topOffset + cellSize.y * (MazeFactory.NB_ROW) + cellRefUnit,
+          cellRefUnit,
+          cellRefUnit);
+    }
+    else
+      {
+        startCell =
+            Rectangle.fromLTWH(x+startOffset, y+topOffset , cellRefUnit, cellRefUnit);
+        exitCell = Rectangle.fromLTWH(
+            startOffset + cellSize.x * (MazeFactory.NB_COL) + cellRefUnit,
+            topOffset + cellSize.y * (MazeFactory.NB_ROW-1),
+            cellRefUnit,
+            cellRefUnit);
+      }
 
     for (int i = 0; i < MazeFactory.NB_COL; i++) {
       for (int j = 0; j < MazeFactory.NB_ROW; j++) {
         currentCell = mazeController.mazeCells[j][i];
-        var cellX = 10+cellSize.x*i;
-        var cellY = 10+cellSize.y*j;
-        if (currentCell & MazeFactory.TOP !=0 && !(i==0 && j==0)) {
+        var cellX = isVertical ? startOffset+cellSize.x*i : startOffset+cellSize.x*(i+1) ;
+        var cellY = isVertical ?  topOffset+cellSize.y*(j+1) : topOffset+cellSize.y*j;
+        if (currentCell & MazeFactory.TOP !=0 && !(i==0 && j==0 && isVertical)) {
           await add(WallComponent(isHorizontal:true, position:Vector2(cellX, cellY), size:wallSizeHorizontal));
         }
-        if (currentCell & MazeFactory.RIGHT !=0) {
+        if (currentCell & MazeFactory.RIGHT !=0 && !(!isVertical && i==(MazeFactory.NB_COL-1) && j==(MazeFactory.NB_ROW-1) )) {
           await add(WallComponent(isHorizontal:false, position:Vector2(cellX+cellSize.x-wallSizeVertical.x, cellY), size:wallSizeVertical));
         }
-        if (currentCell & MazeFactory.BOTTOM !=0 /*&& !(i==(MazeFactory.NB_COL-1) && j==(MazeFactory.NB_ROW-1))*/) {
+        if (currentCell & MazeFactory.BOTTOM !=0 && !(isVertical && i==(MazeFactory.NB_COL-1) && j==(MazeFactory.NB_ROW-1) )) {
           await add(WallComponent(isHorizontal:true, position:Vector2(cellX, cellY+cellSize.y-wallSizeHorizontal.y), size:wallSizeHorizontal));
         }
-        if (currentCell & MazeFactory.LEFT !=0) {
+        if (currentCell & MazeFactory.LEFT !=0 && !(i==0 && j==0 && !isVertical)) {
           await add(WallComponent( isHorizontal:false, position:Vector2(cellX, cellY), size:wallSizeVertical));
         }
 
       }
     }
 
-    add(MazeExitComponent(position: exitPosition, size:Vector2(wallSizeHorizontal.x, wallSizeHorizontal.y)));
+    add(MazeExitComponent(endCell: exitCell));
 
   }
 }

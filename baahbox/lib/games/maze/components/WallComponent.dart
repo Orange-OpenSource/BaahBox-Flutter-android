@@ -21,6 +21,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/rendering.dart';
 
+import '../../../constants/enums.dart';
 import '../mazeGame.dart';
 
 class WallComponent extends RectangleComponent with CollisionCallbacks,
@@ -32,7 +33,7 @@ class WallComponent extends RectangleComponent with CollisionCallbacks,
 
   WallComponent({ required this.isHorizontal, required super.position, super.size})
       : super(anchor: Anchor.topLeft, paint: Paint()
-    ..color = const Color(0xFF553301)
+    ..color = BBColor.greyGreen.color
     ..style = PaintingStyle.fill);
   @override
   Future<void> onLoad() async {

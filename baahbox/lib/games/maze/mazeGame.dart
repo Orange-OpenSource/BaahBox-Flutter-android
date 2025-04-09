@@ -24,6 +24,7 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:baahbox/games/BBGame.dart';
+import 'package:flame/extensions.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 
@@ -75,6 +76,8 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
   @override
   Future<void> onLoad() async {
     title = instructionTitle;
+
+
     setInstructions();
     await loadAssetsInCache();
     loadInfoComponents();
@@ -127,11 +130,12 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
     //var mazeSize = min(size.x, size.y- durationText.size.y-10);
     var mazeSize = min(size.x, size.y- 15 -10);
     var mazePosition = Vector2( (size.x-mazeSize)/2,0 );
+    var isVertical = size.y >= size.x;
 
-    maze = MazeComponent(mazeController:mazeController, position:mazePosition, size:Vector2(mazeSize,mazeSize));
+    maze = MazeComponent(mazeController:mazeController, isVertical:isVertical, position:mazePosition, size:Vector2(mazeSize,mazeSize));
     add(maze);
 
-    player = MazePlayerComponent(startPosition: mazePosition.clone()..add(maze.startPosition), radius: min(maze.cellSize.x, maze.cellSize.y)/4);
+    player = MazePlayerComponent(isVerticalScreen:isVertical, startCell: maze.startCell);
     add(player);
   }
 

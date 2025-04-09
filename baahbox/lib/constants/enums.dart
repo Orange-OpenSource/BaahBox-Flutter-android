@@ -48,7 +48,8 @@ enum Sensor {
   arcadeJoystick(asset: 'assets/images/Dashboard/joystick.png'),
   button(asset: 'assets/images/Dashboard/demo_icon.png'),
   digitalJoystick(asset: 'assets/images/Dashboard/joystick.png'),
-  wheelChairJoystick(asset: 'assets/images/Dashboard/joystick.png');
+  wheelChairJoystick(asset: 'assets/images/Dashboard/joystick.png'),
+  hand(asset: 'assets/images/Dashboard/poignee.png');
 
   const Sensor({required this.asset});
   final String asset;
@@ -116,7 +117,7 @@ enum BBGameList {
   ),
   maze(
     title: 'Labyrinthe',
-    mainAsset: 'assets/images/Dashboard/menu_toad.png',
+    mainAsset: 'assets/images/Dashboard/menu_maze.png',
     baseColor: BBColor.lightGreen,
     numberOfSensors: 1,
   );

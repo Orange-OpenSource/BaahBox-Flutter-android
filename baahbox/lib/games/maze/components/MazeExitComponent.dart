@@ -19,29 +19,40 @@
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flutter/rendering.dart';
+import 'package:flame/experimental.dart';
 
 import '../mazeGame.dart';
 
-class MazeExitComponent extends PositionComponent with CollisionCallbacks,
-    HasGameReference<MazeGame> {
+class MazeExitComponent extends SpriteComponent with CollisionCallbacks,
+    HasGameRef<MazeGame> {
 
   late final RectangleHitbox hitbox;
 
 
-  MazeExitComponent({  required super.position, super.size})
-      : super(anchor: Anchor.topLeft);
+  late final Rectangle endCell;
+
+
+  MazeExitComponent({  required this.endCell})
+      : super(anchor: Anchor.topLeft,
+      position: Vector2(endCell.left, endCell.top),
+      size:Vector2(endCell.width,endCell.height));
   @override
   Future<void> onLoad() async {
     initialize();
   }
 
-  void initialize() {
-
+  Future<void> initialize() async {
+    sprite = await gameRef.loadSprite('Games/Maze/trefle.png');
+    var ratio = (sprite?.srcSize.x ?? endCell.width) / (sprite?.srcSize.y ?? endCell.height);
+    var width = endCell.width/3*2;
+    var height = width/ratio;
+    size = Vector2(width,height);
+    position = Vector2(endCell.left+(endCell.width-width)/2, endCell.top+(endCell.height-height)/2);
     hitbox = RectangleHitbox(position: Vector2(0,0), size: size)
       ..collisionType= CollisionType.passive
       ..renderShape = false;
     add(hitbox);
 
   }
+
 }

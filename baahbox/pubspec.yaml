@@ -74,6 +74,7 @@ flutter:
      - assets/images/Games/Star/
      - assets/images/Games/Sheep/
      - assets/images/Games/Spaceship/
+     - assets/images/Games/Maze/
      - assets/images/Games/rogue_shooter/
      - assets/images/Particules/
      - assets/images/Splashscreen/

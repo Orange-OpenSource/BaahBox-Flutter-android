@@ -17,41 +17,61 @@
  *
  */
 
+import 'dart:math';
+
 import 'package:baahbox/games/maze/components/MazeExitComponent.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/experimental.dart';
 import 'package:flutter/rendering.dart';
 
 import '../../../constants/enums.dart';
 import '../mazeGame.dart';
 import 'WallComponent.dart';
 
-class MazePlayerComponent extends CircleComponent with CollisionCallbacks, HasVisibility,
-    HasGameReference<MazeGame> {
+class MazePlayerComponent extends SpriteComponent with CollisionCallbacks, HasVisibility,
+    HasGameRef<MazeGame> {
   static const double speed = 20;
   static const double movementSpeed = 50;
   MovingState state = MovingState.none;
   MovingState collisionState = MovingState.none;
   bool isOut = false;
   late final CircleHitbox hitbox;
-  late final Vector2 startPosition;
+
+  late final Rectangle startCell;
+  late final bool isVerticalScreen;
 
 
-  MazePlayerComponent({required this.startPosition, required super.radius})
-      : super(anchor: Anchor.topLeft, position: startPosition, paint:  Paint()
-    ..color = BBColor.violet.color
-    ..style = PaintingStyle.fill);
+  MazePlayerComponent({  required this.startCell, required this.isVerticalScreen})
+      : super(anchor: Anchor.center,
+      position: Vector2(startCell.left, startCell.top),
+      size:Vector2(startCell.width,startCell.height));
 
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    hitbox = CircleHitbox()
-    ..radius=radius
-      ..anchor= Anchor.topLeft
-      ..paint = paint
-      ..renderShape = false;
 
+    sprite = await gameRef.loadSprite('Games/Maze/mouton_labyrinthe.png');
+    var ratio = (sprite?.srcSize.x ?? startCell.width) / (sprite?.srcSize.y ?? startCell.height);
+
+    var height = startCell.width/3*2;
+    var width = height*ratio;
+
+    size = Vector2(width,height);
+    resetToStartCellPosition();
+
+    var radius = min(width/2,height/2);
+    hitbox = CircleHitbox(position: Vector2(width/2,height/2), radius: radius)
+    ..anchor=Anchor.center
+      ..renderShape = false;
     add(hitbox);
+  }
+
+  void resetToStartCellPosition() {
+    position = Vector2(startCell.left+(startCell.width)/2, startCell.top+(startCell.height)/2);
+    if(!isVerticalScreen) {
+      angle = -pi/2;
+    }
   }
 
   void hide() {
@@ -65,20 +85,29 @@ class MazePlayerComponent extends CircleComponent with CollisionCallbacks, HasVi
   void update(double dt) {
     super.update(dt);
 
-
+      var onStartCell = position.x>startCell.left && position.x<startCell.right &&
+          position.y>startCell.top && position.y<startCell.bottom;
       if(!isOut && state!=MovingState.none && collisionState!=state) {
         switch (state) {
           case MovingState.left:
-            moveLeft(dt);
+            if(!onStartCell) {
+              moveLeft(dt);
+            }
             break;
           case MovingState.right:
-            moveRight(dt);
+            if(!isVerticalScreen || !onStartCell) {
+              moveRight(dt);
+            }
             break;
           case MovingState.up:
-            moveUp(dt);
+            if(!onStartCell) {
+              moveUp(dt);
+            }
             break;
           case MovingState.down:
-            moveDown(dt);
+            if(isVerticalScreen || !onStartCell) {
+              moveDown(dt);
+            }
             break;
           case MovingState.none:
             break;
@@ -87,7 +116,7 @@ class MazePlayerComponent extends CircleComponent with CollisionCallbacks, HasVi
   }
 
   void resetToStartPosition() {
-    position = startPosition;
+    resetToStartCellPosition();
     state=MovingState.none;
     isOut = false;
     collisionState=MovingState.none;
@@ -95,18 +124,22 @@ class MazePlayerComponent extends CircleComponent with CollisionCallbacks, HasVi
   }
   void moveLeft(double dt) {
     position.x -= movementSpeed * dt;
+    angle = pi/2;
   }
 
   void moveRight(double dt) {
     position.x += movementSpeed * dt;
+    angle = -pi/2;
   }
 
   void moveUp(double dt) {
     position.y -= movementSpeed * dt;
+    angle = pi;
   }
 
   void moveDown(double dt) {
     position.y += movementSpeed * dt;
+    angle = 0;
   }
   Vector2 _cornerBumpDistance(
       Vector2 directionVector, Vector2 pointA, Vector2 pointB) {
