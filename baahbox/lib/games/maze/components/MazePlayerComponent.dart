@@ -22,15 +22,17 @@ import 'dart:math';
 import 'package:baahbox/games/maze/components/MazeExitComponent.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/experimental.dart';
-import 'package:flutter/rendering.dart';
-
-import '../../../constants/enums.dart';
+import 'package:get/get.dart';
+import '../../../services/settings/settingsController.dart';
 import '../mazeGame.dart';
 import 'WallComponent.dart';
 
-class MazePlayerComponent extends SpriteComponent with CollisionCallbacks, HasVisibility,
-    HasGameRef<MazeGame> {
+class MazePlayerComponent extends SpriteComponent
+    with CollisionCallbacks, HasVisibility, HasGameRef<MazeGame> {
+  final SettingsController settingsController = Get.find();
+
   static const double speed = 20;
   static const double movementSpeed = 50;
   MovingState state = MovingState.none;
@@ -40,37 +42,42 @@ class MazePlayerComponent extends SpriteComponent with CollisionCallbacks, HasVi
 
   late final Rectangle startCell;
   late final bool isVerticalScreen;
+  bool isBlinkMode = false;
+  Vector2 relativeMovementDelta = Vector2(0,0);
 
-
-  MazePlayerComponent({  required this.startCell, required this.isVerticalScreen})
-      : super(anchor: Anchor.center,
-      position: Vector2(startCell.left, startCell.top),
-      size:Vector2(startCell.width,startCell.height));
+  MazePlayerComponent({required this.startCell, required this.isVerticalScreen})
+      : super(
+            anchor: Anchor.center,
+            position: Vector2(startCell.left, startCell.top),
+            size: Vector2(startCell.width, startCell.height));
 
   @override
   Future<void> onLoad() async {
     super.onLoad();
 
     sprite = await gameRef.loadSprite('Games/Maze/mouton_labyrinthe.png');
-    var ratio = (sprite?.srcSize.x ?? startCell.width) / (sprite?.srcSize.y ?? startCell.height);
+    var ratio = (sprite?.srcSize.x ?? startCell.width) /
+        (sprite?.srcSize.y ?? startCell.height);
 
-    var height = startCell.width/3*2;
-    var width = height*ratio;
+    var height = startCell.width / 3 * 2;
+    var width = height * ratio;
 
-    size = Vector2(width,height);
+    size = Vector2(width, height);
     resetToStartCellPosition();
 
-    var radius = min(width/2,height/2);
-    hitbox = CircleHitbox(position: Vector2(width/2,height/2), radius: radius)
-    ..anchor=Anchor.center
-      ..renderShape = false;
+    var radius = min(width / 2, height / 2);
+    hitbox =
+        CircleHitbox(position: Vector2(width / 2, height / 2), radius: radius)
+          ..anchor = Anchor.center
+          ..renderShape = false;
     add(hitbox);
   }
 
   void resetToStartCellPosition() {
-    position = Vector2(startCell.left+(startCell.width)/2, startCell.top+(startCell.height)/2);
-    if(!isVerticalScreen) {
-      angle = -pi/2;
+    position = Vector2(startCell.left + (startCell.width) / 2,
+        startCell.top + (startCell.height) / 2);
+    if (!isVerticalScreen) {
+      angle = -pi / 2;
     }
   }
 
@@ -81,55 +88,95 @@ class MazePlayerComponent extends SpriteComponent with CollisionCallbacks, HasVi
   void show() {
     isVisible = true;
   }
+
   @override
   void update(double dt) {
     super.update(dt);
 
-      var onStartCell = position.x>startCell.left && position.x<startCell.right &&
-          position.y>startCell.top && position.y<startCell.bottom;
-      if(!isOut && state!=MovingState.none && collisionState!=state) {
-        switch (state) {
-          case MovingState.left:
-            if(!onStartCell) {
-              moveLeft(dt);
+    if (game.isRunning && !game.isGameOver) {
+      var onStartCell = position.x > startCell.left &&
+          position.x < startCell.right &&
+          position.y > startCell.top &&
+          position.y < startCell.bottom;
+      if (!isOut) {
+        if (settingsController.mazeSettings["isFineDirection"]) {
+          if (onStartCell) {
+            if (isVerticalScreen) {
+              relativeMovementDelta.x = 0;
             }
-            break;
-          case MovingState.right:
-            if(!isVerticalScreen || !onStartCell) {
-              moveRight(dt);
+            else {
+              relativeMovementDelta.y = 0;
             }
-            break;
-          case MovingState.up:
-            if(!onStartCell) {
-              moveUp(dt);
-            }
-            break;
-          case MovingState.down:
-            if(isVerticalScreen || !onStartCell) {
-              moveDown(dt);
-            }
-            break;
-          case MovingState.none:
-            break;
+          }
+
+          if(relativeMovementDelta.x!=0 || relativeMovementDelta.y!=0) {
+            position.add(relativeMovementDelta * movementSpeed * dt);
+            angle = relativeMovementDelta.screenAngle() + pi;
+          }
+        }
+        else if (state != MovingState.none && collisionState != state) {
+          switch (state) {
+            case MovingState.left:
+              if (!onStartCell) {
+                moveLeft(dt);
+              }
+              break;
+            case MovingState.right:
+              if (!isVerticalScreen || !onStartCell) {
+                moveRight(dt);
+              }
+              break;
+            case MovingState.up:
+              if (!onStartCell) {
+                moveUp(dt);
+              }
+              break;
+            case MovingState.down:
+              if (isVerticalScreen || !onStartCell) {
+                moveDown(dt);
+              }
+              break;
+            case MovingState.none:
+              break;
+          }
         }
       }
+    }
+  }
+
+  void takeHit() {
+    blink();
+  }
+
+  void blink() {
+    isBlinkMode = true;
+    add(OpacityEffect.to(0, EffectController(duration: 0.5, reverseDuration: 1),
+        onComplete: () {
+      isBlinkMode = false;
+    }));
   }
 
   void resetToStartPosition() {
     resetToStartCellPosition();
-    state=MovingState.none;
+    state = MovingState.none;
     isOut = false;
-    collisionState=MovingState.none;
-
+    collisionState = MovingState.none;
   }
+
+
+
+  void moveDelta(Vector2 relativeDelta) {
+    relativeMovementDelta = relativeDelta;
+  }
+
   void moveLeft(double dt) {
     position.x -= movementSpeed * dt;
-    angle = pi/2;
+    angle = pi / 2;
   }
 
   void moveRight(double dt) {
     position.x += movementSpeed * dt;
-    angle = -pi/2;
+    angle = -pi / 2;
   }
 
   void moveUp(double dt) {
@@ -141,6 +188,7 @@ class MazePlayerComponent extends SpriteComponent with CollisionCallbacks, HasVi
     position.y += movementSpeed * dt;
     angle = 0;
   }
+
   Vector2 _cornerBumpDistance(
       Vector2 directionVector, Vector2 pointA, Vector2 pointB) {
     var dX = pointA.x - pointB.x;
@@ -169,17 +217,16 @@ class MazePlayerComponent extends SpriteComponent with CollisionCallbacks, HasVi
       return Vector2(0, dY);
     }
   }
+
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
-    if( !isOut && other is MazeExitComponent)
-      {
-        isOut=true;
-      }
-    else if (other is WallComponent) {
-      if (collisionState == MovingState.none) {
+    if (game.isRunning && !game.isGameOver) {
+      if (!isOut && other is MazeExitComponent) {
+        isOut = true;
+      } else if (other is WallComponent) {
+        if (collisionState == MovingState.none) {
           if (intersectionPoints.length == 2) {
-
             var pointA = intersectionPoints.elementAt(0);
             var pointB = intersectionPoints.elementAt(1);
             final mid = (pointA + pointB) / 2;
@@ -193,13 +240,15 @@ class MazePlayerComponent extends SpriteComponent with CollisionCallbacks, HasVi
               position += _cornerBumpDistance(collisionVector, pointA, pointB);
             }
 
-            //collisionState = state;
+            collisionState = state;
+            if (!isBlinkMode) {
+              takeHit();
+              gameRef.looseLife();
+            }
           }
-
-
+        }
       }
     }
-
   }
 
   @override
@@ -208,7 +257,5 @@ class MazePlayerComponent extends SpriteComponent with CollisionCallbacks, HasVi
     if (other is WallComponent) {
       collisionState = MovingState.none;
     }
-
-
   }
 }

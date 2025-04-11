@@ -17,7 +17,6 @@
  *
  */
 
-
 import 'dart:math';
 import 'dart:ui';
 
@@ -34,6 +33,7 @@ import '../../services/settings/settingsController.dart';
 import 'MazeFactory.dart';
 import 'components/MazeComponent.dart';
 import 'components/MazeExitComponent.dart';
+import 'components/MazeLifeManager.dart';
 import 'components/MazePlayerComponent.dart';
 import 'components/WallComponent.dart';
 
@@ -45,16 +45,16 @@ enum MovingState {
   left;
 }
 
-
-
 class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
   final Controller appController = Get.find();
   final SettingsController settingsController = Get.find();
   final MazeFactory mazeController = MazeFactory();
 
   var instructionTitle = 'Traverse le labynthe';
-  var instructionSubtitleJoystick = 'pousse le joystick à gauche, à droite, en haut ou en bas';
-  var instructionSubtitleFinger = 'pousse le joystick virtuel à gauche, à droite, en haut ou en bas';
+  var instructionSubtitleJoystick =
+      'pousse le joystick à gauche, à droite, en haut ou en bas';
+  var instructionSubtitleFinger =
+      'pousse le joystick virtuel à gauche, à droite, en haut ou en bas';
   var feedbackTitleWon = 'Bravo! \ntu as vaincu le labyrinthe !';
   var feedbackTitleLost = "Dommage, tu resteras dans le labyrinthe.";
 
@@ -69,6 +69,7 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
   late final MazePlayerComponent player;
   late final MazeComponent maze;
   late final TextComponent durationText;
+  late final MazeLifeManager lifeManager;
 
   double elapsedTime = 0.0;
 
@@ -77,7 +78,6 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
   Future<void> onLoad() async {
     title = instructionTitle;
 
-
     setInstructions();
     await loadAssetsInCache();
     loadInfoComponents();
@@ -85,82 +85,103 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
     super.onLoad();
   }
 
-
   void loadComponents() async {
     mazeController.makeMaze();
 
-
-    if(!appController.isConnectedToBox)
-      {
-        joyStickKnobPaint =  Paint()
-          ..color = BBColor.pinky.color.withAlpha(200)
-          ..style = PaintingStyle.fill;
-        joyStickBackgroundPaint =  Paint()
-          ..color = BBColor.greyGreen.color.withAlpha(200)
-          ..style = PaintingStyle.fill;
-
-      }
+    if (!appController.isConnectedToBox) {
+      joyStickKnobPaint = Paint()
+        ..color = BBColor.pinky.color.withAlpha(200)
+        ..style = PaintingStyle.fill;
+      joyStickBackgroundPaint = Paint()
+        ..color = BBColor.greyGreen.color.withAlpha(200)
+        ..style = PaintingStyle.fill;
+    }
 
     durationText = TextComponent(
-      position: Vector2(size.x - 5, size.y - 10),
-      anchor: Anchor.bottomRight,
+      position: Vector2(size.x - 5,  10),
+      anchor: Anchor.topRight,
       priority: 1,
     );
     add(durationText);
 
     createMazeAndPlayer();
-
   }
 
   void createMazeAndPlayer() {
-    if(!appController.isConnectedToBox)
-    {
+    if (!appController.isConnectedToBox) {
       var radius = size.y / 4;
-      if(radius >30 || radius <10) {
+      if (radius > 30 || radius < 10) {
         radius = 20;
       }
       joystick = JoystickComponent(
         anchor: Anchor.bottomCenter,
         knob: CircleComponent(radius: radius, paint: joyStickKnobPaint),
-        background: CircleComponent(radius: radius*3, paint: joyStickBackgroundPaint),
+        background:
+            CircleComponent(radius: radius * 3, paint: joyStickBackgroundPaint),
         margin: const EdgeInsets.only(left: 40, bottom: 40),
       );
       add(joystick);
     }
     //var mazeSize = min(size.x, size.y- durationText.size.y-10);
-    var mazeSize = min(size.x, size.y- 15 -10);
-    var mazePosition = Vector2( (size.x-mazeSize)/2,0 );
-    var isVertical = size.y >= size.x;
+    var isVertical = (size.y - 10) >= size.x;
+    var mazeSize = isVertical ? size.x : (size.y - 10);
+    var mazePosition = Vector2((size.x - mazeSize) / 2, 0);
 
-    maze = MazeComponent(mazeController:mazeController, isVertical:isVertical, position:mazePosition, size:Vector2(mazeSize,mazeSize));
+    maze = MazeComponent(
+        mazeController: mazeController,
+        isVertical: isVertical,
+        position: mazePosition,
+        size: Vector2(mazeSize, mazeSize));
     add(maze);
 
-    player = MazePlayerComponent(isVerticalScreen:isVertical, startCell: maze.startCell);
+    player = MazePlayerComponent(
+        isVerticalScreen: isVertical, startCell: maze.startCell);
     add(player);
+
+    add(lifeManager = MazeLifeManager(
+        lifeSize: player.size,
+      position: Vector2(size.x - 15, size.y - 10)));
+    if(settingsController.mazeSettings["hasMaxTouch"])
+    {
+      lifeManager.show();
+    }
+    else
+    {
+      lifeManager.hide();
+    }
+
+
   }
 
-  void loadInfoComponents() {
-
-  }
-  Future<void> loadAssetsInCache() async {
-
+  void loadInfoComponents() {}
+  Future<void> loadAssetsInCache() async {}
+  void looseLife() {
+    if (state == GameState.running &&
+        settingsController.mazeSettings["hasMaxTouch"]) {
+      lifeManager.looseOneLife();
+    }
   }
 
   // Game play
   @override
   void update(double dt) {
     super.update(dt);
-    if (state == GameState.running)
-      {
-        elapsedTime+=dt;
+    if (state == GameState.running) {
+      if (settingsController.mazeSettings["hasChrono"]) {
+        elapsedTime -= dt;
+      } else {
+        elapsedTime += dt;
       }
+    }
     if (appController.isActive) {
       appController.updateConnectionState();
       if (state == GameState.running) {
         refreshInput();
         durationText.text = prettyDuration(elapsedTime);
-        if(player.isOut ) {
+        if (player.isOut) {
           setGameStateToWon(true);
+        } else  if (settingsController.mazeSettings["hasChrono"] && elapsedTime <= 0) {
+          setGameStateToWon(false);
         }
       } else {
         setInstructions();
@@ -170,35 +191,35 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
 
   // Box input
   void refreshInput() {
-
-
     if (appController.isConnectedToBox) {
       var sensorType = settingsController.currentSensor;
       switch (sensorType) {
         case Sensor.muscle:
-
         case Sensor.arcadeJoystick:
           var joystickInput = appController.joystickInput;
 
         default:
       }
     } else {
-
-      var deltaX = joystick.relativeDelta.x;
-      var deltaY = joystick.relativeDelta.y;
-
-      if(deltaX.abs() > deltaY.abs() && deltaX!=0)
-        {
-           deltaX > 0 ? player.state = MovingState.right : player.state = MovingState.left;
-        }
-      else if( deltaY!=0)
-      {
-        deltaY > 0 ? player.state = MovingState.down : player.state = MovingState.up;
+      if (settingsController.mazeSettings["isFineDirection"]) {
+        player.moveDelta(joystick.relativeDelta);
       }
       else {
-        player.state = MovingState.none;
-      }
-       /* switch(joystick.direction)
+        var deltaX = joystick.relativeDelta.x;
+        var deltaY = joystick.relativeDelta.y;
+
+        if (deltaX.abs() > deltaY.abs() && deltaX != 0) {
+          deltaX > 0
+              ? player.state = MovingState.right
+              : player.state = MovingState.left;
+        } else if (deltaY != 0) {
+          deltaY > 0
+              ? player.state = MovingState.down
+              : player.state = MovingState.up;
+        } else {
+          player.state = MovingState.none;
+        }
+        /* switch(joystick.direction)
             {
               case JoystickDirection.idle:
         case JoystickDirection.up: player.state = MovingState.up; break;
@@ -210,14 +231,18 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
         case JoystickDirection.upRight:player.state = MovingState.up; break;
         case JoystickDirection.downRight:player.state = MovingState.up; break;
       }*/
+      }
     }
   }
+
   void setGameStateToWon(bool win) {
     state = win ? GameState.won : GameState.lost;
     feedback = win ? feedbackTitleWon : feedbackTitleLost;
     if (win) {
       maze.hide();
       player.hide();
+      lifeManager.hide();
+
     }
     endGame();
   }
@@ -225,7 +250,19 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
 // Game State management
   @override
   void startGame() {
-
+    if(settingsController.mazeSettings["hasMaxTouch"])
+    {
+      lifeManager.show();
+    }
+    else
+      {
+        lifeManager.hide();
+      }
+    if (settingsController.mazeSettings["hasChrono"]) {
+      elapsedTime = settingsController.mazeSettings["chronoMaxTime"] ?? 10.0;
+    } else {
+      elapsedTime = 0.0;
+    }
     super.startGame();
   }
 
@@ -238,7 +275,20 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
   @override
   void resetGame() async {
     super.resetGame();
-    elapsedTime = 0.0;
+    if (settingsController.mazeSettings["hasChrono"]) {
+      elapsedTime = settingsController.mazeSettings["chronoMaxTime"] ?? 10.0;
+    } else {
+      elapsedTime = 0.0;
+    }
+    lifeManager.createLifes();
+    if(settingsController.mazeSettings["hasMaxTouch"])
+    {
+      lifeManager.show();
+    }
+    else
+    {
+      lifeManager.hide();
+    }
     player.resetToStartPosition();
     maze.initialize();
     maze.show();
@@ -248,11 +298,10 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
     }
   }
 
-
   String prettyDuration(double durationInSec) {
     var components = <String>[];
 
-    int seconds = durationInSec ~/1;
+    int seconds = durationInSec ~/ 1;
     int minutes = seconds ~/ 60;
     int hours = minutes ~/ 60;
     int days = hours ~/ 24;
@@ -272,10 +321,8 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
       components.add('${minutes}m');
     }
 
-
     components.add('$seconds');
     components.add('s');
-
 
     return components.join();
   }
