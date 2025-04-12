@@ -46,6 +46,36 @@ class MazeSettingsPage extends GetView<SettingsController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
+                          'Taille du labyrinthe : ',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ]))),
+          const SizedBox(
+            height: 12,
+          ),
+
+          Obx(() => Text(
+            "Nombre de cases : " +
+                controller.mazeSettings["mazeSize"].toString(),
+            style: TextStyle(
+                fontSize: 16, fontWeight: FontWeight.bold)
+          )),
+          const SizedBox(
+            height: 12,
+          ),
+          MazeSizeSlider(),
+          const SizedBox(
+            height: 12,
+          ),
+          Card(
+              shape: ContinuousRectangleBorder(),
+              child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
                           'Temps de jeu : ',
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
@@ -60,9 +90,6 @@ class MazeSettingsPage extends GetView<SettingsController> {
               onChanged: (bool newValue) {
                 controller.setMazeHasChrono(newValue);
               })),
-          const SizedBox(
-            height: 12,
-          ),
           const SizedBox(
             height: 12,
           ),
@@ -128,11 +155,25 @@ class MazeSettingsPage extends GetView<SettingsController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Joystick :',
+                          'Déplacement :',
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                       ]))),
+          const SizedBox(
+            height: 12,
+          ),
+          Obx(() => Text(
+            "Vitesse de déplacement : " +
+                controller.mazeSettings["speedMovement"].toString(),
+            style: TextStyle(
+                fontSize: 16, fontWeight: FontWeight.bold),
+
+          )),
+          const SizedBox(
+            height: 12,
+          ),
+          MazeSpeedSlider(),
           const SizedBox(
             height: 12,
           ),
@@ -160,13 +201,13 @@ class _MazeChronoDurationSliderState extends State<MazeChronoDurationSlider> {
 
   @override
   Widget build(BuildContext context) {
-    final double _maxDuration = controller.mazeSettings["chronoMaxTime"] ?? 10;
+    final double _maxDuration = controller.mazeSettings["chronoMaxTime"] ?? 20;
     double _value = _maxDuration;
     return Obx(() => Slider.adaptive(
       value: _value,
-      min: 10,
-      max: 60,
-      divisions: 20,
+      min: 20,
+      max: 120,
+      divisions: 10,
       label: _value.floor().toString(),
       semanticFormatterCallback: (double newValue) {
         return '${newValue.round()} secondes';
@@ -211,6 +252,72 @@ class _MazeWallTouchNumberSliderState extends State<MazeWallTouchNumberSlider> {
         }) ;
       }: null,
     ));
+  }
+}
+
+class MazeSpeedSlider extends StatefulWidget {
+  const MazeSpeedSlider({super.key});
+
+  @override
+  State<MazeSpeedSlider> createState() => _MazeSpeedSliderState();
+}
+
+class _MazeSpeedSliderState extends State<MazeSpeedSlider> {
+  final SettingsController controller = Get.find();
+
+  @override
+  Widget build(BuildContext context) {
+    final double _speed = controller.mazeSettings["speedMovement"] ?? 40;
+    double _value = _speed;
+    return Slider.adaptive(
+      value: _value,
+      min: 20,
+      max: 80,
+      divisions: 5,
+      label: _value.floor().toString(),
+      semanticFormatterCallback: (double newValue) {
+        return '${newValue.round()}';
+      },
+      onChanged: (double value) {
+        setState(() {
+          _value = value.floorToDouble();
+          controller.setMazeSpeedMovement(_value);
+        });
+      } ,
+    );
+  }
+}
+
+
+class MazeSizeSlider extends StatefulWidget {
+  const MazeSizeSlider({super.key});
+
+  @override
+  State<MazeSizeSlider> createState() => _MazeSizeSliderState();
+}
+
+class _MazeSizeSliderState extends State<MazeSizeSlider> {
+  final SettingsController controller = Get.find();
+
+  @override
+  Widget build(BuildContext context) {
+    final int _nbT = controller.mazeSettings["mazeSize"] ?? 5;
+    double _value = _nbT.toDouble();
+    return Slider.adaptive(
+      value: _value,
+      min: 4,
+      max: 7,
+      divisions: 3,
+      label: _value.round().toString(),
+      semanticFormatterCallback: (double newValue) {
+        return '${newValue.round()}';
+      },
+      onChanged: (double value) {
+        setState(() {
+          _value = value;
+          controller.setMazeSize(value.toInt());
+        }) ;
+      });
   }
 }
 

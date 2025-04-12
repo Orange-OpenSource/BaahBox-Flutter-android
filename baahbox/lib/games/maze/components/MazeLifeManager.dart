@@ -31,6 +31,7 @@ class MazeLifeManager extends PositionComponent with HasGameRef<MazeGame>, HasVi
   final lifeArray = [];
   final gapSize = 5;
   late  Vector2 lifeSize;
+
   MazeLifeManager({required this.lifeSize, required super.position})
       : super(
     anchor: Anchor.bottomRight,
@@ -39,6 +40,7 @@ class MazeLifeManager extends PositionComponent with HasGameRef<MazeGame>, HasVi
   @override
   Future<void> onLoad() async {
     super.onLoad();
+
     var sprite = await gameRef.loadSprite('Games/Maze/mouton_labyrinthe.png');
     var ratio = (sprite.srcSize.x) / (sprite.srcSize.y );
 
@@ -46,6 +48,7 @@ class MazeLifeManager extends PositionComponent with HasGameRef<MazeGame>, HasVi
     var width = height * ratio;*/
     var height =  lifeSize.y;
     var width = height * ratio;
+
 
     lifeSize = Vector2(width, height);
 
@@ -62,8 +65,14 @@ class MazeLifeManager extends PositionComponent with HasGameRef<MazeGame>, HasVi
 
   void createLifes() {
 
+    while(lifeArray.isNotEmpty)
+      {
+        remove(lifeArray.first);
+        lifeArray.removeAt(0);
+      }
     var maxTouch =  settingsController.mazeSettings["maxTouches"];
-    size = Vector2(lifeSize.x*maxTouch, lifeSize.y);
+    size = Vector2((lifeSize.x+gapSize)*maxTouch, lifeSize.y);
+
     for (var i = 0; i <maxTouch; i++) {
       var xpos = (lifeSize.x+gapSize) * i;
       _createLifeAt(xpos, 0);

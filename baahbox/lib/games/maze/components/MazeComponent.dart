@@ -22,7 +22,8 @@ import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
 import 'package:flutter/rendering.dart';
-
+import 'package:get/get.dart';
+import '../../../services/settings/settingsController.dart';
 import '../MazeFactory.dart';
 import '../mazeGame.dart';
 import 'MazeExitComponent.dart';
@@ -30,6 +31,9 @@ import 'WallComponent.dart';
 
 class MazeComponent extends PositionComponent
     with HasVisibility, HasGameReference<MazeGame> {
+
+  final SettingsController settingsController = Get.find();
+
   late final MazeFactory mazeController;
   late Rectangle exitCell;
   late Rectangle startCell;
@@ -58,6 +62,8 @@ class MazeComponent extends PositionComponent
   }
 
   Future<void> initialize() async {
+    int mazeSize = settingsController.mazeSettings["mazeSize"];
+    mazeController.makeMaze(mazeSize, mazeSize);
     removeAll(children.query());
     double startOffset = 20;
     double topOffset = 20;

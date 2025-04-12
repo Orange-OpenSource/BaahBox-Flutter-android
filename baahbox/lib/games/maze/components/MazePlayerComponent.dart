@@ -33,15 +33,16 @@ class MazePlayerComponent extends SpriteComponent
     with CollisionCallbacks, HasVisibility, HasGameRef<MazeGame> {
   final SettingsController settingsController = Get.find();
 
-  static const double speed = 20;
-  static const double movementSpeed = 50;
+  late double movementSpeed = 30;
   MovingState state = MovingState.none;
   MovingState collisionState = MovingState.none;
   bool isOut = false;
   late final CircleHitbox hitbox;
 
-  late final Rectangle startCell;
+  late Rectangle startCell;
   late final bool isVerticalScreen;
+  late final double spriteRatio;
+
   bool isBlinkMode = false;
   Vector2 relativeMovementDelta = Vector2(0,0);
 
@@ -56,14 +57,14 @@ class MazePlayerComponent extends SpriteComponent
     super.onLoad();
 
     sprite = await gameRef.loadSprite('Games/Maze/mouton_labyrinthe.png');
-    var ratio = (sprite?.srcSize.x ?? startCell.width) /
+    spriteRatio = (sprite?.srcSize.x ?? startCell.width) /
         (sprite?.srcSize.y ?? startCell.height);
 
     var height = startCell.width / 3 * 2;
-    var width = height * ratio;
+    var width = height * spriteRatio;
 
     size = Vector2(width, height);
-    resetToStartCellPosition();
+    resetToStart();
 
     var radius = min(width / 2, height / 2);
     hitbox =
@@ -73,20 +74,27 @@ class MazePlayerComponent extends SpriteComponent
     add(hitbox);
   }
 
-  void resetToStartCellPosition() {
-    position = Vector2(startCell.left + (startCell.width) / 2,
-        startCell.top + (startCell.height) / 2);
-    if (!isVerticalScreen) {
-      angle = -pi / 2;
-    }
-  }
-
   void hide() {
     isVisible = false;
   }
 
   void show() {
     isVisible = true;
+  }
+
+  void updateStartCell(Rectangle newStartCell) {
+    startCell=newStartCell;
+
+    var height = startCell.width / 3 * 2;
+    var width = height * spriteRatio;
+
+    size = Vector2(width, height);
+    resetToStart();
+    var radius = min(width / 2, height / 2);
+    hitbox.radius = radius;
+    hitbox.position = Vector2(width / 2, height / 2);
+
+
   }
 
   @override
@@ -156,11 +164,19 @@ class MazePlayerComponent extends SpriteComponent
     }));
   }
 
-  void resetToStartPosition() {
-    resetToStartCellPosition();
+  void resetToStart() {
+
+    movementSpeed = settingsController.mazeSettings["speedMovement"];
     state = MovingState.none;
     isOut = false;
     collisionState = MovingState.none;
+
+    position = Vector2(startCell.left + (startCell.width) / 2,
+        startCell.top + (startCell.height) / 2);
+    if (!isVerticalScreen) {
+      angle = -pi / 2;
+    }
+
   }
 
 

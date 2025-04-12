@@ -17,16 +17,21 @@
  *
  */
 
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame/effects.dart';
-import 'package:flame/flame.dart';
+import 'package:flame/experimental.dart';
 
-class MazeLifeComponent extends SpriteComponent with HasGameRef, HasVisibility {
-  MazeLifeComponent({required super.size, required super.position})
-      : super(
-    anchor: Anchor.topRight,
-  );
+import '../mazeGame.dart';
 
+class MazeWinComponent extends SpriteComponent with HasVisibility, HasGameRef<MazeGame> {
+
+  MazeWinComponent({  super.position, required super.size})
+      : super(anchor: Anchor.center);
+
+  @override
+  Future<void> onLoad() async {
+    initialize();
+  }
   void hide() {
     isVisible = false;
   }
@@ -34,26 +39,13 @@ class MazeLifeComponent extends SpriteComponent with HasGameRef, HasVisibility {
   void show() {
     isVisible = true;
   }
-  @override
-  Future<void> onLoad() async {
-    super.onLoad();
-    sprite = await gameRef.loadSprite('Games/Maze/mouton_labyrinthe.png');
+  Future<void> initialize() async {
+    sprite = await gameRef.loadSprite('Games/Maze/trefle.png');
+    var ratio = (sprite?.srcSize.x ?? size.x) / (sprite?.srcSize.y ?? size.y);
+    var width = size.x;
+    var height = width/ratio;
+    size = Vector2(width,height);
 
-  }
-
-  void disappear() {
-    this.add(
-    OpacityEffect.fadeOut(
-    EffectController(duration: 0.75)
-    ));
-    removeFromParent();
-  }
-
-  void appear() {
-    this.add(
-        OpacityEffect.fadeIn(
-            EffectController(duration: 0.75)
-        ));
   }
 
 }

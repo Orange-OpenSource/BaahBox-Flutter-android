@@ -61,6 +61,8 @@ class SettingsController extends GetxController {
     "hasMaxTouch": false,
     "maxTouches": 5,
     "isFineDirection": false,
+    "speedMovement":40.0,
+    "mazeSize": 5,
   }.obs;
 
 // getters
@@ -232,6 +234,27 @@ class SettingsController extends GetxController {
     } else {
       _mazeSettings["maxTouches"] = 3;
       showMyToast("Null value for max wall touches !");
+    }
+  }
+
+  void setMazeSize(int? value) {
+    if (value != null) {
+      _mazeSettings["mazeSize"] = value > 0 ? value : 5;
+      var maxTime = _mazeSettings["mazeSize"];
+      print("maze size : $maxTime");
+    } else {
+      _mazeSettings["mazeSize"] = 5;
+      showMyToast("Null value for maze size !");
+    }
+  }
+  void setMazeSpeedMovement(double? value) {
+    if (value != null) {
+      _mazeSettings["speedMovement"] = value > 0 ? value : 40.0;
+      var maxTime = _mazeSettings["speedMovement"];
+      print("movement speed : $maxTime");
+    } else {
+      _mazeSettings["speedMovement"] = 40.0;
+      showMyToast("Null value for movement speed !");
     }
   }
 
