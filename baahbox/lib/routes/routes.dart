@@ -35,7 +35,7 @@ import 'package:baahbox/services/settings/termsOfUsePage.dart';
 import 'package:baahbox/services/settings/legalInformationsPage.dart';
 
 import '../games/maze/mazeGamePage.dart';
-import '../services/settings/mazeSetings.dart';
+import '../services/settings/mazeSettings.dart';
 
 enum BBRoute {
   welcome(path: "/"),

@@ -111,9 +111,15 @@ class MazePlayerComponent extends SpriteComponent
           if (onStartCell) {
             if (isVerticalScreen) {
               relativeMovementDelta.x = 0;
+              if(relativeMovementDelta.y<0) {
+                relativeMovementDelta.y=0;
+              }
             }
             else {
               relativeMovementDelta.y = 0;
+              if(relativeMovementDelta.x<0) {
+                relativeMovementDelta.x=0;
+              }
             }
           }
 
