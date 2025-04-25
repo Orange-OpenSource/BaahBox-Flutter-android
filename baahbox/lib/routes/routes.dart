@@ -34,6 +34,9 @@ import 'package:baahbox/games/toad/toadGamePage.dart';
 import 'package:baahbox/services/settings/termsOfUsePage.dart';
 import 'package:baahbox/services/settings/legalInformationsPage.dart';
 
+import '../games/maze/mazeGamePage.dart';
+import '../services/settings/mazeSettings.dart';
+
 enum BBRoute {
   welcome(path: "/"),
   star(path: "/star"),
@@ -41,6 +44,7 @@ enum BBRoute {
   sheep(path: "/sheep"),
   spaceShip(path: "/spaceShip"),
   toad(path: "/toad"),
+  maze(path: "/maze"),
   testSensors(path: "/testSensors"),
   settings(path: "/settings"),
   connection(path: "/connection"),
@@ -48,6 +52,7 @@ enum BBRoute {
   sheepSettings(path: "/sheepSettings"),
   toadSettings(path: "/toadSettings"),
   spaceShipSettings(path: "/spaceShipSettings"),
+  mazeSettings(path: "/mazeSettings"),
   termsAndConditions(path: "/termsAndConditions"),
   cgu(path: "/cgu"),
   legals(path: "/legals");
@@ -67,12 +72,14 @@ class BBRoutes {
     GetPage(page: () => SheepSettingsPage(), name: BBRoute.sheepSettings.path),
     GetPage(page: () =>  SpaceShipSettingsPage(), name: BBRoute.spaceShipSettings.path),
     GetPage(page: () =>  ToadSettingsPage(), name: BBRoute.toadSettings.path),
+    GetPage(page: () =>  MazeSettingsPage(), name: BBRoute.mazeSettings.path),
     GetPage(page: () => const ConnectionPage(), name: BBRoute.connection.path),
     GetPage(page: () => BalloonGamePage(), name: BBRoute.balloon.path),
     GetPage(page: () => ToadGamePage(), name: BBRoute.toad.path),
     GetPage(page: () => SheepGamePage(), name: BBRoute.sheep.path),
     GetPage(page: () => SpaceShipGamePage(), name: BBRoute.spaceShip.path),
     GetPage(page: () => StarGamePage(), name: BBRoute.star.path),
+    GetPage(page: () => MazeGamePage(), name: BBRoute.maze.path),
     GetPage(page: () => const TermsAndConditionsPage(), name: BBRoute.termsAndConditions.path),
     GetPage(page: () => const TermsOfUsePage(), name: BBRoute.cgu.path),
     GetPage(page: () => const LegalInformationsPage(), name: BBRoute.legals.path),

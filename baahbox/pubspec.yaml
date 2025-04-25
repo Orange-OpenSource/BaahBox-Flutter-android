@@ -34,9 +34,13 @@ dependencies:
   flutter_reactive_ble: ^5.4.0
   permission_handler:
 
+  device_info_plus: ^10.1.2
+
   meta:
   auto_size_text:
   pdfx: ^2.8.0
+
+  device_preview: ^1.1.0
 
 dev_dependencies:
   flutter_test:
@@ -70,6 +74,7 @@ flutter:
      - assets/images/Games/Star/
      - assets/images/Games/Sheep/
      - assets/images/Games/Spaceship/
+     - assets/images/Games/Maze/
      - assets/images/Games/rogue_shooter/
      - assets/images/Particules/
      - assets/images/Splashscreen/

@@ -55,6 +55,16 @@ class SettingsController extends GetxController {
     "flySteadyTime": 3.0,
   }.obs;
 
+  var _mazeSettings = <String, Object>{
+    "hasChrono": false,
+    "chronoMaxTime": 20.0,
+    "hasMaxTouch": false,
+    "maxTouches": 5,
+    "isFineDirection": false,
+    "speedMovement":40.0,
+    "mazeSize": 5,
+  }.obs;
+
 // getters
   Sensor get currentSensor => _currentSensor.value;
 
@@ -62,11 +72,12 @@ class SettingsController extends GetxController {
   Map get genericSettings => _genericSettings;
   Map get spaceShipSettings => _spaceShipSettings;
   Map get toadSettings => _toadSettings;
+  Map get mazeSettings => _mazeSettings;
 
   @override
   void onInit() async {
     everAll(
-        [_genericSettings, _spaceShipSettings, _toadSettings, _sheepSettings],
+        [_genericSettings, _spaceShipSettings, _toadSettings, _sheepSettings, _mazeSettings],
         (value) => {print("settings update:   $value !")});
     super.onInit();
   }
@@ -184,6 +195,69 @@ class SettingsController extends GetxController {
       showMyToast("Null value for flies steady time !");
     }
   }
+
+  // ===================
+  // Maze Settings
+  // ===================
+  void setMazeHasChrono(bool hasChrono) {
+    _mazeSettings["hasChrono"] = hasChrono;
+    var hasChronoSetting = _mazeSettings["hasChrono"];
+    print("has chrono: $hasChronoSetting");
+  }
+
+  void setMazeFineDirection(bool isFine) {
+    _mazeSettings["isFineDirection"] = isFine;
+    var isFineSetting = _mazeSettings["isFineDirection"];
+    print("is fine direction: $isFineSetting");
+  }
+  void setMazeHasMaxWallTouches(bool hasMaxTouch) {
+    _mazeSettings["hasMaxTouch"] = hasMaxTouch;
+    var hasMaxtouchesSetting = _mazeSettings["hasMaxTouch"];
+    print("has max touches: $hasMaxtouchesSetting");
+  }
+
+  void setMazeChronoMaxTime(double? value) {
+    if (value != null) {
+      _mazeSettings["chronoMaxTime"] = value > 0 ? value : 20.0;
+      var maxTime = _mazeSettings["chronoMaxTime"];
+      print("number of flies : $maxTime");
+    } else {
+      _mazeSettings["chronoMaxTime"] = 20.0;
+      showMyToast("Null value for chrono max time !");
+    }
+  }
+  void setMazeWallMaxTouch(int? value) {
+    if (value != null) {
+      _mazeSettings["maxTouches"] = value > 0 ? value : 3;
+      var maxTime = _mazeSettings["maxTouches"];
+      print("max wall touches : $maxTime");
+    } else {
+      _mazeSettings["maxTouches"] = 3;
+      showMyToast("Null value for max wall touches !");
+    }
+  }
+
+  void setMazeSize(int? value) {
+    if (value != null) {
+      _mazeSettings["mazeSize"] = value > 0 ? value : 5;
+      var maxTime = _mazeSettings["mazeSize"];
+      print("maze size : $maxTime");
+    } else {
+      _mazeSettings["mazeSize"] = 5;
+      showMyToast("Null value for maze size !");
+    }
+  }
+  void setMazeSpeedMovement(double? value) {
+    if (value != null) {
+      _mazeSettings["speedMovement"] = value > 0 ? value : 40.0;
+      var maxTime = _mazeSettings["speedMovement"];
+      print("movement speed : $maxTime");
+    } else {
+      _mazeSettings["speedMovement"] = 40.0;
+      showMyToast("Null value for movement speed !");
+    }
+  }
+
 
   // ===================
   // ===================

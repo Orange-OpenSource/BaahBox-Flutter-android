@@ -103,6 +103,17 @@ class SettingsPage extends StatelessWidget {
             title: Text('Gobe les mouches',
                 style: Theme.of(context).textTheme.bodyLarge),
           ),
+          const Divider(
+            height: 0,
+          ),
+          ListTile(
+            trailing: Icon(Icons.arrow_forward_outlined),
+            dense: false,
+            enabled: true,
+            onTap: () => Get.toNamed(BBRoute.mazeSettings.path),
+            title: Text('Labyrinthe',
+                style: Theme.of(context).textTheme.bodyLarge),
+          ),
           Card(
             shape: ContinuousRectangleBorder(),
             child: Padding(

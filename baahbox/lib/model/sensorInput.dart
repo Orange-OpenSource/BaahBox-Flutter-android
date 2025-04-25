@@ -18,6 +18,14 @@
  *
  */
 
+
+// Frame format:
+// C1|a1|C2|a2|JBin|90 = <muscle1, muscle2, Joystic=JBin, EndOfFrame>
+// Where:
+// muscle1 = C1x32+a1
+// muscle2 = C2x32+a2
+// joystic = right|left|down|up
+// EndOfFrame = 90 -> '\n'
 List<(MusclesInput, JoystickInput)> computeData(List<int> numberlist) {
   //final numbers = <int>[13, 5, 11, 16, 0, 90, 13, 7, 11, 22, 0, 90];
   List<(MusclesInput, JoystickInput)> res = [];

@@ -69,6 +69,7 @@ class _WelcomePageState extends State<WelcomePage> {
         GameRow(BBGameList.sheep, BBRoute.sheep.path, 160, 1400),
         GameRow(BBGameList.starship, BBRoute.spaceShip.path,160, 1400),
         GameRow(BBGameList.toad, BBRoute.toad.path, 160, 1400),
+        GameRow(BBGameList.maze, BBRoute.maze.path, 160, 1400),
           ] //wrap
           ),
         ));
