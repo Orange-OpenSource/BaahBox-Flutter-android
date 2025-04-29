@@ -38,7 +38,8 @@ class GeneralSettingsPage extends GetView<SettingsController> {
         appBar: AppBar(
           title: Text('Général'),
         ),
-        body: appController.isConnectedToBox
+        body: SafeArea(
+    child:appController.isConnectedToBox
             ? ListView(
                 children: [
                   const Padding(
@@ -121,7 +122,7 @@ class GeneralSettingsPage extends GetView<SettingsController> {
                     height: 12,
                   ),
                 ],
-              ));
+              )));
   }
 }
 

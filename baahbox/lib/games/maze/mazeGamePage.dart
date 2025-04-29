@@ -52,7 +52,8 @@ class MazeGamePage extends StatelessWidget {
               onPressed: () => Get.toNamed('/mazeSettings')),
         ],
       ),
-      body: Stack(children: [
+      body:  SafeArea(
+          child:Stack(children: [
         GameWidget(
           game: game,
           overlayBuilderMap: const {
@@ -65,7 +66,7 @@ class MazeGamePage extends StatelessWidget {
             child: Text('...'),
           ),
         )
-      ]),
+      ])),
     );
   }
 }

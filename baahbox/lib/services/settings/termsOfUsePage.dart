@@ -84,7 +84,8 @@ class _TermsOfUsePageState extends State<TermsOfUsePage> {
 
         ],
       ),
-      body: PdfView(
+      body:SafeArea(
+    child: PdfView(
         builders: PdfViewBuilders<DefaultBuilderOptions>(
           options: const DefaultBuilderOptions(),
           documentLoaderBuilder: (_) =>
@@ -95,7 +96,7 @@ class _TermsOfUsePageState extends State<TermsOfUsePage> {
         ),
         controller: _pdfController,
       ),
-    );
+    ));
   }
 
   PhotoViewGalleryPageOptions _pageBuilder(

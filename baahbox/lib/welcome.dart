@@ -59,7 +59,8 @@ class _WelcomePageState extends State<WelcomePage> {
                 onPressed: () => Get.toNamed('/settings')),
           ],
         ),
-        body: Container(
+        body:  SafeArea(
+    child:Container(
           child: ListView(
               padding: const EdgeInsets.all(0),
               children: <Widget>[
@@ -72,7 +73,7 @@ class _WelcomePageState extends State<WelcomePage> {
         GameRow(BBGameList.maze, BBRoute.maze.path, 160, 1400),
           ] //wrap
           ),
-        ));
+        )));
   }
 }
 

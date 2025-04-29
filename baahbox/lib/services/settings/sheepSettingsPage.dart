@@ -34,7 +34,8 @@ class SheepSettingsPage extends GetView<SettingsController> {
       appBar: AppBar(
         title: AutoSizeText('Réglages du saute mouton', maxLines: 1),
       ),
-      body: ListView(
+      body: SafeArea(
+    child:ListView(
         children: [
           const Padding(
             padding: EdgeInsets.only(left: 32, top: 8),
@@ -86,7 +87,7 @@ class SheepSettingsPage extends GetView<SettingsController> {
           ),
         ],
       ),
-    );
+    ));
   }
 }
 

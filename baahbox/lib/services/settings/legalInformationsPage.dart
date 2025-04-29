@@ -83,7 +83,8 @@ class _LegalInformationPageState extends State<LegalInformationsPage> {
           
         ],
       ),
-      body: PdfView(
+      body: SafeArea(
+    child:PdfView(
         builders: PdfViewBuilders<DefaultBuilderOptions>(
           options: const DefaultBuilderOptions(),
           documentLoaderBuilder: (_) =>
@@ -94,7 +95,7 @@ class _LegalInformationPageState extends State<LegalInformationsPage> {
         ),
         controller: _pdfController,
       ),
-    );
+    ));
   }
 
   PhotoViewGalleryPageOptions _pageBuilder(
