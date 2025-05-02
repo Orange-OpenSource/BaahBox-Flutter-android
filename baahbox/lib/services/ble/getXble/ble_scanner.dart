@@ -41,11 +41,15 @@ class BleScanner extends GetxController {
   final _devices = <DiscoveredDevice>[];
 
 
+  List<DiscoveredDevice> getDevices() {
+    return _devices;
+  }
+
   final void Function(String message) _logMessage;
 
   void startScan(BleScannerFilter filter) {
     _logMessage('Recherche des équipements BLE');
-    _devices.clear();
+ //   _devices.clear();
     _subscription?.cancel();
     _subscription = _ble
         .scanForDevices(withServices: filter.serviceId ?? [])
