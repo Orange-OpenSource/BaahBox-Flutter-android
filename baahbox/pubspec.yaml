@@ -40,7 +40,7 @@ dependencies:
   auto_size_text:
   pdfx: 2.8.0
 
-  device_preview: 1.1.0
+  device_preview: 1.2.0
 
 dev_dependencies:
   flutter_test:
