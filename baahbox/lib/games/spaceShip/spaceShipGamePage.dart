@@ -53,7 +53,8 @@ class SpaceShipGamePage extends StatelessWidget {
                 onPressed: () => Get.toNamed('/spaceShipSettings')),
           ],
         ),
-        body: Stack(children: [
+        body: SafeArea(
+    child:Stack(children: [
           GameWidget(
             game: game,
             overlayBuilderMap: const {
@@ -66,7 +67,7 @@ class SpaceShipGamePage extends StatelessWidget {
               child: Text('Loading'),
             ),
           )
-        ]),
+        ])),
     );
   }
 }

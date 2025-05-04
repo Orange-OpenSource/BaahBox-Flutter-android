@@ -55,7 +55,8 @@ class StarGamePage extends StatelessWidget {
                 onPressed: () => Get.toNamed('/settings')),
           ],
         ),
-        body: Stack(children: [
+        body: SafeArea(
+    child:Stack(children: [
           GameWidget(
             game: game,
             overlayBuilderMap: const {
@@ -65,7 +66,7 @@ class StarGamePage extends StatelessWidget {
               'PostGame': OverlayBuilder.postGame,
             },
           ),
-        ]),
+        ])),
     );
   }
 }

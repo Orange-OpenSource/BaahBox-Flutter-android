@@ -44,7 +44,8 @@ class TestGamePage extends StatelessWidget {
                   onPressed: () => Get.toNamed(BBRoute.welcome.path)
               ),
             ),
-            body: Container(alignment: Alignment.center,
+            body: SafeArea(
+              child:Container(alignment: Alignment.center,
               child:
                 Column(mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -54,7 +55,7 @@ class TestGamePage extends StatelessWidget {
                       sensorTest(),
                     ]
                 )
-            ),
+            )),
           floatingActionButton: FloatingActionButton(
           onPressed: () => Get.back(),
           tooltip: 'Increment',

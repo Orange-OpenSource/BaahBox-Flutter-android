@@ -31,7 +31,8 @@ class SettingsPage extends StatelessWidget {
         appBar: AppBar(
           title: Text("Réglages"),
         ),
-        body: ListView(padding: const EdgeInsets.all(0), children: [
+        body: SafeArea(
+    child:ListView(padding: const EdgeInsets.all(0), children: [
           Card(
             shape: ContinuousRectangleBorder(),
             child: Padding(
@@ -134,6 +135,6 @@ class SettingsPage extends StatelessWidget {
             title:
                 Text('A propos', style: Theme.of(context).textTheme.bodyLarge),
           ),
-        ]));
+        ])));
   }
 }

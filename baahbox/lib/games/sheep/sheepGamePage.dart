@@ -52,7 +52,8 @@ class SheepGamePage extends StatelessWidget {
                 onPressed: () => Get.toNamed('/sheepSettings')),
           ],
         ),
-        body: Stack(children: [
+        body: SafeArea(
+    child:Stack(children: [
           GameWidget(
             game: game,
             overlayBuilderMap: const {
@@ -65,7 +66,7 @@ class SheepGamePage extends StatelessWidget {
               child: Text('...'),
             ),
           )
-        ]),
+        ])),
     );
   }
 }
