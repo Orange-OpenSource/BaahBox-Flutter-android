@@ -52,7 +52,8 @@ class ToadGamePage extends StatelessWidget {
                 onPressed: () => Get.toNamed('/toadSettings')),
           ],
         ),
-        body: Stack(children: [
+        body: SafeArea(
+    child:Stack(children: [
           GameWidget(
             game: game,
             overlayBuilderMap: const {
@@ -65,7 +66,7 @@ class ToadGamePage extends StatelessWidget {
               child: Text('Loading'),
             ),
           )
-        ]),
+        ])),
     );
   }
 }

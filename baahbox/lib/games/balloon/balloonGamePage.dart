@@ -52,7 +52,8 @@ class BalloonGamePage extends StatelessWidget {
                 onPressed: () => Get.toNamed('/settings')),
           ],
         ),
-        body: Stack(children: [
+        body: SafeArea(
+    child:Stack(children: [
           GameWidget(
             game: game,
             overlayBuilderMap: const {
@@ -62,7 +63,7 @@ class BalloonGamePage extends StatelessWidget {
               'PostGame': OverlayBuilder.postGame,
             },
           )
-          ]),
+          ])),
     );
   }
 }

@@ -21,8 +21,9 @@ version: 1.0.1+4
 environment:
   sdk: ">=3.0.0 <4.0.0"
 dependencies:
-  flame: 1.26.1
-  flame_svg: any
+  flame: 1.28.1
+  flame_svg: 1.11.11
+  
   flutter:
     sdk: flutter
   get:
@@ -40,7 +41,8 @@ dependencies:
   auto_size_text:
   pdfx: 2.8.0
 
-  device_preview: 1.1.0
+
+  device_preview: 1.2.0
 
 dev_dependencies:
   flutter_test:
