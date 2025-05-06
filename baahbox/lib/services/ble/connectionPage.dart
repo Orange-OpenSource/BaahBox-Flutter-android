@@ -92,6 +92,10 @@ class _ConnectionPageState extends State<ConnectionPage> {
       // Connected
       if (event == BleStatus.ready) {
         bleController.bleLogger.addToLog("starting Scanning");
+        _foundBleUARTDevices = bleController.scanner.getDevices();
+        if (_foundBleUARTDevices.isNotEmpty) {
+          refreshScreen();
+        }
         bleController.scanner.rxBleScannerState.listen((scannerState) {
           _foundBleUARTDevices = scannerState.discoveredDevices;
           refreshScreen();
@@ -223,121 +227,125 @@ class _ConnectionPageState extends State<ConnectionPage> {
     Navigator.of(context).pop(true);
     return Future<bool>.value(true);
   }
+
   @override
   Widget build(BuildContext context) => WillPopScope(
-  onWillPop: _onBackPressed,
-  child: Scaffold(
-        appBar: AppBar(
-            title: Text("Connexion")),
-        body: SafeArea(
-  child:SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              BleMonitorView(),
-              Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                      padding: EdgeInsets.only(left: 20),
-                      child: Text(
-                          _connected
-                              ? "Vous êtes connecté:"
-                              : "Sélectionnez votre Baah Box: ",
-                          style: Theme.of(context).textTheme.bodyLarge))),
-              if (_connected)
-                ListTile(
-                  leading: Image.asset('assets/images/Dashboard/tick.png',
-                      width: 20),
-                  dense: false,
-                  enabled: true,
-                  onTap: () async {
-                    _disconnect();
-                  },
-                  title: Text(appController.connectedDeviceName,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyLarge
-                          ?.copyWith(fontWeight: FontWeight.bold)),
-                  subtitle: Text(appController.connectedDeviceId),
-                ),
-              SizedBox(
-                height: 15,
-              ),
-              if (_foundBleUARTDevices.length <= 0)
-                Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                        padding: EdgeInsets.only(left: 20),
-                        child: Text("Aucune BaahBox trouvée.",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge
-                                ?.copyWith(fontWeight: FontWeight.bold))))
-              else
-                Container(
+      onWillPop: _onBackPressed,
+      child: Scaffold(
+          appBar: AppBar(title: Text("Connexion")),
+          body: SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  BleMonitorView(),
+                  Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                          padding: EdgeInsets.only(left: 20),
+                          child: Text(
+                              _connected
+                                  ? "Vous êtes connecté:"
+                                  : "Sélectionnez votre Baah Box: ",
+                              style: Theme.of(context).textTheme.bodyLarge))),
+                  if (_connected)
+                    ListTile(
+                      leading: Image.asset('assets/images/Dashboard/tick.png',
+                          width: 20),
+                      dense: false,
+                      enabled: true,
+                      onTap: () async {
+                        _disconnect();
+                      },
+                      title: Text(appController.connectedDeviceName,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge
+                              ?.copyWith(fontWeight: FontWeight.bold)),
+                      subtitle: Text(appController.connectedDeviceId),
+                    ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  if (_foundBleUARTDevices.length <= 0)
+                    Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                            padding: EdgeInsets.only(left: 20),
+                            child: Text("Aucune BaahBox trouvée.",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.copyWith(fontWeight: FontWeight.bold))))
+                  else
+                    Container(
+                        margin: const EdgeInsets.all(5.0),
+                        height: 75,
+                        child: ListView.builder(
+                          itemCount: _foundBleUARTDevices.length,
+                          itemBuilder: (context, index) => ListTile(
+                            leading: isDeviceConnectedToApp(
+                                    _foundBleUARTDevices[index].id)
+                                ? const Icon(Icons.link, color: Colors.blue)
+                                : const Icon(Icons.link_off_outlined),
+                            dense: false,
+                            enabled: true,
+                            onTap: () async {
+                              !_connected
+                                  ? onConnectDevice(index)
+                                  : _disconnect();
+                            },
+                            title: Text(_foundBleUARTDevices[index].name,
+                                style: TextStyle(
+                                    color: _connected
+                                        ? Colors.black
+                                        : Colors.blue)),
+                            subtitle: Text(
+                              _foundBleUARTDevices[index].id,
+                            ),
+                          ),
+                        )),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                      padding: EdgeInsets.all(5),
+                      child: const Text("Données reçues:",
+                          textAlign: TextAlign.left)),
+                  Container(
                     margin: const EdgeInsets.all(5.0),
-                    height: 75,
-                    child: ListView.builder(
-                      itemCount: _foundBleUARTDevices.length,
-                      itemBuilder: (context, index) => ListTile(
-                        leading: isDeviceConnectedToApp(
-                                _foundBleUARTDevices[index].id)
-                            ? const Icon(Icons.link, color: Colors.blue)
-                            : const Icon(Icons.link_off_outlined),
-                        dense: false,
-                        enabled: true,
-                        onTap: () async {
-                          !_connected ? onConnectDevice(index) : _disconnect();
-                        },
-                        title: Text(_foundBleUARTDevices[index].name,
-                            style: TextStyle(
-                                color:
-                                    _connected ? Colors.black : Colors.blue)),
-                        subtitle: Text(
-                          _foundBleUARTDevices[index].id,
-                        ),
-                      ),
-                    )),
-              SizedBox(
-                height: 10,
+                    width: 1400,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(color: Colors.blue, width: 2)),
+                    height: 90,
+                    child: _connected
+                        ? Obx(() => Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Text(appController.musclesInput.describe() +
+                                "\n" +
+                                appController.joystickInput.describe())))
+                        : const Text(""),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  const Text(" Messages bluetooth:"),
+                  Container(
+                      margin: const EdgeInsets.all(5.0),
+                      width: 1400,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: Colors.blue, width: 2)),
+                      height: 100,
+                      child: Scrollbar(
+                          child: SingleChildScrollView(
+                              child: Padding(
+                                  padding: EdgeInsets.all(5), child: Text(
+                                      //"${bleController.bleLogger.rxMessages.value})//"
+                                      "$_logTexts"))))),
+                ],
               ),
-              Padding(
-                  padding: EdgeInsets.all(5),
-                  child:
-                      const Text("Données reçues:", textAlign: TextAlign.left)),
-              Container(
-                margin: const EdgeInsets.all(5.0),
-                width: 1400,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    border: Border.all(color: Colors.blue, width: 2)),
-                height: 90,
-                child: _connected
-                    ? Obx(() => Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Text(appController.musclesInput.describe() +
-                            "\n" +
-                            appController.joystickInput.describe())))
-                    : const Text(""),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              const Text(" Messages bluetooth:"),
-              Container(
-                  margin: const EdgeInsets.all(5.0),
-                  width: 1400,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      border: Border.all(color: Colors.blue, width: 2)),
-                  height: 100,
-                  child: Scrollbar(
-                      child: SingleChildScrollView(
-                          child: Padding(padding: EdgeInsets.all(5), child: Text(
-                              //"${bleController.bleLogger.rxMessages.value})//"
-                              "$_logTexts"))))),
-            ],
-          ),
-        ),
-      )));
+            ),
+          )));
 }
