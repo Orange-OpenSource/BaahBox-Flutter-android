@@ -214,7 +214,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
 
   void updateControllerWith(List<int> data) {
     var tuples = computeData(data);
-    for ((AnalogInputs, DigitalInputs) tuple in tuples) {
+    for ((MusclesInput, JoystickInput) tuple in tuples) {
       //  print("${tuple.$1.describe()}, ${tuple.$2.describe()}");
       appController.setJoystickTo(tuple.$2);
       appController.setMusclesTo(tuple.$1);
@@ -322,9 +322,9 @@ class _ConnectionPageState extends State<ConnectionPage> {
                     child: _connected
                         ? Obx(() => Padding(
                             padding: EdgeInsets.all(10),
-                            child: Text(appController.analogInput.describe() +
+                            child: Text(appController.musclesInput.describe() +
                                 "\n" +
-                                appController.digitalInputs.describe())))
+                                appController.joystickInput.describe())))
                         : const Text(""),
                   ),
                   SizedBox(
