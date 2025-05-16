@@ -26,17 +26,19 @@ import 'package:baahbox/controllers/appController.dart';
 class SettingsController extends GetxController {
   final Controller appController = Get.find();
 
-  var _currentSensor = Sensor.arcadeJoystick.obs;
+  var _currentSensor = Sensor.digitalJoystick.obs;
 
   // TODO: use classes instead of maps
   var _genericSettings = <String, Object>{
     "sensitivity": Sensitivity.medium,
-    "sensor": Sensor.arcadeJoystick,
+    "sensor": Sensor.digitalJoystick,
     "numberOfSensors": 1,
     "threshold": 0.2,
     "demoMode": false,
     "isSensor1On": true,
     "isSensor2On": false,
+    "analogInputRangeForHandleLower": 10,
+    "analogInputRangeForHandleUpper":100
   }.obs;
 
   var _sheepSettings = <String, Object>{
@@ -106,6 +108,28 @@ class SettingsController extends GetxController {
 
   void setMuscle2To(bool mu2) {
     _genericSettings["isSensor2On"] = mu2;
+  }
+
+  void setHandleRangeLower(int val) {
+    if(val>0 && val <=180)
+      {
+        _genericSettings["analogInputRangeForHandleLower"] = val;
+      }
+
+  }
+
+  void setHandleRangeUpper(int val) {
+    if(val>0 && val <=180)
+    {
+      _genericSettings["analogInputRangeForHandleUpper"] = val;
+    }
+  }
+  int getHandleRangeLower() {
+    return (_genericSettings["analogInputRangeForHandleLower"] ?? 0) as int;
+  }
+
+  int getHandleRangeUpper() {
+    return (_genericSettings["analogInputRangeForHandleUpper"] ?? 0) as int;
   }
 
   void updateSensorTo(Sensor? sensor) {

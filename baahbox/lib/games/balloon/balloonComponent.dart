@@ -56,7 +56,7 @@ class BalloonComponent extends SpriteComponent with HasGameRef<BalloonGame> {
   }
 
   updateSprite(double dt) {
-    int coeff = (gameRef.input / 100).toInt();
+    int coeff = (gameRef.input / 10).toInt();
     switch (coeff) {
       case 0 || 1:
         setTo(balloonstartSprite, 0);
@@ -74,7 +74,7 @@ class BalloonComponent extends SpriteComponent with HasGameRef<BalloonGame> {
       this.size = newSize / 4;
     } else if (coeff > 0) {
       var newSize = this.sprite?.srcSize ?? Vector2(400, 600);
-      this.size = newSize * (coeff / 1000).toDouble();
+      this.size = newSize * (coeff / 100).toDouble();
     }
   }
 }

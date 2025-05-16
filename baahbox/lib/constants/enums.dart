@@ -45,11 +45,10 @@ enum ShootingType {
 enum Sensor {
   none(asset: 'assets/images/Dashboard/demo_icon.png'),
   muscle(asset: 'assets/images/Dashboard/muscle.png'),
-  arcadeJoystick(asset: 'assets/images/Dashboard/joystick.png'),
+  analogJoystick(asset: 'assets/images/Dashboard/joystick.png'),
   button(asset: 'assets/images/Dashboard/demo_icon.png'),
   digitalJoystick(asset: 'assets/images/Dashboard/joystick.png'),
-  wheelChairJoystick(asset: 'assets/images/Dashboard/joystick.png'),
-  hand(asset: 'assets/images/Dashboard/poignee.png');
+  handle(asset: 'assets/images/Dashboard/poignee.png');
 
   const Sensor({required this.asset});
   final String asset;

@@ -29,6 +29,7 @@ import 'package:get/get.dart';
 import 'package:baahbox/controllers/appController.dart';
 import 'package:baahbox/constants/enums.dart';
 import 'package:baahbox/games/BBGame.dart';
+import '../../model/sensorInput.dart';
 import 'starSprite.dart';
 import 'package:baahbox/services/settings/settingsController.dart';
 
@@ -46,6 +47,7 @@ class StarGame extends BBGame with TapCallbacks {
   var instructionSubtitleMuscle = 'en contractant ton muscle';
   var instructionSubtitleJoystick = 'pousse le joystick en haut';
   var instructionSubtitleFinger = 'glisse le doigt de bas en haut';
+  var instructionSubtitleHandle = 'tire la poignée vers le haut';
 
   final feedBackTitle = 'encore un effort!';
   @override
@@ -98,17 +100,30 @@ class StarGame extends BBGame with TapCallbacks {
     if (appController.isConnectedToBox) {
       var sensorType = settingsController.currentSensor;
       switch (sensorType) {
+        case Sensor.analogJoystick:
+          int newValue = rangeMap(500-appController.analogInputs.analog2, 0, 500, 0, 1000);
+          input = newValue >= 50 ? newValue : 0;
         case Sensor.muscle:
         // The strength is in range [0...1024] -> Have it fit into [0...100]
-          input = appController.musclesInput.muscle1;
-        case Sensor.arcadeJoystick:
-          var joystickInput = appController.joystickInput;
+          input = appController.analogInputs.analog1;
+        case Sensor.digitalJoystick:
+          var joystickInput = appController.digitalInputs;
           if (joystickInput.up && input < 1000) {
             input += 8;
           } else if  (input >= 10) {
               input -= 5;
           }
-        default:
+        case Sensor.handle:
+          {
+            input = calibrateAnalogInput(
+                appController.analogInputs.analog1,
+                settingsController
+                    .genericSettings["analogInputRangeForHandleLower"],
+                settingsController.genericSettings[
+                "analogInputRangeForHandleUpper"]);
+          }
+        case Sensor.none:
+        case Sensor.button:
       }
     } else {
       input = panInput;

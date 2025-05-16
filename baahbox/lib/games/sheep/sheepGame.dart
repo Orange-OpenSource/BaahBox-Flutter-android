@@ -38,6 +38,8 @@ import 'package:baahbox/games/sheep/components/counterManager.dart';
 import 'package:baahbox/games/sheep/background/cloud_manager.dart';
 import 'package:baahbox/services/settings/settingsController.dart';
 
+import '../../model/sensorInput.dart';
+
 class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
   final Controller appController = Get.find();
   final SettingsController settingsController = Get.find();
@@ -59,6 +61,7 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
   bool hasSheepStartedJumping = false;
   bool sheepDidJumpOverGate = false;
   int strengthValue = 0;
+  int threshold = 10;
   var gateVelocity = ObjectVelocity.low;
 
   int panInput = 0;
@@ -68,6 +71,7 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
   var instructionSubtitleMuscle = 'en contractant ton muscle';
   var instructionSubtitleJoystick = 'pousse le joystick en haut';
   var instructionSubtitleFinger = 'glisse le doigt de bas en haut';
+  var instructionSubtitleHandle = 'tire la poignée vers le haut';
 
   var endTitle = 's';
   var feedbackTitleWon = 'Bravo! \ntu as sauté toutes les barrières';
@@ -183,7 +187,6 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
     if (appController.isActive) {
       appController.updateConnectionState();
       if (isRunning) {
-        refreshInput();
         transformInputInMove();
         if (isNewGateOnQueue()) {
           if (!isSheepOnFloor() && !sheepDidJumpOverGate) {
@@ -204,17 +207,46 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
   }
 
   void transformInputInMove() {
+
+
     if (appController.isConnectedToBox) {
       //   if input <= threshold { return }
       //   var heightConstraint = (CGFloat(strengthValue) - CGFloat (hardnessCoeff*350)) / 1000
 //   if heightConstraint < 0 { heightConstraint = 0 }
       var sensor = settingsController.currentSensor;
       switch (sensor) {
-        case Sensor.muscle:
+        case Sensor.analogJoystick:
+          int newValue = rangeMap(500-appController.analogInputs.analog2, 0, 500, 0, 1000);
+          input = newValue >= 50 ? (newValue / 10).toInt() : 0;
           final jumpHeigth = floorY * (1 - (input / 100));
           sheep.moveTo(jumpHeigth);
-        case Sensor.arcadeJoystick:
-          var joystickInput = appController.joystickInput;
+        case Sensor.handle:
+          {
+            input = (calibrateAnalogInput(
+                appController.analogInputs.analog1,
+                settingsController
+                    .genericSettings["analogInputRangeForHandleLower"],
+                settingsController.genericSettings[
+                "analogInputRangeForHandleUpper"])
+                /10)
+                .toInt();
+            input = input >= threshold ? input : 0;
+            final jumpHeigth = floorY * (1 - (input / 100));
+            sheep.moveTo(jumpHeigth);
+          }
+        case Sensor.muscle:
+          if (settingsController.genericSettings["isSensor1On"]) {
+            input = (appController.analogInputs.analog1 / 10).toInt();
+          } else if (settingsController.genericSettings["isSensor2On"]) {
+            input = (appController.analogInputs.analog2 / 10).toInt();
+          } else {
+            input = 0;
+          }
+          input = input >= threshold ? input : 0;
+          final jumpHeigth = floorY * (1 - (input / 100));
+          sheep.moveTo(jumpHeigth);
+        case Sensor.digitalJoystick:
+          var joystickInput = appController.digitalInputs;
           if (joystickInput.up) {
             sheep.moveTo(sheep.y - 3);
           } else if (joystickInput.down) {
@@ -223,25 +255,11 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
         default:
       }
     }
-// let jumpheightWithConstraint = groundPosition.y + (maxHeigthJump * heightConstraint)
-// jumpTo(sprite: sheep, height: jumpheightWithConstraint)
-  }
+    else
+      {
+        input = panInput;
+      }
 
-//  var heightConstraint = (CGFloat(strengthValue) - CGFloat (hardnessCoeff*350)) / 1000
-//  if heightConstraint < 0 { heightConstraint = 0 }
-// let jumpheightWithConstraint = groundPosition.y + (maxHeigthJump * heightConstraint)
-// jumpTo(sprite: sheep, height: jumpheightWithConstraint)
-
-  void refreshInput() {
-    // todo deal with 2 muscles or joystick input
-    if (appController.isConnectedToBox) {
-      // The strength is in range [0...1024] -> Have it fit into [0...100]
-      input = (appController.musclesInput.muscle1 ~/ 10);
-      print("sheep: input= $input");
-
-    } else { // demo mode
-      input = panInput;
-    }
   }
 
   void checkSheepAndGatePositions() {
