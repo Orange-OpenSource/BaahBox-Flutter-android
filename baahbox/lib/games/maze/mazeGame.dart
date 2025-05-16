@@ -51,7 +51,7 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
   final SettingsController settingsController = Get.find();
   final MazeFactory mazeController = MazeFactory();
 
-  var instructionTitle = 'Traverse le labynthe';
+  var instructionTitle = 'Traverse le labyrinthe';
   var instructionSubtitleJoystick =
       'pousse le joystick à gauche, à droite, en haut ou en bas';
   var instructionSubtitleFinger =

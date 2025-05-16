@@ -9,7 +9,7 @@ plugins {
 android {
     namespace = "com.orange.labs.baahbox"
     compileSdk = 35
-    ndkVersion =  flutter.ndkVersion
+    ndkVersion =  "27.0.12077973" //flutter.ndkVersion
 
 
     java {
