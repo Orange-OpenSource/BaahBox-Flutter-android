@@ -10,8 +10,9 @@ class MuscleSettingsView extends GetView<SettingsController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.all(20),
-        child: ListView(children: [
+        width: double.infinity,
+        child:
+            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           Card(
               shape: ContinuousRectangleBorder(),
               child: Padding(
@@ -36,21 +37,25 @@ class MuscleSettingsView extends GetView<SettingsController> {
           const SizedBox(
             height: 12,
           ),
-          Obx(() => SwitchListTile.adaptive(
-              title: const Text("Muscle1"),
-              value: controller.genericSettings["isSensor1On"],
-              onChanged: (bool newValue) {
-                controller.setMuscle1To(newValue);
-              })),
+          Container(
+              padding: EdgeInsets.all(20),
+              child: Obx(() => SwitchListTile.adaptive(
+                  title: const Text("Muscle1"),
+                  value: controller.genericSettings["isSensor1On"],
+                  onChanged: (bool newValue) {
+                    controller.setMuscle1To(newValue);
+                  }))),
           const SizedBox(
             height: 5,
           ),
-          Obx(() => SwitchListTile.adaptive(
-              title: const Text("Muscle2"),
-              value: controller.genericSettings["isSensor2On"],
-              onChanged: (bool newValue) {
-                controller.setMuscle2To(newValue);
-              })),
+          Container(
+              padding: EdgeInsets.all(20),
+              child: Obx(() => SwitchListTile.adaptive(
+                  title: const Text("Muscle2"),
+                  value: controller.genericSettings["isSensor2On"],
+                  onChanged: (bool newValue) {
+                    controller.setMuscle2To(newValue);
+                  }))),
         ]));
   }
 }

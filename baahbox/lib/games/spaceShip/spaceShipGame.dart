@@ -36,6 +36,8 @@ import 'package:baahbox/games/spaceShip/components/lifeManager.dart';
 import 'package:flame/input.dart';
 import 'package:baahbox/services/settings/settingsController.dart';
 
+import '../../model/sensorInput.dart';
+
 class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
   final Controller appController = Get.find();
   final SettingsController settingsController = Get.find();
@@ -57,6 +59,8 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
   var instructionSubtitleMuscle = 'en contractant tes muscles';
   var instructionSubtitleJoystick = 'pousse le joystick à gauche ou à droite';
   var instructionSubtitleFinger = 'glisse le doigt à gauche ou à droite';
+  var instructionSubtitleHandle = 'tire la poignée vers le haut';
+
   int threshold = 10;
 
   @override
@@ -136,22 +140,44 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
     if (appController.isConnectedToBox) {
       var sensorType = settingsController.currentSensor;
       switch (sensorType) {
+        case Sensor.analogJoystick:
+          int analog1 = rangeMap(appController.analogInputs.analog1, 0, 1024, 500, -500);
+
+          inputL = analog1<0 ?analog1.abs().toInt() : 0;
+          inputR = analog1>0 ?analog1.toInt() : 0;
+          goLeft = inputL > threshold;
+          goRight = inputR > threshold;
+
+        case Sensor.handle:
+          {
+            int input = (calibrateAnalogInput(
+                appController.analogInputs.analog1,
+                settingsController
+                    .genericSettings["analogInputRangeForHandleLower"],
+                settingsController.genericSettings[
+                "analogInputRangeForHandleUpper"])
+                /10)
+                .toInt();
+            goLeft = input < 50 - threshold;
+            goRight = input > 50 + threshold;
+          }
         case Sensor.muscle:
           // The strength is in range [0...1024] -> Have it fit into [0...100]
-          inputL = (appController.musclesInput.muscle1 ~/ 10);
-          inputR = (appController.musclesInput.muscle2 ~/ 10);
+          inputL = (appController.analogInputs.analog1 ~/ 10);
+          inputR = (appController.analogInputs.analog2 ~/ 10);
           goLeft = (inputL > threshold) && (inputL > inputR);
           goRight = (inputR > threshold) && (inputR > inputL);
 
-        case Sensor.arcadeJoystick:
-          var joystickInput = appController.joystickInput;
+        case Sensor.digitalJoystick:
+          var joystickInput = appController.digitalInputs;
           goLeft = joystickInput.right;
           goRight = joystickInput.left;
           print("joystick : " + joystickInput.describe());
           print("right : $goRight");
           print("left : $goLeft");
 
-        default:
+        case Sensor.button:
+        case Sensor.none:
       }
     }
   }
@@ -160,7 +186,7 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
     if (!goLeft && !goRight) {
       return;
     }
-    var offset = goLeft ? 2.0 : -2.0;
+    var offset = goLeft ? -2.0 : 2.0;
     ship.moveBy(offset);
   }
 

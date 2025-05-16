@@ -57,6 +57,8 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
   var instructionSubtitleFinger =
       'pousse le joystick virtuel à gauche, à droite, en haut ou en bas';
 
+  var instructionSubtitleHandle = 'tire la poignée vers le haut';
+
   late int cellWidth;
   late int cellHeight;
   @override
@@ -187,8 +189,8 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
   // Box input
   void refreshInput() {
     if (appController.isConnectedToBox &&
-        settingsController.currentSensor == Sensor.arcadeJoystick) {
-      var joystickInput = appController.joystickInput;
+        settingsController.currentSensor == Sensor.digitalJoystick) {
+      var joystickInput = appController.digitalInputs;
       if (joystickInput.right) {
         player.state = MovingState.right;
       } else if (joystickInput.left) {
@@ -197,6 +199,25 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
         player.state = MovingState.up;
       } else if (joystickInput.down) {
         player.state = MovingState.down;
+      }
+    } else if (appController.isConnectedToBox &&
+        settingsController.currentSensor == Sensor.analogJoystick) {
+      double newXValue = (500 - appController.analogInputs.analog1) / 500;
+      double newYValue = (appController.analogInputs.analog2 - 500) / 500;
+      if (settingsController.mazeSettings["isFineDirection"]) {
+        player.moveDelta(Vector2(newXValue, newYValue));
+      } else {
+        if (newXValue.abs() > newYValue.abs() && newXValue.abs() > 0.1) {
+          newXValue > 0
+              ? player.state = MovingState.right
+              : player.state = MovingState.left;
+        } else if (newYValue.abs() > 0.1) {
+          newYValue > 0
+              ? player.state = MovingState.down
+              : player.state = MovingState.up;
+        } else {
+          player.state = MovingState.none;
+        }
       }
     } else {
       if (settingsController.mazeSettings["isFineDirection"]) {
@@ -216,18 +237,6 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
         } else {
           player.state = MovingState.none;
         }
-        /* switch(joystick.direction)
-            {
-              case JoystickDirection.idle:
-        case JoystickDirection.up: player.state = MovingState.up; break;
-        case JoystickDirection.down:player.state = MovingState.down; break;
-        case JoystickDirection.left:player.state = MovingState.up; break;
-        case JoystickDirection.right:player.state = MovingState.up; break;
-        case JoystickDirection.upLeft:player.state = MovingState.up; break;
-        case JoystickDirection.downLeft:player.state = MovingState.up; break;
-        case JoystickDirection.upRight:player.state = MovingState.up; break;
-        case JoystickDirection.downRight:player.state = MovingState.up; break;
-      }*/
       }
     }
   }
