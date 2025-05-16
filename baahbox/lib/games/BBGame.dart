@@ -39,6 +39,7 @@ class BBGame extends FlameGame with PanDetector {
   String instructionSubtitleMuscle = "sous titre Muscle";
   String instructionSubtitleJoystick = "sous titre Joystick";
   String instructionSubtitleFinger = "sous titre Finger";
+  String instructionSubtitleHandle = "sous titre Handle";
   String feedback = "encore un effort !";
 
   bool get isRunning => state == GameState.running;
@@ -66,7 +67,7 @@ class BBGame extends FlameGame with PanDetector {
       switch (sensorType) {
         case Sensor.muscle:
           subTitle = instructionSubtitleMuscle;
-        case Sensor.arcadeJoystick:
+        case Sensor.analogJoystick:
           subTitle = instructionSubtitleJoystick;
         default:
           subTitle = instructionSubtitleFinger;

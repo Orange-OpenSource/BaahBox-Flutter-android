@@ -26,6 +26,7 @@ import 'package:baahbox/controllers/appController.dart';
 import 'package:get/get.dart';
 import 'package:baahbox/constants/enums.dart';
 import 'package:baahbox/games/BBGame.dart';
+import '../../model/sensorInput.dart';
 import 'balloonComponent.dart';
 import 'package:baahbox/services/settings/settingsController.dart';
 
@@ -36,11 +37,12 @@ class BalloonGame extends BBGame with TapCallbacks {
   late BalloonComponent _balloon;
 
   var panInput = 0;
-  var input = 0;
+  int input = 0;
   var instructionTitle = 'Gonfle le ballon';
   var instructionSubtitleMuscle = 'en contractant ton muscle';
   var instructionSubtitleJoystick = 'pousse le joystick en haut';
   var instructionSubtitleFinger = 'glisse le doigt de bas en haut';
+  var instructionSubtitleHandle = 'tire la poignée vers le haut';
   var feedback1 = "C'est parti !";
   var feedback2 = 'Encore un petit effort!';
   var feedback3 = 'On y est presque !';
@@ -79,23 +81,44 @@ class BalloonGame extends BBGame with TapCallbacks {
       }
     }
   }
-  
+
   void refreshInput() {
     // Todo : deal with threshod and sensitivity
     if (appController.isConnectedToBox) {
       var sensorType = settingsController.currentSensor;
       switch (sensorType) {
+        case Sensor.analogJoystick:
+          int newValue = rangeMap(500-appController.analogInputs.analog2, 0, 500, 0, 1000);
+          input = newValue >= 50 ? (newValue / 10).toInt() : 0;
         case Sensor.muscle:
-        // The strength is in range [0...1024] -> Have it fit into [0...100]
-          input = appController.musclesInput.muscle1;
-        case Sensor.arcadeJoystick:
-          var joystickInput = appController.joystickInput;
-          if (joystickInput.up && input < 1000) {
+          // The strength is in range [0...1024] -> Have it fit into [0...100]
+          if (settingsController.genericSettings["isSensor1On"]) {
+            input = (appController.analogInputs.analog1 / 10).toInt();
+          } else if (settingsController.genericSettings["isSensor2On"]) {
+            input = (appController.analogInputs.analog2 / 10).toInt();
+          } else {
+            input = 0;
+          }
+        case Sensor.digitalJoystick:
+          var joystickInput = appController.digitalInputs;
+          if (joystickInput.up && input < 100) {
             input += 8;
-          } else if  (input >= 10) {
+          } else if (input >= 10) {
             input -= 5;
           }
-        default:
+        case Sensor.handle:
+          {
+            input = (calibrateAnalogInput(
+                        appController.analogInputs.analog1,
+                        settingsController
+                            .genericSettings["analogInputRangeForHandleLower"],
+                        settingsController.genericSettings[
+                            "analogInputRangeForHandleUpper"])
+                    /10)
+                .toInt();
+          }
+        case Sensor.none:
+        case Sensor.button:
       }
     } else {
       input = panInput;
@@ -103,12 +126,12 @@ class BalloonGame extends BBGame with TapCallbacks {
   }
 
   void updateOverlaysAndState() {
-    int coeff = (input / 100).toInt();
-    if (input < 300) {
+
+    if (input < 30) {
       feedback = feedback1;
-    } else if (input < 500) {
+    } else if (input < 50) {
       feedback = feedback2;
-    } else if (input < 800) {
+    } else if (input < 80) {
       feedback = feedback3;
     } else {
       endGame();
@@ -118,7 +141,7 @@ class BalloonGame extends BBGame with TapCallbacks {
 
   @override
   void startGame() {
-    input =0;
+    input = 0;
     _balloon.initialize();
     super.startGame();
     displayFeedBack();
@@ -127,7 +150,6 @@ class BalloonGame extends BBGame with TapCallbacks {
   @override
   void resetGame() {
     super.resetGame();
-
   }
 
   @override

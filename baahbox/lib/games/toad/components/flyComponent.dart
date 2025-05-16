@@ -63,7 +63,7 @@ class FlyComponent extends SpriteComponent
     var width = 50.00;//gameRef.size.x/10;
     size = Vector2(width,width/ratio);
     anchor = Anchor.center;
-    add(CircleHitbox());
+    add(RectangleHitbox());
     gameRef.registerToFlyNet(position);
     show();
     _AppearanceTimer.timer.start();

@@ -24,6 +24,7 @@ import 'package:baahbox/constants/enums.dart';
 import 'package:baahbox/controllers/appController.dart';
 import 'package:baahbox/services/settings/settingsController.dart';
 
+import 'generalSettingsHandlePage.dart';
 import 'generalSettingsMusclePage.dart';
 
 class GeneralSettingsPage extends GetView<SettingsController> {
@@ -38,91 +39,98 @@ class GeneralSettingsPage extends GetView<SettingsController> {
         appBar: AppBar(
           title: Text('Général'),
         ),
-        body: SafeArea(
-    child:appController.isConnectedToBox
-            ? ListView(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(left: 32, top: 8),
-                  ),
-                  Card(
-                      shape: ContinuousRectangleBorder(),
-                      child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'Type de capteur',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+        body: SafeArea(child: Obx(() {
+          if (appController.isConnectedToBox == true) {
+            return ListView(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(left: 32, top: 8),
+                ),
+                Card(
+                    shape: ContinuousRectangleBorder(),
+                    child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Type de capteur',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                                const Text(
-                                  'Précisez le type de capteur utilisé',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                  ),
+                              ),
+                              const Text(
+                                'Précisez le type de capteur utilisé',
+                                style: TextStyle(
+                                  fontSize: 12,
                                 ),
-                              ]))),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                  const Padding(
-                      padding: EdgeInsets.only(left: 16, top: 8),
-                      child: const Text(
-                        'Capteur utilisé:',
-                        style: TextStyle(
-                          fontSize: 16,
-                        ),
-                      )),
-                  const Padding(
-                      padding: EdgeInsets.only(right: 16, top: 8),
-                      child: Align(
-                          alignment: Alignment.centerRight,
-                          child: RadioSensorChoice())),
-                  const SizedBox(
-                    height: 36,
-                  ),
-                  Obx(() => controller.currentSensor == Sensor.muscle
-                      ? MuscleSettingsView()
-                      : const SizedBox(
-                          height: 0,
-                        ))
-                ],
-              )
-            : ListView(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(left: 32, top: 8),
-                  ),
-                  Card(
-                      shape: ContinuousRectangleBorder(),
-                      child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'Mode sans connexion activé',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                              ),
+                            ]))),
+                const SizedBox(
+                  height: 12,
+                ),
+                const Padding(
+                    padding: EdgeInsets.only(left: 16, top: 8),
+                    child: const Text(
+                      'Capteur utilisé:',
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    )),
+                const Padding(
+                    padding: EdgeInsets.only(right: 16, top: 8),
+                    child: Align(
+                        alignment: Alignment.centerRight,
+                        child: RadioSensorChoice())),
+                const SizedBox(
+                  height: 36,
+                ),
+                Obx(() {
+                  if (controller.currentSensor == Sensor.muscle) {
+                    return MuscleSettingsView();
+                  } else if (controller.currentSensor == Sensor.handle) {
+                    return HandleSettingsView();
+                  } else {
+                    return const SizedBox(height: 0);
+                  }
+                })
+              ],
+            );
+          } else {
+            return ListView(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(left: 32, top: 8),
+                ),
+                Card(
+                    shape: ContinuousRectangleBorder(),
+                    child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Mode sans connexion activé',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                                const Text(
-                                  "S'il n'y a pas de boitier BaahBox connecté, \nvous pouvez quand même jouer!\nFaites glisser votre doigt vers le haut, la gauche ou la droite pour jouer.",
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                  ),
+                              ),
+                              const Text(
+                                "S'il n'y a pas de boitier BaahBox connecté, \nvous pouvez quand même jouer!\nFaites glisser votre doigt vers le haut, la gauche ou la droite pour jouer.",
+                                style: TextStyle(
+                                  fontSize: 12,
                                 ),
-                              ]))),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                ],
-              )));
+                              ),
+                            ]))),
+                const SizedBox(
+                  height: 12,
+                ),
+              ],
+            );
+          }
+        })));
   }
 }
 
@@ -137,7 +145,7 @@ class SensitivitySelectionView extends StatefulWidget {
 class _SensitivitySelectionViewState extends State<SensitivitySelectionView> {
   final SettingsController controller = Get.find();
   late Sensitivity? _selection;
-  void onSelectionChanged (Sensitivity? value) {
+  void onSelectionChanged(Sensitivity? value) {
     setState(() {
       _selection = value;
       if (value != null) {
@@ -145,31 +153,30 @@ class _SensitivitySelectionViewState extends State<SensitivitySelectionView> {
       }
     });
   }
+
   @override
   Widget build(BuildContext context) {
-    _selection =  Sensitivity.medium;
+    _selection = Sensitivity.medium;
     return Column(
       children: <Widget>[
         RadioListTile.adaptive(
-            title:const Text('Faible'),
+            title: const Text('Faible'),
             value: Sensitivity.low,
             groupValue: _selection,
             toggleable: true,
-            onChanged:  onSelectionChanged),
+            onChanged: onSelectionChanged),
         RadioListTile.adaptive(
-            title:const Text('Moyenne'),
+            title: const Text('Moyenne'),
             value: Sensitivity.medium,
             groupValue: _selection,
             toggleable: true,
             onChanged: onSelectionChanged),
-
         RadioListTile.adaptive(
-            title:const Text('Elevée'),
+            title: const Text('Elevée'),
             value: Sensitivity.high,
             groupValue: _selection,
             toggleable: true,
             onChanged: onSelectionChanged),
-
       ],
     );
   }
@@ -184,7 +191,7 @@ class RadioSensorChoice extends StatefulWidget {
 class _RadioSensorChoiceState extends State<RadioSensorChoice> {
   final SettingsController controller = Get.find();
   late Sensor? _selection;
-  void onSelectionChanged (Sensor? value) {
+  void onSelectionChanged(Sensor? value) {
     setState(() {
       _selection = value;
       if (value != null) {
@@ -192,6 +199,7 @@ class _RadioSensorChoiceState extends State<RadioSensorChoice> {
       }
     });
   }
+
   @override
   Widget build(BuildContext context) {
     _selection = controller.genericSettings["sensor"];
@@ -209,7 +217,15 @@ class _RadioSensorChoiceState extends State<RadioSensorChoice> {
           title: Text("joystick"),
           leading: Radio.adaptive(
             groupValue: _selection,
-            value: Sensor.arcadeJoystick,
+            value: Sensor.digitalJoystick,
+            onChanged: onSelectionChanged,
+          ),
+        ),
+        ListTile(
+          title: Text("joystick analogique"),
+          leading: Radio.adaptive(
+            groupValue: _selection,
+            value: Sensor.analogJoystick,
             onChanged: onSelectionChanged,
           ),
         ),
@@ -218,6 +234,14 @@ class _RadioSensorChoiceState extends State<RadioSensorChoice> {
           leading: Radio.adaptive(
             groupValue: _selection,
             value: Sensor.muscle,
+            onChanged: onSelectionChanged,
+          ),
+        ),
+        ListTile(
+          title: Text("poignée"),
+          leading: Radio.adaptive(
+            groupValue: _selection,
+            value: Sensor.handle,
             onChanged: onSelectionChanged,
           ),
         ),

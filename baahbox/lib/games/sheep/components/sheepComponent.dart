@@ -101,7 +101,7 @@ class SheepComponent extends SpriteComponent
   }
 
   bool isOnFloor(double yPos) {
-    return position.y == yPos;
+    return (position.y -yPos).abs() <=1;
   }
 
   bool isPosInFrame(double y) {

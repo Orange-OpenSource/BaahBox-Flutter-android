@@ -27,12 +27,12 @@ class Controller extends FullLifeCycleController with FullLifeCycleMixin {
   static Controller get to => Get.find();
   final GetxBle bleController = Get.find();
 
-  var _musclesInput = MusclesInput(0, 0).obs;
-  var _joystickInput = JoystickInput(0).obs;
+  var _analogInputs = AnalogInputs(0, 0).obs;
+  var _digitalInputs = DigitalInputs(0).obs;
   var _isConnectedToBox = false.obs;
   var _connectedDeviceName = "".obs;
   var _connectedDeviceId = "".obs;
-  var _currentSensor = Sensor.arcadeJoystick.obs;
+  var _currentSensor = Sensor.digitalJoystick.obs;
   var _isActive = false.obs;
   var _isDebugging = true.obs;
 
@@ -40,8 +40,8 @@ class Controller extends FullLifeCycleController with FullLifeCycleMixin {
   // getters
   String get connectedDeviceName=> _connectedDeviceName.value;
   String get connectedDeviceId => _connectedDeviceId.value;
-  MusclesInput get musclesInput => _musclesInput.value;
-  JoystickInput get joystickInput => _joystickInput.value;
+  AnalogInputs get analogInputs => _analogInputs.value;
+  DigitalInputs get digitalInputs => _digitalInputs.value;
   bool get isConnectedToBox => _isConnectedToBox.value;
   bool get isActive => _isActive.value;
   bool get isDebugging => _isDebugging.value;
@@ -74,12 +74,12 @@ class Controller extends FullLifeCycleController with FullLifeCycleMixin {
     _isActive.value = activate;
   }
 
-  void setMusclesTo(MusclesInput mi) {
-    _musclesInput.value = mi;
+  void setAnalogsTo(AnalogInputs mi) {
+    _analogInputs.value = mi;
   }
 
-  void setJoystickTo(JoystickInput ji) {
-    _joystickInput.value = ji;
+  void setDigitalsTo(DigitalInputs ji) {
+    _digitalInputs.value = ji;
   }
 
 @override

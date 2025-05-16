@@ -20,15 +20,17 @@
 
 
 // Frame format:
-// C1|a1|C2|a2|JBin|90 = <muscle1, muscle2, Joystic=JBin, EndOfFrame>
+// C1|a1|C2|a2|JBin|90 = <analog1, analog2, digitals=JBin, EndOfFrame>
 // Where:
-// muscle1 = C1x32+a1
-// muscle2 = C2x32+a2
-// joystic = right|left|down|up
+// analog1 = C1x32+a1
+// analog2 = C2x32+a2
+// digitals = right|left|down|up
 // EndOfFrame = 90 -> '\n'
-List<(MusclesInput, JoystickInput)> computeData(List<int> numberlist) {
+import 'dart:math';
+
+List<(AnalogInputs, DigitalInputs)> computeData(List<int> numberlist) {
   //final numbers = <int>[13, 5, 11, 16, 0, 90, 13, 7, 11, 22, 0, 90];
-  List<(MusclesInput, JoystickInput)> res = [];
+  List<(AnalogInputs, DigitalInputs)> res = [];
 
   for (List<int> input in splitInput(numberlist)) {
     res.add(computeInputList(input));
@@ -51,13 +53,13 @@ List splitInput(List<int> numberlist) {
   return res;
 }
 
-(MusclesInput, JoystickInput) computeInputList(List<int> liste) {
+(AnalogInputs, DigitalInputs) computeInputList(List<int> liste) {
 
   final m1 = bytesToValue(coeff: liste[0], add: liste[1]);
   final m2 = bytesToValue(coeff: liste[2], add: liste[3]);
-  final muscles = MusclesInput(m1, m2);
-  final joystick = JoystickInput(liste[4]);
-  return (muscles, joystick);
+  final analogs = AnalogInputs(m1, m2);
+  final digitals = DigitalInputs(liste[4]);
+  return (analogs, digitals);
 }
 
 String describeInputs(List<int> liste) {
@@ -66,9 +68,9 @@ String describeInputs(List<int> liste) {
   }
   final m1 = bytesToValue(coeff: liste[0], add: liste[1]);
   final m2 = bytesToValue(coeff: liste[2], add: liste[3]);
-  final muscles = MusclesInput(m1, m2);
-  final joystick = JoystickInput(liste[4]);
-  final overall = muscles.describe() + '\n' + joystick.describe();
+  final analogs = AnalogInputs(m1, m2);
+  final digitals = DigitalInputs(liste[4]);
+  final overall = analogs.describe() + '\n' + digitals.describe();
   return overall;
 }
 
@@ -77,24 +79,24 @@ int bytesToValue({int coeff = 0, int add = 0}) {
   return res;
 }
 
-class MusclesInput {
-  int muscle1 = 0;
-  int muscle2 = 0;
+class AnalogInputs {
+  int analog1 = 0;
+  int analog2 = 0;
 
-  MusclesInput(this.muscle1, this.muscle2);
+  AnalogInputs(this.analog1, this.analog2);
 
   String describe() {
-    return 'Muscle1: $muscle1, Muscle2: $muscle2';
+    return 'Analog1: $analog1, Analog2: $analog2';
   }
 }
 
-class JoystickInput {
+class DigitalInputs {
   late bool right;
   late bool left;
   late bool down;
   late bool up;
 
-  JoystickInput(int input) {
+  DigitalInputs(int input) {
     this.right = input & 0x08 == 0x08;
     this.left = input & 0x04 == 0x04;
     this.down = input & 0x02 == 0x02;
@@ -102,5 +104,32 @@ class JoystickInput {
   }
   String describe() {
     return 'right: $right, left: $left, down: $down, up: $up';
+  }
+}
+
+int rangeMap(int value, int min1, int max1, int min2, int max2) {
+  double slope = (max2 - min2).toDouble() / (max1 - min1).toDouble();
+  return min2 + (slope * (value - min1).toDouble()).round();
+}
+
+int calibrateForAmplitude(int value, int min1, int max1) {
+  double slope = 100.0 / (max1 - min1).toDouble();
+  return (slope * (value - min1).toDouble()).round();
+}
+
+int convertAngleToAnalog(int angle) {
+  return rangeMap(angle, 0, 180, 0, 1000);
+}
+
+int calibrateAnalogInput(int value, int lower, int upper) {
+  int lowerConvertedAngle = convertAngleToAnalog(lower);
+  int higherConvertedAngle = convertAngleToAnalog(upper);
+  double slope =
+      1000.0 / (higherConvertedAngle - lowerConvertedAngle).toDouble();
+  if (value >= lowerConvertedAngle) {
+    return min(1000.0, (value - lowerConvertedAngle).toDouble() * slope)
+        .round();
+  } else {
+    return 0;
   }
 }
