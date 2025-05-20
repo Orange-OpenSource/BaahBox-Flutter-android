@@ -88,7 +88,7 @@ class BalloonGame extends BBGame with TapCallbacks {
       var sensorType = settingsController.currentSensor;
       switch (sensorType) {
         case Sensor.analogJoystick:
-          int newValue = rangeMap(500-appController.analogInputs.analog2, 0, 500, 0, 1000);
+          int newValue = rangeMap(appController.analogInputs.analog1 - 500, 0, 500, 0, 1000);
           input = newValue >= 50 ? (newValue / 10).toInt() : 0;
         case Sensor.muscle:
           // The strength is in range [0...1024] -> Have it fit into [0...100]

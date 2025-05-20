@@ -159,17 +159,16 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
       var sensorType = settingsController.currentSensor;
       switch (sensorType) {
         case Sensor.analogJoystick:
-        // The strength is in range [0...1024] centered on 500 -> Have it fit into [0...100]
+        // The strength is in range [0...1024] centered on 500 -> Have it fit into [-500...500]
+          int analog2 = rangeMap(appController.analogInputs.analog2, 0, 1024, 500, -500);
 
-          int analog1 = rangeMap(appController.analogInputs.analog1, 0, 1024, 500, -500);
+          inputL = analog2<0 ?analog2.abs().toInt() : 0;
+          inputR = analog2>0 ?analog2.toInt() : 0;
+          goLeft = (inputL > threshold * 10)   && !isToadShooting;
+          goRight = (inputR > threshold * 10)  && !isToadShooting;
 
-          inputL = analog1<0 ?analog1.abs().toInt() : 0;
-          inputR = analog1>0 ?analog1.toInt() : 0;
-          goLeft = (inputL > threshold)  && !isToadShooting;
-          goRight = (inputR > threshold)  && !isToadShooting;
-
-          int analog2 = rangeMap(appController.analogInputs.analog2-500, -500, 500, 100, 0);
-          shoot = (analog2 > 95 && !isToadShooting);
+          int analog1 = rangeMap(appController.analogInputs.analog1 - 500, 0, 500, 0, 100);
+          shoot = (analog1 > 70 && !isToadShooting);
         case Sensor.handle:
           {
             int input = (calibrateAnalogInput(
