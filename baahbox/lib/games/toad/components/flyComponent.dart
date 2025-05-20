@@ -63,7 +63,7 @@ class FlyComponent extends SpriteComponent
     var width = 50.00;//gameRef.size.x/10;
     size = Vector2(width,width/ratio);
     anchor = Anchor.center;
-    add(RectangleHitbox());
+    add(CircleHitbox());
     gameRef.registerToFlyNet(position);
     show();
     _AppearanceTimer.timer.start();
@@ -99,6 +99,7 @@ class FlyComponent extends SpriteComponent
       Set<Vector2> intersectionPoints,
       PositionComponent other,
       ) {
+
     super.onCollisionStart(intersectionPoints, other);
     if (other is TongueComponent) {
       other.takeHit();
@@ -107,4 +108,5 @@ class FlyComponent extends SpriteComponent
     }
   }
 }
+
 

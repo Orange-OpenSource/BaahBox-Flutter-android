@@ -39,7 +39,7 @@ class ToadComponent extends SpriteComponent
     Flame.images.fromCache('Games/Toad/toad_blink.png'),
   ];
 
-  late final _binkTimer = TimerComponent(
+  late final _blinkTimer = TimerComponent(
     period: .25,
     onTick: setSpriteTo,
     autoStart: false,
@@ -50,12 +50,13 @@ class ToadComponent extends SpriteComponent
     onTick: resetToadShooting,
     autoStart: false,
   );
+
   final Vector2 deltaPosition = Vector2.zero();
 
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    await add(_binkTimer);
+    await add(_blinkTimer);
     await add(_shootTimer);
     initialize();
   }
@@ -86,10 +87,12 @@ class ToadComponent extends SpriteComponent
 
   void blink() {
     setSpriteTo(spriteNb: 1);
-    _binkTimer.timer.start();
+    _blinkTimer.timer.start();
   }
 
   void jump() {}
+
+
   void resetToadShooting() {
     gameRef.isToadShooting = false;
   }

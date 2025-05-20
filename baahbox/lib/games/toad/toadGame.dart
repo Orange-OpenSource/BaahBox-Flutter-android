@@ -225,7 +225,8 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
 
   void looseScore() {
     if (state == GameState.running) {
-          flyManager.looseOneScore();
+      flyManager.looseOneScore();
+
     }
   }
 
