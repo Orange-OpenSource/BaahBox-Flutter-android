@@ -322,7 +322,7 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
       floor.hide();
       counterManager.counterText.text = "";
     }
-    progressionText.text = ""; //feedback;
+    progressionText.text = "";
     endGame();
   }
 

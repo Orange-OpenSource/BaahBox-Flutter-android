@@ -109,9 +109,9 @@ class SheepComponent extends SpriteComponent
   }
 
   void checkCostume() {
-    if (position.y < gameRef.floorY) {
+    if (position.y <= gameRef.floorY -10) {
       setSpriteTo(2);
-    } else if (position.y == gameRef.floorY) {
+    } else if (position.y > gameRef.floorY -10) {
       tremble();
       var rng = new Random();
       var i = rng.nextInt(2);
