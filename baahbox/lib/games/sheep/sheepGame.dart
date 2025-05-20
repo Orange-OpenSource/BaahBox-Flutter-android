@@ -216,8 +216,8 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
       var sensor = settingsController.currentSensor;
       switch (sensor) {
         case Sensor.analogJoystick:
-          int newValue = rangeMap(500-appController.analogInputs.analog2, 0, 500, 0, 1000);
-          input = newValue >= 50 ? (newValue / 10).toInt() : 0;
+          int newValue = rangeMap(appController.analogInputs.analog1 - 500, 0, 500, 0, 1000);
+          input = newValue >= 100 ? (newValue / 10).toInt() : 0;
           final jumpHeigth = floorY * (1 - (input / 100));
           sheep.moveTo(jumpHeigth);
         case Sensor.handle:
@@ -273,7 +273,7 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
         configureLabelsForCongrats();
       }
       hasSheepStartedJumping = false;
-      // startWalkingSheepAnimation()
+      //startWalkingSheepAnimation()
       configureLabelsForWalking();
     } else {
       hasSheepStartedJumping = true;

@@ -202,8 +202,8 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
       }
     } else if (appController.isConnectedToBox &&
         settingsController.currentSensor == Sensor.analogJoystick) {
-      double newXValue = (500 - appController.analogInputs.analog1) / 500;
-      double newYValue = (appController.analogInputs.analog2 - 500) / 500;
+      double newXValue = (500 - appController.analogInputs.analog2) / 500;
+      double newYValue = (500 - appController.analogInputs.analog1) / 500;
       if (settingsController.mazeSettings["isFineDirection"]) {
         player.moveDelta(Vector2(newXValue, newYValue));
       } else {
