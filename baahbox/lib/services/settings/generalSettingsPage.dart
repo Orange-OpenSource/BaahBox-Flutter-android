@@ -134,53 +134,7 @@ class GeneralSettingsPage extends GetView<SettingsController> {
   }
 }
 
-class SensitivitySelectionView extends StatefulWidget {
-  const SensitivitySelectionView({super.key});
 
-  @override
-  State<SensitivitySelectionView> createState() =>
-      _SensitivitySelectionViewState();
-}
-
-class _SensitivitySelectionViewState extends State<SensitivitySelectionView> {
-  final SettingsController controller = Get.find();
-  late Sensitivity? _selection;
-  void onSelectionChanged(Sensitivity? value) {
-    setState(() {
-      _selection = value;
-      if (value != null) {
-        controller.updateSensitivityTo(value);
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    _selection = Sensitivity.medium;
-    return Column(
-      children: <Widget>[
-        RadioListTile.adaptive(
-            title: const Text('Faible'),
-            value: Sensitivity.low,
-            groupValue: _selection,
-            toggleable: true,
-            onChanged: onSelectionChanged),
-        RadioListTile.adaptive(
-            title: const Text('Moyenne'),
-            value: Sensitivity.medium,
-            groupValue: _selection,
-            toggleable: true,
-            onChanged: onSelectionChanged),
-        RadioListTile.adaptive(
-            title: const Text('Elevée'),
-            value: Sensitivity.high,
-            groupValue: _selection,
-            toggleable: true,
-            onChanged: onSelectionChanged),
-      ],
-    );
-  }
-}
 
 class RadioSensorChoice extends StatefulWidget {
   const RadioSensorChoice({super.key});
@@ -205,104 +159,38 @@ class _RadioSensorChoiceState extends State<RadioSensorChoice> {
     _selection = controller.genericSettings["sensor"];
     return Column(
       children: [
-        ListTile(
-          title: Text("button"),
-          leading: Radio.adaptive(
-            groupValue: _selection,
+        RadioListTile.adaptive(
+            title: const Text('bouton'),
             value: Sensor.button,
-            onChanged: onSelectionChanged,
-          ),
-        ),
-        ListTile(
-          title: Text("joystick"),
-          leading: Radio.adaptive(
             groupValue: _selection,
+            toggleable: true,
+            onChanged: onSelectionChanged),
+        RadioListTile.adaptive(
+            title: const Text('joystick'),
             value: Sensor.digitalJoystick,
-            onChanged: onSelectionChanged,
-          ),
-        ),
-        ListTile(
-          title: Text("joystick analogique"),
-          leading: Radio.adaptive(
             groupValue: _selection,
+            toggleable: true,
+            onChanged: onSelectionChanged),
+        RadioListTile.adaptive(
+            title: const Text('joystick analogique'),
             value: Sensor.analogJoystick,
-            onChanged: onSelectionChanged,
-          ),
-        ),
-        ListTile(
-          title: Text("muscle"),
-          leading: Radio.adaptive(
             groupValue: _selection,
+            toggleable: true,
+            onChanged: onSelectionChanged),
+        RadioListTile.adaptive(
+            title: const Text('muscle'),
             value: Sensor.muscle,
-            onChanged: onSelectionChanged,
-          ),
-        ),
-        ListTile(
-          title: Text("poignée"),
-          leading: Radio.adaptive(
             groupValue: _selection,
+            toggleable: true,
+            onChanged: onSelectionChanged),
+        RadioListTile.adaptive(
+            title: const Text('poignée'),
             value: Sensor.handle,
-            onChanged: onSelectionChanged,
-          ),
-        ),
+            groupValue: _selection,
+            toggleable: true,
+            onChanged: onSelectionChanged)
       ],
     );
   }
 }
 
-class SliderExample extends StatefulWidget {
-  const SliderExample({super.key});
-
-  @override
-  State<SliderExample> createState() => _SliderExampleState();
-}
-
-class _SliderExampleState extends State<SliderExample> {
-  double _currentSliderValue = 20;
-
-  @override
-  Widget build(BuildContext context) {
-    return Slider.adaptive(
-      value: _currentSliderValue,
-      max: 100,
-      divisions: 5,
-      label: _currentSliderValue.round().toString(),
-      onChanged: (double value) {
-        setState(() {
-          _currentSliderValue = value;
-        });
-      },
-    );
-  }
-}
-
-class SwitchExample extends StatefulWidget {
-  const SwitchExample({super.key, required this.title});
-  final String title;
-
-  @override
-  State<SwitchExample> createState() => _SwitchExampleState(title: title);
-}
-
-class _SwitchExampleState extends State<SwitchExample> {
-  _SwitchExampleState({required this.title});
-  bool light = true;
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-        title: Text(title),
-        trailing: Switch.adaptive(
-          // This bool value toggles the switch.
-          value: light,
-          activeColor: Theme.of(context).colorScheme.primary,
-          onChanged: (bool value) {
-            // This is called when the user toggles the switch.
-            setState(() {
-              light = value;
-            });
-          },
-        ));
-  }
-}
