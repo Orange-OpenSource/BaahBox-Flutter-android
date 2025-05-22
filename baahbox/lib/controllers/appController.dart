@@ -20,32 +20,27 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:baahbox/model/sensorInput.dart';
 import 'package:baahbox/constants/enums.dart';
-import 'package:baahbox/services/ble/getXble/getx_ble.dart';
 import 'package:get/get.dart';
+
+import '../services/ble/BleController.dart';
 
 class Controller extends FullLifeCycleController with FullLifeCycleMixin {
   static Controller get to => Get.find();
-  final GetxBle bleController = Get.find();
 
-  var _analogInputs = AnalogInputs(0, 0).obs;
-  var _digitalInputs = DigitalInputs(0).obs;
-  var _isConnectedToBox = false.obs;
-  var _connectedDeviceName = "".obs;
-  var _connectedDeviceId = "".obs;
-  var _currentSensor = Sensor.digitalJoystick.obs;
+  final BleController bleController = Get.find();
   var _isActive = false.obs;
   var _isDebugging = true.obs;
-
+  var _currentSensor = Sensor.digitalJoystick.obs;
 
   // getters
-  String get connectedDeviceName=> _connectedDeviceName.value;
-  String get connectedDeviceId => _connectedDeviceId.value;
-  AnalogInputs get analogInputs => _analogInputs.value;
-  DigitalInputs get digitalInputs => _digitalInputs.value;
-  bool get isConnectedToBox => _isConnectedToBox.value;
+  String get connectedDeviceName=> bleController.connectedDevice.value?.name ?? "";
+  String get connectedDeviceId => bleController.connectedDevice.value?.deviceID ?? "";
+  AnalogInputs get analogInputs => bleController.analogInputs;
+  DigitalInputs get digitalInputs => bleController.digitalInputs;
+  bool get isConnectedToBox => bleController.connectedDevice.value!=null;
   bool get isActive => _isActive.value;
   bool get isDebugging => _isDebugging.value;
-  Sensor get currentSensor => _isConnectedToBox.value ? _currentSensor.value: Sensor.none;
+  Sensor get currentSensor => isConnectedToBox ? _currentSensor.value: Sensor.none;
 
   // functions
   void setDebugModeTo(bool isDebug) {
@@ -55,32 +50,10 @@ class Controller extends FullLifeCycleController with FullLifeCycleMixin {
   void setSensorTo(Sensor sensor) {
       _currentSensor.value = sensor;
   }
-
-  void setConnectionStateTo(bool isConnected) {
-    _isConnectedToBox.value = isConnected;
-  }
-
- void updateConnectionState()  {
-   setConnectionStateTo(bleController.isBLEDeviceConnected());
- }
-
-  void setConnectedDeviceNameTo(String  deviceName) {
-    _connectedDeviceName.value = deviceName;
-  }
-  void setConnectedDeviceIdTo(String  deviceId) {
-    _connectedDeviceId.value = deviceId;
-  }
   void setActivationStateTo(bool activate) {
     _isActive.value = activate;
   }
 
-  void setAnalogsTo(AnalogInputs mi) {
-    _analogInputs.value = mi;
-  }
-
-  void setDigitalsTo(DigitalInputs ji) {
-    _digitalInputs.value = ji;
-  }
 
 @override
   void onClose() {

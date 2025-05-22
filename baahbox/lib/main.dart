@@ -18,21 +18,21 @@
  */
 
 import 'package:baahbox/constants/enums.dart';
+import 'package:baahbox/services/ble/BleController.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:baahbox/routes/routes.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:baahbox/controllers/appController.dart';
 import 'package:baahbox/services/settings/settingsController.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:baahbox/services/ble/getXble/getx_ble.dart';
+
 import 'dart:io' show Platform;
 
 void main() async {
   await GetStorage.init();
-  final GetxBle bleController = Get.put(GetxBle());
+  final BleController bleController = Get.put(BleController());
   final Controller c = Get.put(Controller());
   final SettingsController settingsController = Get.put(SettingsController());
 

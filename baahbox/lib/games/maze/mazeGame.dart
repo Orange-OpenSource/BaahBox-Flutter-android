@@ -170,7 +170,6 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
       }
     }
     if (appController.isActive) {
-      appController.updateConnectionState();
       if (state == GameState.running) {
         refreshInput();
         durationText.text = prettyDuration(elapsedTime);

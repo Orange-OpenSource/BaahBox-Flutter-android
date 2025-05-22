@@ -73,7 +73,7 @@ class StarGame extends BBGame with TapCallbacks {
   void update(double dt) {
     super.update(dt);
     if (appController.isActive) {
-      appController.updateConnectionState();
+
       if (isRunning) {
         refreshInput();
        //scoreText.text = 'Score: $input';
