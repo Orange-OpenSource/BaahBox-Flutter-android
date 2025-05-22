@@ -140,13 +140,14 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
     if (appController.isConnectedToBox) {
       var sensorType = settingsController.currentSensor;
       switch (sensorType) {
-        case Sensor.analogJoystick:
-          int analog1 = rangeMap(appController.analogInputs.analog1, 0, 1024, 500, -500);
 
-          inputL = analog1<0 ?analog1.abs().toInt() : 0;
-          inputR = analog1>0 ?analog1.toInt() : 0;
-          goLeft = inputL > threshold;
-          goRight = inputR > threshold;
+        case Sensor.analogJoystick:
+          int analog2 = rangeMap(appController.analogInputs.analog2, 0, 1024, 500, -500);
+
+          inputL = analog2<0 ?analog2.abs().toInt() : 0;
+          inputR = analog2>0 ?analog2.toInt() : 0;
+          goLeft = inputL > threshold * 10 ;
+          goRight = inputR > threshold * 10;
 
         case Sensor.handle:
           {
@@ -161,6 +162,7 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
             goLeft = input < 50 - threshold;
             goRight = input > 50 + threshold;
           }
+
         case Sensor.muscle:
           // The strength is in range [0...1024] -> Have it fit into [0...100]
           inputL = (appController.analogInputs.analog1 ~/ 10);
