@@ -60,29 +60,42 @@ class _WelcomePageState extends State<WelcomePage> {
           ],
         ),
         body:  SafeArea(
-    child:Container(
-          child: ListView(
-              padding: const EdgeInsets.all(0),
-              children: <Widget>[
-                GameRow(BBGameList.star, BBRoute.star.path, 160, 1400),
-
-        GameRow(BBGameList.balloon, BBRoute.balloon.path, 160, 1400),
-        GameRow(BBGameList.sheep, BBRoute.sheep.path, 160, 1400),
-        GameRow(BBGameList.starship, BBRoute.spaceShip.path,160, 1400),
-        GameRow(BBGameList.toad, BBRoute.toad.path, 160, 1400),
-        GameRow(BBGameList.maze, BBRoute.maze.path, 160, 1400),
-          ] //wrap
-          ),
-        )));
+    child: LayoutBuilder(
+    builder: (BuildContext context, BoxConstraints constraints) {
+      return GameList(availableHeight:constraints.maxHeight);
+    })));
   }
 }
 
+
+class GameList extends StatelessWidget {
+  final double availableHeight;
+
+  const GameList({super.key, required this.availableHeight});
+  @override
+  Widget build(BuildContext context) {
+    final double height = availableHeight/6;//MediaQuery.of(context).size.height/6;
+    return Container(
+      child: ListView(
+          padding: const EdgeInsets.all(0),
+          children: <Widget>[
+            GameRow(BBGameList.star, BBRoute.star.path, height),
+            GameRow(BBGameList.balloon, BBRoute.balloon.path, height),
+            GameRow(BBGameList.sheep, BBRoute.sheep.path, height),
+            GameRow(BBGameList.starship, BBRoute.spaceShip.path,height),
+            GameRow(BBGameList.toad, BBRoute.toad.path, height),
+            GameRow(BBGameList.maze, BBRoute.maze.path, height),
+          ] //wrap
+      ),
+    );
+  }
+
+}
 class GameRow extends StatelessWidget {
-  GameRow(this.game, this.gamePath, this.height, this.width);
+  GameRow(this.game, this.gamePath, this.height);
   final String gamePath;
   final BBGameList game;
   final double height;
-  final double width;
 
   @override
   Widget build(BuildContext context) {
@@ -93,8 +106,8 @@ class GameRow extends StatelessWidget {
               shape:MaterialStateProperty.all(ContinuousRectangleBorder())),
           child: Container(
               alignment: Alignment.centerLeft,
-              height: height, //(Get.height/5)-10,
-              width: width,
+              height: height<40 ? 40 : height, //(Get.height/5)-10,
+              width: double.infinity,
               padding: const EdgeInsets.all(0),
 
               child: Row(
