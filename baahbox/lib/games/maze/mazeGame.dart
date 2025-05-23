@@ -88,13 +88,11 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
   }
 
   void loadComponents() async {
+
+    createMazeAndPlayer();
+
     if (!appController.isConnectedToBox) {
-      joyStickKnobPaint = Paint()
-        ..color = BBColor.pinky.color.withAlpha(200)
-        ..style = PaintingStyle.fill;
-      joyStickBackgroundPaint = Paint()
-        ..color = BBColor.greyGreen.color.withAlpha(200)
-        ..style = PaintingStyle.fill;
+      createTouchJoystick();
     }
 
     durationText = TextComponent(
@@ -104,7 +102,6 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
     );
     add(durationText);
 
-    createMazeAndPlayer();
 
     winComponent = MazeWinComponent(
         position: Vector2(size.x / 2, size.y / 2),
@@ -113,21 +110,30 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
     add(winComponent);
   }
 
+ void createTouchJoystick() {
+   var radius = size.y / 4;
+   if (radius > 30 || radius < 10) {
+     radius = 20;
+   }
+  joyStickKnobPaint = Paint()
+  ..color = BBColor.pinky.color.withAlpha(200)
+  ..style = PaintingStyle.fill;
+  joyStickBackgroundPaint = Paint()
+  ..color = BBColor.greyGreen.color.withAlpha(200)
+  ..style = PaintingStyle.fill;
+
+  joystick = JoystickComponent(
+  anchor: Anchor.bottomCenter,
+  knob: CircleComponent(radius: radius, paint: joyStickKnobPaint),
+  background:
+  CircleComponent(radius: radius * 3, paint: joyStickBackgroundPaint),
+  margin: const EdgeInsets.only(left: 40, bottom: 40),
+  );
+
+  add(joystick);
+}
+
   void createMazeAndPlayer() {
-    var radius = size.y / 4;
-    if (radius > 30 || radius < 10) {
-      radius = 20;
-    }
-    joystick = JoystickComponent(
-      anchor: Anchor.bottomCenter,
-      knob: CircleComponent(radius: radius, paint: joyStickKnobPaint),
-      background:
-      CircleComponent(radius: radius * 3, paint: joyStickBackgroundPaint),
-      margin: const EdgeInsets.only(left: 40, bottom: 40),
-    );
-    if (!appController.isConnectedToBox) {
-      add(joystick);
-    }
     //var mazeSize = min(size.x, size.y- durationText.size.y-10);
     var isVertical = (size.y - 10) >= size.x;
     var mazeSize = isVertical ? size.x : (size.y - 10);
