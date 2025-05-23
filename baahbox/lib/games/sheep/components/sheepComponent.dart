@@ -52,7 +52,7 @@ class SheepComponent extends SpriteComponent
   Future<void> onLoad() async {
     super.onLoad();
     initialize();
-    add(RectangleHitbox());
+    add(CircleHitbox());
   }
 
   void initialize() {
@@ -70,6 +70,8 @@ class SheepComponent extends SpriteComponent
       checkCostume();
     }
     goDown();
+
+
   }
 
   void tremble() {
@@ -101,7 +103,7 @@ class SheepComponent extends SpriteComponent
   }
 
   bool isOnFloor(double yPos) {
-    return (position.y -yPos).abs() <=1;
+    return (position.y - yPos).abs() <=1;
   }
 
   bool isPosInFrame(double y) {
@@ -133,6 +135,10 @@ class SheepComponent extends SpriteComponent
         walking1 = false;
     }
   }
+
+ void setCostumeForLostGame() {
+    setSpriteTo(3);
+ }
 
   SpriteAnimation getWalkingAnimation() {
     final sprites = walkingImages.map((image) => Sprite(image)).toList();
