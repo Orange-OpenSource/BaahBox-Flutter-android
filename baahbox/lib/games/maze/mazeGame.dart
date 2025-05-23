@@ -90,19 +90,23 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
   void loadComponents() async {
 
     createMazeAndPlayer();
-
+    createWinComponent();
+    createChronoText();
     if (!appController.isConnectedToBox) {
       createTouchJoystick();
     }
+  }
 
+  void createChronoText() {
     durationText = TextComponent(
       position: Vector2(size.x - 5, 10),
       anchor: Anchor.topRight,
       priority: 1,
     );
     add(durationText);
+  }
 
-
+  void createWinComponent() {
     winComponent = MazeWinComponent(
         position: Vector2(size.x / 2, size.y / 2),
         size: Vector2(size.x / 3, size.y / 3));

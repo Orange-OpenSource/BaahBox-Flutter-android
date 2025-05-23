@@ -49,11 +49,10 @@ class LifeManager extends Component with HasGameRef<SpaceShipGame> {
   }
 
   void looseOneLife() {
-    if (lifeArray.length > 0) {
-      lifeArray.last.disappear();
-      lifeArray.removeLast();
-    } else {
-      game.endGame();
+    lifeArray.last.disappear();
+    lifeArray.removeLast();
+    if (lifeArray.isEmpty) {
+        game.endGame();
     }
   }
 }
