@@ -118,7 +118,7 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
   void update(double dt) {
     super.update(dt);
     if (appController.isActive) {
-      appController.updateConnectionState();
+
       if (state == GameState.running) {
         refreshInput();
         transformInputInOffset();

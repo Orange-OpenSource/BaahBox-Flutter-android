@@ -185,7 +185,7 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
   void update(double dt) {
     super.update(dt);
     if (appController.isActive) {
-      appController.updateConnectionState();
+
       if (isRunning) {
         transformInputInMove();
         if (isNewGateOnQueue()) {
