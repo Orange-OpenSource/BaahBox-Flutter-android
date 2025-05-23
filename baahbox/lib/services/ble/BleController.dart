@@ -37,7 +37,7 @@ class BleDevice {
   late final String name;
   late final String deviceID;
   Rx<bool> isConnected = false.obs;
-
+  Rx<bool> isWorking = false.obs;
   BleDevice({required this.name, required this.deviceID});
 }
 
@@ -134,7 +134,8 @@ class BleController extends GetxController {
           return BleDevice(
               name: elt.device.advName,
               deviceID: elt.device.remoteId.toString())
-            ..isConnected.value = elt.device.isConnected;
+            ..isConnected.value = elt.device.isConnected
+          ..isWorking.value = false;
         }
       }).toList();
       availableDevices.value = newList;
@@ -209,6 +210,11 @@ class BleController extends GetxController {
     }, onError: (e) {
       print(e);
     });
+    var associatedAvailableDevice = availableDevices.firstWhereOrNull(
+            (element) =>
+        element.deviceID == device.remoteId.toString().toUpperCase());
+    associatedAvailableDevice?.isWorking.value = true;
+
     await device.connect();
     /* if(device.isConnected) {
       deviceConnected(device);
@@ -229,6 +235,7 @@ class BleController extends GetxController {
         (element) =>
             element.deviceID == device.remoteId.toString().toUpperCase());
     associatedAvailableDevice?.isConnected.value = true;
+    associatedAvailableDevice?.isWorking.value = false;
     connectedDevice.value = associatedAvailableDevice;
   }
 
@@ -236,8 +243,13 @@ class BleController extends GetxController {
     var device = _scanResults.firstWhereOrNull((element) =>
         element.device.remoteId.toString() == connectedDevice.value?.deviceID);
     if (device != null) {
-      deviceDisconnected(device.device);
+      //deviceDisconnected(device.device);
+      var associatedAvailableDevice = availableDevices.firstWhereOrNull(
+              (element) =>
+          element.deviceID == device.device.remoteId.toString().toUpperCase());
+      associatedAvailableDevice?.isWorking.value = true;
     }
+
     device?.device.disconnect();
   }
 
@@ -245,7 +257,12 @@ class BleController extends GetxController {
     var associatedAvailableDevice = availableDevices.firstWhereOrNull(
         (element) =>
             element.deviceID == device.remoteId.toString().toUpperCase());
+    if(associatedAvailableDevice?.isConnected.value==true)
+      {
+        associatedAvailableDevice?.isWorking.value = false;
+      }
     associatedAvailableDevice?.isConnected.value = false;
+
 
 
     if(connectedDevice.value!=null) {
@@ -253,12 +270,13 @@ class BleController extends GetxController {
         "BaahBox deconnectée",
         "${device.advName} est maintenant deconnectée",
         snackPosition: SnackPosition.TOP,
+        colorText : Get.context!=null ? Theme.of(Get.context!).colorScheme.onSurface : Colors.black,
+        backgroundColor: Get.context!=null ? Theme.of(Get.context!).colorScheme.surface : Colors.white,
         borderRadius: 10,
         icon: Image.asset(
           "assets/images/Dashboard/bluetooth.png",
           height: 40,
           width: 40,
-          //color: Colors.white,
         ),
       );
     }

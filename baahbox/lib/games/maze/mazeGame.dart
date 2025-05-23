@@ -114,18 +114,18 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
   }
 
   void createMazeAndPlayer() {
+    var radius = size.y / 4;
+    if (radius > 30 || radius < 10) {
+      radius = 20;
+    }
+    joystick = JoystickComponent(
+      anchor: Anchor.bottomCenter,
+      knob: CircleComponent(radius: radius, paint: joyStickKnobPaint),
+      background:
+      CircleComponent(radius: radius * 3, paint: joyStickBackgroundPaint),
+      margin: const EdgeInsets.only(left: 40, bottom: 40),
+    );
     if (!appController.isConnectedToBox) {
-      var radius = size.y / 4;
-      if (radius > 30 || radius < 10) {
-        radius = 20;
-      }
-      joystick = JoystickComponent(
-        anchor: Anchor.bottomCenter,
-        knob: CircleComponent(radius: radius, paint: joyStickKnobPaint),
-        background:
-            CircleComponent(radius: radius * 3, paint: joyStickBackgroundPaint),
-        margin: const EdgeInsets.only(left: 40, bottom: 40),
-      );
       add(joystick);
     }
     //var mazeSize = min(size.x, size.y- durationText.size.y-10);
@@ -219,6 +219,10 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
         }
       }
     } else {
+      if(!contains(joystick))
+        {
+          add(joystick);
+        }
       if (settingsController.mazeSettings["isFineDirection"]) {
         player.moveDelta(joystick.relativeDelta);
       } else {

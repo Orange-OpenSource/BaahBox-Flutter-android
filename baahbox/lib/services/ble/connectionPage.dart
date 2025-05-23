@@ -40,15 +40,10 @@ class _ConnectionPageState extends State<ConnectionPage> {
   final Controller appController = Get.find();
   final BleController bleController = Get.find();
 
-  String _logTexts = "";
+
 
   void initState() {
     super.initState();
-  }
-
-  void _disconnect() async {
-    bleController.disconnectDevice();
-    _logTexts = "";
   }
 
   Future<bool> _onBackPressed() {
@@ -122,21 +117,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
                       })),
                   SizedBox(
                     height: 30,
-                  ),
-                  const Text(" Messages bluetooth:"),
-                  Container(
-                      margin: const EdgeInsets.all(5.0),
-                      width: 1400,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(color: Colors.blue, width: 2)),
-                      height: 100,
-                      child: Scrollbar(
-                          child: SingleChildScrollView(
-                              child: Padding(
-                                  padding: EdgeInsets.all(5), child: Text(
-                                      //"${bleController.bleLogger.rxMessages.value})//"
-                                      "$_logTexts"))))),
+                  )
                 ],
               ),
             )),

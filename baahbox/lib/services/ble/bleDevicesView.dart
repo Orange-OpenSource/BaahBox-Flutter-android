@@ -39,6 +39,18 @@ class BleDevicesView extends GetView<BleController> {
                             device.deviceID
                         ? const Icon(Icons.link, color: Colors.blue)
                         : const Icon(Icons.link_off_outlined),
+                    trailing: device.isWorking.value == true
+                        ? SizedBox(
+                      height: 30,
+                      width: 30,
+                      child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation(
+                              Theme.of(context).colorScheme.onSurface),
+                          strokeWidth: 3,
+                          color:
+                          Theme.of(context).colorScheme.onSurface),
+                    )
+                        : null,
                     dense: false,
                     enabled: true,
                     onTap: () async {
@@ -50,27 +62,24 @@ class BleDevicesView extends GetView<BleController> {
                         controller.connectOnDeviceId(device.deviceID);
                       }
                     },
-                    title: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                Text(
-                      device.name,
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.normal),
-                    ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        controller.connectedDevice.value?.deviceID ==
-                            device.deviceID
-                            ?  Text(
-                          "connectée",
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight:FontWeight.bold),
-                        ) : SizedBox(width: 0 )
-                      ]),
+                    title: Row(mainAxisSize: MainAxisSize.min, children: [
+                      Text(
+                        device.name,
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.normal),
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      controller.connectedDevice.value?.deviceID ==
+                              device.deviceID
+                          ? Text(
+                              "connectée",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            )
+                          : SizedBox(width: 0),
+                    ]),
                     subtitle: Text(
                       device.deviceID,
                     ));
