@@ -73,16 +73,17 @@ class CounterManager extends Component with HasGameRef<SheepGame> {
   }
 
   void looseOneMark() {
-    if (markArray.length > 0) {
+    if (markArray.isNotEmpty) {
       markArray.last.disappear();
       markArray.removeLast();
-    } else {
-      counterText.text = "";
     }
+      if (markArray.isEmpty) {
+        counterText.text = "";
+      }
   }
 
   void clearTheFields() {
-    for (var i = 0; i <= markArray.length+1; i++)
+    for (var i = 0; i < markArray.length; i++)
      looseOneMark();
     }
   }
