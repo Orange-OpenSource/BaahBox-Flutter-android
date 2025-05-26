@@ -92,8 +92,9 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
     createMazeAndPlayer();
     createWinComponent();
     createChronoText();
+    createTouchJoystick();
     if (!appController.isConnectedToBox) {
-      createTouchJoystick();
+      add(joystick);
     }
   }
 
@@ -133,8 +134,6 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
   CircleComponent(radius: radius * 3, paint: joyStickBackgroundPaint),
   margin: const EdgeInsets.only(left: 40, bottom: 40),
   );
-
-  add(joystick);
 }
 
   void createMazeAndPlayer() {
