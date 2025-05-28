@@ -17,7 +17,7 @@
  *
  */
 
-import 'package:flutter/cupertino.dart';
+import 'package:baahbox/constants/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:baahbox/constants/enums.dart';
@@ -80,7 +80,7 @@ class SettingsController extends GetxController {
   void onInit() async {
     everAll(
         [_genericSettings, _spaceShipSettings, _toadSettings, _sheepSettings, _mazeSettings],
-        (value) => {print("settings update:   $value !")});
+        (value) => {debugLog("settings update:   $value !")});
     super.onInit();
   }
 
@@ -161,7 +161,7 @@ class SettingsController extends GetxController {
     if (velocity != null) {
       _sheepSettings["gateVelocity"] = velocity;
     } else {
-      print("Null value !");
+      debugLog("Null value !");
     }
   }
 
@@ -175,18 +175,18 @@ class SettingsController extends GetxController {
     } else {
       showMyToast("Null value !");
     }
-    print("ships to set : $value");
+    debugLog("ships to set : $value");
     var ships = _spaceShipSettings["numberOfShips"];
-    print("shipSettings: $ships");
+    debugLog("shipSettings: $ships");
   }
 
   void setAsteroidSpeedTo(ObjectVelocity? velocity) {
     if (velocity != null) {
       _spaceShipSettings["asteroidVelocity"] = velocity;
       var speed = spaceShipSettings["asteroidVelocity"];
-      print("asteroids: $speed");
+      debugLog("asteroids: $speed");
     } else {
-      print("Null value !");
+      debugLog("Null value !");
     }
   }
 
@@ -196,14 +196,14 @@ class SettingsController extends GetxController {
   void setToadShootingModeToAutomatic(bool isShootingAuto) {
     _toadSettings["iShootingModeAutomatic"] = isShootingAuto;
     var shootType = toadSettings["iShootingModeAutomatic"];
-    print("shooting Type: $shootType");
+    debugLog("shooting Type: $shootType");
   }
 
   void setNumberOfFliesTo(int? value) {
     if (value != null) {
       _toadSettings["numberOfFlies"] = value > 0 ? value : 3;
       var nFlies = toadSettings["numberOfFlies"];
-      print("number of flies : $nFlies");
+      debugLog("number of flies : $nFlies");
     } else {
       _toadSettings["numberOfFlies"] = 3;
       showMyToast("Null value for number of flies !");
@@ -214,7 +214,7 @@ class SettingsController extends GetxController {
     if (value != null) {
       _toadSettings["flySteadyTime"] = value > 0.0 ? value : 5.0;
       var flyDuration = toadSettings["flySteadyTime"];
-      print("Fly duration (in sec) : $flyDuration");
+      debugLog("Fly duration (in sec) : $flyDuration");
     } else {
       showMyToast("Null value for flies steady time !");
     }
@@ -226,25 +226,25 @@ class SettingsController extends GetxController {
   void setMazeHasChrono(bool hasChrono) {
     _mazeSettings["hasChrono"] = hasChrono;
     var hasChronoSetting = _mazeSettings["hasChrono"];
-    print("has chrono: $hasChronoSetting");
+    debugLog("has chrono: $hasChronoSetting");
   }
 
   void setMazeFineDirection(bool isFine) {
     _mazeSettings["isFineDirection"] = isFine;
     var isFineSetting = _mazeSettings["isFineDirection"];
-    print("is fine direction: $isFineSetting");
+    debugLog("is fine direction: $isFineSetting");
   }
   void setMazeHasMaxWallTouches(bool hasMaxTouch) {
     _mazeSettings["hasMaxTouch"] = hasMaxTouch;
     var hasMaxtouchesSetting = _mazeSettings["hasMaxTouch"];
-    print("has max touches: $hasMaxtouchesSetting");
+    debugLog("has max touches: $hasMaxtouchesSetting");
   }
 
   void setMazeChronoMaxTime(double? value) {
     if (value != null) {
       _mazeSettings["chronoMaxTime"] = value > 0 ? value : 20.0;
       var maxTime = _mazeSettings["chronoMaxTime"];
-      print("number of flies : $maxTime");
+      debugLog("number of flies : $maxTime");
     } else {
       _mazeSettings["chronoMaxTime"] = 20.0;
       showMyToast("Null value for chrono max time !");
@@ -254,7 +254,7 @@ class SettingsController extends GetxController {
     if (value != null) {
       _mazeSettings["maxTouches"] = value > 0 ? value : 3;
       var maxTime = _mazeSettings["maxTouches"];
-      print("max wall touches : $maxTime");
+      debugLog("max wall touches : $maxTime");
     } else {
       _mazeSettings["maxTouches"] = 3;
       showMyToast("Null value for max wall touches !");
@@ -265,7 +265,7 @@ class SettingsController extends GetxController {
     if (value != null) {
       _mazeSettings["mazeSize"] = value > 0 ? value : 5;
       var maxTime = _mazeSettings["mazeSize"];
-      print("maze size : $maxTime");
+      debugLog("maze size : $maxTime");
     } else {
       _mazeSettings["mazeSize"] = 5;
       showMyToast("Null value for maze size !");
@@ -275,7 +275,7 @@ class SettingsController extends GetxController {
     if (value != null) {
       _mazeSettings["speedMovement"] = value > 0 ? value : 40.0;
       var maxTime = _mazeSettings["speedMovement"];
-      print("movement speed : $maxTime");
+      debugLog("movement speed : $maxTime");
     } else {
       _mazeSettings["speedMovement"] = 40.0;
       showMyToast("Null value for movement speed !");

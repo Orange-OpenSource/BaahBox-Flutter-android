@@ -39,7 +39,7 @@ class BleMonitorView extends GetView<BleController> {
           Text("État du bluetooth :",
               style: Theme.of(context).textTheme.bodyLarge),
           Obx(() => Text(
-              switch (controller.adaptaterState.value) {
+              switch (controller.adapterState.value) {
                 BleAdapterState.unavailable =>
                   "Votre téléphone n'est pas compatible avec le bluetooth Low Energy ",
                 BleAdapterState.unauthorized =>
@@ -54,7 +54,7 @@ class BleMonitorView extends GetView<BleController> {
                   .bodyLarge
                   ?.copyWith(fontWeight: FontWeight.bold))),
           Obx(() {
-            switch (controller.adaptaterState.value) {
+            switch (controller.adapterState.value) {
               case BleAdapterState.unavailable:
                 return SizedBox(
                   height: 15,
@@ -84,7 +84,7 @@ class BleMonitorView extends GetView<BleController> {
           Text("Recherche de BaahBox :",
               style: Theme.of(context).textTheme.bodyLarge),
           Obx(() => FilledButton(
-              onPressed: controller.adaptaterState.value ==
+              onPressed: controller.adapterState.value ==
                   BleAdapterState.enable
                   ? () {
                       _startOrStopScan();
@@ -117,7 +117,7 @@ class BleMonitorView extends GetView<BleController> {
   }
 
   void _askPermissions() async {
-    if (controller.adaptaterState.value ==
+    if (controller.adapterState.value ==
         BleAdapterState.unauthorized) {
       if (Platform.isAndroid) {
         DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
@@ -143,7 +143,7 @@ class BleMonitorView extends GetView<BleController> {
       await controller.stopScanDevices();
     } else {
       bool canStart = false;
-      if (controller.adaptaterState.value == BleAdapterState.enable) {
+      if (controller.adapterState.value == BleAdapterState.enable) {
         canStart = true;
       } else if (Platform.isIOS) {
         canStart = true;

@@ -19,6 +19,7 @@
 
 import 'dart:math' as math;
 import 'dart:ui';
+import 'package:baahbox/constants/utils.dart';
 import 'package:baahbox/games/toad/components/flyScoreComponent.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
@@ -185,7 +186,7 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
         case Sensor.muscle: // The strength is in range [0...1024] -> Have it fit into [0...100]
           inputR = (appController.analogInputs.analog1 ~/ 10);
           inputL = (appController.analogInputs.analog2 ~/ 10);
-          print("toad: inputL= $inputL, inputR = $inputR");
+          debugLog("toad: inputL= $inputL, inputR = $inputR");
           goLeft = (inputL > threshold) && (inputL > inputR) && !isToadShooting;
           goRight = (inputR > threshold) && !goLeft && !isToadShooting;
           shoot = (inputL > 99 && inputR > 99 && !isToadShooting);

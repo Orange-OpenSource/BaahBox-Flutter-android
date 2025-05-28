@@ -18,6 +18,7 @@
  */
 
 import 'dart:ui';
+import 'package:baahbox/constants/utils.dart';
 import 'package:baahbox/games/spaceShip/components/scoreManager.dart';
 import 'package:baahbox/games/spaceShip/components/shipComponent.dart';
 import 'package:flame/effects.dart';
@@ -174,9 +175,9 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
           var joystickInput = appController.digitalInputs;
           goLeft = joystickInput.right;
           goRight = joystickInput.left;
-          print("joystick : " + joystickInput.describe());
-          print("right : $goRight");
-          print("left : $goLeft");
+          debugLog("joystick : " + joystickInput.describe());
+          debugLog("right : $goRight");
+          debugLog("left : $goLeft");
 
         case Sensor.button:
         case Sensor.none:

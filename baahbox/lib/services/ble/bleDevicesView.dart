@@ -57,7 +57,7 @@ class BleDevicesView extends GetView<BleController> {
                       if (controller.connectedDevice.value?.deviceID ==
                           device.deviceID) {
                         controller.disconnectDevice();
-                      } else if (controller.adaptaterState.value ==
+                      } else if (controller.adapterState.value ==
                           BleAdapterState.enable) {
                         controller.connectOnDeviceId(device.deviceID);
                       }

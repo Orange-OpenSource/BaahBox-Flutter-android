@@ -105,7 +105,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
                           border: Border.all(color: Colors.blue, width: 2)),
                       height: 90,
                       child: Obx(() {
-                        if (bleController.adaptaterState.value ==
+                        if (bleController.adapterState.value ==
                             BleAdapterState.enable) {
                           return Padding(
                               padding: EdgeInsets.all(10),
