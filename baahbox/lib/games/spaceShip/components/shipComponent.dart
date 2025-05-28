@@ -25,7 +25,7 @@ import 'package:baahbox/games/spaceShip/components/meteorComponent.dart';
 import 'package:baahbox/games/spaceShip/spaceShipGame.dart';
 
 class ShipComponent extends SpriteComponent
-    with HasGameRef<SpaceShipGame>, CollisionCallbacks {
+    with HasGameReference<SpaceShipGame>, CollisionCallbacks {
   ShipComponent()
       : super(
           size: Vector2(75, 100),
@@ -42,8 +42,8 @@ class ShipComponent extends SpriteComponent
   void initialize() {
     sprite = normalShipSprite;
     size = normalShipSprite.srcSize / 13;
-    position = Vector2(gameRef.size.x / 2,
-        (gameRef.size.y) / 2 + size.y );
+    position = Vector2(game.size.x / 2,
+        (game.size.y) / 2 + size.y );
     anchor = Anchor.center;
   }
 
@@ -94,7 +94,7 @@ class ShipComponent extends SpriteComponent
       if (other is MeteorComponent) {
         other.takeHit();
         takeHit();
-        gameRef.looseLife();
+        game.looseLife();
       }
 
   }

@@ -26,7 +26,7 @@ import 'package:flame/components.dart';
 import 'package:baahbox/games/toad/toadGame.dart';
 
 class TongueComponent extends SpriteComponent
-    with  HasVisibility, HasGameRef<ToadGame>, CollisionCallbacks {
+    with  HasVisibility, HasGameReference<ToadGame>, CollisionCallbacks {
   TongueComponent({required super.position}) : super(anchor: Anchor.bottomCenter);
 
   final tongueSprite = Sprite(Flame.images.fromCache('Games/Toad/tongue.png'));
@@ -47,7 +47,7 @@ class TongueComponent extends SpriteComponent
   void initialize() {
     this.sprite = tongueSprite;
     var ratio = tongueSprite.srcSize.x / tongueSprite.srcSize.y;
-    var width = gameRef.size.x/30;
+    var width = game.size.x/30;
     size = Vector2(width,width/ratio*5);
     priority = 2;
     hide();

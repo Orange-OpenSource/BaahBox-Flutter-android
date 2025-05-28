@@ -26,7 +26,7 @@ import 'package:baahbox/services/settings/settingsController.dart';
 
 import 'MazeLifeComponent.dart';
 
-class MazeLifeManager extends PositionComponent with HasGameRef<MazeGame>, HasVisibility {
+class MazeLifeManager extends PositionComponent with HasGameReference<MazeGame>, HasVisibility {
   final SettingsController settingsController = Get.find();
   final lifeArray = [];
   final gapSize = 5;
@@ -41,7 +41,7 @@ class MazeLifeManager extends PositionComponent with HasGameRef<MazeGame>, HasVi
   Future<void> onLoad() async {
     super.onLoad();
 
-    var sprite = await gameRef.loadSprite('Games/Maze/mouton_labyrinthe.png');
+    var sprite = await game.loadSprite('Games/Maze/mouton_labyrinthe.png');
     var ratio = (sprite.srcSize.x) / (sprite.srcSize.y );
 
     /*var height =  lifeSize.x / 3 * 2;

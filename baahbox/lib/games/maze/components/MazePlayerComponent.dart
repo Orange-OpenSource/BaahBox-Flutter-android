@@ -30,7 +30,7 @@ import '../mazeGame.dart';
 import 'WallComponent.dart';
 
 class MazePlayerComponent extends SpriteComponent
-    with CollisionCallbacks, HasVisibility, HasGameRef<MazeGame> {
+    with CollisionCallbacks, HasVisibility, HasGameReference<MazeGame> {
   final SettingsController settingsController = Get.find();
 
   late double movementSpeed = 30;
@@ -56,7 +56,7 @@ class MazePlayerComponent extends SpriteComponent
   Future<void> onLoad() async {
     super.onLoad();
 
-    sprite = await gameRef.loadSprite('Games/Maze/mouton_labyrinthe.png');
+    sprite = await game.loadSprite('Games/Maze/mouton_labyrinthe.png');
     spriteRatio = (sprite?.srcSize.x ?? startCell.width) /
         (sprite?.srcSize.y ?? startCell.height);
 
@@ -265,7 +265,7 @@ class MazePlayerComponent extends SpriteComponent
             collisionState = state;
             if (!isBlinkMode) {
               takeHit();
-              gameRef.looseLife();
+              game.looseLife();
             }
           }
         }

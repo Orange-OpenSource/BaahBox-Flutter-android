@@ -32,7 +32,7 @@ import '../../../constants/enums.dart';
 
 
 class MeteorComponent extends SpriteComponent
-    with HasGameRef<SpaceShipGame>, CollisionCallbacks {
+    with HasGameReference<SpaceShipGame>, CollisionCallbacks {
   static const speed = 100;
   static final Vector2 initialSize = Vector2.all(100);
   double accelerationRate = 1.0;
@@ -59,7 +59,7 @@ class MeteorComponent extends SpriteComponent
   void update(double dt) {
     super.update(dt);
       y += speed * dt * accelerationRate ;
-      if (isNotVisible() || !gameRef.appController.isActive || gameRef.state == GameState.lost ) {
+      if (isNotVisible() || !game.appController.isActive || game.state == GameState.lost ) {
         removeFromParent();
       }
   }

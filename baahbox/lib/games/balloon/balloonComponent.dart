@@ -21,7 +21,7 @@ import 'package:baahbox/games/balloon/balloonGame.dart';
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 
-class BalloonComponent extends SpriteComponent with HasGameRef<BalloonGame> {
+class BalloonComponent extends SpriteComponent with HasGameReference<BalloonGame> {
   BalloonComponent() : super(size: Vector2.all(16.0), anchor: Anchor.center);
 
   final balloonstartSprite =
@@ -44,8 +44,8 @@ class BalloonComponent extends SpriteComponent with HasGameRef<BalloonGame> {
   void initialize() {
     this.sprite = balloonstartSprite;
     size = balloonstartSprite.srcSize / 4;
-    position = Vector2(gameRef.size.x / 2,
-        (gameRef.size.y) / 2 + balloonstartSprite.srcSize.y / 4);
+    position = Vector2(game.size.x / 2,
+        (game.size.y) / 2 + balloonstartSprite.srcSize.y / 4);
     this.anchor = Anchor.bottomCenter;
   }
 
@@ -56,12 +56,12 @@ class BalloonComponent extends SpriteComponent with HasGameRef<BalloonGame> {
   }
 
   updateSprite(double dt) {
-    int coeff = (gameRef.input / 10).toInt();
+    int coeff = (game.input / 10).toInt();
     switch (coeff) {
       case 0 || 1:
         setTo(balloonstartSprite, 0);
       case 2 || 3 || 4 || 5 || 6 || 7:
-        setTo(balloonlowSprite, gameRef.input);
+        setTo(balloonlowSprite, game.input);
       case 8 || 9 || 10:
         setTo(balloonexplodeSprite, 0);
     }

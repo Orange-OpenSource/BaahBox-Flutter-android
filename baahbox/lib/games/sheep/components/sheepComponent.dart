@@ -28,7 +28,7 @@ import 'package:baahbox/games/sheep/components/bimComponent.dart';
 
 class SheepComponent extends SpriteComponent
     with  HasVisibility,
-        HasGameRef<SheepGame>,
+        HasGameReference<SheepGame>,
         CollisionCallbacks {
   SheepComponent({required super.position})
       : super(size: Vector2(100, 100), anchor: Anchor.bottomCenter);
@@ -58,7 +58,7 @@ class SheepComponent extends SpriteComponent
   void initialize() {
     this.sprite = walkingSprite1;
     var ratio = walkingSprite1.srcSize.x / walkingSprite1.srcSize.y;
-    var width = gameRef.size.x/3;
+    var width = game.size.x/3;
     size = Vector2(width,width/ratio);
     show();
   }
@@ -66,7 +66,7 @@ class SheepComponent extends SpriteComponent
   @override
   void update(double dt) {
     super.update(dt);
-    if (gameRef.isRunning) {
+    if (game.isRunning) {
       checkCostume();
     }
     goDown();
@@ -89,7 +89,7 @@ class SheepComponent extends SpriteComponent
 
   void goDown() {
     var yPos = position.y + 1;
-    position.y = min(yPos, gameRef.floorY);
+    position.y = min(yPos, game.floorY);
   }
 
   void moveTo(double yPos) {
@@ -107,13 +107,13 @@ class SheepComponent extends SpriteComponent
   }
 
   bool isPosInFrame(double y) {
-    return (y <= gameRef.floorY) && ((y - size.y) > 0);
+    return (y <= game.floorY) && ((y - size.y) > 0);
   }
 
   void checkCostume() {
-    if (position.y <= gameRef.floorY -10) {
+    if (position.y <= game.floorY -10) {
       setSpriteTo(2);
-    } else if (position.y > gameRef.floorY -10) {
+    } else if (position.y > game.floorY -10) {
       tremble();
       var rng = new Random();
       var i = rng.nextInt(2);
@@ -149,7 +149,7 @@ class SheepComponent extends SpriteComponent
     setSpriteTo(3);
     game.add(BimComponent(
         position: Vector2(position.x + size.x/2, position.y - size.y - 20)));
-    gameRef.setGameStateToWon(false);
+    game.setGameStateToWon(false);
   }
 
   @override

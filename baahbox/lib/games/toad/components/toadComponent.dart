@@ -27,7 +27,7 @@ import 'package:flame/geometry.dart';
 
 class ToadComponent extends SpriteComponent
     with  HasVisibility,
-        HasGameRef<ToadGame> {
+        HasGameReference<ToadGame> {
   ToadComponent()
       : super(size: Vector2(100, 100), anchor: Anchor.bottomCenter);
 
@@ -64,10 +64,10 @@ class ToadComponent extends SpriteComponent
   void initialize() {
     this.sprite = toadSprite;
     var ratio = toadSprite.srcSize.x / toadSprite.srcSize.y;
-    var width = gameRef.size.x * 3/8;
+    var width = game.size.x * 3/8;
     size = Vector2(width,width/ratio);
     anchor = Anchor.center;
-    position =  Vector2(gameRef.size.x / 2, gameRef.size.y - size.y -150);
+    position =  Vector2(game.size.x / 2, game.size.y - size.y -150);
     angle = nativeAngle;
     show();
   }
@@ -94,7 +94,7 @@ class ToadComponent extends SpriteComponent
 
 
   void resetToadShooting() {
-    gameRef.isToadShooting = false;
+    game.isToadShooting = false;
   }
 
   void rotateBy(int deltaAngle) {
@@ -112,8 +112,8 @@ class ToadComponent extends SpriteComponent
 
   bool checkFlies({bool automaticMode = true}) {
    bool gotOne = false;
-    for (double x in gameRef.flyNet.keys) {
-      var _flyX = gameRef.flyNet[x]!;
+    for (double x in game.flyNet.keys) {
+      var _flyX = game.flyNet[x]!;
       var target = Vector2(x, _flyX);
       var angleToTarget = angleTo(target);
        var deltaAngle = automaticMode ?  pi / 360 : pi/ 90;
@@ -140,9 +140,9 @@ class ToadComponent extends SpriteComponent
   }
 
   void shoot({double distance = 300.0}) {
-    gameRef.isToadShooting = true;
-    gameRef.tongue.priority = -1;
-    gameRef.tongue.showAtAngle(angle, distance);
+    game.isToadShooting = true;
+    game.tongue.priority = -1;
+    game.tongue.showAtAngle(angle, distance);
     blink();
     _shootTimer.timer.start();
     // animateToadForShooting();

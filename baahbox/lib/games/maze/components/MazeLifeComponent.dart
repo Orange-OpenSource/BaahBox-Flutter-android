@@ -21,7 +21,7 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/flame.dart';
 
-class MazeLifeComponent extends SpriteComponent with HasGameRef, HasVisibility {
+class MazeLifeComponent extends SpriteComponent with HasGameReference, HasVisibility {
   MazeLifeComponent({required super.size, required super.position})
       : super(
     anchor: Anchor.topRight,
@@ -37,7 +37,7 @@ class MazeLifeComponent extends SpriteComponent with HasGameRef, HasVisibility {
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    sprite = await gameRef.loadSprite('Games/Maze/mouton_labyrinthe.png');
+    sprite = await game.loadSprite('Games/Maze/mouton_labyrinthe.png');
 
   }
 

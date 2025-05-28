@@ -30,7 +30,7 @@ import 'package:baahbox/services/settings/settingsController.dart';
 
 
 class FlyComponent extends SpriteComponent
-    with  HasVisibility, HasGameRef<ToadGame>, CollisionCallbacks {
+    with  HasVisibility, HasGameReference<ToadGame>, CollisionCallbacks {
   double flightDuration = 5.0;
   final flySprite = Sprite(Flame.images.fromCache('Games/Toad/fly.png'));
 
@@ -60,19 +60,19 @@ class FlyComponent extends SpriteComponent
     this.sprite = flySprite;
    // this.flightDuration = flightDuration;
     var ratio = flySprite.srcSize.x / flySprite.srcSize.y;
-    var width = 50.00;//gameRef.size.x/10;
+    var width = 50.00;//game.size.x/10;
     size = Vector2(width,width/ratio);
     anchor = Anchor.center;
     add(CircleHitbox());
-    gameRef.registerToFlyNet(position);
+    game.registerToFlyNet(position);
     show();
     _AppearanceTimer.timer.start();
   }
 
   void setPositionTo(Vector2 newPosition){
-    gameRef.unRegisterFromFlyNet(position);
+    game.unRegisterFromFlyNet(position);
     position = newPosition;
-    gameRef.registerToFlyNet(position);
+    game.registerToFlyNet(position);
   }
 
   @override
@@ -90,7 +90,7 @@ class FlyComponent extends SpriteComponent
 
   void disappear() {
     hide();
-    gameRef.unRegisterFromFlyNet(position);
+    game.unRegisterFromFlyNet(position);
     removeFromParent();
   }
 
@@ -103,7 +103,7 @@ class FlyComponent extends SpriteComponent
     super.onCollisionStart(intersectionPoints, other);
     if (other is TongueComponent) {
       other.takeHit();
-      gameRef.looseScore();
+      game.looseScore();
       _gotShotTimer.timer.start();
     }
   }
