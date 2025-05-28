@@ -19,6 +19,7 @@
 
 import 'dart:math';
 import 'dart:ui';
+import 'package:baahbox/constants/utils.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/services.dart';
@@ -171,7 +172,7 @@ class StarGame extends BBGame with TapCallbacks {
     } else {
       var yPos = info.eventPosition.global.y;
       panInput = ((canvasSize.y - yPos) * 1024.0 / canvasSize.y).toInt();
-      // print(
+      // debugLog(
       //     "panInput : ${panInput} :::  panY : ${yPos} vs game ${canvasSize.y}");
     }
   }
@@ -179,6 +180,6 @@ class StarGame extends BBGame with TapCallbacks {
   @override
   void onTapDown(TapDownEvent event) {
     super.onTapDown(event);
-   // print("state : $state ");
+    //debugLog("state : $state ");
   }
 }

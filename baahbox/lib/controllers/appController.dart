@@ -1,6 +1,6 @@
 /*
  * Baah Box
- * Copyright (c) 2024. Orange SA
+ * Copyright (c) 2024-2025. Orange SA
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+import 'package:baahbox/constants/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:baahbox/model/sensorInput.dart';
@@ -70,35 +71,35 @@ class Controller extends FullLifeCycleController with FullLifeCycleMixin {
 // Mandatory
   @override
   void onDetached() {
-    print('appController - onDetached called');
+    debugLog('appController - onDetached called');
     _isActive.value = false;
   }
 
 // Mandatory
   @override
   void onInactive() {
-    print('appController - onInactive called');
+    debugLog('appController - onInactive called');
     _isActive.value = false;
   }
 
 // Mandatory
   @override
   void onPaused() {
-    print('appController - onPaused called');
+    debugLog('appController - onPaused called');
     _isActive.value = false;
   }
   // Mandatory
 
   @override
   void onHidden() {
-    print('appController - onHidden called');
+    debugLog('appController - onHidden called');
     _isActive.value = false;
   }
 
 // Mandatory
   @override
   void onResumed() {
-    print('appController - onResumed called');
+    debugLog('appController - onResumed called');
     _isActive.value = true;
   }
 

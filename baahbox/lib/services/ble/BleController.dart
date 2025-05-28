@@ -19,6 +19,7 @@
 
 import 'dart:async';
 
+import 'package:baahbox/constants/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get/get.dart';
@@ -47,7 +48,7 @@ final String characteristicUuid = '6E400003-B5A3-F393-E0A9-E50E24DCCA9E';
 class BleController extends GetxController {
   var isActivated = false.obs;
 
-  var adaptaterState = BleAdapterState.unavailable.obs;
+  var adapterState = BleAdapterState.unavailable.obs;
 
   var isScanningDevices = false.obs;
 
@@ -68,7 +69,7 @@ class BleController extends GetxController {
 
   void init() async {
     if (await FlutterBluePlus.isSupported == false) {
-      adaptaterState.value = BleAdapterState.unavailable;
+      adapterState.value = BleAdapterState.unavailable;
     } else {
       checkStateSubscription();
       scanDevicesSubscription();
@@ -97,26 +98,26 @@ class BleController extends GetxController {
         FlutterBluePlus.adapterState.listen((BluetoothAdapterState state) {
       switch (state) {
         case BluetoothAdapterState.unknown:
-          adaptaterState.value = BleAdapterState.unavailable;
+          adapterState.value = BleAdapterState.unavailable;
           resetDevices();
           isScanningDevices.value = false;
         case BluetoothAdapterState.unavailable:
-          adaptaterState.value = BleAdapterState.unavailable;
+          adapterState.value = BleAdapterState.unavailable;
           resetDevices();
           isScanningDevices.value = false;
         case BluetoothAdapterState.unauthorized:
-          adaptaterState.value = BleAdapterState.unauthorized;
+          adapterState.value = BleAdapterState.unauthorized;
           resetDevices();
           isScanningDevices.value = false;
         case BluetoothAdapterState.turningOn:
-          adaptaterState.value = BleAdapterState.waiting;
+          adapterState.value = BleAdapterState.waiting;
           isScanningDevices.value = false;
         case BluetoothAdapterState.on:
-          adaptaterState.value = BleAdapterState.enable;
+          adapterState.value = BleAdapterState.enable;
         case BluetoothAdapterState.turningOff:
-          adaptaterState.value = BleAdapterState.waiting;
+          adapterState.value = BleAdapterState.waiting;
         case BluetoothAdapterState.off:
-          adaptaterState.value = BleAdapterState.disabled;
+          adapterState.value = BleAdapterState.disabled;
           resetDevices();
           isScanningDevices.value = false;
       }
@@ -142,7 +143,7 @@ class BleController extends GetxController {
       availableDevices.refresh();
     }, onError: (e) {
       //isScanningDevices.value=false;
-      print(e);
+      debugLog(e);
     });
 
     _isScanningSubscription = FlutterBluePlus.isScanning.listen((state) {
@@ -156,8 +157,8 @@ class BleController extends GetxController {
     //   var withServices = [Guid(serviceUuid)];
     //   _systemDevices = await FlutterBluePlus.systemDevices(withServices);
     // } catch (e, backtrace) {
-    //   print(e);
-    //   print("backtrace: $backtrace");
+    //   debugLog(e);
+    //   debugLog("backtrace: $backtrace");
     // }
     try {
       _scanResults = [];
@@ -169,8 +170,8 @@ class BleController extends GetxController {
           ],
           androidScanMode: AndroidScanMode.lowPower);
     } catch (e, backtrace) {
-      print(e);
-      print("backtrace: $backtrace");
+      debugLog(e.toString());
+      debugLog("backtrace: $backtrace");
     }
   }
 
@@ -178,8 +179,8 @@ class BleController extends GetxController {
     try {
       FlutterBluePlus.stopScan();
     } catch (e, backtrace) {
-      print(e);
-      print("backtrace: $backtrace");
+      debugLog(e.toString());
+      debugLog("backtrace: $backtrace");
     }
   }
 
@@ -208,7 +209,7 @@ class BleController extends GetxController {
         case BluetoothConnectionState.disconnecting:
       }
     }, onError: (e) {
-      print(e);
+      debugLog(e);
     });
     var associatedAvailableDevice = availableDevices.firstWhereOrNull(
             (element) =>
