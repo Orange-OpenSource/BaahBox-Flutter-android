@@ -33,6 +33,14 @@ class SheepSettingsPage extends GetView<SettingsController> {
     return Scaffold(
       appBar: AppBar(
         title: AutoSizeText('Réglages du saute mouton', maxLines: 1),
+        actions: [
+          IconButton(
+              icon: Image.asset(
+                  'assets/images/Dashboard/settings_icon.png',
+                  width: 25, height: 25,
+                  color: mainColor),
+              onPressed: () => Get.toNamed('/settings')),
+        ],
       ),
       body: SafeArea(
     child:ListView(
