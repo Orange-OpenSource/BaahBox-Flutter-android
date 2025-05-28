@@ -26,7 +26,7 @@ import 'package:baahbox/games/sheep/sheepGame.dart';
 import 'package:flame/text.dart';
 import 'package:flutter/material.dart';
 
-class CounterManager extends Component with HasGameRef<SheepGame> {
+class CounterManager extends Component with HasGameReference<SheepGame> {
   final markArray = [];
   var gateNumber = 1;
   final gapSize = 5;
@@ -46,7 +46,7 @@ class CounterManager extends Component with HasGameRef<SheepGame> {
 
 
   void showCount() async {
-    await gameRef.addAll([
+    await game.addAll([
       counterText = TextComponent(
           position: Vector2(2, game.size.y - 30),
           textRenderer: regular,
@@ -69,20 +69,21 @@ class CounterManager extends Component with HasGameRef<SheepGame> {
   void _createMarkAt(double x, double y) {
     final mark = MarkComponent(position: Vector2(x, y));
     markArray.add(mark);
-    gameRef.add(mark);
+    game.add(mark);
   }
 
   void looseOneMark() {
-    if (markArray.length > 0) {
+    if (markArray.isNotEmpty) {
       markArray.last.disappear();
       markArray.removeLast();
-    } else {
-      counterText.text = "";
     }
+      if (markArray.isEmpty) {
+        counterText.text = "";
+      }
   }
 
   void clearTheFields() {
-    for (var i = 0; i <= markArray.length+1; i++)
+    for (var i = 0; i < markArray.length; i++)
      looseOneMark();
     }
   }

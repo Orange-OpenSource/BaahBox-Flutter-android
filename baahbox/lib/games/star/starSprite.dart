@@ -24,7 +24,7 @@ import 'package:baahbox/controllers/appController.dart';
 import 'package:get/get.dart';
 
 
-class StarSprite extends SpriteComponent with HasGameRef<StarGame> {
+class StarSprite extends SpriteComponent with HasGameReference<StarGame> {
   final Controller appController = Get.find();
   StarSprite() : super(size: Vector2.all(16.0), anchor: Anchor.center);
 
@@ -43,7 +43,7 @@ class StarSprite extends SpriteComponent with HasGameRef<StarGame> {
   void initialize()  {
     this.sprite = starSprite;
     size = starSprite.srcSize / 5;
-    position = Vector2(gameRef.size.x / 2, gameRef.size.y/2-size.y/4);
+    position = Vector2(game.size.x / 2, game.size.y/2-size.y/4);
     size = starSprite.srcSize / 5;
   }
 
@@ -58,7 +58,7 @@ class StarSprite extends SpriteComponent with HasGameRef<StarGame> {
   @override
   void update(double dt) {
     super.update(dt);
-    if (gameRef.input >= 750) {
+    if (game.input >= 750) {
       setTo(shiningStarSprite);
     } else {
       setTo(starSprite);

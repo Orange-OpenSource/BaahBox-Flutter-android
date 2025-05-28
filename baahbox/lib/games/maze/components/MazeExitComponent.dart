@@ -24,7 +24,7 @@ import 'package:flame/experimental.dart';
 import '../mazeGame.dart';
 
 class MazeExitComponent extends SpriteComponent with CollisionCallbacks,
-    HasGameRef<MazeGame> {
+    HasGameReference<MazeGame> {
 
   late final RectangleHitbox hitbox;
 
@@ -42,7 +42,7 @@ class MazeExitComponent extends SpriteComponent with CollisionCallbacks,
   }
 
   Future<void> initialize() async {
-    sprite = await gameRef.loadSprite('Games/Maze/trefle.png');
+    sprite = await game.loadSprite('Games/Maze/trefle.png');
     var ratio = (sprite?.srcSize.x ?? endCell.width) / (sprite?.srcSize.y ?? endCell.height);
     var width = endCell.width/3*2;
     var height = width/ratio;

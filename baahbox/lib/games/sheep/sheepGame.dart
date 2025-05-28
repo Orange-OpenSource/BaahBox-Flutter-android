@@ -185,14 +185,15 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
   void update(double dt) {
     super.update(dt);
     if (appController.isActive) {
-
       if (isRunning) {
         transformInputInMove();
         if (isNewGateOnQueue()) {
           if (!isSheepOnFloor() && !sheepDidJumpOverGate) {
-            setGameStateToWon(false);
             feedback = "Il faut atterrir après la barrière!";
             progressionText.text = feedback;
+            setGameStateToWon(false);
+            sheep.setCostumeForLostGame();
+
           } else if (successfulJumps == gameObjective) {
             counterManager.looseOneMark();
             setGameStateToWon(true);
@@ -207,8 +208,6 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
   }
 
   void transformInputInMove() {
-
-
     if (appController.isConnectedToBox) {
       //   if input <= threshold { return }
       //   var heightConstraint = (CGFloat(strengthValue) - CGFloat (hardnessCoeff*350)) / 1000

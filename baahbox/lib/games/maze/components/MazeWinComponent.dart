@@ -23,7 +23,7 @@ import 'package:flame/experimental.dart';
 
 import '../mazeGame.dart';
 
-class MazeWinComponent extends SpriteComponent with HasVisibility, HasGameRef<MazeGame> {
+class MazeWinComponent extends SpriteComponent with HasVisibility, HasGameReference<MazeGame> {
 
   MazeWinComponent({  super.position, required super.size})
       : super(anchor: Anchor.center);
@@ -40,7 +40,7 @@ class MazeWinComponent extends SpriteComponent with HasVisibility, HasGameRef<Ma
     isVisible = true;
   }
   Future<void> initialize() async {
-    sprite = await gameRef.loadSprite('Games/Maze/trefle.png');
+    sprite = await game.loadSprite('Games/Maze/trefle.png');
     var ratio = (sprite?.srcSize.x ?? size.x) / (sprite?.srcSize.y ?? size.y);
     var width = size.x;
     var height = width/ratio;

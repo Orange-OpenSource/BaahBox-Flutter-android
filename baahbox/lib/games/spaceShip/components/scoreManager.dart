@@ -20,7 +20,7 @@
 import 'package:flame/components.dart';
 import 'package:baahbox/games/spaceShip/spaceShipGame.dart';
 
-class ScoreManager extends TimerComponent with HasGameRef<SpaceShipGame> {
+class ScoreManager extends TimerComponent with HasGameReference<SpaceShipGame> {
   ScoreManager() : super(period: 1, repeat: true);
 
   @override

@@ -23,7 +23,7 @@ import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
 import 'package:baahbox/games/spaceShip/components/starComponent.dart';
 
-class StarBackGroundCreator extends Component with HasGameRef<SpaceShipGame> {
+class StarBackGroundCreator extends Component with HasGameReference<SpaceShipGame> {
   final gapSize = 12;
   late final SpriteSheet spriteSheet;
   Random random = Random();

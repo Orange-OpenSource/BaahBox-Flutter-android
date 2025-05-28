@@ -24,7 +24,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:baahbox/services/settings/settingsController.dart';
 
-class LifeManager extends Component with HasGameRef<SpaceShipGame> {
+class LifeManager extends Component with HasGameReference<SpaceShipGame> {
   final SettingsController settingsController = Get.find();
   final lifeArray = [];
   final gapSize = 5;
@@ -49,11 +49,12 @@ class LifeManager extends Component with HasGameRef<SpaceShipGame> {
   }
 
   void looseOneLife() {
-    if (lifeArray.length > 0) {
+    if (lifeArray.isNotEmpty) {
       lifeArray.last.disappear();
       lifeArray.removeLast();
-    } else {
-      game.endGame();
+    }
+    if (lifeArray.isEmpty) {
+        game.endGame();
     }
   }
 }

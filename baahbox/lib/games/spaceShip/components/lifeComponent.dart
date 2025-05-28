@@ -21,7 +21,7 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/flame.dart';
 
-class LifeComponent extends SpriteComponent with HasGameRef {
+class LifeComponent extends SpriteComponent with HasGameReference {
   LifeComponent({required Vector2 position})
       : super(
     size: Vector2(75, 100),

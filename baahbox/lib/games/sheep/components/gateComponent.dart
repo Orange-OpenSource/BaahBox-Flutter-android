@@ -25,7 +25,7 @@ import 'package:baahbox/games/sheep/sheepGame.dart';
 
 
 class GateComponent extends SpriteComponent
-    with HasGameRef<SheepGame>, CollisionCallbacks {
+    with HasGameReference<SheepGame>, CollisionCallbacks {
 
   late ObjectVelocity speedScale;
   final Vector2 deltaPosition = Vector2.zero();
@@ -48,7 +48,7 @@ class GateComponent extends SpriteComponent
     speed = Vector2(-1, 0)..scale(this.speedScale.value * 30);
   }
   void resetPosition() {
-    position = Vector2(gameRef.size.x + size.x / 2, gameRef.floorY);
+    position = Vector2(game.size.x + size.x / 2, game.floorY);
     isNewComer = true;
   }
 
@@ -62,7 +62,7 @@ class GateComponent extends SpriteComponent
   @override
   void update(double dt) {
     super.update(dt);
-    if (gameRef.isRunning) {
+    if (game.isRunning) {
       deltaPosition
         ..setFrom(speed)
         ..scale(dt);
@@ -71,7 +71,7 @@ class GateComponent extends SpriteComponent
       if (x < -size.x / 2) {
         x = game.size.x + size.x;
         isNewComer = true;
-        gameRef.nbDisplayedGates += 1;
+        game.nbDisplayedGates += 1;
       } else {
         isNewComer = false;
       }

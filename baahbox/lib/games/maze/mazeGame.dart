@@ -88,24 +88,26 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
   }
 
   void loadComponents() async {
-    if (!appController.isConnectedToBox) {
-      joyStickKnobPaint = Paint()
-        ..color = BBColor.pinky.color.withAlpha(200)
-        ..style = PaintingStyle.fill;
-      joyStickBackgroundPaint = Paint()
-        ..color = BBColor.greyGreen.color.withAlpha(200)
-        ..style = PaintingStyle.fill;
-    }
 
+    createMazeAndPlayer();
+    createWinComponent();
+    createChronoText();
+    createTouchJoystick();
+    if (!appController.isConnectedToBox) {
+      add(joystick);
+    }
+  }
+
+  void createChronoText() {
     durationText = TextComponent(
       position: Vector2(size.x - 5, 10),
       anchor: Anchor.topRight,
       priority: 1,
     );
     add(durationText);
+  }
 
-    createMazeAndPlayer();
-
+  void createWinComponent() {
     winComponent = MazeWinComponent(
         position: Vector2(size.x / 2, size.y / 2),
         size: Vector2(size.x / 3, size.y / 3));
@@ -113,21 +115,28 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
     add(winComponent);
   }
 
+ void createTouchJoystick() {
+   var radius = size.y / 4;
+   if (radius > 30 || radius < 10) {
+     radius = 20;
+   }
+  joyStickKnobPaint = Paint()
+  ..color = BBColor.pinky.color.withAlpha(200)
+  ..style = PaintingStyle.fill;
+  joyStickBackgroundPaint = Paint()
+  ..color = BBColor.greyGreen.color.withAlpha(200)
+  ..style = PaintingStyle.fill;
+
+  joystick = JoystickComponent(
+  anchor: Anchor.bottomCenter,
+  knob: CircleComponent(radius: radius, paint: joyStickKnobPaint),
+  background:
+  CircleComponent(radius: radius * 3, paint: joyStickBackgroundPaint),
+  margin: const EdgeInsets.only(left: 40, bottom: 40),
+  );
+}
+
   void createMazeAndPlayer() {
-    var radius = size.y / 4;
-    if (radius > 30 || radius < 10) {
-      radius = 20;
-    }
-    joystick = JoystickComponent(
-      anchor: Anchor.bottomCenter,
-      knob: CircleComponent(radius: radius, paint: joyStickKnobPaint),
-      background:
-      CircleComponent(radius: radius * 3, paint: joyStickBackgroundPaint),
-      margin: const EdgeInsets.only(left: 40, bottom: 40),
-    );
-    if (!appController.isConnectedToBox) {
-      add(joystick);
-    }
     //var mazeSize = min(size.x, size.y- durationText.size.y-10);
     var isVertical = (size.y - 10) >= size.x;
     var mazeSize = isVertical ? size.x : (size.y - 10);

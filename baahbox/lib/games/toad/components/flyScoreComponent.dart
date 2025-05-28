@@ -22,7 +22,7 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/flame.dart';
 
-class FlyScoreComponent extends SpriteComponent with HasVisibility, HasGameRef<ToadGame> {
+class FlyScoreComponent extends SpriteComponent with HasVisibility, HasGameReference<ToadGame> {
   FlyScoreComponent({required Vector2 position})
       : super(
     size: Vector2(100, 75),
