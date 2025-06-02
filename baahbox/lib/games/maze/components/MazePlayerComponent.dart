@@ -45,6 +45,8 @@ class MazePlayerComponent extends SpriteComponent
 
   bool isBlinkMode = false;
   Vector2 relativeMovementDelta = Vector2(0,0);
+  Vector2 lastValidPosition = Vector2(0,0);
+  Vector2 lastPosition = Vector2(0,0);
 
   MazePlayerComponent({required this.startCell, required this.isVerticalScreen})
       : super(
@@ -101,7 +103,9 @@ class MazePlayerComponent extends SpriteComponent
   void update(double dt) {
     super.update(dt);
 
+
     if (game.isRunning && !game.isGameOver) {
+      position.copyInto(lastPosition);
       var onStartCell = position.x > startCell.left &&
           position.x < startCell.right &&
           position.y > startCell.top &&
@@ -122,7 +126,12 @@ class MazePlayerComponent extends SpriteComponent
               }
             }
           }
-
+          if(relativeMovementDelta.x.abs()<=0.005) {
+            relativeMovementDelta.x=0;
+          }
+          if(relativeMovementDelta.y.abs()<=0.005) {
+            relativeMovementDelta.y=0;
+          }
           if(relativeMovementDelta.x!=0 || relativeMovementDelta.y!=0) {
             position.add(relativeMovementDelta * movementSpeed * dt);
             angle = relativeMovementDelta.screenAngle() + pi;
@@ -155,6 +164,11 @@ class MazePlayerComponent extends SpriteComponent
           }
         }
       }
+
+      if(position.x != lastPosition.x || position.y != lastPosition.y)
+        {
+          lastValidPosition = lastPosition;
+        }
     }
   }
 
@@ -164,7 +178,7 @@ class MazePlayerComponent extends SpriteComponent
 
   void blink() {
     isBlinkMode = true;
-    add(OpacityEffect.to(0, EffectController(duration: 0.5, reverseDuration: 1),
+    add(OpacityEffect.to(0, EffectController(duration: 1, reverseDuration: 1),
         onComplete: () {
       isBlinkMode = false;
     }));
@@ -211,34 +225,6 @@ class MazePlayerComponent extends SpriteComponent
     angle = 0;
   }
 
-  Vector2 _cornerBumpDistance(
-      Vector2 directionVector, Vector2 pointA, Vector2 pointB) {
-    var dX = pointA.x - pointB.x;
-    var dY = pointA.y - pointB.y;
-    // The order of the two intersection points differs per corner
-    // The following if statements negates the necessary values to make the
-    // player move back to the right position
-    if (directionVector.x > 0 && directionVector.y < 0) {
-      // Top right corner
-      dX = -dX;
-    } else if (directionVector.x > 0 && directionVector.y > 0) {
-      // Bottom right corner
-      dX = -dX;
-    } else if (directionVector.x < 0 && directionVector.y > 0) {
-      // Bottom left corner
-      dY = -dY;
-    } else if (directionVector.x < 0 && directionVector.y < 0) {
-      // Top left corner
-      dY = -dY;
-    }
-    // The absolute smallest of both values determines from which side the player bumps
-    // and therefor determines the needed displacement
-    if (dX.abs() < dY.abs()) {
-      return Vector2(dX, 0);
-    } else {
-      return Vector2(0, dY);
-    }
-  }
 
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
@@ -248,26 +234,12 @@ class MazePlayerComponent extends SpriteComponent
         isOut = true;
       } else if (other is WallComponent) {
         if (collisionState == MovingState.none) {
-          if (intersectionPoints.length == 2) {
-            var pointA = intersectionPoints.elementAt(0);
-            var pointB = intersectionPoints.elementAt(1);
-            final mid = (pointA + pointB) / 2;
-            final collisionVector = absoluteCenter - mid;
-            if (pointA.x == pointB.x || pointA.y == pointB.y) {
-              // Hitting a side without touching a corner
-              double penetrationDepth = (size.x / 2) - collisionVector.length;
-              collisionVector.normalize();
-              position += collisionVector.scaled(penetrationDepth);
-            } else {
-              position += _cornerBumpDistance(collisionVector, pointA, pointB);
-            }
-
-            collisionState = state;
-            if (!isBlinkMode) {
-              takeHit();
-              game.looseLife();
-            }
+          collisionState = state;
+          if (!isBlinkMode) {
+            takeHit();
+            game.looseLife();
           }
+          position = lastValidPosition;
         }
       }
     }
