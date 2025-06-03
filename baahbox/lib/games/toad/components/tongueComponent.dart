@@ -68,7 +68,7 @@ class TongueComponent extends SpriteComponent
 
   void showAtAngle(double destAngle, double distance) {
     angle = destAngle;
-    scale = Vector2(1.0 ,distance/size.y);
+    scale = Vector2(1.0, distance/size.y);
     show();
     _timer.timer.start();
 

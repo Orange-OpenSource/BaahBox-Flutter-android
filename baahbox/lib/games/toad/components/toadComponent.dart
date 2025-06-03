@@ -26,13 +26,12 @@ import 'package:baahbox/games/toad/toadGame.dart';
 import 'package:flame/geometry.dart';
 
 class ToadComponent extends SpriteComponent
-    with  HasVisibility,
-        HasGameReference<ToadGame> {
-  ToadComponent()
-      : super(size: Vector2(100, 100), anchor: Anchor.bottomCenter);
+    with HasVisibility, HasGameReference<ToadGame> {
+  ToadComponent() : super(size: Vector2(100, 100), anchor: Anchor.bottomCenter);
 
   final toadSprite = Sprite(Flame.images.fromCache('Games/Toad/toad.png'));
-  final toadBlinkSprite = Sprite(Flame.images.fromCache('Games/Toad/toad_blink.png'));
+  final toadBlinkSprite =
+      Sprite(Flame.images.fromCache('Games/Toad/toad_blink.png'));
 
   final blinkingImages = [
     Flame.images.fromCache('Games/Toad/toad.png'),
@@ -53,6 +52,9 @@ class ToadComponent extends SpriteComponent
 
   final Vector2 deltaPosition = Vector2.zero();
 
+  final angularTolerance = 10;
+  final degreeToRadian = pi / 180;
+
   @override
   Future<void> onLoad() async {
     super.onLoad();
@@ -64,10 +66,11 @@ class ToadComponent extends SpriteComponent
   void initialize() {
     this.sprite = toadSprite;
     var ratio = toadSprite.srcSize.x / toadSprite.srcSize.y;
-    var width = game.size.x * 3/8;
-    size = Vector2(width,width/ratio);
+
+    var width = min(game.size.x,game.size.y) / 3 ; //* 3 / 8;
+    size = Vector2(width, width / ratio);
     anchor = Anchor.center;
-    position =  Vector2(game.size.x / 2, game.size.y - size.y -150);
+    position = Vector2(game.size.x / 2, game.size.y - size.y/2 - (game.size.y/4));// - 150);
     angle = nativeAngle;
     show();
   }
@@ -92,34 +95,40 @@ class ToadComponent extends SpriteComponent
 
   void jump() {}
 
-
   void resetToadShooting() {
     game.isToadShooting = false;
   }
 
   void rotateBy(int deltaAngle) {
     {
-      var delta = (deltaAngle/ 180 * math.pi/2);
+      var delta = (deltaAngle / 180 * math.pi / 2);
       var newAngle = angle + delta;
-      if ( newAngle> tau/4 || newAngle < -tau/4) { return ;}
+      if (newAngle > tau / 4 || newAngle < -tau / 4) {
+        return;
+      }
       for (double interAngle = 0; interAngle < delta; interAngle++) {
         angle = angle + interAngle;
       }
       angle = newAngle;
-
     }
   }
 
   bool checkFlies({bool automaticMode = true}) {
-   bool gotOne = false;
-    for (double x in game.flyNet.keys) {
-      var _flyX = game.flyNet[x]!;
-      var target = Vector2(x, _flyX);
-      var angleToTarget = angleTo(target);
-       var deltaAngle = automaticMode ?  pi / 360 : pi/ 90;
-      if (angleToTarget.abs() <= deltaAngle) {
-        shoot(distance: position.distanceTo(target));
-        gotOne = true;
+    bool gotOne = false;
+    var flyList = game.flyNet.keys.toList();
+
+    if (flyList.length >= 1) {
+      flyList.sort((a, b) => b.compareTo(a));
+      for (double y in flyList) {
+        var _flyX = game.flyNet[y]!;
+        var target = Vector2(_flyX, y);
+        var angleToTarget = angleTo(target);
+
+        var deltaAngle = automaticMode ? 1 : angularTolerance;
+        if (angleToTarget.abs() <= deltaAngle * degreeToRadian) {
+          shoot(distance: position.distanceTo(target));
+          gotOne = true;
+        }
       }
     }
     return gotOne;
