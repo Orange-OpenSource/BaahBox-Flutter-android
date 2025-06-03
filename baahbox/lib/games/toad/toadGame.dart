@@ -18,6 +18,7 @@
  */
 
 import 'dart:math' as math;
+import 'dart:math';
 import 'dart:ui';
 import 'package:baahbox/constants/utils.dart';
 import 'package:baahbox/games/toad/components/flyScoreComponent.dart';
@@ -89,20 +90,19 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
     await add(toad = ToadComponent());
     await add(tongue = TongueComponent(position: toad.position));
     var skyLimit = toad.position.y - toad.size.y;
+
     flyLauncher = loadFlyLauncher(skyLimit);
     await add(flyManager = FlyManager());
   }
 
   SpawnComponent loadFlyLauncher(double yLimit) {
+    var top = max(0.0, yLimit - (4 * toad.size.y));
     return SpawnComponent.periodRange(
         factory: (i) => FlyComponent(settingsController
-            .toadSettings["flySteadyTime"]), //size: Vector2(50, 50)),
-        minPeriod: 1,
+            .toadSettings["flySteadyTime"]),
+       minPeriod: 1,
         maxPeriod: 3,
-        area: Rectangle.fromCenter(
-          center: Vector2(size.x / 2, yLimit / 3),
-          size: Vector2(size.x - 50, 2 * yLimit / 3 - 50),
-        ));
+        area:  Rectangle.fromLTWH(size.x/20, top, size.x-(size.x/10), yLimit - top));
   }
 
   void loadInfoComponents() {}
@@ -304,11 +304,11 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
     }
   }
   void registerToFlyNet(Vector2 position) {
-    flyNet[position.x] = position.y; //todo mettre l'angle et la distance
+    flyNet[position.y] = position.x; //todo mettre l'angle et la distance
   }
 
   void unRegisterFromFlyNet(Vector2 position) {
-    flyNet.remove(position.x); //todo mettre l'angle et la distance
+    flyNet.remove(position.y); //todo mettre l'angle et la distance
   }
 
   double coordToGradian(double x, double y) {

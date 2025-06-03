@@ -19,6 +19,7 @@
 
 import 'dart:io';
 import 'dart:math' as math;
+import 'dart:math';
 import 'package:baahbox/games/toad/components/tongueComponent.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/effects.dart';
@@ -60,10 +61,16 @@ class FlyComponent extends SpriteComponent
     this.sprite = flySprite;
    // this.flightDuration = flightDuration;
     var ratio = flySprite.srcSize.x / flySprite.srcSize.y;
-    var width = 50.00;//game.size.x/10;
+    var width = min(game.size.x, game.size.y) / 10;
     size = Vector2(width,width/ratio);
     anchor = Anchor.center;
-    add(CircleHitbox());
+
+    var radius = max(width / 2, height / 2);
+    var hitBox =
+    CircleHitbox(position: Vector2(width / 2, height / 2), radius: radius)
+      ..anchor = Anchor.center;
+    add(hitBox);
+
     game.registerToFlyNet(position);
     show();
     _AppearanceTimer.timer.start();

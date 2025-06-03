@@ -17,6 +17,8 @@
  *
  */
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:ui';
@@ -106,7 +108,7 @@ class GameRow extends StatelessWidget {
               shape:MaterialStateProperty.all(ContinuousRectangleBorder())),
           child: Container(
               alignment: Alignment.centerLeft,
-              height: height<40 ? 40 : height, //(Get.height/5)-10,
+              height: max(60, height), //(Get.height/5)-10,
               width: double.infinity,
               padding: const EdgeInsets.all(0),
 
@@ -115,9 +117,9 @@ class GameRow extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Image(
-                        alignment: Alignment.centerLeft,
+                        alignment: Alignment.center,
                         image: AssetImage(game.mainAsset),
-                        width: 60),
+                        height: 60),
                     Spacer(),
                     Column(
                         mainAxisAlignment: MainAxisAlignment.center,
