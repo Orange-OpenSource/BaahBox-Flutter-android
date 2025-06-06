@@ -17,16 +17,29 @@
  *
  */
 
-import 'package:baahbox/constants/enums.dart';
-import 'package:baahbox/games/spaceShip/spaceShipGame.dart';
-import '../../model/GamePage.dart';
+import 'package:baahbox/services/settings/settingsController.dart';
+import 'package:get/get.dart';
 
-class SpaceShipGamePage extends GamePage {
-  SpaceShipGamePage({super.key})
-      : super(
-      game: SpaceShipGame(),
-      mainColor: BBGameList.sheep.baseColor.color,
-      title: "La bataille de l'espace",
-      settingsRoute: '/spaceShipSettings');
+import '../../constants/enums.dart';
+
+class SpaceShipSettings  {
+  var _asteroidVelocity = ObjectVelocity.medium.obs;
+  var _numberOfShips = 3.obs;
+  var muscleSettings = MuscleSettings()
+    ..sensor1Orientation=AnalogicSensorOrientation.horizontal
+    ..sensor2Orientation=AnalogicSensorOrientation.none;
+
+  ObjectVelocity get asteroidVelocity => _asteroidVelocity.value;
+  set asteroidVelocity(ObjectVelocity val)
+  {
+    _asteroidVelocity.value = val;
+  }
+
+  int get numberOfShips => _numberOfShips.value;
+  set numberOfShips(int val)
+  {
+    if(val>0) {
+      _numberOfShips.value = val;
+    }
+  }
 }
-

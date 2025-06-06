@@ -17,16 +17,28 @@
  *
  */
 
-import 'package:baahbox/constants/enums.dart';
-import 'package:baahbox/games/spaceShip/spaceShipGame.dart';
-import '../../model/GamePage.dart';
 
-class SpaceShipGamePage extends GamePage {
-  SpaceShipGamePage({super.key})
-      : super(
-      game: SpaceShipGame(),
-      mainColor: BBGameList.sheep.baseColor.color,
-      title: "La bataille de l'espace",
-      settingsRoute: '/spaceShipSettings');
+import 'package:baahbox/services/settings/settingsController.dart';
+import 'package:get/get.dart';
+
+import '../../constants/enums.dart';
+
+class SheepSettings  {
+    var _gateVelocity = ObjectVelocity.medium.obs;
+    var _numberOfGates = 3.obs;
+    var muscleSettings = MuscleSettings();
+
+    ObjectVelocity get gateVelocity => _gateVelocity.value;
+    set gateVelocity(ObjectVelocity val)
+    {
+      _gateVelocity.value = val;
+    }
+
+    int get numberOfGates => _numberOfGates.value;
+    set numberOfGates(int val)
+    {
+        if(val>0) {
+            _numberOfGates.value = val;
+        }
+    }
 }
-

@@ -111,7 +111,7 @@ class MazePlayerComponent extends SpriteComponent
           position.y > startCell.top &&
           position.y < startCell.bottom;
       if (!isOut) {
-        if (settingsController.mazeSettings["isFineDirection"]) {
+        if (settingsController.mazeSettings.isFineDirection) {
           if (onStartCell) {
             if (isVerticalScreen) {
               relativeMovementDelta.x = 0;
@@ -186,7 +186,7 @@ class MazePlayerComponent extends SpriteComponent
 
   void resetToStart() {
 
-    movementSpeed = settingsController.mazeSettings["speedMovement"];
+    movementSpeed = settingsController.mazeSettings.speedMovement;
     state = MovingState.none;
     isOut = false;
     collisionState = MovingState.none;

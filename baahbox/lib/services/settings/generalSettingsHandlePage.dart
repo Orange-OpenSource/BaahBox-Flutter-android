@@ -55,7 +55,7 @@ class HandleSettingsView extends GetView<SettingsController> {
           Container(
               padding: EdgeInsets.all(20),
               child: Obx(() => Text(
-                    "Limite basse (entre 0° et 90°) : ${controller.genericSettings["analogInputRangeForHandleLower"]}",
+                    "Limite basse (entre 0° et 90°) : ${controller.handleSettings.rangeForHandleLower}",
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ))),
           const SizedBox(
@@ -70,7 +70,7 @@ class HandleSettingsView extends GetView<SettingsController> {
           Container(
               padding: EdgeInsets.all(20),
               child: Obx(() => Text(
-                    "Limite haute (entre 90° et 180°) : ${controller.genericSettings["analogInputRangeForHandleUpper"]}",
+                    "Limite haute (entre 90° et 180°) : ${controller.handleSettings.rangeForHandleUpper}",
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ))),
           const SizedBox(
@@ -101,9 +101,9 @@ class _RotationSliderState extends State<RotationSlider> {
   Widget build(BuildContext context) {
     double _value = widget.min.toDouble();
     if (widget.isLower) {
-      _value = controller.getHandleRangeLower().toDouble();
+      _value = controller.handleSettings.rangeForHandleLower.toDouble();
     } else {
-      _value = controller.getHandleRangeUpper().toDouble();
+      _value = controller.handleSettings.rangeForHandleUpper.toDouble();
     }
 
     return Slider.adaptive(
@@ -119,9 +119,9 @@ class _RotationSliderState extends State<RotationSlider> {
           setState(() {
             _value = value;
             if (widget.isLower) {
-              controller.setHandleRangeLower(value.toInt());
+              controller.handleSettings.rangeForHandleLower = value.toInt();
             } else {
-              controller.setHandleRangeUpper(value.toInt());
+              controller.handleSettings.rangeForHandleUpper = value.toInt();
             }
           });
         });

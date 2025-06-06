@@ -1,6 +1,6 @@
 /*
  * Baah Box
- * Copyright (c) 2024. Orange SA
+ * Copyright (c) 2024-2025. Orange SA
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -17,22 +17,32 @@
  *
  */
 
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:baahbox/constants/enums.dart';
-import '../../model/GamePage.dart';
-import '../BBGame.dart';
-import 'balloonGame.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:flame/game.dart';
-import 'package:baahbox/controllers/appController.dart';
-import 'package:baahbox/games/overlayBuilder.dart';
 
-class BalloonGamePage extends GamePage {
-  BalloonGamePage({super.key})
-      : super(
-            game: BalloonGame(),
-            mainColor: BBGameList.balloon.baseColor.color,
-            title: "Fais exploser le ballon !",
-            settingsRoute: '/settings');
+enum AnalogicSensorOrientation {
+  vertical,
+  verticalReversed,
+  horizontal,
+  horizontalReversed,
+  none;
+}
+
+class AnalogicSensorSettings {
+  var _orientation = AnalogicSensorOrientation.vertical.obs;
+
+  AnalogicSensorOrientation get orientation => _orientation.value;
+  set orientation(AnalogicSensorOrientation orientation) {
+    _orientation.value = orientation;
+  }
+
+  var _isCenteredToZero = false.obs;
+  bool get isCenteredToZero => _isCenteredToZero.value;
+  set isCenteredToZero(bool val) {
+    _isCenteredToZero.value = val;
+  }
+}
+
+class AnalogicChannelsSettings {
+  var sensor1 = AnalogicSensorSettings();
+  var sensor2 = AnalogicSensorSettings();
 }

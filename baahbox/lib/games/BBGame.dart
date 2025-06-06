@@ -78,7 +78,7 @@ class BBGame extends FlameGame with PanDetector {
   }
   void startGame() {
     overlays.clear();
-    appController.setActivationStateTo(true);
+    appController.isActive=true;
     state = GameState.running;
   }
 

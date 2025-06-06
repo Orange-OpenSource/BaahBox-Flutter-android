@@ -133,3 +133,26 @@ enum BBGameList {
   final BBColor baseColor;
   final int numberOfSensors;
 }
+
+enum GameInputAxes {
+  vertical,
+  horizontal,
+  both;
+}
+
+enum GameInputDirectionType {
+  analogic,
+  digital;
+}
+
+enum GameInputDirection {
+  up,
+  upLeft,
+  upRight,
+  right,
+  down,
+  downRight,
+  downLeft,
+  left,
+  idle,
+}

@@ -99,7 +99,7 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
     var top = max(0.0, yLimit - (4 * toad.size.y));
     return SpawnComponent.periodRange(
         factory: (i) => FlyComponent(settingsController
-            .toadSettings["flySteadyTime"]),
+            .toadSettings.flySteadyTime),
        minPeriod: 1,
         maxPeriod: 3,
         area:  Rectangle.fromLTWH(size.x/20, top, size.x-(size.x/10), yLimit - top));
@@ -141,7 +141,7 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
       if (state == GameState.running) {
         refreshInput();
         transformInputInAction();
-        if (settingsController.toadSettings["iShootingModeAutomatic"]) {
+        if (settingsController.toadSettings.iShootingModeAutomatic) {
           toad.checkFlies();
         }
       } else {
@@ -214,7 +214,7 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
       if (!goLeft && !goRight && !shoot) {
         return;
       }
-      if (shoot && !settingsController.toadSettings["iShootingModeAutomatic"]) {
+      if (shoot && !settingsController.toadSettings.iShootingModeAutomatic) {
         startShooting();
       } else {
         var deltaAngle = goLeft ? -2 : 2;

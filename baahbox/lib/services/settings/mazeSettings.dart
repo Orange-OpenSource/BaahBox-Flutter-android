@@ -65,8 +65,7 @@ class MazeSettingsPage extends GetView<SettingsController> {
           ),
 
           Obx(() => Text(
-            "Nombre de cases : " +
-                controller.mazeSettings["mazeSize"].toString(),
+            "Nombre de cases : ${controller.mazeSettings.mazeSize}",
             style: TextStyle(
                 fontSize: 16, fontWeight: FontWeight.bold)
           )),
@@ -95,20 +94,18 @@ class MazeSettingsPage extends GetView<SettingsController> {
           ),
           Obx(() => SwitchListTile.adaptive(
               title: Text("Mode chronomètré"),
-              value: controller.mazeSettings["hasChrono"],
+              value: controller.mazeSettings.hasChrono,
               onChanged: (bool newValue) {
-                controller.setMazeHasChrono(newValue);
+                controller.mazeSettings.hasChrono = newValue;
               })),
           const SizedBox(
             height: 12,
           ),
           Obx(() => Text(
-            "Temps maximum pour sortir : " +
-                controller.mazeSettings["chronoMaxTime"]
-                    .toString()+" secondes",
+            "Temps maximum pour sortir : ${controller.mazeSettings.chronoMaxTime} secondes",
             style: TextStyle(
                 fontSize: 16, fontWeight: FontWeight.bold,
-                color:controller.mazeSettings["hasChrono"] ? Theme.of(context).colorScheme.onSurface : Theme.of(context).colorScheme.outline),
+                color:controller.mazeSettings.hasChrono ? Theme.of(context).colorScheme.onSurface : Theme.of(context).colorScheme.outline),
 
           )),
           const SizedBox(
@@ -133,20 +130,18 @@ class MazeSettingsPage extends GetView<SettingsController> {
           ),
           Obx(() => SwitchListTile.adaptive(
               title: Text("Impacts pénalisant"),
-              value: controller.mazeSettings["hasMaxTouch"],
+              value: controller.mazeSettings.hasMaxTouch,
               onChanged: (bool newValue) {
-                controller.setMazeHasMaxWallTouches(newValue);
+                controller.mazeSettings.hasMaxTouch=newValue;
               })),
           const SizedBox(
             height: 12,
           ),
           Obx(() => Text(
-            "Nombre d'impacts maximum : " +
-                controller.mazeSettings["maxTouches"]
-                    .toString(),
+            "Nombre d'impacts maximum : ${controller.mazeSettings.hasMaxTouch}",
             style: TextStyle(
                 fontSize: 16, fontWeight: FontWeight.bold,
-              color:controller.mazeSettings["hasMaxTouch"] ? Theme.of(context).colorScheme.onSurface : Theme.of(context).colorScheme.outline),
+              color:controller.mazeSettings.hasMaxTouch ? Theme.of(context).colorScheme.onSurface : Theme.of(context).colorScheme.outline),
 
           )),
           const SizedBox(
@@ -173,8 +168,7 @@ class MazeSettingsPage extends GetView<SettingsController> {
             height: 12,
           ),
           Obx(() => Text(
-            "Vitesse de déplacement : " +
-                controller.mazeSettings["speedMovement"].toString(),
+            "Vitesse de déplacement : ${controller.mazeSettings.speedMovement}",
             style: TextStyle(
                 fontSize: 16, fontWeight: FontWeight.bold),
 
@@ -188,9 +182,9 @@ class MazeSettingsPage extends GetView<SettingsController> {
           ),
           Obx(() => SwitchListTile.adaptive(
               title: Text("Direction précise"),
-              value: controller.mazeSettings["isFineDirection"],
+              value: controller.mazeSettings.isFineDirection,
               onChanged: (bool newValue) {
-                controller.setMazeFineDirection(newValue);
+                controller.mazeSettings.isFineDirection=newValue;
               }))
         ],
       ),
@@ -210,7 +204,7 @@ class _MazeChronoDurationSliderState extends State<MazeChronoDurationSlider> {
 
   @override
   Widget build(BuildContext context) {
-    final double _maxDuration = controller.mazeSettings["chronoMaxTime"] ?? 20;
+    final double _maxDuration = controller.mazeSettings.chronoMaxTime;
     double _value = _maxDuration;
     return Obx(() => Slider.adaptive(
       value: _value,
@@ -221,10 +215,10 @@ class _MazeChronoDurationSliderState extends State<MazeChronoDurationSlider> {
       semanticFormatterCallback: (double newValue) {
         return '${newValue.round()} secondes';
       },
-      onChanged: controller.mazeSettings["hasChrono"] ? (double value) {
+      onChanged: controller.mazeSettings.hasChrono ? (double value) {
         setState(() {
           _value = value.floorToDouble();
-          controller.setMazeChronoMaxTime(_value);
+          controller.mazeSettings.chronoMaxTime=_value;
         });
       } : null,
     ));
@@ -243,7 +237,7 @@ class _MazeWallTouchNumberSliderState extends State<MazeWallTouchNumberSlider> {
 
   @override
   Widget build(BuildContext context) {
-    final int _nbT = controller.mazeSettings["maxTouches"] ?? 3;
+    final int _nbT = controller.mazeSettings.maxTouches;
     double _value = _nbT.toDouble();
     return Obx(() => Slider.adaptive(
       value: _value,
@@ -254,10 +248,10 @@ class _MazeWallTouchNumberSliderState extends State<MazeWallTouchNumberSlider> {
       semanticFormatterCallback: (double newValue) {
         return '${newValue.round()}';
       },
-      onChanged: controller.mazeSettings["hasMaxTouch"] ?(double value) {
+      onChanged: controller.mazeSettings.hasMaxTouch ?(double value) {
         setState(() {
           _value = value;
-          controller.setMazeWallMaxTouch(value.toInt());
+          controller.mazeSettings.maxTouches = value.toInt();
         }) ;
       }: null,
     ));
@@ -276,7 +270,7 @@ class _MazeSpeedSliderState extends State<MazeSpeedSlider> {
 
   @override
   Widget build(BuildContext context) {
-    final double _speed = controller.mazeSettings["speedMovement"] ?? 40;
+    final double _speed = controller.mazeSettings.speedMovement;
     double _value = _speed;
     return Slider.adaptive(
       value: _value,
@@ -290,7 +284,7 @@ class _MazeSpeedSliderState extends State<MazeSpeedSlider> {
       onChanged: (double value) {
         setState(() {
           _value = value.floorToDouble();
-          controller.setMazeSpeedMovement(_value);
+          controller.mazeSettings.speedMovement=_value;
         });
       } ,
     );
@@ -310,7 +304,7 @@ class _MazeSizeSliderState extends State<MazeSizeSlider> {
 
   @override
   Widget build(BuildContext context) {
-    final int _nbT = controller.mazeSettings["mazeSize"] ?? 5;
+    final int _nbT = controller.mazeSettings.mazeSize;
     double _value = _nbT.toDouble();
     return Slider.adaptive(
       value: _value,
@@ -324,7 +318,7 @@ class _MazeSizeSliderState extends State<MazeSizeSlider> {
       onChanged: (double value) {
         setState(() {
           _value = value;
-          controller.setMazeSize(value.toInt());
+          controller.mazeSettings.mazeSize=value.toInt();
         }) ;
       });
   }

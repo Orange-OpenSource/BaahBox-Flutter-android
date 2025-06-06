@@ -57,8 +57,6 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
   var instructionSubtitleFinger =
       'pousse le joystick virtuel à gauche, à droite, en haut ou en bas';
 
-  var instructionSubtitleHandle = 'tire la poignée vers le haut';
-
   late int cellWidth;
   late int cellHeight;
   @override
@@ -162,7 +160,7 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
   Future<void> loadAssetsInCache() async {}
   void looseLife() {
     if (state == GameState.running &&
-        settingsController.mazeSettings["hasMaxTouch"]) {
+        settingsController.mazeSettings.hasMaxTouch) {
       lifeManager.looseOneLife();
     }
   }
@@ -172,7 +170,7 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
   void update(double dt) {
     super.update(dt);
     if (state == GameState.running) {
-      if (settingsController.mazeSettings["hasChrono"]) {
+      if (settingsController.mazeSettings.hasChrono) {
         elapsedTime -= dt;
       } else {
         elapsedTime += dt;
@@ -184,7 +182,7 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
         durationText.text = prettyDuration(elapsedTime);
         if (player.isOut) {
           setGameStateToWon(true);
-        } else if (settingsController.mazeSettings["hasChrono"] &&
+        } else if (settingsController.mazeSettings.hasChrono &&
             elapsedTime <= 0) {
           setGameStateToWon(false);
         }
@@ -212,7 +210,7 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
         settingsController.currentSensor == Sensor.analogJoystick) {
       double newXValue = (500 - appController.analogInputs.analog2) / 500;
       double newYValue = (500 - appController.analogInputs.analog1) / 500;
-      if (settingsController.mazeSettings["isFineDirection"]) {
+      if (settingsController.mazeSettings.isFineDirection) {
         player.moveDelta(Vector2(newXValue, newYValue));
       } else {
         if (newXValue.abs() > newYValue.abs() && newXValue.abs() > 0.1) {
@@ -232,7 +230,7 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
         {
           add(joystick);
         }
-      if (settingsController.mazeSettings["isFineDirection"]) {
+      if (settingsController.mazeSettings.isFineDirection) {
         player.moveDelta(joystick.relativeDelta);
       } else {
         var deltaX = joystick.relativeDelta.x;
@@ -269,14 +267,14 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
   @override
   void startGame() {
     winComponent.hide();
-    if (settingsController.mazeSettings["hasMaxTouch"]) {
+    if (settingsController.mazeSettings.hasMaxTouch) {
       lifeManager.createLifes();
       lifeManager.show();
     } else {
       lifeManager.hide();
     }
-    if (settingsController.mazeSettings["hasChrono"]) {
-      elapsedTime = settingsController.mazeSettings["chronoMaxTime"] ?? 10.0;
+    if (settingsController.mazeSettings.hasChrono) {
+      elapsedTime = settingsController.mazeSettings.chronoMaxTime ?? 10.0;
     } else {
       elapsedTime = 0.0;
     }
@@ -294,13 +292,13 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
   @override
   void resetGame() async {
     super.resetGame();
-    if (settingsController.mazeSettings["hasChrono"]) {
-      elapsedTime = settingsController.mazeSettings["chronoMaxTime"] ?? 10.0;
+    if (settingsController.mazeSettings.hasChrono) {
+      elapsedTime = settingsController.mazeSettings.chronoMaxTime ?? 10.0;
     } else {
       elapsedTime = 0.0;
     }
     lifeManager.createLifes();
-    if (settingsController.mazeSettings["hasMaxTouch"]) {
+    if (settingsController.mazeSettings.hasChrono) {
       lifeManager.show();
     } else {
       lifeManager.hide();
