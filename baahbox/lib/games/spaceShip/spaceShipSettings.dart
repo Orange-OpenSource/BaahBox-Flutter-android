@@ -21,13 +21,14 @@ import 'package:baahbox/services/settings/settingsController.dart';
 import 'package:get/get.dart';
 
 import '../../constants/enums.dart';
+import '../../model/AnalogicSensor.dart';
 
 class SpaceShipSettings  {
   var _asteroidVelocity = ObjectVelocity.medium.obs;
   var _numberOfShips = 3.obs;
   var muscleSettings = MuscleSettings()
-    ..sensor1Orientation=AnalogicSensorOrientation.horizontal
-    ..sensor2Orientation=AnalogicSensorOrientation.none;
+    ..sensor1.orientation=AnalogicSensorOrientation.horizontal
+    ..sensor2.orientation=AnalogicSensorOrientation.none;
 
   ObjectVelocity get asteroidVelocity => _asteroidVelocity.value;
   set asteroidVelocity(ObjectVelocity val)

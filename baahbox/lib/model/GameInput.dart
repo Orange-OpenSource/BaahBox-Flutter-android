@@ -27,21 +27,37 @@ import '../controllers/appController.dart';
 import '../services/settings/settingsController.dart';
 import 'package:get/get.dart';
 
+import 'AnalogicSensor.dart';
+
 class GameInput {
+  final SettingsController settingsController = Get.find();
+
   final GameInputAxes axes;
-  final GameInputDirectionType directionType;
+
+  GameInputDirectionType get directionType {
+    switch (settingsController.genericSettings.sensor) {
+      case Sensor.none:
+        return GameInputDirectionType.digital;
+      case Sensor.muscle:
+        return GameInputDirectionType.analogic;
+      case Sensor.digitalJoystick:
+        return GameInputDirectionType.digital;
+      case Sensor.button:
+        return GameInputDirectionType.digital;
+      case Sensor.analogJoystick:
+        return GameInputDirectionType.analogic;
+      case Sensor.handle:
+        return GameInputDirectionType.analogic;
+    }
+  }
 
   final MuscleSettings musclesSettings;
 
-  final SettingsController settingsController = Get.find();
   final Controller appController = Get.find();
 
   final Vector2 _delta = Vector2.zero();
 
-  GameInput(
-      {required this.axes,
-      required this.directionType,
-      required this.musclesSettings});
+  GameInput({required this.axes, required this.musclesSettings});
 
   static const double _eighthOfPi = pi / 8;
 
@@ -151,54 +167,49 @@ class GameInput {
   }
 
   void convertAnalogJoystickInput() {
-    var joystickInput = appController.analogInputs;
-
-    double analog1 =
-        (calibrateAnalogInput(joystickInput.analog1, 0, 180) - 500) / 500;
-    // up is Y positive on joystick, need to be inverted
-    double analog2 =
-        (500 - calibrateAnalogInput(joystickInput.analog2, 0, 180)) / 500;
+    double newXValue = (500 - appController.analogInputs.analog2) / 500;
+    double newYValue = (500 - appController.analogInputs.analog1) / 500;
     switch (axes) {
       case GameInputAxes.horizontal:
         if (directionType == GameInputDirectionType.analogic) {
-          _delta.setValues(analog1, 0);
+          _delta.setValues(newXValue, 0);
         } else {
-          _delta.setValues(analog1.abs() >= 0.5 ? analog1.sign : 0, 0);
+          _delta.setValues(newXValue.abs() >= 0.5 ? newXValue.sign : 0, 0);
         }
       case GameInputAxes.vertical:
         if (directionType == GameInputDirectionType.analogic) {
-          _delta.setValues(0, analog2);
+          _delta.setValues(0, newYValue);
         } else {
-          _delta.setValues(analog2.abs() >= 0.5 ? analog2.sign : 0, 0);
+          _delta.setValues(newYValue.abs() >= 0.5 ? newYValue.sign : 0, 0);
         }
       case GameInputAxes.both:
         if (directionType == GameInputDirectionType.analogic) {
-          _delta.setValues(analog1, analog2);
+          _delta.setValues(newXValue, newYValue);
         } else {
-          _delta.setValues(analog1.abs() >= 0.5 ? analog1.sign : 0,
-              analog2.abs() >= 0.5 ? analog2.sign : 0);
+          _delta.setValues(newXValue.abs() >= 0.5 ? newXValue.sign : 0,
+              newYValue.abs() >= 0.5 ? newYValue.sign : 0);
         }
     }
   }
 
   void convertOnlyOneMuscleInput(bool isMuscle1) {
-    var joystickInput = isMuscle1
+    var sensorInput = isMuscle1
         ? appController.analogInputs.analog1
         : appController.analogInputs.analog2;
     var muscleOrientation = isMuscle1
-        ? musclesSettings.sensor1Orientation
-        : musclesSettings.sensor2Orientation;
+        ? musclesSettings.sensor1.orientation
+        : musclesSettings.sensor2.orientation;
     var isCenteredToZero = isMuscle1
-        ? musclesSettings.isMuscle1CenteredToZero
-        : musclesSettings.isMuscle2CenteredToZero;
+        ? musclesSettings.sensor1.isCenteredToZero
+        : musclesSettings.sensor2.isCenteredToZero;
     var hasBothAction = musclesSettings.hasBothAction;
 
+    var inputValue = isCenteredToZero
+        ? rangeMap(sensorInput, 0, 1000, -500, 500) / 500
+        : rangeMap(sensorInput, 0, 1024, 0, 1000) / 1000;
     switch (muscleOrientation) {
       case AnalogicSensorOrientation.vertical:
         {
-          var inputValue = isCenteredToZero
-              ? (500 - calibrateAnalogInput(joystickInput, 0, 180)) / 1000
-              : -calibrateAnalogInput(joystickInput, 0, 180) / 1000;
           if (directionType == GameInputDirectionType.analogic) {
             _delta.setValues(0, inputValue);
           } else {
@@ -207,9 +218,7 @@ class GameInput {
         }
       case AnalogicSensorOrientation.verticalReversed:
         {
-          var inputValue = isCenteredToZero
-              ? (calibrateAnalogInput(joystickInput, 0, 180) - 500) / 1000
-              : calibrateAnalogInput(joystickInput, 0, 180) / 1000;
+          inputValue = -1.0 * inputValue;
           if (directionType == GameInputDirectionType.analogic) {
             _delta.setValues(0, inputValue);
           } else {
@@ -218,9 +227,6 @@ class GameInput {
         }
       case AnalogicSensorOrientation.horizontal:
         {
-          var inputValue = isCenteredToZero
-              ? (500 - calibrateAnalogInput(joystickInput, 0, 180)) / 1000
-              : -calibrateAnalogInput(joystickInput, 0, 180) / 1000;
           if (directionType == GameInputDirectionType.analogic) {
             _delta.setValues(inputValue, 0);
           } else {
@@ -229,9 +235,7 @@ class GameInput {
         }
       case AnalogicSensorOrientation.horizontalReversed:
         {
-          var inputValue = isCenteredToZero
-              ? (calibrateAnalogInput(joystickInput, 0, 180) - 500) / 1000
-              : calibrateAnalogInput(joystickInput, 0, 180) / 1000;
+          inputValue = -1.0 * inputValue;
           if (directionType == GameInputDirectionType.analogic) {
             _delta.setValues(inputValue, 0);
           } else {
@@ -244,11 +248,9 @@ class GameInput {
 
     if (hasBothAction) {
       var analog1 =
-          calibrateAnalogInput(appController.analogInputs.analog1, 0, 180) /
-              1000;
+          rangeMap(appController.analogInputs.analog1, 0, 1024, 0, 1000) / 1000;
       var analog2 =
-          calibrateAnalogInput(appController.analogInputs.analog1, 0, 180) /
-              1000;
+          rangeMap(appController.analogInputs.analog2, 0, 1024, 0, 1000) / 1000;
 
       var deltaForAction = Vector2(analog1, analog2);
       var directionForAction = convertDeltaToDirection(deltaForAction);
@@ -259,17 +261,15 @@ class GameInput {
   }
 
   void convertBothMusclesInput() {
-    var muscle1Orientation = musclesSettings.sensor1Orientation;
+    var muscle1Orientation = musclesSettings.sensor1.orientation;
     if (axes != GameInputAxes.both) {
       _delta.setValues(0, 0);
     } else {
       var analog1 =
-          calibrateAnalogInput(appController.analogInputs.analog1, 0, 180) /
-              1000;
+          rangeMap(appController.analogInputs.analog1, 0, 1024, 0, 1000) / 1000;
 
       var analog2 =
-          calibrateAnalogInput(appController.analogInputs.analog2, 0, 180) /
-              1000;
+          rangeMap(appController.analogInputs.analog1, 0, 1024, 0, 1000) / 1000;
 
       switch (muscle1Orientation) {
         case AnalogicSensorOrientation.vertical:
@@ -335,20 +335,20 @@ class GameInput {
   }
 
   void convertMuscleInput() {
-    if (musclesSettings.sensor1Orientation == AnalogicSensorOrientation.none &&
-        musclesSettings.sensor2Orientation == AnalogicSensorOrientation.none) {
+    if (musclesSettings.sensor1.orientation == AnalogicSensorOrientation.none &&
+        musclesSettings.sensor2.orientation == AnalogicSensorOrientation.none) {
       // no muscle selected
       _delta.setValues(0, 0);
-    } else if (musclesSettings.sensor2Orientation ==
+    } else if (musclesSettings.sensor1.orientation ==
         AnalogicSensorOrientation.none) {
       // Only muscle 2
       convertOnlyOneMuscleInput(false);
-    } else if (musclesSettings.sensor1Orientation ==
+    } else if (musclesSettings.sensor2.orientation ==
         AnalogicSensorOrientation.none) {
       // Only muscle1
       convertOnlyOneMuscleInput(true);
-    } else if (musclesSettings.sensor1Orientation !=
-        musclesSettings.sensor2Orientation) {
+    } else if (musclesSettings.sensor1.orientation !=
+        musclesSettings.sensor2.orientation) {
       convertBothMusclesInput();
     } else {
       _delta.setValues(0, 0);
@@ -366,10 +366,12 @@ class GameInput {
 
     switch (axes) {
       case GameInputAxes.horizontal:
+        // force value to be centered to 0
+        analog1 = 1 - analog1*2;
         if (directionType == GameInputDirectionType.analogic) {
           _delta.setValues(analog1, 0);
         } else {
-          _delta.setValues(analog1 >= 0.5 ? 1 : 0, 0);
+          _delta.setValues(analog1.abs() >= 0.5 ? analog1.sign : 0, 0);
         }
       case GameInputAxes.vertical:
         if (directionType == GameInputDirectionType.analogic) {
@@ -378,10 +380,11 @@ class GameInput {
           _delta.setValues(0, analog1 >= 0.5 ? -1 : 0);
         }
       case GameInputAxes.both:
+        // priority to vertical axis
         if (directionType == GameInputDirectionType.analogic) {
-          _delta.setValues(analog1, 0);
+          _delta.setValues(0,analog1);
         } else {
-          _delta.setValues(analog1 >= 0.5 ? 1 : 0, 0);
+          _delta.setValues(0,analog1 >= 0.5 ? 1 : 0);
         }
     }
   }

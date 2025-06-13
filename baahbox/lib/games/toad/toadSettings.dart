@@ -20,14 +20,16 @@
 import 'package:baahbox/services/settings/settingsController.dart';
 import 'package:get/get.dart';
 
+import '../../model/AnalogicSensor.dart';
+
 class ToadSettings  {
   var _iShootingModeAutomatic = false.obs;
   var _numberOfFlies = 5.obs;
   var _flySteadyTime = 3.0.obs;
 
   var muscleSettings = MuscleSettings()
-    ..sensor1Orientation=AnalogicSensorOrientation.horizontal
-    ..sensor2Orientation=AnalogicSensorOrientation.none;
+    ..sensor1.orientation=AnalogicSensorOrientation.horizontal
+    ..sensor2.orientation=AnalogicSensorOrientation.none;
 
   bool get iShootingModeAutomatic => _iShootingModeAutomatic.value;
   set iShootingModeAutomatic(bool val)

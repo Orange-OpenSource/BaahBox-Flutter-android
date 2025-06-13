@@ -24,14 +24,16 @@ import 'package:baahbox/constants/enums.dart';
 import 'package:get/get.dart';
 
 import '../services/ble/BleController.dart';
+import '../services/settings/settingsController.dart';
 
 class Controller extends FullLifeCycleController with FullLifeCycleMixin {
   static Controller get to => Get.find();
 
   final BleController bleController = Get.find();
+  final SettingsController settingsController = Get.find();
   var _isActive = false.obs;
   var _isDebugging = true.obs;
-  var _currentSensor = Sensor.digitalJoystick.obs;
+
 
   // getters
   String get connectedDeviceName =>
@@ -52,10 +54,8 @@ class Controller extends FullLifeCycleController with FullLifeCycleMixin {
   }
 
   Sensor get currentSensor =>
-      isConnectedToBox ? _currentSensor.value : Sensor.none;
-  set currentSensor(Sensor sensor) {
-    _currentSensor.value = sensor;
-  }
+      isConnectedToBox ? settingsController.genericSettings.sensor : Sensor.none;
+
 
   @override
   void onClose() {

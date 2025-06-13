@@ -205,46 +205,36 @@ class _RadioSensorChoiceState extends State<RadioSensorChoice> {
     _selection = controller.genericSettings.sensor;
     return Column(
       children: [
-        ListTile(
-          title: Text("button"),
-          leading: Radio.adaptive(
-            groupValue: _selection,
+        RadioListTile.adaptive(
+            title: const Text('bouton'),
             value: Sensor.button,
-            onChanged: onSelectionChanged,
-          ),
-        ),
-        ListTile(
-          title: Text("joystick digital"),
-          leading: Radio.adaptive(
             groupValue: _selection,
+            toggleable: true,
+            onChanged: onSelectionChanged),
+        RadioListTile.adaptive(
+            title: const Text('joystick digital'),
             value: Sensor.digitalJoystick,
-            onChanged: onSelectionChanged,
-          ),
-        ),
-        ListTile(
-          title: Text("joystick analogique"),
-          leading: Radio.adaptive(
             groupValue: _selection,
+            toggleable: true,
+            onChanged: onSelectionChanged),
+        RadioListTile.adaptive(
+            title: const Text('joystick analogique'),
             value: Sensor.analogJoystick,
-            onChanged: onSelectionChanged,
-          ),
-        ),
-        ListTile(
-          title: Text("muscle"),
-          leading: Radio.adaptive(
             groupValue: _selection,
+            toggleable: true,
+            onChanged: onSelectionChanged),
+        RadioListTile.adaptive(
+            title: const Text('muscle'),
             value: Sensor.muscle,
-            onChanged: onSelectionChanged,
-          ),
-        ),
-        ListTile(
-          title: Text("poignée"),
-          leading: Radio.adaptive(
             groupValue: _selection,
+            toggleable: true,
+            onChanged: onSelectionChanged),
+        RadioListTile.adaptive(
+            title: const Text('poignée'),
             value: Sensor.handle,
-            onChanged: onSelectionChanged,
-          ),
-        ),
+            groupValue: _selection,
+            toggleable: true,
+            onChanged: onSelectionChanged)
       ],
     );
   }

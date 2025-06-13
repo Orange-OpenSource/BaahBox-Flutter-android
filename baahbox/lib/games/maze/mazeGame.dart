@@ -29,6 +29,7 @@ import 'package:get/get.dart';
 
 import '../../constants/enums.dart';
 import '../../controllers/appController.dart';
+import '../../model/GameInput.dart';
 import '../../services/settings/settingsController.dart';
 import 'MazeFactory.dart';
 import 'components/MazeComponent.dart';
@@ -70,6 +71,8 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
   late final TextComponent durationText;
   late final MazeLifeManager lifeManager;
   late final MazeWinComponent winComponent;
+
+  late GameInput gameInput;
 
   double elapsedTime = 0.0;
 
@@ -194,45 +197,40 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
 
   // Box input
   void refreshInput() {
-    if (appController.isConnectedToBox &&
-        settingsController.currentSensor == Sensor.digitalJoystick) {
-      var joystickInput = appController.digitalInputs;
-      if (joystickInput.right) {
-        player.state = MovingState.right;
-      } else if (joystickInput.left) {
-        player.state = MovingState.left;
-      } else if (joystickInput.up) {
-        player.state = MovingState.up;
-      } else if (joystickInput.down) {
-        player.state = MovingState.down;
+
+    if (checkCompatibleSensor(BBGameList.maze.compatibleSensorsList)) {
+      if (settingsController.mazeSettings.isFineDirection &&
+          gameInput.directionType == GameInputDirectionType.analogic) {
+        player.moveDelta(gameInput.delta);
       }
-    } else if (appController.isConnectedToBox &&
-        settingsController.currentSensor == Sensor.analogJoystick) {
-      double newXValue = (500 - appController.analogInputs.analog2) / 500;
-      double newYValue = (500 - appController.analogInputs.analog1) / 500;
-      if (settingsController.mazeSettings.isFineDirection) {
-        player.moveDelta(Vector2(newXValue, newYValue));
-      } else {
-        if (newXValue.abs() > newYValue.abs() && newXValue.abs() > 0.1) {
-          newXValue > 0
-              ? player.state = MovingState.right
-              : player.state = MovingState.left;
-        } else if (newYValue.abs() > 0.1) {
-          newYValue > 0
-              ? player.state = MovingState.down
-              : player.state = MovingState.up;
-        } else {
-          player.state = MovingState.none;
+      else
+        {
+          switch (gameInput.direction) {
+            case GameInputDirection.up:
+            case GameInputDirection.upLeft:
+            case GameInputDirection.upRight:
+              player.state = MovingState.up;
+            case GameInputDirection.right:
+              player.state = MovingState.right;
+            case GameInputDirection.down:
+            case GameInputDirection.downRight:
+            case GameInputDirection.downLeft:
+              player.state = MovingState.down;
+            case GameInputDirection.left:
+              player.state = MovingState.left;
+            case GameInputDirection.idle:
+              player.state = MovingState.none;
+          }
         }
-      }
     } else {
       if(!contains(joystick))
-        {
-          add(joystick);
-        }
+      {
+        add(joystick);
+      }
       if (settingsController.mazeSettings.isFineDirection) {
         player.moveDelta(joystick.relativeDelta);
-      } else {
+      }
+      else  {
         var deltaX = joystick.relativeDelta.x;
         var deltaY = joystick.relativeDelta.y;
 
@@ -250,6 +248,7 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
       }
     }
   }
+
 
   void setGameStateToWon(bool win) {
     state = win ? GameState.won : GameState.lost;
@@ -278,6 +277,9 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
     } else {
       elapsedTime = 0.0;
     }
+    gameInput = GameInput(
+        axes: GameInputAxes.both,
+        musclesSettings: settingsController.mazeSettings.musclesSettings);
     maze.initialize();
     player.updateStartCell(maze.startCell);
     player.resetToStart();
@@ -298,7 +300,7 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
       elapsedTime = 0.0;
     }
     lifeManager.createLifes();
-    if (settingsController.mazeSettings.hasChrono) {
+    if (settingsController.mazeSettings.hasMaxTouch) {
       lifeManager.show();
     } else {
       lifeManager.hide();

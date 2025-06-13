@@ -4,6 +4,8 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:baahbox/services/settings/settingsController.dart';
 
+import '../../model/AnalogicSensor.dart';
+
 class MuscleSettingsView extends GetView<SettingsController> {
   final MuscleSettings muscleSettings;
 
@@ -11,7 +13,7 @@ class MuscleSettingsView extends GetView<SettingsController> {
   @override
   Widget build(BuildContext context) {
     Rx<bool> hasMuscle2 =
-        (muscleSettings.sensor2Orientation != AnalogicSensorOrientation.none)
+        (muscleSettings.sensor2.orientation != AnalogicSensorOrientation.none)
             .obs;
 
     return Container(
@@ -57,9 +59,9 @@ class MuscleSettingsView extends GetView<SettingsController> {
           ),
           Obx(() => SwitchListTile.adaptive(
               title: const Text("Muscle1 centré sur 0"),
-              value: muscleSettings.isMuscle1CenteredToZero,
+              value: muscleSettings.sensor1.isCenteredToZero,
               onChanged: (bool newValue) {
-                muscleSettings.isMuscle1CenteredToZero = newValue;
+                muscleSettings.sensor1.isCenteredToZero = newValue;
               })),
           const SizedBox(
             height: 5,
@@ -69,6 +71,10 @@ class MuscleSettingsView extends GetView<SettingsController> {
               value: hasMuscle2.value,
               onChanged: (bool newValue) {
                 hasMuscle2.value = newValue;
+                if(!newValue)
+                  {
+                    muscleSettings.sensor2.orientation = AnalogicSensorOrientation.none;
+                  }
               })),
           const SizedBox(
             height: 5,
@@ -111,9 +117,9 @@ class MuscleSettingsView extends GetView<SettingsController> {
             if (hasMuscle2.value) {
               return SwitchListTile.adaptive(
                   title: const Text("Muscle2 centré sur 0"),
-                  value: muscleSettings.isMuscle2CenteredToZero,
+                  value: muscleSettings.sensor2.isCenteredToZero,
                   onChanged: (bool newValue) {
-                    muscleSettings.isMuscle2CenteredToZero = newValue;
+                    muscleSettings.sensor2.isCenteredToZero = newValue;
                   });
             } else {
               return const SizedBox(
@@ -141,10 +147,10 @@ class _MuscleOrientationSelectionViewState
     setState(() {
       _selection = value;
       if (value != null) {
-        widget.muscleSettings.sensor1Orientation = value;
-        if (widget.muscleSettings.sensor2Orientation !=
+        widget.muscleSettings.sensor1.orientation = value;
+        if (widget.muscleSettings.sensor2.orientation !=
             AnalogicSensorOrientation.none) {
-          widget.muscleSettings.isMuscle1CenteredToZero = false;
+          widget.muscleSettings.sensor1.isCenteredToZero = false;
         }
       }
     });
@@ -152,7 +158,7 @@ class _MuscleOrientationSelectionViewState
 
   @override
   Widget build(BuildContext context) {
-    _selection = widget.muscleSettings.sensor1Orientation;
+    _selection = widget.muscleSettings.sensor1.orientation;
 
     return Column(
       children: <Widget>[
@@ -207,10 +213,10 @@ class _Muscle2OrientationSelectionViewState
     setState(() {
       _selection = value;
       if (value != null) {
-        widget.muscleSettings.sensor2Orientation = value;
-        if (widget.muscleSettings.sensor1Orientation !=
+        widget.muscleSettings.sensor2.orientation = value;
+        if (widget.muscleSettings.sensor1.orientation !=
             AnalogicSensorOrientation.none) {
-          widget.muscleSettings.isMuscle2CenteredToZero = false;
+          widget.muscleSettings.sensor2.isCenteredToZero = false;
         }
       }
     });
@@ -218,7 +224,7 @@ class _Muscle2OrientationSelectionViewState
 
   @override
   Widget build(BuildContext context) {
-    _selection = widget.muscleSettings.sensor2Orientation;
+    _selection = widget.muscleSettings.sensor2.orientation;
     return Column(
       children: <Widget>[
         Obx(() => RadioListTile.adaptive(
@@ -226,9 +232,9 @@ class _Muscle2OrientationSelectionViewState
             value: AnalogicSensorOrientation.vertical,
             groupValue: _selection,
             toggleable: true,
-            onChanged: widget.muscleSettings.sensor1Orientation ==
+            onChanged: widget.muscleSettings.sensor1.orientation ==
                         AnalogicSensorOrientation.vertical ||
-                    widget.muscleSettings.sensor1Orientation ==
+                    widget.muscleSettings.sensor1.orientation ==
                         AnalogicSensorOrientation.verticalReversed
                 ? null
                 : onSelectionChanged)),
@@ -237,9 +243,9 @@ class _Muscle2OrientationSelectionViewState
             value: AnalogicSensorOrientation.horizontal,
             groupValue: _selection,
             toggleable: true,
-            onChanged: widget.muscleSettings.sensor1Orientation ==
+            onChanged: widget.muscleSettings.sensor1.orientation ==
                         AnalogicSensorOrientation.horizontal ||
-                    widget.muscleSettings.sensor1Orientation ==
+                    widget.muscleSettings.sensor1.orientation ==
                         AnalogicSensorOrientation.horizontalReversed
                 ? null
                 : onSelectionChanged)),
@@ -248,9 +254,9 @@ class _Muscle2OrientationSelectionViewState
             value: AnalogicSensorOrientation.verticalReversed,
             groupValue: _selection,
             toggleable: true,
-            onChanged: widget.muscleSettings.sensor1Orientation ==
+            onChanged: widget.muscleSettings.sensor1.orientation ==
                         AnalogicSensorOrientation.vertical ||
-                    widget.muscleSettings.sensor1Orientation ==
+                    widget.muscleSettings.sensor1.orientation ==
                         AnalogicSensorOrientation.verticalReversed
                 ? null
                 : onSelectionChanged)),
@@ -259,9 +265,9 @@ class _Muscle2OrientationSelectionViewState
             value: AnalogicSensorOrientation.horizontalReversed,
             groupValue: _selection,
             toggleable: true,
-            onChanged: widget.muscleSettings.sensor1Orientation ==
+            onChanged: widget.muscleSettings.sensor1.orientation ==
                         AnalogicSensorOrientation.horizontal ||
-                    widget.muscleSettings.sensor1Orientation ==
+                    widget.muscleSettings.sensor1.orientation ==
                         AnalogicSensorOrientation.horizontalReversed
                 ? null
                 : onSelectionChanged)),

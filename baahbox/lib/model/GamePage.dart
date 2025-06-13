@@ -25,6 +25,8 @@ import 'package:flame/game.dart';
 import 'package:baahbox/controllers/appController.dart';
 import 'package:baahbox/games/overlayBuilder.dart';
 
+import '../services/settings/settingsController.dart';
+
 class GamePage extends StatelessWidget {
   final Controller appController = Get.find();
   final BBGame game;
