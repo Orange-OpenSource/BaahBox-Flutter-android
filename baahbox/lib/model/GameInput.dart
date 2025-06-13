@@ -168,7 +168,13 @@ class GameInput {
 
   void convertAnalogJoystickInput() {
     double newXValue = (500 - appController.analogInputs.analog2) / 500;
+    if(newXValue.abs()<0.05) {
+      newXValue = 0.0;
+    }
     double newYValue = (500 - appController.analogInputs.analog1) / 500;
+    if(newYValue.abs()<0.05) {
+      newYValue = 0.0;
+    }
     switch (axes) {
       case GameInputAxes.horizontal:
         if (directionType == GameInputDirectionType.analogic) {
