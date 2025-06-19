@@ -20,61 +20,85 @@
 import 'package:baahbox/games/spaceShip/spaceShipSettings.dart';
 import 'package:get/get.dart';
 import 'package:baahbox/constants/enums.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../games/maze/mazeSettings.dart';
 import '../../games/sheep/sheepSettings.dart';
 import '../../games/toad/toadSettings.dart';
 import '../../model/AnalogicSensor.dart';
 
-
 class GeneralSettings {
-  var _numberOfSensors = 1.obs;
-  var _sensitivity = Sensitivity.medium.obs;
-  var _sensor = Sensor.digitalJoystick.obs;
-  var _threshold = 0.2.obs;
-  var _demoMode = false.obs;
+  late final SharedPreferences prefs;
+
+  late RxInt _numberOfSensors;
+  late Rx<Sensitivity> _sensitivity;
+  late Rx<Sensor> _sensor;
+  late RxDouble _threshold;
+  late RxBool _demoMode;
+
+  GeneralSettings({required this.prefs}) {
+    _numberOfSensors = (prefs.getInt('_numberOfSensors') ?? 1).obs;
+    _sensitivity = (Sensitivity.values
+            .byName(prefs.getString('_sensitivity') ?? Sensitivity.medium.name))
+        .obs;
+    _sensor = (Sensor.values
+            .byName(prefs.getString('_sensor') ?? Sensor.digitalJoystick.name))
+        .obs;
+    _threshold = (prefs.getDouble('_threshold') ?? 0.2).obs;
+    _demoMode = (prefs.getBool('_demoMode') ?? false).obs;
+  }
 
   int get numberOfSensors => _numberOfSensors.value;
   set numberOfSensor(int val) {
     if (val >= 0) {
       _numberOfSensors.value = val;
+      prefs.setInt('_numberOfSensors', val);
     }
   }
 
   Sensitivity get sensitivity => _sensitivity.value;
   set sensitivity(Sensitivity val) {
     _sensitivity.value = val;
+    prefs.setString('_sensitivity', val.name);
   }
 
   Sensor get sensor => _sensor.value;
   set sensor(Sensor val) {
     _sensor.value = val;
+    prefs.setString('_sensor', val.name);
   }
 
   double get threshold => _threshold.value;
   set threshold(double val) {
     if (val >= 0) {
       _threshold.value = val;
+      prefs.setDouble('_threshold', val);
     }
   }
 
   bool get demoMode => _demoMode.value;
   set demoMode(bool val) {
     _demoMode.value = val;
+    prefs.setBool('_demoMode', val);
   }
 }
 
-
-
 class HandleSettings extends AnalogicSensorSettings {
-  var _analogInputRangeForHandleLower = 10.obs;
-  var _analogInputRangeForHandleUpper = 100.obs;
+  late final SharedPreferences prefs;
 
+  late RxInt _analogInputRangeForHandleLower ;
+  late RxInt _analogInputRangeForHandleUpper;
+
+  HandleSettings({required this.prefs}) {
+    _analogInputRangeForHandleLower = (prefs.getInt('_analogInputRangeForHandleLower') ?? 10).obs;
+    _analogInputRangeForHandleUpper = (prefs.getInt('_analogInputRangeForHandleUpper') ?? 100).obs;
+  }
 
   int get rangeForHandleLower => _analogInputRangeForHandleLower.value;
   set rangeForHandleLower(int val) {
     if (val >= 0 && val <= _analogInputRangeForHandleUpper.value) {
       _analogInputRangeForHandleLower.value = val;
+      prefs.setInt('_analogInputRangeForHandleLower', val);
     }
   }
 
@@ -82,13 +106,20 @@ class HandleSettings extends AnalogicSensorSettings {
   set rangeForHandleUpper(int val) {
     if (val > _analogInputRangeForHandleLower.value && val <= 180) {
       _analogInputRangeForHandleUpper.value = val;
+      prefs.setInt('_analogInputRangeForHandleUpper', val);
     }
   }
 }
 
 class MuscleSettings extends AnalogicChannelsSettings {
 
-  var _hasBothAction = false.obs;
+  late final SharedPreferences prefs;
+
+  late RxBool _hasBothAction;
+
+  MuscleSettings({required this.prefs}) {
+    _hasBothAction = (prefs.getBool('_hasBothAction') ?? false).obs;
+  }
 
   bool get hasBothAction => _hasBothAction.value;
   set hasBothAction(bool bothAction) {
@@ -98,18 +129,29 @@ class MuscleSettings extends AnalogicChannelsSettings {
 
 class SettingsController extends GetxController {
   // TODO: use classes instead of maps
-  var genericSettings = GeneralSettings();
-  var musclesSettings = MuscleSettings();
-  var handleSettings = HandleSettings();
+  late GeneralSettings genericSettings;
+  late MuscleSettings musclesSettings;
+  late HandleSettings handleSettings;
 
-  var sheepSettings = SheepSettings();
-  var spaceShipSettings = SpaceShipSettings();
-  var toadSettings = ToadSettings();
-  var mazeSettings = MazeSettings();
+  late SheepSettings sheepSettings;
+  late SpaceShipSettings spaceShipSettings;
+  late ToadSettings toadSettings;
+  late MazeSettings mazeSettings;
+
+  late final SharedPreferences prefs;
 
   @override
   void onInit() async {
     super.onInit();
+    prefs = await SharedPreferences.getInstance();
+    genericSettings = GeneralSettings(prefs: prefs);
+    musclesSettings = MuscleSettings(prefs: prefs);
+    handleSettings = HandleSettings(prefs: prefs);
+    sheepSettings = SheepSettings(prefs: prefs);
+    spaceShipSettings = SpaceShipSettings(prefs: prefs);
+    toadSettings = ToadSettings(prefs: prefs);
+    mazeSettings = MazeSettings(prefs: prefs);
+
   }
 
   @override

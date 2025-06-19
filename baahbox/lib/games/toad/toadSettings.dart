@@ -19,22 +19,32 @@
 
 import 'package:baahbox/services/settings/settingsController.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../model/AnalogicSensor.dart';
 
 class ToadSettings  {
-  var _iShootingModeAutomatic = false.obs;
-  var _numberOfFlies = 5.obs;
-  var _flySteadyTime = 3.0.obs;
+  late final SharedPreferences prefs;
 
-  var muscleSettings = MuscleSettings()
-    ..sensor1.orientation=AnalogicSensorOrientation.horizontal
-    ..sensor2.orientation=AnalogicSensorOrientation.none;
+  late RxBool _iShootingModeAutomatic;
+  late RxInt _numberOfFlies;
+  late RxDouble _flySteadyTime;
 
+  late MuscleSettings muscleSettings;
+
+  ToadSettings({required this.prefs}) {
+    _iShootingModeAutomatic = (prefs.getBool('_iShootingModeAutomatic') ?? false).obs;
+    _numberOfFlies = (prefs.getInt('_numberOfFlies') ?? 5).obs;
+    _flySteadyTime = (prefs.getDouble('_flySteadyTime') ?? 3.0).obs;
+    muscleSettings = MuscleSettings(prefs: prefs)
+      ..sensor1.orientation=AnalogicSensorOrientation.horizontal
+      ..sensor2.orientation=AnalogicSensorOrientation.none;
+  }
   bool get iShootingModeAutomatic => _iShootingModeAutomatic.value;
   set iShootingModeAutomatic(bool val)
   {
     _iShootingModeAutomatic.value = val;
+    prefs.setBool('_iShootingModeAutomatic', val);
   }
 
   int get numberOfFlies => _numberOfFlies.value;
@@ -42,6 +52,7 @@ class ToadSettings  {
   {
     if(val>0) {
       _numberOfFlies.value = val;
+      prefs.setInt('_numberOfFlies', val);
     }
   }
 
@@ -50,6 +61,7 @@ class ToadSettings  {
   {
     if(val>0) {
       _flySteadyTime.value = val;
+      prefs.setDouble('_flySteadyTime', val);
     }
   }
 }

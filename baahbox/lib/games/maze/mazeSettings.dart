@@ -19,18 +19,34 @@
 
 import 'package:baahbox/services/settings/settingsController.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MazeSettings  {
 
-  var _mazeSize = 5.obs;
-  var _hasChrono = false.obs;
-  var _chronoMaxTime = 40.0.obs;
-  var _hasMaxTouch = false.obs;
-  var _maxTouches = 5.obs;
-  var _isFineDirection = false.obs;
-  var _speedMovement = 40.0.obs;
+  late final SharedPreferences prefs;
 
-  var musclesSettings = MuscleSettings();
+  late RxInt _mazeSize;
+  late RxBool _hasChrono;
+  late RxDouble _chronoMaxTime;
+  late RxBool _hasMaxTouch;
+  late RxInt _maxTouches;
+  late RxBool _isFineDirection;
+  late RxDouble _speedMovement;
+
+  late MuscleSettings musclesSettings;
+
+  MazeSettings({required this.prefs}) {
+    _mazeSize = (prefs.getInt('_mazeSize') ?? 5).obs;
+    _hasChrono = (prefs.getBool('_hasChrono') ?? false).obs;
+    _chronoMaxTime = (prefs.getDouble('_chronoMaxTime') ?? 40.0).obs;
+    _hasMaxTouch = (prefs.getBool('_hasMaxTouch') ?? false).obs;
+    _maxTouches = (prefs.getInt('_maxTouches') ?? 5).obs;
+    _isFineDirection = (prefs.getBool('_isFineDirection') ?? false).obs;
+    _speedMovement = (prefs.getDouble('_speedMovement') ?? 40.0).obs;
+
+    musclesSettings = MuscleSettings(prefs : prefs);
+
+  }
 
 
   int get mazeSize => _mazeSize.value;
@@ -38,6 +54,7 @@ class MazeSettings  {
   {
     if(val > 0) {
       _mazeSize.value = val;
+      prefs.setInt('_mazeSize', val);
     }
   }
 
@@ -45,6 +62,7 @@ class MazeSettings  {
   set hasChrono(bool val)
   {
     _hasChrono.value = val;
+    prefs.setBool('_hasChrono', val);
   }
 
   double get chronoMaxTime => _chronoMaxTime.value;
@@ -52,6 +70,7 @@ class MazeSettings  {
   {
     if(val > 0) {
       _chronoMaxTime.value = val;
+      prefs.setDouble('_chronoMaxTime', val);
     }
   }
 
@@ -59,6 +78,7 @@ class MazeSettings  {
   set hasMaxTouch(bool val)
   {
     _hasMaxTouch.value = val;
+    prefs.setBool('_hasMaxTouch', val);
   }
 
   int get maxTouches => _maxTouches.value;
@@ -66,6 +86,7 @@ class MazeSettings  {
   {
     if(val > 0) {
       _maxTouches.value = val;
+      prefs.setInt('_maxTouches', val);
     }
   }
 
@@ -73,6 +94,7 @@ class MazeSettings  {
   set isFineDirection(bool val)
   {
     _isFineDirection.value = val;
+    prefs.setBool('_isFineDirection', val);
   }
 
   double get speedMovement => _speedMovement.value;
@@ -80,6 +102,7 @@ class MazeSettings  {
   {
     if(val > 0) {
       _speedMovement.value = val;
+      prefs.setDouble('_speedMovement', val);
     }
   }
 }

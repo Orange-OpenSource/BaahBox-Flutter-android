@@ -19,28 +19,41 @@
 
 import 'package:baahbox/services/settings/settingsController.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants/enums.dart';
 import '../../model/AnalogicSensor.dart';
 
-class SpaceShipSettings  {
-  var _asteroidVelocity = ObjectVelocity.medium.obs;
-  var _numberOfShips = 3.obs;
-  var muscleSettings = MuscleSettings()
-    ..sensor1.orientation=AnalogicSensorOrientation.horizontal
-    ..sensor2.orientation=AnalogicSensorOrientation.none;
+class SpaceShipSettings {
+  late final SharedPreferences prefs;
+
+  late Rx<ObjectVelocity> _asteroidVelocity ;
+  late RxInt _numberOfShips;
+
+  late MuscleSettings muscleSettings;
+
+  SpaceShipSettings({required this.prefs}) {
+    _asteroidVelocity = (ObjectVelocity.values.byName(
+            prefs.getString('_asteroidVelocity') ?? ObjectVelocity.medium.name))
+        .obs;
+    _numberOfShips = (prefs.getInt('_numberOfShips') ?? 3).obs;
+
+    muscleSettings = MuscleSettings(prefs: prefs)
+      ..sensor1.orientation = AnalogicSensorOrientation.horizontal
+      ..sensor2.orientation = AnalogicSensorOrientation.none;
+  }
 
   ObjectVelocity get asteroidVelocity => _asteroidVelocity.value;
-  set asteroidVelocity(ObjectVelocity val)
-  {
+  set asteroidVelocity(ObjectVelocity val) {
     _asteroidVelocity.value = val;
+    prefs.setString('_asteroidVelocity', val.name);
   }
 
   int get numberOfShips => _numberOfShips.value;
-  set numberOfShips(int val)
-  {
-    if(val>0) {
+  set numberOfShips(int val) {
+    if (val > 0) {
       _numberOfShips.value = val;
+      prefs.setInt('_numberOfShips', val);
     }
   }
 }

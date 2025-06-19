@@ -20,18 +20,32 @@
 
 import 'package:baahbox/services/settings/settingsController.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants/enums.dart';
+import '../../model/AnalogicSensor.dart';
 
 class SheepSettings  {
-    var _gateVelocity = ObjectVelocity.medium.obs;
-    var _numberOfGates = 3.obs;
-    var muscleSettings = MuscleSettings();
+    late final SharedPreferences prefs;
+
+    late Rx<ObjectVelocity> _gateVelocity;
+    late RxInt _numberOfGates;
+    late MuscleSettings muscleSettings;
+
+    SheepSettings({required this.prefs}) {
+        _gateVelocity = (ObjectVelocity.values
+            .byName(prefs.getString('_gateVelocity') ?? ObjectVelocity.medium.name))
+            .obs;
+        _numberOfGates = (prefs.getInt('_numberOfGates') ?? 3).obs;
+
+        muscleSettings = MuscleSettings(prefs: prefs);
+    }
 
     ObjectVelocity get gateVelocity => _gateVelocity.value;
     set gateVelocity(ObjectVelocity val)
     {
       _gateVelocity.value = val;
+      prefs.setString('_gateVelocity', val.name);
     }
 
     int get numberOfGates => _numberOfGates.value;
@@ -39,6 +53,7 @@ class SheepSettings  {
     {
         if(val>0) {
             _numberOfGates.value = val;
+            prefs.setInt('_numberOfGates', val);
         }
     }
 }
