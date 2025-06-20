@@ -42,8 +42,7 @@ class ShipComponent extends SpriteComponent
   void initialize() {
     sprite = normalShipSprite;
     size = normalShipSprite.srcSize / 13;
-    position = Vector2(game.size.x / 2,
-        (game.size.y) / 2 + (1.5 * size.y) );
+    position = Vector2(game.size.x / 2, (game.size.y) / 2 + (1.5 * size.y));
     anchor = Anchor.center;
   }
 
@@ -90,12 +89,15 @@ class ShipComponent extends SpriteComponent
     Set<Vector2> intersectionPoints,
     PositionComponent other,
   ) {
-      super.onCollisionStart(intersectionPoints, other);
-      if (other is MeteorComponent) {
-        other.takeHit();
-        takeHit();
+    super.onCollisionStart(intersectionPoints, other);
+    if (other is MeteorComponent) {
+      other.takeHit();
+      takeHit();
+      if (other.isSheepMeteor) {
+        game.addLife();
+      } else {
         game.looseLife();
       }
-
+    }
   }
 }

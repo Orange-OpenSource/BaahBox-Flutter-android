@@ -34,11 +34,15 @@ class LifeManager extends Component with HasGameReference<SpaceShipGame> {
     createLifes();
   }
 
+  int getLifeXPosFromIndex(int index) {
+    const int  gapSize = 6;
+    return (25 + gapSize) * index + 10;
+  }
   void createLifes() {
-    const gapSize = 6;
+
     for (var i = 0; i < settingsController.spaceShipSettings.numberOfShips; i++) {
-       var xpos = (25 + gapSize) * i;
-      _createLifeAt(xpos + 10, game.size.y - 10);
+
+      _createLifeAt(getLifeXPosFromIndex(i).toDouble(), game.size.y - 10);
     }
   }
 
@@ -55,6 +59,12 @@ class LifeManager extends Component with HasGameReference<SpaceShipGame> {
     }
     if (lifeArray.isEmpty) {
         game.endGame();
+    }
+  }
+
+  void addOneLife() {
+    if (lifeArray.length<settingsController.spaceShipSettings.numberOfShips) {
+      _createLifeAt(getLifeXPosFromIndex(lifeArray.length).toDouble(), game.size.y - 10);
     }
   }
 }
