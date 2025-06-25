@@ -42,13 +42,14 @@ class FlyScoreComponent extends SpriteComponent with HasVisibility, HasGameRefer
 
   void setSpriteTo() {
 
-    var animSprite = SpriteComponent(sprite:fullScoreSprite, position:game.toad.position,
+    var startPosition = Vector2(game.toad.position.x, game.toad.position.y+game.toad.height/2);
+    var animSprite = SpriteComponent(sprite:fullScoreSprite, position:startPosition,
     size: size, scale: Vector2(0.1,0.1), anchor: Anchor.bottomLeft,);
     game.add(animSprite);
     animSprite.add(ScaleEffect.to(Vector2(1, 1),
-    EffectController(duration: 0.5)));
+    EffectController(duration: 0.5, startDelay:0.3)));
     animSprite.add(SequenceEffect([MoveEffect.to(position,
-        EffectController(duration: 0.5),
+        EffectController(duration: 0.5, startDelay:0.3),
     ),
     RemoveEffect()],onComplete: ()=>{sprite=fullScoreSprite}));
   }

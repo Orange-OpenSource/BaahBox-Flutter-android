@@ -121,7 +121,7 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
   void initializeParams() {
     isToadShooting = false;
     gameInput = GameInput(
-        axes: GameInputAxes.horizontal,
+        axes: GameInputAxes.both,
         musclesSettings: settingsController.toadSettings.muscleSettings);
   }
 
