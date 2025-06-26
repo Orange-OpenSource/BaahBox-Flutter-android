@@ -25,6 +25,7 @@ import 'package:baahbox/constants/enums.dart';
 import 'package:baahbox/services/settings/settingsController.dart';
 
 import '../../services/settings/generalSettingsMusclePage.dart';
+import 'generalSettingsHandlePage.dart';
 
 class ToadSettingsPage extends GetView<SettingsController> {
   final mainColor = BBGameList.toad.baseColor.color;

@@ -24,7 +24,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class MazeSettings  {
 
   late final SharedPreferences prefs;
-
+  static const prefsPrefix = "MazeSettings::";
   late RxInt _mazeSize;
   late RxBool _hasChrono;
   late RxDouble _chronoMaxTime;
@@ -36,15 +36,15 @@ class MazeSettings  {
   late MuscleSettings musclesSettings;
 
   MazeSettings({required this.prefs}) {
-    _mazeSize = (prefs.getInt('_mazeSize') ?? 5).obs;
-    _hasChrono = (prefs.getBool('_hasChrono') ?? false).obs;
-    _chronoMaxTime = (prefs.getDouble('_chronoMaxTime') ?? 40.0).obs;
-    _hasMaxTouch = (prefs.getBool('_hasMaxTouch') ?? false).obs;
-    _maxTouches = (prefs.getInt('_maxTouches') ?? 5).obs;
-    _isFineDirection = (prefs.getBool('_isFineDirection') ?? false).obs;
-    _speedMovement = (prefs.getDouble('_speedMovement') ?? 40.0).obs;
+    _mazeSize = (prefs.getInt('${prefsPrefix}_mazeSize') ?? 5).obs;
+    _hasChrono = (prefs.getBool('${prefsPrefix}_hasChrono') ?? false).obs;
+    _chronoMaxTime = (prefs.getDouble('${prefsPrefix}_chronoMaxTime') ?? 40.0).obs;
+    _hasMaxTouch = (prefs.getBool('${prefsPrefix}_hasMaxTouch') ?? false).obs;
+    _maxTouches = (prefs.getInt('${prefsPrefix}_maxTouches') ?? 5).obs;
+    _isFineDirection = (prefs.getBool('${prefsPrefix}_isFineDirection') ?? false).obs;
+    _speedMovement = (prefs.getDouble('${prefsPrefix}_speedMovement') ?? 40.0).obs;
 
-    musclesSettings = MuscleSettings(prefs : prefs);
+    musclesSettings = MuscleSettings(prefs : prefs, prefsPrefix:prefsPrefix);
 
   }
 
@@ -54,7 +54,7 @@ class MazeSettings  {
   {
     if(val > 0) {
       _mazeSize.value = val;
-      prefs.setInt('_mazeSize', val);
+      prefs.setInt('${prefsPrefix}_mazeSize', val);
     }
   }
 
@@ -62,7 +62,7 @@ class MazeSettings  {
   set hasChrono(bool val)
   {
     _hasChrono.value = val;
-    prefs.setBool('_hasChrono', val);
+    prefs.setBool('${prefsPrefix}_hasChrono', val);
   }
 
   double get chronoMaxTime => _chronoMaxTime.value;
@@ -70,7 +70,7 @@ class MazeSettings  {
   {
     if(val > 0) {
       _chronoMaxTime.value = val;
-      prefs.setDouble('_chronoMaxTime', val);
+      prefs.setDouble('${prefsPrefix}_chronoMaxTime', val);
     }
   }
 
@@ -78,7 +78,7 @@ class MazeSettings  {
   set hasMaxTouch(bool val)
   {
     _hasMaxTouch.value = val;
-    prefs.setBool('_hasMaxTouch', val);
+    prefs.setBool('${prefsPrefix}_hasMaxTouch', val);
   }
 
   int get maxTouches => _maxTouches.value;
@@ -86,7 +86,7 @@ class MazeSettings  {
   {
     if(val > 0) {
       _maxTouches.value = val;
-      prefs.setInt('_maxTouches', val);
+      prefs.setInt('${prefsPrefix}_maxTouches', val);
     }
   }
 
@@ -94,7 +94,7 @@ class MazeSettings  {
   set isFineDirection(bool val)
   {
     _isFineDirection.value = val;
-    prefs.setBool('_isFineDirection', val);
+    prefs.setBool('${prefsPrefix}_isFineDirection', val);
   }
 
   double get speedMovement => _speedMovement.value;
@@ -102,7 +102,7 @@ class MazeSettings  {
   {
     if(val > 0) {
       _speedMovement.value = val;
-      prefs.setDouble('_speedMovement', val);
+      prefs.setDouble('${prefsPrefix}_speedMovement', val);
     }
   }
 }

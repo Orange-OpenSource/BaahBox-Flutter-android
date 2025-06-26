@@ -136,7 +136,8 @@ class SheepGame extends BBGame with TapCallbacks, HasCollisionDetection {
     sheepDidJumpOverGate = false;
     gameInput = GameInput(
         axes: GameInputAxes.vertical,
-        musclesSettings: settingsController.musclesSettings);
+        musclesSettings: settingsController.sheepSettings.muscleSettings,
+        handleSettings: settingsController.handleSettings);
     gameObjective = settingsController.sheepSettings.numberOfGates;
     gateVelocity = settingsController.sheepSettings.gateVelocity;
   }

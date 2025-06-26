@@ -84,21 +84,20 @@ class GeneralSettings {
 }
 
 class HandleSettings extends AnalogicSensorSettings {
-  late final SharedPreferences prefs;
 
   late RxInt _analogInputRangeForHandleLower ;
   late RxInt _analogInputRangeForHandleUpper;
 
-  HandleSettings({required this.prefs}) {
-    _analogInputRangeForHandleLower = (prefs.getInt('_analogInputRangeForHandleLower') ?? 10).obs;
-    _analogInputRangeForHandleUpper = (prefs.getInt('_analogInputRangeForHandleUpper') ?? 100).obs;
+  HandleSettings({required super.prefs, required super.prefsPrefix}) {
+    _analogInputRangeForHandleLower = (prefs.getInt('${prefsPrefix}_analogInputRangeForHandleLower') ?? 10).obs;
+    _analogInputRangeForHandleUpper = (prefs.getInt('${prefsPrefix}_analogInputRangeForHandleUpper') ?? 100).obs;
   }
 
   int get rangeForHandleLower => _analogInputRangeForHandleLower.value;
   set rangeForHandleLower(int val) {
     if (val >= 0 && val <= _analogInputRangeForHandleUpper.value) {
       _analogInputRangeForHandleLower.value = val;
-      prefs.setInt('_analogInputRangeForHandleLower', val);
+      prefs.setInt('${prefsPrefix}_analogInputRangeForHandleLower', val);
     }
   }
 
@@ -106,19 +105,18 @@ class HandleSettings extends AnalogicSensorSettings {
   set rangeForHandleUpper(int val) {
     if (val > _analogInputRangeForHandleLower.value && val <= 180) {
       _analogInputRangeForHandleUpper.value = val;
-      prefs.setInt('_analogInputRangeForHandleUpper', val);
+      prefs.setInt('${prefsPrefix}_analogInputRangeForHandleUpper', val);
     }
   }
 }
 
 class MuscleSettings extends AnalogicChannelsSettings {
 
-  late final SharedPreferences prefs;
 
   late RxBool _hasBothAction;
 
-  MuscleSettings({required this.prefs}) {
-    _hasBothAction = (prefs.getBool('_hasBothAction') ?? false).obs;
+  MuscleSettings({required super.prefs, required super.prefsPrefix}) {
+    _hasBothAction = (prefs.getBool('${prefsPrefix}_hasBothAction') ?? false).obs;
   }
 
   bool get hasBothAction => _hasBothAction.value;
@@ -139,14 +137,15 @@ class SettingsController extends GetxController {
   late MazeSettings mazeSettings;
 
   late final SharedPreferences prefs;
+  static const prefsPrefix = "GenericSettings::";
 
   @override
   void onInit() async {
     super.onInit();
     prefs = await SharedPreferences.getInstance();
     genericSettings = GeneralSettings(prefs: prefs);
-    musclesSettings = MuscleSettings(prefs: prefs);
-    handleSettings = HandleSettings(prefs: prefs);
+    musclesSettings = MuscleSettings(prefs: prefs, prefsPrefix:prefsPrefix);
+    handleSettings = HandleSettings(prefs: prefs, prefsPrefix:prefsPrefix);
     sheepSettings = SheepSettings(prefs: prefs);
     spaceShipSettings = SpaceShipSettings(prefs: prefs);
     toadSettings = ToadSettings(prefs: prefs);

@@ -25,6 +25,7 @@ import 'package:baahbox/constants/enums.dart';
 import 'package:baahbox/services/settings/settingsController.dart';
 
 import '../../services/settings/generalSettingsMusclePage.dart';
+import 'generalSettingsHandlePage.dart';
 
 class SpaceShipSettingsPage extends GetView<SettingsController> {
   final mainColor = BBColor.blueGreen.color;

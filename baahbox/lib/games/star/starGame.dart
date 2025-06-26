@@ -134,7 +134,8 @@ class StarGame extends BBGame with TapCallbacks {
     input =0;
     gameInput = GameInput(
         axes: GameInputAxes.vertical,
-        musclesSettings: settingsController.musclesSettings);
+        musclesSettings: settingsController.musclesSettings,
+        handleSettings: settingsController.handleSettings);
     _star.initialize();
     super.startGame();
   }

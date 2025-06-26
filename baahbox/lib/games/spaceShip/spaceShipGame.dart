@@ -119,10 +119,9 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
   void update(double dt) {
     super.update(dt);
     if (appController.isActive) {
-
       if (state == GameState.running) {
         refreshInput();
-        transformInputInOffset();
+
         scoreText.text = 'Score: $score';
       } else {
         setInstructions();
@@ -138,23 +137,26 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
     goRight = false;
 
     if (checkCompatibleSensor(BBGameList.starship.compatibleSensorsList)) {
-
       switch (gameInput.directionType) {
         case GameInputDirectionType.analogic:
           var deltaX = gameInput.delta.x;
-          goLeft = (deltaX.abs() > threshold) && (deltaX<0);
-          goRight = (deltaX.abs() > threshold) && (deltaX>0);
+          if (deltaX.abs() > threshold) {
+            ship.moveTo(deltaX);
+          } else {
+            ship.setSpriteTo(0);
+          }
         case GameInputDirectionType.digital:
           var currentInputDirection = gameInput.direction;
-          goLeft = currentInputDirection==GameInputDirection.left;
-          goRight = currentInputDirection==GameInputDirection.right;
+          goLeft = currentInputDirection == GameInputDirection.left;
+          goRight = currentInputDirection == GameInputDirection.right;
+          transformInputInOffset();
       }
-
     }
   }
 
   void transformInputInOffset() {
     if (!goLeft && !goRight) {
+      ship.setSpriteTo(0);
       return;
     }
     var offset = goLeft ? -2.0 : 2.0;
@@ -182,9 +184,14 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
 // Game State management
   @override
   void startGame() {
+    // force handle settings to be centered to 0
     gameInput = GameInput(
         axes: GameInputAxes.horizontal,
-        musclesSettings: settingsController.musclesSettings);
+        musclesSettings: settingsController.spaceShipSettings.muscleSettings,
+        handleSettings: HandleSettings(
+            prefs: settingsController.handleSettings.prefs,
+            prefsPrefix: settingsController.handleSettings.prefsPrefix)
+          ..isCenteredToZero = true);
     super.startGame();
   }
 

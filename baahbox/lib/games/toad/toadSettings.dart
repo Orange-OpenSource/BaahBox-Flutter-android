@@ -25,6 +25,7 @@ import '../../model/AnalogicSensor.dart';
 
 class ToadSettings  {
   late final SharedPreferences prefs;
+  static const prefsPrefix = "ToadSettings::";
 
   late RxBool _iShootingModeAutomatic;
   late RxInt _numberOfFlies;
@@ -33,10 +34,10 @@ class ToadSettings  {
   late MuscleSettings muscleSettings;
 
   ToadSettings({required this.prefs}) {
-    _iShootingModeAutomatic = (prefs.getBool('_iShootingModeAutomatic') ?? false).obs;
-    _numberOfFlies = (prefs.getInt('_numberOfFlies') ?? 5).obs;
-    _flySteadyTime = (prefs.getDouble('_flySteadyTime') ?? 3.0).obs;
-    muscleSettings = MuscleSettings(prefs: prefs)
+    _iShootingModeAutomatic = (prefs.getBool('${prefsPrefix}_iShootingModeAutomatic') ?? false).obs;
+    _numberOfFlies = (prefs.getInt('${prefsPrefix}_numberOfFlies') ?? 5).obs;
+    _flySteadyTime = (prefs.getDouble('${prefsPrefix}_flySteadyTime') ?? 3.0).obs;
+    muscleSettings = MuscleSettings(prefs: prefs, prefsPrefix:prefsPrefix)
       ..sensor1.orientation=AnalogicSensorOrientation.horizontal
       ..sensor2.orientation=AnalogicSensorOrientation.none;
   }
@@ -44,7 +45,7 @@ class ToadSettings  {
   set iShootingModeAutomatic(bool val)
   {
     _iShootingModeAutomatic.value = val;
-    prefs.setBool('_iShootingModeAutomatic', val);
+    prefs.setBool('${prefsPrefix}_iShootingModeAutomatic', val);
   }
 
   int get numberOfFlies => _numberOfFlies.value;
@@ -52,7 +53,7 @@ class ToadSettings  {
   {
     if(val>0) {
       _numberOfFlies.value = val;
-      prefs.setInt('_numberOfFlies', val);
+      prefs.setInt('${prefsPrefix}_numberOfFlies', val);
     }
   }
 
@@ -61,7 +62,7 @@ class ToadSettings  {
   {
     if(val>0) {
       _flySteadyTime.value = val;
-      prefs.setDouble('_flySteadyTime', val);
+      prefs.setDouble('${prefsPrefix}_flySteadyTime', val);
     }
   }
 }

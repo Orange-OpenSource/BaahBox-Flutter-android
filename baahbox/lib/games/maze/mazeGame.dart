@@ -279,7 +279,8 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
     }
     gameInput = GameInput(
         axes: GameInputAxes.both,
-        musclesSettings: settingsController.mazeSettings.musclesSettings);
+        musclesSettings: settingsController.mazeSettings.musclesSettings,
+        handleSettings: settingsController.handleSettings);
     maze.initialize();
     player.updateStartCell(maze.startCell);
     player.resetToStart();

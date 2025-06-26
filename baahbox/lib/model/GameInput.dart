@@ -52,12 +52,13 @@ class GameInput {
   }
 
   final MuscleSettings musclesSettings;
+  final HandleSettings handleSettings;
 
   final Controller appController = Get.find();
 
   final Vector2 _delta = Vector2.zero();
 
-  GameInput({required this.axes, required this.musclesSettings});
+  GameInput({required this.axes, required this.musclesSettings, required this.handleSettings});
 
   static const double _eighthOfPi = pi / 8;
 
@@ -364,33 +365,32 @@ class GameInput {
   void convertHandleInput() {
     var joystickInput = appController.analogInputs;
 
-    double analog1 = calibrateAnalogInput(
-            joystickInput.analog1,
-            settingsController.handleSettings.rangeForHandleLower,
-            settingsController.handleSettings.rangeForHandleUpper) /
-        1000;
+
+    int calibratedInput = calibrateAnalogInput(
+        joystickInput.analog1,
+        handleSettings.rangeForHandleLower,
+        handleSettings.rangeForHandleUpper);
+
+    double analog1 = calibratedInput / 1000;
+
+    if(handleSettings.isCenteredToZero) {
+      analog1 = rangeMap(calibratedInput , 0, 1000, -500, 500) / 500;
+    }
 
     switch (axes) {
       case GameInputAxes.horizontal:
-        // force value to be centered to 0
-        analog1 = 1 - analog1*2;
+      case GameInputAxes.both:
         if (directionType == GameInputDirectionType.analogic) {
           _delta.setValues(analog1, 0);
         } else {
           _delta.setValues(analog1.abs() >= 0.5 ? analog1.sign : 0, 0);
         }
       case GameInputAxes.vertical:
+
         if (directionType == GameInputDirectionType.analogic) {
           _delta.setValues(0, -1 * analog1);
         } else {
-          _delta.setValues(0, analog1 >= 0.5 ? -1 : 0);
-        }
-      case GameInputAxes.both:
-        // priority to vertical axis
-        if (directionType == GameInputDirectionType.analogic) {
-          _delta.setValues(0,analog1);
-        } else {
-          _delta.setValues(0,analog1 >= 0.5 ? 1 : 0);
+          _delta.setValues(0, analog1.abs() >= 0.5 ? -1 *analog1.sign : 0);
         }
     }
   }

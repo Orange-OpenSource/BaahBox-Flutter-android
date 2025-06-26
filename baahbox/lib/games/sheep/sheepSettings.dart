@@ -27,6 +27,7 @@ import '../../model/AnalogicSensor.dart';
 
 class SheepSettings  {
     late final SharedPreferences prefs;
+    static const prefsPrefix = "SheepSettings::";
 
     late Rx<ObjectVelocity> _gateVelocity;
     late RxInt _numberOfGates;
@@ -34,18 +35,18 @@ class SheepSettings  {
 
     SheepSettings({required this.prefs}) {
         _gateVelocity = (ObjectVelocity.values
-            .byName(prefs.getString('_gateVelocity') ?? ObjectVelocity.medium.name))
+            .byName(prefs.getString('${prefsPrefix}_gateVelocity') ?? ObjectVelocity.medium.name))
             .obs;
-        _numberOfGates = (prefs.getInt('_numberOfGates') ?? 3).obs;
+        _numberOfGates = (prefs.getInt('${prefsPrefix}_numberOfGates') ?? 3).obs;
 
-        muscleSettings = MuscleSettings(prefs: prefs);
+        muscleSettings = MuscleSettings(prefs: prefs, prefsPrefix:prefsPrefix);
     }
 
     ObjectVelocity get gateVelocity => _gateVelocity.value;
     set gateVelocity(ObjectVelocity val)
     {
       _gateVelocity.value = val;
-      prefs.setString('_gateVelocity', val.name);
+      prefs.setString('${prefsPrefix}_gateVelocity', val.name);
     }
 
     int get numberOfGates => _numberOfGates.value;
@@ -53,7 +54,7 @@ class SheepSettings  {
     {
         if(val>0) {
             _numberOfGates.value = val;
-            prefs.setInt('_numberOfGates', val);
+            prefs.setInt('${prefsPrefix}_numberOfGates', val);
         }
     }
 }

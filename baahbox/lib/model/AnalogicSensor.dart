@@ -18,6 +18,7 @@
  */
 
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum AnalogicSensorOrientation {
   vertical,
@@ -28,21 +29,40 @@ enum AnalogicSensorOrientation {
 }
 
 class AnalogicSensorSettings {
-  var _orientation = AnalogicSensorOrientation.vertical.obs;
+  late final SharedPreferences prefs;
+  late final String prefsPrefix;
+
+  AnalogicSensorSettings({required this.prefs, required this.prefsPrefix}) {
+    _orientation = (AnalogicSensorOrientation.values
+        .byName(prefs.getString('${prefsPrefix}_orientation') ?? AnalogicSensorOrientation.vertical.name))
+        .obs;
+
+    _isCenteredToZero = (prefs.getBool('${prefsPrefix}_isCenteredToZero') ?? false).obs;
+  }
+  late Rx<AnalogicSensorOrientation> _orientation = AnalogicSensorOrientation.vertical.obs;
 
   AnalogicSensorOrientation get orientation => _orientation.value;
   set orientation(AnalogicSensorOrientation orientation) {
     _orientation.value = orientation;
+    prefs.setString('${prefsPrefix}_orientation', orientation.name);
   }
 
-  var _isCenteredToZero = false.obs;
+  late RxBool _isCenteredToZero;
   bool get isCenteredToZero => _isCenteredToZero.value;
   set isCenteredToZero(bool val) {
     _isCenteredToZero.value = val;
+    prefs.setBool('${prefsPrefix}_isCenteredToZero', val);
   }
 }
 
 class AnalogicChannelsSettings {
-  var sensor1 = AnalogicSensorSettings();
-  var sensor2 = AnalogicSensorSettings();
+  late final SharedPreferences prefs;
+  late final String prefsPrefix;
+
+  AnalogicChannelsSettings({required this.prefs, required this.prefsPrefix}) {
+    sensor1 = AnalogicSensorSettings(prefs: prefs, prefsPrefix: prefsPrefix);
+    sensor2 = AnalogicSensorSettings(prefs: prefs, prefsPrefix: prefsPrefix);
+  }
+  late final AnalogicSensorSettings sensor1;
+  late final AnalogicSensorSettings sensor2;
 }

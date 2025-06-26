@@ -93,7 +93,7 @@ class GeneralSettingsPage extends GetView<SettingsController> {
                               muscleSettings: controller.musclesSettings);
                         } else if (controller.genericSettings.sensor ==
                             Sensor.handle) {
-                          return HandleSettingsView();
+                          return HandleSettingsView(handleSettings: controller.handleSettings);
                         } else {
                           return const SizedBox(height: 0);
                         }

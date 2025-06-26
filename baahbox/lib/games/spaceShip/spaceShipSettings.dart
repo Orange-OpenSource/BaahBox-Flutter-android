@@ -26,6 +26,7 @@ import '../../model/AnalogicSensor.dart';
 
 class SpaceShipSettings {
   late final SharedPreferences prefs;
+  static const prefsPrefix = "SpaceShipSettings::";
 
   late Rx<ObjectVelocity> _asteroidVelocity ;
   late RxInt _numberOfShips;
@@ -34,26 +35,27 @@ class SpaceShipSettings {
 
   SpaceShipSettings({required this.prefs}) {
     _asteroidVelocity = (ObjectVelocity.values.byName(
-            prefs.getString('_asteroidVelocity') ?? ObjectVelocity.medium.name))
+            prefs.getString('${prefsPrefix}_asteroidVelocity') ?? ObjectVelocity.medium.name))
         .obs;
-    _numberOfShips = (prefs.getInt('_numberOfShips') ?? 3).obs;
+    _numberOfShips = (prefs.getInt('${prefsPrefix}_numberOfShips') ?? 3).obs;
 
-    muscleSettings = MuscleSettings(prefs: prefs)
+    muscleSettings = MuscleSettings(prefs: prefs, prefsPrefix:prefsPrefix)
       ..sensor1.orientation = AnalogicSensorOrientation.horizontal
       ..sensor2.orientation = AnalogicSensorOrientation.none;
+
   }
 
   ObjectVelocity get asteroidVelocity => _asteroidVelocity.value;
   set asteroidVelocity(ObjectVelocity val) {
     _asteroidVelocity.value = val;
-    prefs.setString('_asteroidVelocity', val.name);
+    prefs.setString('${prefsPrefix}_asteroidVelocity', val.name);
   }
 
   int get numberOfShips => _numberOfShips.value;
   set numberOfShips(int val) {
     if (val > 0) {
       _numberOfShips.value = val;
-      prefs.setInt('_numberOfShips', val);
+      prefs.setInt('${prefsPrefix}_numberOfShips', val);
     }
   }
 }

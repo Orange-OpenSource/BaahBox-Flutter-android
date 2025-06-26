@@ -120,9 +120,14 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
 
   void initializeParams() {
     isToadShooting = false;
+    // force handle settings to be centered to 0
     gameInput = GameInput(
         axes: GameInputAxes.both,
-        musclesSettings: settingsController.toadSettings.muscleSettings);
+        musclesSettings: settingsController.toadSettings.muscleSettings,
+        handleSettings: HandleSettings(
+            prefs: settingsController.handleSettings.prefs,
+            prefsPrefix: settingsController.handleSettings.prefsPrefix)
+          ..isCenteredToZero = true);
   }
 
   void initializeUI() {
@@ -142,7 +147,7 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
 
       if (state == GameState.running) {
         refreshInput();
-        transformInputInAction();
+
         if (settingsController.toadSettings.iShootingModeAutomatic) {
           toad.checkFlies();
         }
@@ -158,18 +163,23 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
     goRight = false;
 
     if (checkCompatibleSensor(BBGameList.toad.compatibleSensorsList)) {
+      shoot = gameInput.direction==GameInputDirection.up && !isToadShooting;
       switch (gameInput.directionType) {
         case GameInputDirectionType.analogic:
-          var deltaX = gameInput.delta.x;
-          goLeft = (deltaX.abs() > threshold) && (deltaX<0);
-          goRight = (deltaX.abs() > threshold) && (deltaX>0);
+          if (shoot && !settingsController.toadSettings.iShootingModeAutomatic) {
+            startShooting();
+          }
+          else {
+            toad.rotateTo(gameInput.delta.x);
+          }
         case GameInputDirectionType.digital:
           var currentInputDirection = gameInput.direction;
           goLeft = currentInputDirection==GameInputDirection.left;
           goRight = currentInputDirection==GameInputDirection.right;
+          transformInputInAction();
       }
 
-      shoot = gameInput.direction==GameInputDirection.up && !isToadShooting;
+
 
     }
   }

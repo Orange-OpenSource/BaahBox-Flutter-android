@@ -112,6 +112,11 @@ int rangeMap(int value, int min1, int max1, int min2, int max2) {
   return min2 + (slope * (value - min1).toDouble()).round();
 }
 
+double rangeMapDouble(double value, double min1, double max1, double min2, double max2) {
+  double slope = (max2 - min2).toDouble() / (max1 - min1);
+  return min2 + slope * (value - min1);
+}
+
 int calibrateForAmplitude(int value, int min1, int max1) {
   double slope = 100.0 / (max1 - min1).toDouble();
   return (slope * (value - min1).toDouble()).round();

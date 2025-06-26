@@ -112,22 +112,24 @@ class FlyComponent extends SpriteComponent
   ) {
     super.onCollisionStart(intersectionPoints, other);
     if (other is TongueComponent) {
-      other.takeHit();
-      game.looseScore();
-      game.unRegisterFromFlyNet(position);
-      add(MoveEffect.to(
+      if(game.isToadShooting) {
+        other.takeHit();
+        game.looseScore();
+        game.unRegisterFromFlyNet(position);
+        add(MoveEffect.to(
             game.toad.position,
             EffectController(
               duration: 0.3,
             ))
-      );
-      add(ScaleEffect.to(
-          Vector2(0.1,0.1),
-          EffectController(
-            duration: 0.3,
-          )
-      ,onComplete: internalDisappear)
-      );
+        );
+        add(ScaleEffect.to(
+            Vector2(0.1, 0.1),
+            EffectController(
+              duration: 0.3,
+            )
+            , onComplete: internalDisappear)
+        );
+      }
       //_gotShotTimer.timer.start();
     }
   }

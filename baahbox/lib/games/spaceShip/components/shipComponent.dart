@@ -46,6 +46,25 @@ class ShipComponent extends SpriteComponent
     anchor = Anchor.center;
   }
 
+  void moveTo(double newPosition)
+  {
+    var center = game.size.x / 2;
+    var nextPositionX = center + newPosition * center;
+    if(nextPositionX==position.x)
+      {
+        setSpriteTo(0);
+        return;
+      }
+    else if(nextPositionX<0) {
+      nextPositionX=0;
+    }
+    else if(nextPositionX>game.size.x) {
+      nextPositionX = game.size.x;
+    }
+
+    setSpriteTo(nextPositionX > position.x ? 1 : 2);
+    position.x = nextPositionX;
+  }
   void moveBy(double offset) {
     var nextPositionX = position.x + offset;
     if (((offset > 0) && ((nextPositionX + (size.x / 2)) <= game.size.x)) ||
