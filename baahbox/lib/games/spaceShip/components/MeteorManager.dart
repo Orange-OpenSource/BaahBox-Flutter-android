@@ -39,7 +39,7 @@ class MeteorManager extends TimerComponent with HasGameReference<SpaceShipGame> 
   void onTick() {
      if (game.appController.isActive && !game.isGameOver) {
       final _halfWidth = meteor1Sprite.originalSize.x / 10;
-      final accelerationRate = game.settingsController.spaceShipSettings["asteroidVelocity"].value/2;
+      final accelerationRate = game.settingsController.spaceShipSettings.asteroidVelocity.value/2;
 
       game.addAll(
         List.generate(

@@ -62,7 +62,7 @@ class MazeComponent extends PositionComponent
   }
 
   Future<void> initialize() async {
-    int mazeSize = settingsController.mazeSettings["mazeSize"];
+    int mazeSize = settingsController.mazeSettings.mazeSize;
     mazeController.makeMaze(mazeSize, mazeSize);
     removeAll(children.query());
     double startOffset = 20;

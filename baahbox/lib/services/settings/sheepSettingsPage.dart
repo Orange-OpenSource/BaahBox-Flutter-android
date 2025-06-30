@@ -56,10 +56,8 @@ class SheepSettingsPage extends GetView<SettingsController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Obx(() => Text(
-                              'Nombre de barrières: ' +
-                                  controller.sheepSettings["numberOfGates"]
-                                      .toString(),
-                              style: TextStyle(
+                          'Nombre de barrières: ${controller.sheepSettings.numberOfGates}',
+                          style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.bold),
                             )),
                       ]))),
@@ -113,14 +111,14 @@ class _GateSpeedSelectionViewState extends State<GateSpeedSelectionView> {
     setState(() {
       _selection = value;
       if (value != null) {
-        controller.setGateSpeedTo(value);
+        controller.sheepSettings.gateVelocity =value;
       }
     });
   }
   @override
   Widget build(BuildContext context) {
     _selection =
-        (controller.sheepSettings["gateVelocity"]) ?? ObjectVelocity.low;
+        (controller.sheepSettings.gateVelocity) ?? ObjectVelocity.low;
     return Column(
       children: <Widget>[
         RadioListTile.adaptive(
@@ -161,7 +159,7 @@ class _GateNumberSliderState extends State<GateNumberSlider> {
 
   @override
   Widget build(BuildContext context) {
-    final int _nbG = (controller.sheepSettings["numberOfGates"]);
+    final int _nbG = (controller.sheepSettings.numberOfGates);
     double _value = _nbG.toDouble();
     return Slider.adaptive(
       value: _value,
@@ -175,7 +173,7 @@ class _GateNumberSliderState extends State<GateNumberSlider> {
       onChanged: (double value) {
         setState(() {
           _value = value;
-          controller.setNumberOfGatesTo(value.toInt());
+          controller.sheepSettings.numberOfGates=value.toInt();
         });
       },
     );

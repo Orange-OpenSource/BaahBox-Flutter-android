@@ -22,6 +22,9 @@ import 'package:get/get.dart';
 import 'package:baahbox/services/settings/settingsController.dart';
 
 class HandleSettingsView extends GetView<SettingsController> {
+  final HandleSettings handleSettings;
+
+  HandleSettingsView({super.key, required this.handleSettings});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -36,7 +39,7 @@ class HandleSettingsView extends GetView<SettingsController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Amplitude de mouvement',
+                          'Amplitude de mouvement de la poignée',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -55,7 +58,7 @@ class HandleSettingsView extends GetView<SettingsController> {
           Container(
               padding: EdgeInsets.all(20),
               child: Obx(() => Text(
-                    "Limite basse (entre 0° et 90°) : ${controller.genericSettings["analogInputRangeForHandleLower"]}",
+                    "Limite basse (entre 0° et 90°) : ${handleSettings.rangeForHandleLower}",
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ))),
           const SizedBox(
@@ -63,14 +66,14 @@ class HandleSettingsView extends GetView<SettingsController> {
           ),
           Container(
               padding: EdgeInsets.all(20),
-              child: RotationSlider(isLower: true, min: 0, max: 90)),
+              child: RotationSlider(handleSettings:handleSettings, isLower: true, min: 0, max: 90)),
           const SizedBox(
             height: 12,
           ),
           Container(
               padding: EdgeInsets.all(20),
               child: Obx(() => Text(
-                    "Limite haute (entre 90° et 180°) : ${controller.genericSettings["analogInputRangeForHandleUpper"]}",
+                    "Limite haute (entre 90° et 180°) : ${handleSettings.rangeForHandleUpper}",
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ))),
           const SizedBox(
@@ -78,14 +81,24 @@ class HandleSettingsView extends GetView<SettingsController> {
           ),
           Container(
               padding: EdgeInsets.all(20),
-              child: RotationSlider(isLower: false, min: 90, max: 180)),
+              child: RotationSlider(handleSettings:handleSettings, isLower: false, min: 90, max: 180)),
+              const SizedBox(
+                height: 5,
+              ),
+              Obx(() => SwitchListTile.adaptive(
+                  title: const Text("Poignée centrée sur 0"),
+                  value: handleSettings.isCenteredToZero,
+                  onChanged: (bool newValue) {
+                    handleSettings.isCenteredToZero = newValue;
+                  })),
         ]));
   }
 }
 
 class RotationSlider extends StatefulWidget {
+  final HandleSettings handleSettings;
   const RotationSlider(
-      {super.key, required this.isLower, required this.min, required this.max});
+      {super.key, required this.handleSettings, required this.isLower, required this.min, required this.max});
   final bool isLower;
   final int min;
   final int max;
@@ -95,15 +108,15 @@ class RotationSlider extends StatefulWidget {
 }
 
 class _RotationSliderState extends State<RotationSlider> {
-  final SettingsController controller = Get.find();
+
 
   @override
   Widget build(BuildContext context) {
     double _value = widget.min.toDouble();
     if (widget.isLower) {
-      _value = controller.getHandleRangeLower().toDouble();
+      _value = widget.handleSettings.rangeForHandleLower.toDouble();
     } else {
-      _value = controller.getHandleRangeUpper().toDouble();
+      _value = widget.handleSettings.rangeForHandleUpper.toDouble();
     }
 
     return Slider.adaptive(
@@ -119,9 +132,9 @@ class _RotationSliderState extends State<RotationSlider> {
           setState(() {
             _value = value;
             if (widget.isLower) {
-              controller.setHandleRangeLower(value.toInt());
+              widget.handleSettings.rangeForHandleLower = value.toInt();
             } else {
-              controller.setHandleRangeUpper(value.toInt());
+              widget.handleSettings.rangeForHandleUpper = value.toInt();
             }
           });
         });

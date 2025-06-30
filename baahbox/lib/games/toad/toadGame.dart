@@ -40,6 +40,7 @@ import 'package:baahbox/games/toad/components/flyComponent.dart';
 import 'package:baahbox/games/toad/components/tongueComponent.dart';
 import 'package:baahbox/games/toad/components/flyManager.dart';
 
+import '../../model/GameInput.dart';
 import '../../model/sensorInput.dart';
 
 
@@ -55,12 +56,10 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
   late final FlyComponent myFly;
 
   int score = 0;
-  int threshold = 10;
-  var panInput = 0;
-  var inputL = 0;
-  var inputR = 0;
+  double threshold = 0.1;
   var goLeft = false;
   var goRight = false;
+  late GameInput gameInput;
   var shoot = false;
   var isToadShooting = false;
   double floorY = 0.0;
@@ -99,7 +98,7 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
     var top = max(0.0, yLimit - (4 * toad.size.y));
     return SpawnComponent.periodRange(
         factory: (i) => FlyComponent(settingsController
-            .toadSettings["flySteadyTime"]),
+            .toadSettings.flySteadyTime),
        minPeriod: 1,
         maxPeriod: 3,
         area:  Rectangle.fromLTWH(size.x/20, top, size.x-(size.x/10), yLimit - top));
@@ -121,6 +120,14 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
 
   void initializeParams() {
     isToadShooting = false;
+    // force handle settings to be centered to 0
+    gameInput = GameInput(
+        axes: GameInputAxes.both,
+        musclesSettings: settingsController.toadSettings.muscleSettings,
+        handleSettings: HandleSettings(
+            prefs: settingsController.handleSettings.prefs,
+            prefsPrefix: settingsController.handleSettings.prefsPrefix)
+          ..isCenteredToZero = true);
   }
 
   void initializeUI() {
@@ -140,8 +147,8 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
 
       if (state == GameState.running) {
         refreshInput();
-        transformInputInAction();
-        if (settingsController.toadSettings["iShootingModeAutomatic"]) {
+
+        if (settingsController.toadSettings.iShootingModeAutomatic) {
           toad.checkFlies();
         }
       } else {
@@ -151,54 +158,29 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
   }
 
   void refreshInput() {
-    inputL = 0;
-    inputR = 0;
+
     goLeft = false;
     goRight = false;
 
-    if (appController.isConnectedToBox) {
-      var sensorType = settingsController.currentSensor;
-      switch (sensorType) {
-        case Sensor.analogJoystick:
-        // The strength is in range [0...1024] centered on 500 -> Have it fit into [-500...500]
-          int analog2 = rangeMap(appController.analogInputs.analog2, 0, 1024, 500, -500);
-
-          inputL = analog2<0 ?analog2.abs().toInt() : 0;
-          inputR = analog2>0 ?analog2.toInt() : 0;
-          goLeft = (inputL > threshold * 10)   && !isToadShooting;
-          goRight = (inputR > threshold * 10)  && !isToadShooting;
-
-          int analog1 = rangeMap(appController.analogInputs.analog1 - 500, 0, 500, 0, 100);
-          shoot = (analog1 > 70 && !isToadShooting);
-        case Sensor.handle:
-          {
-            int input = (calibrateAnalogInput(
-                appController.analogInputs.analog1,
-                settingsController
-                    .genericSettings["analogInputRangeForHandleLower"],
-                settingsController.genericSettings[
-                "analogInputRangeForHandleUpper"])
-                /10)
-                .toInt();
-            goLeft = input < 50 - threshold;
-            goRight = input > 50 + threshold;
+    if (checkCompatibleSensor(BBGameList.toad.compatibleSensorsList)) {
+      shoot = gameInput.direction==GameInputDirection.up && !isToadShooting;
+      switch (gameInput.directionType) {
+        case GameInputDirectionType.analogic:
+          if (shoot && !settingsController.toadSettings.iShootingModeAutomatic) {
+            startShooting();
           }
-        case Sensor.muscle: // The strength is in range [0...1024] -> Have it fit into [0...100]
-          inputR = (appController.analogInputs.analog1 ~/ 10);
-          inputL = (appController.analogInputs.analog2 ~/ 10);
-          debugLog("toad: inputL= $inputL, inputR = $inputR");
-          goLeft = (inputL > threshold) && (inputL > inputR) && !isToadShooting;
-          goRight = (inputR > threshold) && !goLeft && !isToadShooting;
-          shoot = (inputL > 99 && inputR > 99 && !isToadShooting);
-
-        case Sensor.digitalJoystick:
-          var joystickInput = appController.digitalInputs;
-          goLeft = joystickInput.left && !isToadShooting;
-          goRight = joystickInput.right && !isToadShooting;
-          shoot = joystickInput.up && !isToadShooting;
-
-        default:
+          else {
+            toad.rotateTo(gameInput.delta.x);
+          }
+        case GameInputDirectionType.digital:
+          var currentInputDirection = gameInput.direction;
+          goLeft = currentInputDirection==GameInputDirection.left;
+          goRight = currentInputDirection==GameInputDirection.right;
+          transformInputInAction();
       }
+
+
+
     }
   }
 
@@ -214,7 +196,7 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
       if (!goLeft && !goRight && !shoot) {
         return;
       }
-      if (shoot && !settingsController.toadSettings["iShootingModeAutomatic"]) {
+      if (shoot && !settingsController.toadSettings.iShootingModeAutomatic) {
         startShooting();
       } else {
         var deltaAngle = goLeft ? -2 : 2;
@@ -277,13 +259,10 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
   // Demo mode
   @override
   void onPanUpdate(DragUpdateInfo info) {
-    if (appController.isConnectedToBox || state != GameState.running) {
-      panInput = 0;
-    } else {
+    if (!appController.isConnectedToBox && state == GameState.running) {
       var xTouch = info.eventPosition.global.x;
       var coeff = (xTouch > size.x / 2) ? 1 : -1;
       toad.rotateBy(coeff * 2);
-      var nAngle = toad.angle;
       toad.checkFlies();
     }
   }

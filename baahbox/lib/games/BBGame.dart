@@ -31,7 +31,6 @@ import 'package:baahbox/services/settings/settingsController.dart';
 
 class BBGame extends FlameGame with PanDetector {
   final Controller appController = Get.find();
-
   GameState state = GameState.initializing;
   final double reactivity = 0.2; //todo enum (hardnesscoeff in ios)
   String title = "titre";
@@ -52,6 +51,11 @@ class BBGame extends FlameGame with PanDetector {
   Future<void> onLoad() async {
     await super.onLoad();
     initializeGame();
+  }
+
+  bool checkCompatibleSensor(List<Sensor> sensorsList) {
+    return appController.isConnectedToBox &&
+        sensorsList.contains(appController.currentSensor);
   }
 
   void initializeGame() {
@@ -76,9 +80,10 @@ class BBGame extends FlameGame with PanDetector {
       subTitle = instructionSubtitleFinger;
     }
   }
+
   void startGame() {
     overlays.clear();
-    appController.setActivationStateTo(true);
+    appController.isActive = true;
     state = GameState.running;
   }
 

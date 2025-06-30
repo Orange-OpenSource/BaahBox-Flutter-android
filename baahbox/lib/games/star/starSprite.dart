@@ -23,6 +23,8 @@ import 'package:flame/flame.dart';
 import 'package:baahbox/controllers/appController.dart';
 import 'package:get/get.dart';
 
+import '../../constants/enums.dart';
+
 
 class StarSprite extends SpriteComponent with HasGameReference<StarGame> {
   final Controller appController = Get.find();
@@ -58,7 +60,7 @@ class StarSprite extends SpriteComponent with HasGameReference<StarGame> {
   @override
   void update(double dt) {
     super.update(dt);
-    if (game.input >= 750) {
+    if (game.input >= 750 || game.state == GameState.won) {
       setTo(shiningStarSprite);
     } else {
       setTo(starSprite);

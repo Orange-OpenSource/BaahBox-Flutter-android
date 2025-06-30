@@ -33,8 +33,9 @@ import 'dart:io' show Platform;
 void main() async {
   await GetStorage.init();
   final BleController bleController = Get.put(BleController());
-  final Controller c = Get.put(Controller());
   final SettingsController settingsController = Get.put(SettingsController());
+  final Controller c = Get.put(Controller());
+
 
 
   runApp(

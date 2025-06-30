@@ -70,7 +70,7 @@ class MazeLifeManager extends PositionComponent with HasGameReference<MazeGame>,
         remove(lifeArray.first);
         lifeArray.removeAt(0);
       }
-    var maxTouch =  settingsController.mazeSettings["maxTouches"];
+    var maxTouch =  settingsController.mazeSettings.maxTouches;
     size = Vector2((lifeSize.x+gapSize)*maxTouch, lifeSize.y);
 
     for (var i = 0; i <maxTouch; i++) {

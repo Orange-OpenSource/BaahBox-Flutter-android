@@ -27,11 +27,10 @@ import 'package:flame/flame.dart';
 import 'package:flame/components.dart';
 import 'package:baahbox/games/toad/toadGame.dart';
 import 'package:baahbox/services/settings/settingsController.dart';
-
-
+import 'package:meta/meta.dart';
 
 class FlyComponent extends SpriteComponent
-    with  HasVisibility, HasGameReference<ToadGame>, CollisionCallbacks {
+    with HasVisibility, HasGameReference<ToadGame>, CollisionCallbacks {
   double flightDuration = 5.0;
   final flySprite = Sprite(Flame.images.fromCache('Games/Toad/fly.png'));
 
@@ -57,18 +56,18 @@ class FlyComponent extends SpriteComponent
     initialize();
   }
 
-  void initialize()  async {
+  void initialize() async {
     this.sprite = flySprite;
-   // this.flightDuration = flightDuration;
+    // this.flightDuration = flightDuration;
     var ratio = flySprite.srcSize.x / flySprite.srcSize.y;
     var width = min(game.size.x, game.size.y) / 10;
-    size = Vector2(width,width/ratio);
+    size = Vector2(width, width / ratio);
     anchor = Anchor.center;
 
     var radius = max(width / 2, height / 2);
     var hitBox =
-    CircleHitbox(position: Vector2(width / 2, height / 2), radius: radius)
-      ..anchor = Anchor.center;
+        CircleHitbox(position: Vector2(width / 2, height / 2), radius: radius)
+          ..anchor = Anchor.center;
     add(hitBox);
 
     game.registerToFlyNet(position);
@@ -76,7 +75,7 @@ class FlyComponent extends SpriteComponent
     _AppearanceTimer.timer.start();
   }
 
-  void setPositionTo(Vector2 newPosition){
+  void setPositionTo(Vector2 newPosition) {
     game.unRegisterFromFlyNet(position);
     position = newPosition;
     game.registerToFlyNet(position);
@@ -96,24 +95,42 @@ class FlyComponent extends SpriteComponent
   }
 
   void disappear() {
-    hide();
+
     game.unRegisterFromFlyNet(position);
+    internalDisappear();
+  }
+
+  void internalDisappear() {
+    hide();
     removeFromParent();
   }
 
   @override
   void onCollisionStart(
-      Set<Vector2> intersectionPoints,
-      PositionComponent other,
-      ) {
-
+    Set<Vector2> intersectionPoints,
+    PositionComponent other,
+  ) {
     super.onCollisionStart(intersectionPoints, other);
     if (other is TongueComponent) {
-      other.takeHit();
-      game.looseScore();
-      _gotShotTimer.timer.start();
+      if(game.isToadShooting) {
+        other.takeHit();
+        game.looseScore();
+        game.unRegisterFromFlyNet(position);
+        add(MoveEffect.to(
+            game.toad.position,
+            EffectController(
+              duration: 0.3,
+            ))
+        );
+        add(ScaleEffect.to(
+            Vector2(0.1, 0.1),
+            EffectController(
+              duration: 0.3,
+            )
+            , onComplete: internalDisappear)
+        );
+      }
+      //_gotShotTimer.timer.start();
     }
   }
 }
-
-
