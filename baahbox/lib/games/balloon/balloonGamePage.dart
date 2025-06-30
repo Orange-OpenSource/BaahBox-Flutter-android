@@ -19,6 +19,8 @@
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:baahbox/constants/enums.dart';
+import '../../model/GamePage.dart';
+import '../BBGame.dart';
 import 'balloonGame.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -26,44 +28,11 @@ import 'package:flame/game.dart';
 import 'package:baahbox/controllers/appController.dart';
 import 'package:baahbox/games/overlayBuilder.dart';
 
-class BalloonGamePage extends StatelessWidget {
-  final Controller appController = Get.find();
-  final game = BalloonGame();
-  final mainColor = BBGameList.balloon.baseColor.color;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          foregroundColor: mainColor,
-          titleTextStyle: TextStyle(
-              color: mainColor, fontWeight: FontWeight.bold, fontSize: 25),
-          title: AutoSizeText("Fais exploser le ballon !", maxLines: 1),
-          actions: [
-            Container(
-                width: 25,
-                child: Obx(() => Image.asset(appController.currentSensor.asset,
-                    color: mainColor))),
-            IconButton(
-                icon: Image.asset(
-                    'assets/images/Dashboard/settings_icon.png',  width: 25, height: 25,
-                    color: mainColor),
-                onPressed: () => Get.toNamed('/settings')),
-          ],
-        ),
-        body: SafeArea(
-    child:Stack(children: [
-          GameWidget(
-            game: game,
-            overlayBuilderMap: const {
-              'PreGame': OverlayBuilder.preGame,
-              'Instructions': OverlayBuilder.instructions,
-              'FeedBack': OverlayBuilder.feedback,
-              'PostGame': OverlayBuilder.postGame,
-            },
-          )
-          ])),
-    );
-  }
+class BalloonGamePage extends GamePage {
+  BalloonGamePage({super.key})
+      : super(
+            game: BalloonGame(),
+            mainColor: BBGameList.balloon.baseColor.color,
+            title: "Fais exploser le ballon !",
+            settingsRoute: '/settings');
 }

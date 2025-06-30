@@ -19,6 +19,7 @@
 
 import 'dart:math';
 
+import 'package:baahbox/services/settings/settingsController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:ui';
@@ -26,10 +27,8 @@ import 'package:baahbox/routes/routes.dart';
 import 'package:baahbox/constants/enums.dart';
 import 'package:baahbox/controllers/appController.dart';
 
-
 class WelcomePage extends StatefulWidget with WidgetsBindingObserver {
   const WelcomePage({Key? key}) : super(key: key);
-
 
   @override
   State<WelcomePage> createState() => _WelcomePageState();
@@ -39,14 +38,14 @@ class _WelcomePageState extends State<WelcomePage> {
   @override
   Widget build(BuildContext context) {
     final mainColor = BBColor.pinky.color;
-    double h = (Get.height/5)-10;
+    double h = (Get.height / 5) - 10;
     double w = Get.width;
     final Controller appController = Get.find();
 
     return Scaffold(
         appBar: AppBar(
           title: Text("Baah !"),
-         // leading: null,
+          // leading: null,
           automaticallyImplyLeading: false,
           actions: [
             Container(
@@ -54,21 +53,17 @@ class _WelcomePageState extends State<WelcomePage> {
                 child: Obx(() => Image.asset(appController.currentSensor.asset,
                     color: mainColor))),
             IconButton(
-                icon: Image.asset(
-                    'assets/images/Dashboard/settings_icon.png',
-                    width: 25, height: 25,
-                    color: mainColor),
+                icon: Image.asset('assets/images/Dashboard/settings_icon.png',
+                    width: 25, height: 25, color: mainColor),
                 onPressed: () => Get.toNamed('/settings')),
           ],
         ),
-        body:  SafeArea(
-    child: LayoutBuilder(
-    builder: (BuildContext context, BoxConstraints constraints) {
-      return GameList(availableHeight:constraints.maxHeight);
-    })));
+        body: SafeArea(child: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+          return GameList(availableHeight: constraints.maxHeight);
+        })));
   }
 }
-
 
 class GameList extends StatelessWidget {
   final double availableHeight;
@@ -76,23 +71,22 @@ class GameList extends StatelessWidget {
   const GameList({super.key, required this.availableHeight});
   @override
   Widget build(BuildContext context) {
-    final double height = availableHeight/6;//MediaQuery.of(context).size.height/6;
+    final double height =
+        availableHeight / 6; //MediaQuery.of(context).size.height/6;
     return Container(
-      child: ListView(
-          padding: const EdgeInsets.all(0),
-          children: <Widget>[
-            GameRow(BBGameList.star, BBRoute.star.path, height),
-            GameRow(BBGameList.balloon, BBRoute.balloon.path, height),
-            GameRow(BBGameList.sheep, BBRoute.sheep.path, height),
-            GameRow(BBGameList.starship, BBRoute.spaceShip.path,height),
-            GameRow(BBGameList.toad, BBRoute.toad.path, height),
-            GameRow(BBGameList.maze, BBRoute.maze.path, height),
-          ] //wrap
-      ),
+      child: ListView(padding: const EdgeInsets.all(0), children: <Widget>[
+        GameRow(BBGameList.star, BBRoute.star.path, height),
+        GameRow(BBGameList.balloon, BBRoute.balloon.path, height),
+        GameRow(BBGameList.sheep, BBRoute.sheep.path, height),
+        GameRow(BBGameList.starship, BBRoute.spaceShip.path, height),
+        GameRow(BBGameList.toad, BBRoute.toad.path, height),
+        GameRow(BBGameList.maze, BBRoute.maze.path, height),
+      ] //wrap
+          ),
     );
   }
-
 }
+
 class GameRow extends StatelessWidget {
   GameRow(this.game, this.gamePath, this.height);
   final String gamePath;
@@ -101,49 +95,54 @@ class GameRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return
-      ElevatedButton(
-          style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(game.baseColor.color),
-              shape:MaterialStateProperty.all(ContinuousRectangleBorder())),
-          child: Container(
-              alignment: Alignment.centerLeft,
-              height: max(60, height), //(Get.height/5)-10,
-              width: double.infinity,
-              padding: const EdgeInsets.all(0),
-
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Image(
-                        alignment: Alignment.center,
-                        image: AssetImage(game.mainAsset),
-                        height: 60),
-                    Spacer(),
-                    Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                              game.title,
-                              style: TextStyle(color: Colors.white, fontSize: 15.0),
-                              textAlign: TextAlign.end,
-                              maxLines: 2
-                          ),
-                          SizedBox(height: 10),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Image(
+    return ElevatedButton(
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(game.baseColor.color),
+            shape: MaterialStateProperty.all(ContinuousRectangleBorder())),
+        child: Container(
+            alignment: Alignment.centerLeft,
+            height: max(60, height), //(Get.height/5)-10,
+            width: double.infinity,
+            padding: const EdgeInsets.all(0),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image(
+                      alignment: Alignment.center,
+                      image: AssetImage(game.mainAsset),
+                      height: 60),
+                  Spacer(),
+                  Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(game.title,
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 15.0),
+                            textAlign: TextAlign.end,
+                            maxLines: 2),
+                        SizedBox(height: 10),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: game.compatibleSensorsList
+                                .where((sensor) =>
+                                    !(sensor == Sensor.analogJoystick &&
+                                        game.compatibleSensorsList
+                                            .contains(Sensor.digitalJoystick)))
+                                .map((Sensor sensor) {
+                              return Padding(
+                                  padding: const EdgeInsets.only(left:5.0),
+                              child:Image(
                                   alignment: Alignment.bottomRight,
-                                  image: AssetImage('assets/images/Dashboard/capteur.png'),
+                                  image: AssetImage(sensor.asset),
                                   height: 25,
                                   width: 25,
-                                )]),
-                        ]),
-                  ])),
-          onPressed: () => Get.toNamed(gamePath));
+                                  color: Colors.white));
+                            }).toList()),
+                      ]),
+                ])),
+        onPressed: () => Get.toNamed(gamePath));
   }
 }

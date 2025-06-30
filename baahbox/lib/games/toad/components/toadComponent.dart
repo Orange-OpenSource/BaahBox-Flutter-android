@@ -20,6 +20,7 @@
 import 'dart:math' as math;
 import 'dart:math';
 import 'dart:core';
+import 'package:baahbox/model/sensorInput.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/components.dart';
 import 'package:baahbox/games/toad/toadGame.dart';
@@ -99,6 +100,10 @@ class ToadComponent extends SpriteComponent
     game.isToadShooting = false;
   }
 
+  void rotateTo(double normalizedAngle) {
+    var newAngle = rangeMapDouble(normalizedAngle, -1.0, 1.0, -tau / 4, tau / 4);
+    angle = newAngle;
+  }
   void rotateBy(int deltaAngle) {
     {
       var delta = (deltaAngle / 180 * math.pi / 2);

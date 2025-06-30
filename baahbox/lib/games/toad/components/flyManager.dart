@@ -26,7 +26,7 @@ import 'package:baahbox/services/settings/settingsController.dart';
 
 class FlyManager extends Component with HasGameReference<ToadGame> {
   final SettingsController settingsController = Get.find();
-  var scoreArray = [];
+  List<FlyScoreComponent> scoreArray = [];
   final gapSize = 5;
 
   @override
@@ -36,7 +36,7 @@ class FlyManager extends Component with HasGameReference<ToadGame> {
 
   void createScores() {
     scoreArray = [];
-    var nbFLies = settingsController.toadSettings["numberOfFlies"];
+    var nbFLies = settingsController.toadSettings.numberOfFlies;
     var gap = (game.size.x - 40.0 - (nbFLies*15)) / (nbFLies -1);
     for (var i = 0; i < nbFLies; i++) {
        var xPos = (20 + (gap+ 15.0) * i);

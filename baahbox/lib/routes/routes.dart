@@ -21,9 +21,7 @@ import 'package:baahbox/welcome.dart';
 import 'package:baahbox/services/settings/settingsPage.dart';
 import 'package:baahbox/services/settings/termsAndConditionsPage.dart';
 import 'package:baahbox/services/settings/generalSettingsPage.dart';
-import 'package:baahbox/services/settings/spaceShipSettingsPage.dart';
-import 'package:baahbox/services/settings/sheepSettingsPage.dart';
-import 'package:baahbox/services/settings/toadSettingsPage.dart';
+
 import 'package:baahbox/games/balloon/balloonGamePage.dart';
 import 'package:baahbox/games/star/starGamePage.dart';
 import 'package:baahbox/services/ble/connectionPage.dart';
@@ -36,6 +34,9 @@ import 'package:baahbox/services/settings/legalInformationsPage.dart';
 
 import '../games/maze/mazeGamePage.dart';
 import '../services/settings/mazeSettings.dart';
+import '../services/settings/sheepSettingsPage.dart';
+import '../services/settings/spaceShipSettingsPage.dart';
+import '../services/settings/toadSettingsPage.dart';
 
 enum BBRoute {
   welcome(path: "/"),
@@ -62,7 +63,6 @@ enum BBRoute {
 }
 
 class BBRoutes {
-
   static String getHomePage() => BBRoute.welcome.path;
 
   static List<GetPage> routes = [
@@ -70,9 +70,9 @@ class BBRoutes {
     GetPage(page: () => const SettingsPage(), name: BBRoute.settings.path),
     GetPage(page: () => GeneralSettingsPage(), name: BBRoute.generalSettings.path),
     GetPage(page: () => SheepSettingsPage(), name: BBRoute.sheepSettings.path),
-    GetPage(page: () =>  SpaceShipSettingsPage(), name: BBRoute.spaceShipSettings.path),
-    GetPage(page: () =>  ToadSettingsPage(), name: BBRoute.toadSettings.path),
-    GetPage(page: () =>  MazeSettingsPage(), name: BBRoute.mazeSettings.path),
+    GetPage(page: () => SpaceShipSettingsPage(), name: BBRoute.spaceShipSettings.path),
+    GetPage(page: () => ToadSettingsPage(), name: BBRoute.toadSettings.path),
+    GetPage(page: () => MazeSettingsPage(), name: BBRoute.mazeSettings.path),
     GetPage(page: () => const ConnectionPage(), name: BBRoute.connection.path),
     GetPage(page: () => BalloonGamePage(), name: BBRoute.balloon.path),
     GetPage(page: () => ToadGamePage(), name: BBRoute.toad.path),

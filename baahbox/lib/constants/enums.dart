@@ -90,46 +90,92 @@ enum BBGameList {
       title: "Fais briller le ciel !",
       mainAsset: 'assets/images/Dashboard/menu_star.png',
       baseColor: BBColor.violet,
-      numberOfSensors: 1),
+      compatibleSensorsList: [
+        Sensor.digitalJoystick,
+        Sensor.analogJoystick,
+        Sensor.handle,
+        Sensor.muscle
+      ]),
   balloon(
       title: 'Fais exploser le ballon !',
       mainAsset: 'assets/images/Dashboard/menu_balloon.png',
       baseColor: BBColor.orange,
-      numberOfSensors: 1),
+      compatibleSensorsList: [
+        Sensor.digitalJoystick,
+        Sensor.analogJoystick,
+        Sensor.handle,
+        Sensor.muscle
+      ]),
   sheep(
     title: 'Saute, mouton, saute !',
     mainAsset: 'assets/images/Dashboard/menu_sheep.png',
     baseColor: BBColor.pinky,
-    numberOfSensors: 1,
+    compatibleSensorsList: [
+      Sensor.digitalJoystick,
+      Sensor.analogJoystick,
+      Sensor.handle,
+      Sensor.muscle
+    ],
   ),
   starship(
     title: "La bataille de l'espace",
     mainAsset: 'assets/images/Dashboard/menu_spaceShip.png',
     baseColor: BBColor.blueGreen,
-    numberOfSensors: 2,
+    compatibleSensorsList: [
+      Sensor.digitalJoystick,
+      Sensor.analogJoystick,
+      Sensor.handle,
+      Sensor.muscle
+    ],
   ),
   toad(
-    title: 'Slurp',
-    mainAsset: 'assets/images/Dashboard/menu_toad.png',
-    baseColor: BBColor.greyGreen,
-    numberOfSensors: 2,
-  ),
+      title: 'Slurp',
+      mainAsset: 'assets/images/Dashboard/menu_toad.png',
+      baseColor: BBColor.greyGreen,
+      compatibleSensorsList: [
+        Sensor.digitalJoystick,
+        Sensor.analogJoystick,
+        Sensor.handle,
+        Sensor.muscle
+      ]),
   maze(
-    title: 'Labyrinthe',
-    mainAsset: 'assets/images/Dashboard/menu_maze.png',
-    baseColor: BBColor.lightGreen,
-    numberOfSensors: 1,
-  );
+      title: 'Labyrinthe',
+      mainAsset: 'assets/images/Dashboard/menu_maze.png',
+      baseColor: BBColor.lightGreen,
+      compatibleSensorsList: [Sensor.digitalJoystick, Sensor.analogJoystick]);
 
   const BBGameList({
     required this.title,
     required this.mainAsset,
     required this.baseColor,
-    required this.numberOfSensors,
+    required this.compatibleSensorsList,
   });
 
   final String title;
   final String mainAsset;
   final BBColor baseColor;
-  final int numberOfSensors;
+  final List<Sensor> compatibleSensorsList;
+}
+
+enum GameInputAxes {
+  vertical,
+  horizontal,
+  both;
+}
+
+enum GameInputDirectionType {
+  analogic,
+  digital;
+}
+
+enum GameInputDirection {
+  up,
+  upLeft,
+  upRight,
+  right,
+  down,
+  downRight,
+  downLeft,
+  left,
+  idle,
 }

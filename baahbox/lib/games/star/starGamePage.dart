@@ -17,56 +17,15 @@
  *
  */
 
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:baahbox/constants/enums.dart';
-import 'starGame.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:flame/game.dart';
-import 'package:baahbox/controllers/appController.dart';
-import 'package:baahbox/games/overlayBuilder.dart';
+import 'package:baahbox/games/star/starGame.dart';
+import '../../model/GamePage.dart';
 
-class StarGamePage extends StatelessWidget {
-  final Controller appController = Get.find();
-  final game = StarGame();
-  final mainColor = BBGameList.star.baseColor.color;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          foregroundColor: mainColor,
-          titleTextStyle: TextStyle(
-              color: mainColor, fontWeight: FontWeight.bold, fontSize: 25),
-          title: AutoSizeText("Fais briller l'étoile !", maxLines: 1),
-          actions: [
-            Container(
-                width: 25,
-                child: Obx(() => Image.asset(appController.currentSensor.asset,
-                    color: mainColor))),
-            // SizedBox(
-            //   width: 15,
-            // ),
-            IconButton(
-                icon: Image.asset(
-                    'assets/images/Dashboard/settings_icon.png',
-                    width: 25, height: 25, color: mainColor),
-                onPressed: () => Get.toNamed('/settings')),
-          ],
-        ),
-        body: SafeArea(
-    child:Stack(children: [
-          GameWidget(
-            game: game,
-            overlayBuilderMap: const {
-              'PreGame': OverlayBuilder.preGame,
-              'Instructions': OverlayBuilder.instructions,
-              'FeedBack': OverlayBuilder.feedback,
-              'PostGame': OverlayBuilder.postGame,
-            },
-          ),
-        ])),
-    );
-  }
+class StarGamePage extends GamePage {
+  StarGamePage({super.key})
+      : super(
+      game: StarGame(),
+      mainColor: BBGameList.star.baseColor.color,
+      title: "Fais briller l'étoile !",
+      settingsRoute: '/settings');
 }

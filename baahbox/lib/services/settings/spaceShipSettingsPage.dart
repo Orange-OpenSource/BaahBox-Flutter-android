@@ -24,6 +24,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:baahbox/constants/enums.dart';
 import 'package:baahbox/services/settings/settingsController.dart';
 
+import '../../services/settings/generalSettingsMusclePage.dart';
+import 'generalSettingsHandlePage.dart';
 
 class SpaceShipSettingsPage extends GetView<SettingsController> {
   final mainColor = BBColor.blueGreen.color;
@@ -57,7 +59,7 @@ class SpaceShipSettingsPage extends GetView<SettingsController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Obx(() => Text(
-                          'Nombre de vaisseaux: '+  controller.spaceShipSettings["numberOfShips"].toString(),
+                          'Nombre de vaisseaux: ${controller.spaceShipSettings.numberOfShips}',
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
                         )),
@@ -92,6 +94,7 @@ class SpaceShipSettingsPage extends GetView<SettingsController> {
           const SizedBox(
             height: 24,
           ),
+          MuscleSettingsView(muscleSettings: controller.spaceShipSettings.muscleSettings)
         ],
       ),
     ));
@@ -110,40 +113,39 @@ class SpeedSelectionView extends StatefulWidget {
 class _SpeedSelectionViewState extends State<SpeedSelectionView> {
   final SettingsController controller = Get.find();
   late ObjectVelocity? _selection;
-  void onSelectionChanged (ObjectVelocity? value) {
+  void onSelectionChanged(ObjectVelocity? value) {
     setState(() {
       _selection = value;
       if (value != null) {
-        controller.setAsteroidSpeedTo(value);
+        controller.spaceShipSettings.asteroidVelocity = value;
       }
     });
   }
+
   @override
   Widget build(BuildContext context) {
     _selection =
-        (controller.spaceShipSettings["asteroidVelocity"]) ?? ObjectVelocity.low;
+        (controller.spaceShipSettings.asteroidVelocity) ?? ObjectVelocity.low;
     return Column(
       children: <Widget>[
         RadioListTile.adaptive(
-            title:const Text('Faible'),
+            title: const Text('Faible'),
             value: ObjectVelocity.low,
             groupValue: _selection,
             toggleable: true,
-            onChanged:  onSelectionChanged),
+            onChanged: onSelectionChanged),
         RadioListTile.adaptive(
-            title:const Text('Moyenne'),
+            title: const Text('Moyenne'),
             value: ObjectVelocity.medium,
             groupValue: _selection,
             toggleable: true,
             onChanged: onSelectionChanged),
-
         RadioListTile.adaptive(
-            title:const Text('Elevée'),
+            title: const Text('Elevée'),
             value: ObjectVelocity.high,
             groupValue: _selection,
             toggleable: true,
             onChanged: onSelectionChanged),
-
       ],
     );
   }
@@ -161,7 +163,7 @@ class _GateNumberSliderState extends State<GateNumberSlider> {
 
   @override
   Widget build(BuildContext context) {
-    final int _nbG = controller.spaceShipSettings["numberOfShips"];
+    final int _nbG = controller.spaceShipSettings.numberOfShips;
     double _value = _nbG.toDouble();
     return Slider.adaptive(
       value: _value,
@@ -175,7 +177,7 @@ class _GateNumberSliderState extends State<GateNumberSlider> {
       onChanged: (double value) {
         setState(() {
           _value = value;
-          controller.setNumberOfShipsTo(value.toInt());
+          controller.spaceShipSettings.numberOfShips = value.toInt();
         });
       },
     );

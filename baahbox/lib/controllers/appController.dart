@@ -24,39 +24,40 @@ import 'package:baahbox/constants/enums.dart';
 import 'package:get/get.dart';
 
 import '../services/ble/BleController.dart';
+import '../services/settings/settingsController.dart';
 
 class Controller extends FullLifeCycleController with FullLifeCycleMixin {
   static Controller get to => Get.find();
 
   final BleController bleController = Get.find();
+  final SettingsController settingsController = Get.find();
   var _isActive = false.obs;
   var _isDebugging = true.obs;
-  var _currentSensor = Sensor.digitalJoystick.obs;
+
 
   // getters
-  String get connectedDeviceName=> bleController.connectedDevice.value?.name ?? "";
-  String get connectedDeviceId => bleController.connectedDevice.value?.deviceID ?? "";
+  String get connectedDeviceName =>
+      bleController.connectedDevice.value?.name ?? "";
+  String get connectedDeviceId =>
+      bleController.connectedDevice.value?.deviceID ?? "";
   AnalogInputs get analogInputs => bleController.analogInputs;
   DigitalInputs get digitalInputs => bleController.digitalInputs;
-  bool get isConnectedToBox => bleController.connectedDevice.value!=null;
+  bool get isConnectedToBox => bleController.connectedDevice.value != null;
   bool get isActive => _isActive.value;
-  bool get isDebugging => _isDebugging.value;
-  Sensor get currentSensor => isConnectedToBox ? _currentSensor.value: Sensor.none;
-
-  // functions
-  void setDebugModeTo(bool isDebug) {
-    _isDebugging.value = isDebug;
-  }
-
-  void setSensorTo(Sensor sensor) {
-      _currentSensor.value = sensor;
-  }
-  void setActivationStateTo(bool activate) {
+  set isActive(bool activate) {
     _isActive.value = activate;
   }
 
+  bool get isDebugging => _isDebugging.value;
+  set isDebugging(bool val) {
+    _isDebugging.value = val;
+  }
 
-@override
+  Sensor get currentSensor =>
+      isConnectedToBox ? settingsController.genericSettings.sensor : Sensor.none;
+
+
+  @override
   void onClose() {
     super.onClose();
   }
@@ -102,7 +103,6 @@ class Controller extends FullLifeCycleController with FullLifeCycleMixin {
     debugLog('appController - onResumed called');
     _isActive.value = true;
   }
-
 
   void showMyToast(String message) {
     Get.snackbar(
