@@ -142,6 +142,11 @@ enum BBGameList {
       title: 'Labyrinthe',
       mainAsset: 'assets/images/Dashboard/menu_maze.png',
       baseColor: BBColor.lightGreen,
+      compatibleSensorsList: [Sensor.digitalJoystick, Sensor.analogJoystick]),
+  maze3d(
+      title: 'Labyrinthe3d',
+      mainAsset: 'assets/images/Dashboard/menu_maze.png',
+      baseColor: BBColor.lightGreen,
       compatibleSensorsList: [Sensor.digitalJoystick, Sensor.analogJoystick]);
 
   const BBGameList({
