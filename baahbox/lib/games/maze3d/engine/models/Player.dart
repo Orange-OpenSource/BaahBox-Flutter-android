@@ -5,5 +5,11 @@ class Player {
   double y;
   double angle;
   final ui.Image? miniMapImage;
-  Player({required this.x, required this.y, required this.angle, required this.miniMapImage});
+  final ui.Image? image;
+
+  Player({required this.x,
+    required this.y,
+    required this.angle,
+    required this.miniMapImage,
+    required this.image});
 }

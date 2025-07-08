@@ -19,9 +19,8 @@
 
 import 'dart:async';
 import 'dart:math';
-import 'dart:typed_data';
-import 'dart:ui';
 import 'dart:ui' as ui;
+import 'package:get/get.dart';
 
 import 'package:baahbox/games/maze/MazeFactory.dart';
 import 'package:baahbox/games/maze3d/engine/render/MinimapPainter.dart';
@@ -30,8 +29,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
 import '../../constants/enums.dart';
+import '../../constants/utils.dart';
+import '../../controllers/appController.dart';
 import '../../model/GameInput.dart';
+import '../../services/settings/settingsController.dart';
 import '../BBGame.dart';
+import 'components/Maze3dWinComponent.dart';
 import 'engine/models/Player.dart';
 import 'engine/models/Target.dart';
 import 'engine/render/RayCastingPainter.dart';
@@ -54,37 +57,49 @@ class Maze3dGame extends BBGame {
   var instructionSubtitleFinger =
       'pousse le joystick virtuel à gauche, à droite, en haut ou en bas';
 
+  final Controller appController = Get.find();
+  final SettingsController settingsController = Get.find();
+
   late final JoystickComponent joystick;
   late final Paint joyStickKnobPaint;
   late final Paint joyStickBackgroundPaint;
   late GameInput gameInput;
-
+  late final Maze3dWinComponent winComponent;
+  late final TextComponent durationText;
   final MazeFactory factory = MazeFactory();
   late List<List<int>> mazeMap;
   late Player player;
   late Target target;
   late RayCastingPainter rayCastingPainter;
   late MinimapPainter miniMapPainter;
+  double elapsedTime = 0.0;
+
   // Loading Game
   @override
   Future<void> onLoad() async {
     title = instructionTitle;
 
     setInstructions();
-    factory.makeMaze(5, 5);
+
+    var mazeSize = settingsController.maze3dSettings.mazeSize;
+    factory.makeMaze(mazeSize, mazeSize);
     mazeMap = factory.convertToMatrixMap();
 
     player = Player(
-        x: 1.5,
-        y: 1.5,
-        angle: mazeMap[1][2] == 1 ? pi / 2 : 0.0,
+        x: 0,
+        y: 0,
+        angle: 0.0,
         miniMapImage: await getImageFromPath(
-            'assets/images/Games/Maze/mouton_labyrinthe.png'));
+            'assets/images/Games/Maze/mouton_labyrinthe.png'),
+        image:
+            await getImageFromPath('assets/images/Games/Maze/sheep_fps.png'));
+    resetPlayerPosition();
     target = Target(
-        x: mazeMap[0].length - 1.5,
-        y: mazeMap.length - 1.5,
+        x: 0,
+        y: 0,
         angle: 0.0,
         image: await getImageFromPath('assets/images/Games/Maze/trefle.png'));
+    resetTargetPosition();
     rayCastingPainter = RayCastingPainter(
         map: mazeMap, player: player, target: target, wallTexture: null);
     miniMapPainter =
@@ -94,8 +109,28 @@ class Maze3dGame extends BBGame {
     if (!appController.isConnectedToBox) {
       add(joystick);
     }
-
+    createWinComponent();
+    createChronoText();
     super.onLoad();
+  }
+
+  void resetMaze() {
+    var mazeSize = settingsController.maze3dSettings.mazeSize;
+    factory.makeMaze(mazeSize, mazeSize);
+    mazeMap = factory.convertToMatrixMap();
+    rayCastingPainter.map = mazeMap;
+    miniMapPainter.map = mazeMap;
+  }
+
+  void resetPlayerPosition() {
+    player.x = 1.5;
+    player.y = 1.5;
+    player.angle = mazeMap[1][2] == 1 ? pi / 2 : 0.0;
+  }
+
+  void resetTargetPosition() {
+    target.x = mazeMap[0].length - 1.5;
+    target.y = mazeMap.length - 1.5;
   }
 
   void createTouchJoystick() {
@@ -119,9 +154,27 @@ class Maze3dGame extends BBGame {
     );
   }
 
+  void createWinComponent() {
+    winComponent = Maze3dWinComponent(
+        position: Vector2(size.x / 2, size.y / 2),
+        size: Vector2(size.x / 3, size.y / 3));
+    winComponent.hide();
+    add(winComponent);
+  }
+
+  void createChronoText() {
+    durationText = TextComponent(
+      position: Vector2(size.x - 5, 10),
+      anchor: Anchor.topRight,
+      priority: 1,
+    );
+    add(durationText);
+  }
+
   void move(double moveSpeed) {
-    final newX = player.x + cos(player.angle) * moveSpeed * 0.05;
-    final newY = player.y + sin(player.angle) * moveSpeed * 0.05;
+    var speedFactor = settingsController.maze3dSettings.speedMovement / 100.0;
+    final newX = player.x + cos(player.angle) * moveSpeed * speedFactor;
+    final newY = player.y + sin(player.angle) * moveSpeed * speedFactor;
 
     // Collision detection
     if (mazeMap[newY.toInt()][newX.toInt()] == 0) {
@@ -141,18 +194,26 @@ class Maze3dGame extends BBGame {
         // If no collision, update the player's position
         player.x = newX;
         player.y = newY;
+      } else {
+        setGameStateToWon(true);
       }
     }
   }
 
   void rotate(double rotSpeed) {
-    player.angle += rotSpeed * 0.05;
+    var speedFactor = settingsController.maze3dSettings.speedMovement / 100.0;
+    player.angle += rotSpeed * speedFactor;
   }
 
   @override
   void render(Canvas canvas) {
-    rayCastingPainter.paint(canvas, size.toSize());
-    miniMapPainter.paint(canvas, Size(150, 150));
+    if (state != GameState.lost && state != GameState.won) {
+      rayCastingPainter.paint(canvas, size.toSize());
+      miniMapPainter.paint(canvas, Size(150, 150));
+    } else {
+      canvas.drawRect(Rect.fromLTWH(0, 0, size.x, size.y),
+          Paint()..color = BBColor.sheepGray.color);
+    }
     super.render(canvas);
   }
 
@@ -160,9 +221,19 @@ class Maze3dGame extends BBGame {
   @override
   void update(double dt) {
     super.update(dt);
-
+    if (state == GameState.running) {
+      if (settingsController.maze3dSettings.hasChrono) {
+        elapsedTime -= dt;
+      } else {
+        elapsedTime += dt;
+      }
+    }
     if (appController.isActive) {
       if (state == GameState.running) {
+        durationText.text = prettyDuration(elapsedTime);
+        if (settingsController.maze3dSettings.hasChrono && elapsedTime <= 0) {
+          setGameStateToWon(false);
+        }
         refreshInput();
       } else {
         setInstructions();
@@ -171,7 +242,7 @@ class Maze3dGame extends BBGame {
   }
 
   void refreshInput() {
-    if (checkCompatibleSensor(BBGameList.maze.compatibleSensorsList)) {
+    if (checkCompatibleSensor(BBGameList.maze3d.compatibleSensorsList)) {
       if (gameInput.directionType == GameInputDirectionType.analogic) {
         move(-1.0 * gameInput.delta.y);
         rotate(gameInput.delta.x);
@@ -203,13 +274,25 @@ class Maze3dGame extends BBGame {
 
   void setGameStateToWon(bool win) {
     state = win ? GameState.won : GameState.lost;
-
+    if (win) {
+      winComponent.show();
+    }
     endGame();
   }
 
 // Game State management
   @override
   void startGame() {
+    winComponent.hide();
+    if (settingsController.maze3dSettings.hasChrono) {
+      elapsedTime = settingsController.maze3dSettings.chronoMaxTime;
+    } else {
+      elapsedTime = 0.0;
+    }
+    gameInput = GameInput(
+        axes: GameInputAxes.both,
+        musclesSettings: settingsController.maze3dSettings.musclesSettings,
+        handleSettings: settingsController.handleSettings);
     super.startGame();
   }
 
@@ -221,7 +304,14 @@ class Maze3dGame extends BBGame {
   @override
   void resetGame() async {
     super.resetGame();
-
+    if (settingsController.maze3dSettings.hasChrono) {
+      elapsedTime = settingsController.maze3dSettings.chronoMaxTime;
+    } else {
+      elapsedTime = 0.0;
+    }
+    resetMaze();
+    resetPlayerPosition();
+    resetTargetPosition();
     if (paused) {
       resumeEngine();
     }

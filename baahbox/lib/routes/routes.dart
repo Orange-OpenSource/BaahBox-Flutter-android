@@ -34,6 +34,7 @@ import 'package:baahbox/services/settings/legalInformationsPage.dart';
 
 import '../games/maze/mazeGamePage.dart';
 import '../games/maze3d/maze3dGamePage.dart';
+import '../services/settings/maze3dSettings.dart';
 import '../services/settings/mazeSettings.dart';
 import '../services/settings/sheepSettingsPage.dart';
 import '../services/settings/spaceShipSettingsPage.dart';
@@ -76,6 +77,7 @@ class BBRoutes {
     GetPage(page: () => SpaceShipSettingsPage(), name: BBRoute.spaceShipSettings.path),
     GetPage(page: () => ToadSettingsPage(), name: BBRoute.toadSettings.path),
     GetPage(page: () => MazeSettingsPage(), name: BBRoute.mazeSettings.path),
+    GetPage(page: () => Maze3dSettingsPage(), name: BBRoute.maze3dSettings.path),
     GetPage(page: () => const ConnectionPage(), name: BBRoute.connection.path),
     GetPage(page: () => BalloonGamePage(), name: BBRoute.balloon.path),
     GetPage(page: () => ToadGamePage(), name: BBRoute.toad.path),

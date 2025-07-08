@@ -10,7 +10,7 @@ import '../models/Player.dart';
 import '../models/Target.dart';
 
 class MinimapPainter extends CustomPainter {
-  final List<List<int>> map;
+  List<List<int>> map;
   final Player player;
   final Target target;
 
@@ -74,7 +74,7 @@ class MinimapPainter extends CustomPainter {
       canvas.save();
 
       canvas.translate(player.x * scale, player.y * scale);
-      canvas.rotate(player.angle - pi/2);
+      canvas.rotate(player.angle-pi/2);
       canvas.translate(-scaledWidth/2, -scaledHeight/2);
       canvas.drawImageRect(player.miniMapImage!, srcRect, dstRect, paint);
       canvas.restore();

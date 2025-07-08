@@ -12,7 +12,7 @@ import '../models/Player.dart';
 import '../models/Target.dart';
 
 class RayCastingPainter extends CustomPainter {
-  final List<List<int>> map;
+  List<List<int>> map;
   final Player player;
   final Target target;
   final ui.Image? wallTexture;
@@ -44,7 +44,7 @@ class RayCastingPainter extends CustomPainter {
 
       // Floor
       paint.color =
-          Color.lerp(BBColor.greenDash.color, Colors.black, 1 - brightness)!;
+          Color.lerp(BBColor.lightGreen.color, Colors.black, 1 - brightness)!;
       canvas.drawLine(
         Offset(0, y.toDouble()),
         Offset(screenWidth, y.toDouble()),
@@ -123,7 +123,7 @@ class RayCastingPainter extends CustomPainter {
 
       // Further adjust shade based on hit orientation
       if (isVerticalHit) {
-        brightness *= 0.7; // Darken vertical walls
+        brightness *= 0.5; // Darken vertical walls
       }
 
       final x = i * (screenWidth / numRays);
@@ -154,7 +154,7 @@ class RayCastingPainter extends CustomPainter {
 
         paint.color = Colors.white;
         paint.colorFilter = ColorFilter.mode(
-          Colors.black.withOpacity(1 - brightness),
+          Colors.black.withValues(alpha: 1 - brightness),
           BlendMode.multiply,
         );
 
@@ -167,7 +167,7 @@ class RayCastingPainter extends CustomPainter {
 
         // paint.color = Color.fromARGB(255, shade, shade, shade);
         paint.color =
-            Color.lerp(BBColor.greyGreen.color, Colors.black, 1 - brightness)!;
+            Color.lerp(BBColor.sheepGray.color, Colors.black, 1 - brightness)!;
         canvas.drawLine(
           Offset(x, (screenHeight - wallHeight) / 2),
           Offset(x, (screenHeight + wallHeight) / 2),
@@ -180,6 +180,7 @@ class RayCastingPainter extends CustomPainter {
     // Render enemies
 
     renderTarget(canvas, size, depthBuffer);
+    renderPlayer(canvas, size, depthBuffer);
    // applyLighting(canvas, size);
   }
 
@@ -199,7 +200,7 @@ class RayCastingPainter extends CustomPainter {
         radius: 0.8,
         colors: [
           Colors.transparent,
-          Colors.black.withOpacity(0.8),
+          Colors.black.withValues(alpha:0.8),
         ],
         stops: const [0.6, 1.0],
       ).createShader(gradientRect)
@@ -212,6 +213,31 @@ class RayCastingPainter extends CustomPainter {
     );
   }
 
+
+  void renderPlayer(Canvas canvas, Size size, List<double> depthBuffer) {
+
+    final screenWidth = size.width;
+    final screenHeight = size.height;
+
+    if (player.image != null) {
+      var ratio = player.image!.height/player.image!.width ;
+      // Draw player image
+      Paint paint = Paint();
+      Rect srcRect = Rect.fromLTWH(
+        0,
+        0,
+        player.image!.width.toDouble(),
+        player.image!.height.toDouble(),
+      );
+      var playerImageWidth = screenWidth/3;
+      Rect dstRect = Rect.fromCenter(
+          center:Offset(screenWidth/2, screenHeight-(ratio * playerImageWidth)/2),
+          width:playerImageWidth,
+          height:ratio * playerImageWidth
+      );
+      canvas.drawImageRect(player.image!, srcRect, dstRect, paint);
+    }
+  }
   void renderTarget(Canvas canvas, Size size, List<double> depthBuffer) {
     final screenWidth = size.width;
     final screenHeight = size.height;

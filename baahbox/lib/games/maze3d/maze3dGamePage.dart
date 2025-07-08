@@ -20,13 +20,13 @@
 
 import 'package:baahbox/constants/enums.dart';
 import '../../model/GamePage.dart';
-import 'Maze3dGame.dart';
+import 'maze3dGame.dart';
 
 class Maze3dGamePage extends GamePage {
   Maze3dGamePage({super.key})
       : super(
       game: Maze3dGame(),
-      mainColor: BBGameList.maze.baseColor.color,
-      title: "Labyrinthe",
-      settingsRoute: '/mazeSettings');
+      mainColor: BBGameList.maze3d.baseColor.color,
+      title: "Labyrinthe 3D",
+      settingsRoute: '/maze3dSettings');
 }

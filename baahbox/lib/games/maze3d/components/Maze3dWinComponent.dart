@@ -17,37 +17,30 @@
  *
  */
 
-import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flutter/rendering.dart';
+import '../maze3dGame.dart';
 
-import '../../../constants/enums.dart';
-import '../mazeGame.dart';
+class Maze3dWinComponent extends SpriteComponent
+    with HasVisibility, HasGameReference<Maze3dGame> {
 
-class WallComponent extends RectangleComponent with CollisionCallbacks,
-    HasGameReference<MazeGame> {
-  late bool isHorizontal;
-  late final Paint paint;
-  late final RectangleHitbox hitbox;
-  late Color color;
+  Maze3dWinComponent({  super.position, required super.size})
+      : super(anchor: Anchor.center);
 
-  WallComponent({ required this.isHorizontal, required super.position, super.size})
-      : super(anchor: Anchor.topLeft, paint: Paint()
-    ..color = BBColor.sheepGray.color
-    ..style = PaintingStyle.fill);
   @override
   Future<void> onLoad() async {
-    initialize();
+    sprite = await game.loadSprite('Games/Maze/trefle.png');
+    var ratio = (sprite?.srcSize.x ?? size.x) / (sprite?.srcSize.y ?? size.y);
+    var width = size.x;
+    var height = width/ratio;
+    size = Vector2(width,height);
+  }
+  void hide() {
+    isVisible = false;
   }
 
-  void initialize() {
-
-    hitbox = RectangleHitbox()
-    ..collisionType= CollisionType.passive
-      ..paint = paint
-      ..renderShape = false;
-
-    add(hitbox);
-
+  void show() {
+    isVisible = true;
   }
+
+
 }

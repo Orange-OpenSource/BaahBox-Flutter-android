@@ -24,3 +24,33 @@ void debugLog(String message) {
     print(message);
   }
 }
+
+
+String prettyDuration(double durationInSec) {
+  var components = <String>[];
+
+  int seconds = durationInSec ~/ 1;
+  int minutes = seconds ~/ 60;
+  int hours = minutes ~/ 60;
+  int days = hours ~/ 24;
+
+  seconds %= 60;
+  minutes %= 60;
+  hours %= 24;
+
+  if (days != 0) {
+    components.add('${days}d');
+  }
+  if (hours != 0) {
+    components.add('${hours}h');
+  }
+
+  if (minutes != 0) {
+    components.add('${minutes}m');
+  }
+
+  components.add('$seconds');
+  components.add('s');
+
+  return components.join();
+}
