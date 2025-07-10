@@ -180,7 +180,6 @@ class RayCastingPainter extends CustomPainter {
     // Render enemies
 
     renderTarget(canvas, size, depthBuffer);
-    renderPlayer(canvas, size, depthBuffer);
    // applyLighting(canvas, size);
   }
 
@@ -214,30 +213,6 @@ class RayCastingPainter extends CustomPainter {
   }
 
 
-  void renderPlayer(Canvas canvas, Size size, List<double> depthBuffer) {
-
-    final screenWidth = size.width;
-    final screenHeight = size.height;
-
-    if (player.image != null) {
-      var ratio = player.image!.height/player.image!.width ;
-      // Draw player image
-      Paint paint = Paint();
-      Rect srcRect = Rect.fromLTWH(
-        0,
-        0,
-        player.image!.width.toDouble(),
-        player.image!.height.toDouble(),
-      );
-      var playerImageWidth = screenWidth/3;
-      Rect dstRect = Rect.fromCenter(
-          center:Offset(screenWidth/2, screenHeight-(ratio * playerImageWidth)/2),
-          width:playerImageWidth,
-          height:ratio * playerImageWidth
-      );
-      canvas.drawImageRect(player.image!, srcRect, dstRect, paint);
-    }
-  }
   void renderTarget(Canvas canvas, Size size, List<double> depthBuffer) {
     final screenWidth = size.width;
     final screenHeight = size.height;

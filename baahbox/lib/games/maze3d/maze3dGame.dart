@@ -73,6 +73,8 @@ class Maze3dGame extends BBGame {
   late RayCastingPainter rayCastingPainter;
   late MinimapPainter miniMapPainter;
   double elapsedTime = 0.0;
+  double deltaTime = 0.0;
+  double playerMovementTime = 0.0;
 
   // Loading Game
   @override
@@ -192,9 +194,20 @@ class Maze3dGame extends BBGame {
 
       if (!collisionWithTarget) {
         // If no collision, update the player's position
-        player.x = newX;
-        player.y = newY;
+        if(newX != player.x) {
+          player.x = newX;
+          playerMovementTime += deltaTime;
+        }
+        else {
+          playerMovementTime = 0.0;
+        }
+        if(newY != player.y) {
+          player.y = newY;
+        }
+
+
       } else {
+        playerMovementTime = 0.0;
         setGameStateToWon(true);
       }
     }
@@ -209,6 +222,7 @@ class Maze3dGame extends BBGame {
   void render(Canvas canvas) {
     if (state != GameState.lost && state != GameState.won) {
       rayCastingPainter.paint(canvas, size.toSize());
+      renderPlayer(canvas, size.toSize());
       miniMapPainter.paint(canvas, Size(150, 150));
     } else {
       canvas.drawRect(Rect.fromLTWH(0, 0, size.x, size.y),
@@ -217,10 +231,43 @@ class Maze3dGame extends BBGame {
     super.render(canvas);
   }
 
+
+  void renderPlayer(Canvas canvas, Size size) {
+
+    final screenWidth = size.width;
+    final screenHeight = size.height;
+
+    if (player.image != null) {
+      var yOffest = 2.0;
+      var movementTime = settingsController.maze3dSettings.speedMovement*playerMovementTime;
+      var deltaXMovement = sin(movementTime)*10.0;
+      var deltaYMovement = sin(movementTime)*yOffest;
+
+
+      var ratio = player.image!.height/player.image!.width ;
+      // Draw player image
+      Paint paint = Paint();
+      Rect srcRect = Rect.fromLTWH(
+        0,
+        0,
+        player.image!.width.toDouble(),
+        player.image!.height.toDouble(),
+      );
+      var playerImageWidth = screenWidth/3;
+      Rect dstRect = Rect.fromCenter(
+          center:Offset(screenWidth/2+deltaXMovement, yOffest+screenHeight-(ratio * playerImageWidth)/2+deltaYMovement),
+          width:playerImageWidth,
+          height:ratio * playerImageWidth
+      );
+      canvas.drawImageRect(player.image!, srcRect, dstRect, paint);
+    }
+  }
+
   // Game play
   @override
   void update(double dt) {
     super.update(dt);
+    deltaTime = dt;
     if (state == GameState.running) {
       if (settingsController.maze3dSettings.hasChrono) {
         elapsedTime -= dt;
