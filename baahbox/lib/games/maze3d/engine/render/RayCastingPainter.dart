@@ -177,8 +177,7 @@ class RayCastingPainter extends CustomPainter {
       // Save the distance to the wall for this ray
       depthBuffer[i] = correctedDistance;
     }
-    // Render enemies
-
+    // Render target
     renderTarget(canvas, size, depthBuffer);
    // applyLighting(canvas, size);
   }
@@ -274,7 +273,7 @@ class RayCastingPainter extends CustomPainter {
         // Save the canvas state before applying transformations
         canvas.save();
 
-        // Translate canvas to the enemy's position
+        // Translate canvas to the target's position
         canvas.translate(screenX, screenHeight / 2);
 
 
@@ -315,7 +314,7 @@ class RayCastingPainter extends CustomPainter {
   }
 
   bool isTargetVisible(Target target, double distance) {
-    // Perform ray casting from player to enemy
+    // Perform ray casting from player to target
     double dx = target.x - player.x;
     double dy = target.y - player.y;
     double angleToTarget = atan2(dy, dx);
