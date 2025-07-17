@@ -17,20 +17,25 @@ class RayCastingPainter extends CustomPainter {
   final Target target;
   final ui.Image? wallTexture;
 
+  double fov = pi / 3;
+
   RayCastingPainter(
       {required this.map,
       required this.player,
       required this.target,
       required this.wallTexture});
 
+  void setFOV(double newFOV) {
+    fov = newFOV;
+  }
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint();
     final screenWidth = size.width;
     final screenHeight = size.height;
 
-    const fov = pi / 3; // 60 degrees field of view
-    const halfFov = fov / 2;
+    //const fov = pi / 3; // 60 degrees field of view
+    var halfFov = fov / 2;
 
     final numRays = screenWidth.toInt();
     final angleStep = fov / numRays;

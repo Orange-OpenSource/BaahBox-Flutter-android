@@ -221,6 +221,7 @@ class Maze3dGame extends BBGame {
   @override
   void render(Canvas canvas) {
     if (state != GameState.lost && state != GameState.won) {
+      rayCastingPainter.setFOV( settingsController.maze3dSettings.FOV);
       rayCastingPainter.paint(canvas, size.toSize());
       renderPlayer(canvas, size.toSize());
       miniMapPainter.paint(canvas, Size(150, 150));

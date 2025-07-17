@@ -17,6 +17,8 @@
  *
  */
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -125,7 +127,20 @@ class Maze3dSettingsPage extends GetView<SettingsController> {
           const SizedBox(
             height: 12,
           ),
-          Maze3dSpeedSlider()
+          Maze3dSpeedSlider(),
+          const SizedBox(
+            height: 12,
+          ),
+          Obx(() => Text(
+            "Champ de vision : ${controller.maze3dSettings.FOV}",
+            style: TextStyle(
+                fontSize: 16, fontWeight: FontWeight.bold),
+
+          )),
+          const SizedBox(
+            height: 12,
+          ),
+          Maze3dFOVSlider()
         ],
       ),
     ));
@@ -197,8 +212,37 @@ class _Maze3dSpeedSliderState extends State<Maze3dSpeedSlider> {
     );
   }
 }
+class Maze3dFOVSlider extends StatefulWidget {
+  const Maze3dFOVSlider({super.key});
 
+  @override
+  State<Maze3dFOVSlider> createState() => _Maze3dFOVSliderState();
+}
+class _Maze3dFOVSliderState extends State<Maze3dFOVSlider> {
+  final SettingsController controller = Get.find();
 
+  @override
+  Widget build(BuildContext context) {
+    final double _fov = controller.maze3dSettings.FOV * 180 / pi;
+    double _value = _fov.floor().toDouble();
+    return Slider.adaptive(
+      value: _value,
+      min: 30,
+      max: 60,
+      divisions: 3,
+      label: _value.floor().toString(),
+      semanticFormatterCallback: (double newValue) {
+        return _value.floor().toString();
+      },
+      onChanged: (double value) {
+        setState(() {
+          _value = value.floorToDouble();
+          controller.maze3dSettings.FOV= _value * pi / 180.0;
+        });
+      } ,
+    );
+  }
+}
 class Maze3dSizeSlider extends StatefulWidget {
   const Maze3dSizeSlider({super.key});
 

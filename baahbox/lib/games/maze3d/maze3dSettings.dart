@@ -17,6 +17,8 @@
  *
  */
 
+import 'dart:math';
+
 import 'package:baahbox/services/settings/settingsController.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,6 +30,7 @@ class Maze3dSettings  {
   late RxInt _mazeSize;
   late RxBool _hasChrono;
   late RxDouble _chronoMaxTime;
+  late RxDouble _FOV;
 
   late RxDouble _speedMovement;
 
@@ -38,6 +41,7 @@ class Maze3dSettings  {
     _hasChrono = (prefs.getBool('${prefsPrefix}_hasChrono') ?? false).obs;
     _chronoMaxTime = (prefs.getDouble('${prefsPrefix}_chronoMaxTime') ?? 40.0).obs;
     _speedMovement = (prefs.getDouble('${prefsPrefix}_speedMovement') ?? 5).obs;
+    _FOV = (prefs.getDouble('${prefsPrefix}_FOV') ?? (pi /3)).obs;
 
     musclesSettings = MuscleSettings(prefs : prefs, prefsPrefix:prefsPrefix);
 
@@ -75,6 +79,14 @@ class Maze3dSettings  {
     if(val > 0) {
       _speedMovement.value = val;
       prefs.setDouble('${prefsPrefix}_speedMovement', val);
+    }
+  }
+  double get FOV => _FOV.value;
+  set FOV(double val)
+  {
+    if(val > 0) {
+      _FOV.value = val;
+      prefs.setDouble('${prefsPrefix}_FOV', val);
     }
   }
 }
