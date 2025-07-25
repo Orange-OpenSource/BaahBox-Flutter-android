@@ -221,10 +221,9 @@ class RayCastingPainter extends CustomPainter {
     final screenWidth = size.width;
     final screenHeight = size.height;
 
-    const fov = pi / 3; // Same as before
-    const halfFov = fov / 2;
+    var halfFov = fov / 2;
 
-    TargetData? targetData = null;
+    TargetData? targetData;
 
     double dx = target.x - player.x;
     double dy = target.y - player.y;

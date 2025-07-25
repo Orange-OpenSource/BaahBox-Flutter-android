@@ -132,7 +132,7 @@ class Maze3dSettingsPage extends GetView<SettingsController> {
             height: 12,
           ),
           Obx(() => Text(
-            "Champ de vision : ${controller.maze3dSettings.FOV}",
+            "Champ de vision (en degrés): ${(controller.maze3dSettings.FOV* 180 / pi).round()}",
             style: TextStyle(
                 fontSize: 16, fontWeight: FontWeight.bold),
 
@@ -224,19 +224,19 @@ class _Maze3dFOVSliderState extends State<Maze3dFOVSlider> {
   @override
   Widget build(BuildContext context) {
     final double _fov = controller.maze3dSettings.FOV * 180 / pi;
-    double _value = _fov.floor().toDouble();
+    double _value = max(30,_fov.round().toDouble());
     return Slider.adaptive(
       value: _value,
       min: 30,
       max: 60,
       divisions: 3,
-      label: _value.floor().toString(),
+      label: _value.round().toString(),
       semanticFormatterCallback: (double newValue) {
-        return _value.floor().toString();
+        return _value.round().toString();
       },
       onChanged: (double value) {
         setState(() {
-          _value = value.floorToDouble();
+          _value = value.roundToDouble();
           controller.maze3dSettings.FOV= _value * pi / 180.0;
         });
       } ,
