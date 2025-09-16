@@ -31,6 +31,7 @@ class Maze3dSettings  {
   late RxBool _hasChrono;
   late RxDouble _chronoMaxTime;
   late RxDouble _FOV;
+  late RxBool _hasBackView;
 
   late RxDouble _speedMovement;
 
@@ -39,6 +40,7 @@ class Maze3dSettings  {
   Maze3dSettings({required this.prefs}) {
     _mazeSize = (prefs.getInt('${prefsPrefix}_mazeSize') ?? 5).obs;
     _hasChrono = (prefs.getBool('${prefsPrefix}_hasChrono') ?? false).obs;
+    _hasBackView = (prefs.getBool('${prefsPrefix}_hasBackView') ?? false).obs;
     _chronoMaxTime = (prefs.getDouble('${prefsPrefix}_chronoMaxTime') ?? 40.0).obs;
     _speedMovement = (prefs.getDouble('${prefsPrefix}_speedMovement') ?? 5).obs;
     _FOV = (prefs.getDouble('${prefsPrefix}_FOV') ?? (pi /3)).obs;
@@ -62,6 +64,13 @@ class Maze3dSettings  {
   {
     _hasChrono.value = val;
     prefs.setBool('${prefsPrefix}_hasChrono', val);
+  }
+
+  bool get hasBackView => _hasBackView.value;
+  set hasBackView(bool val)
+  {
+    _hasBackView.value = val;
+    prefs.setBool('${prefsPrefix}_hasBackView', val);
   }
 
   double get chronoMaxTime => _chronoMaxTime.value;

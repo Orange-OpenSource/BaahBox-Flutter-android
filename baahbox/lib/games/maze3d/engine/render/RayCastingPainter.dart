@@ -16,6 +16,7 @@ class RayCastingPainter extends CustomPainter {
   final Player player;
   final Target target;
   final ui.Image? wallTexture;
+  final bool isReverse;
 
   double fov = pi / 3;
 
@@ -23,7 +24,8 @@ class RayCastingPainter extends CustomPainter {
       {required this.map,
       required this.player,
       required this.target,
-      required this.wallTexture});
+      required this.wallTexture,
+      required this.isReverse});
 
   void setFOV(double newFOV) {
     fov = newFOV;
@@ -41,6 +43,21 @@ class RayCastingPainter extends CustomPainter {
     final angleStep = fov / numRays;
 
     const maxDepth = 20.0;
+
+    if(isReverse)
+    {
+      paint.color =Colors.white;
+      canvas.drawRect(
+        Rect.fromLTWH(
+          0,
+          0,
+          screenWidth,
+          screenHeight,
+        ),
+        paint,
+      );
+    }
+
     // Draw floor and ceiling with gradient effect
     for (int y = screenHeight ~/ 2; y < screenHeight; y++) {
       double depth = (screenHeight / (2.0 * y - screenHeight));
@@ -68,7 +85,8 @@ class RayCastingPainter extends CustomPainter {
     List<double> depthBuffer = List.filled(numRays, double.infinity);
 
     for (int i = 0; i < numRays; i++) {
-      final rayAngle = (player.angle - halfFov) + (i * angleStep);
+      double playerAngleView = isReverse ? player.angle + pi : player.angle;
+      final rayAngle = (playerAngleView - halfFov) + (i * angleStep);
 
       double distanceToWall = 0.0;
       bool hitWall = false;
@@ -120,7 +138,7 @@ class RayCastingPainter extends CustomPainter {
       }
 
       final correctedDistance =
-          distanceToWall * cos(player.angle - rayAngle + 0.0001);
+          distanceToWall * cos(playerAngleView - rayAngle + 0.0001);
 
       final wallHeight = screenHeight / (correctedDistance + 0.0001);
 
@@ -174,8 +192,8 @@ class RayCastingPainter extends CustomPainter {
         paint.color =
             Color.lerp(BBColor.sheepGray.color, Colors.black, 1 - brightness)!;
         canvas.drawLine(
-          Offset(x, (screenHeight - wallHeight) / 2),
-          Offset(x, (screenHeight + wallHeight) / 2),
+          Offset(x, max(0,(screenHeight - wallHeight) / 2)),
+          Offset(x, min(screenHeight,(screenHeight + wallHeight) / 2)),
           paint..strokeWidth = (screenWidth / numRays) + 1,
         );
       }

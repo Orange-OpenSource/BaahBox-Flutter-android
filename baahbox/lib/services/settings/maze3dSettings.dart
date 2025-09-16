@@ -95,6 +95,15 @@ class Maze3dSettingsPage extends GetView<SettingsController> {
             height: 12,
           ),
           Obx(() => SwitchListTile.adaptive(
+              title: Text("Rétroviseur"),
+              value: controller.maze3dSettings.hasBackView,
+              onChanged: (bool newValue) {
+                controller.maze3dSettings.hasBackView = newValue;
+              })),
+          const SizedBox(
+            height: 12,
+          ),
+          Obx(() => SwitchListTile.adaptive(
               title: Text("Mode chronomètré"),
               value: controller.maze3dSettings.hasChrono,
               onChanged: (bool newValue) {

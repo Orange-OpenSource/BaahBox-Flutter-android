@@ -20,6 +20,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'dart:ui' as ui;
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:baahbox/games/maze/MazeFactory.dart';
@@ -71,7 +72,9 @@ class Maze3dGame extends BBGame {
   late Player player;
   late Target target;
   late RayCastingPainter rayCastingPainter;
+  late RayCastingPainter rayCastingBackViewPainter;
   late MinimapPainter miniMapPainter;
+  Paint hudPaint = Paint();
   double elapsedTime = 0.0;
   double deltaTime = 0.0;
   double playerMovementTime = 0.0;
@@ -80,6 +83,12 @@ class Maze3dGame extends BBGame {
   @override
   Future<void> onLoad() async {
     title = instructionTitle;
+
+    hudPaint.color = Colors.black;
+    hudPaint.colorFilter = ColorFilter.mode(
+      Colors.black,
+      BlendMode.multiply,
+    );
 
     setInstructions();
 
@@ -103,7 +112,17 @@ class Maze3dGame extends BBGame {
         image: await getImageFromPath('assets/images/Games/Maze/trefle.png'));
     resetTargetPosition();
     rayCastingPainter = RayCastingPainter(
-        map: mazeMap, player: player, target: target, wallTexture: null);
+        map: mazeMap,
+        player: player,
+        target: target,
+        wallTexture: null,
+        isReverse: false);
+    rayCastingBackViewPainter = RayCastingPainter(
+        map: mazeMap,
+        player: player,
+        target: target,
+        wallTexture: null,
+        isReverse: true);
     miniMapPainter =
         MinimapPainter(map: mazeMap, player: player, target: target);
 
@@ -121,6 +140,7 @@ class Maze3dGame extends BBGame {
     factory.makeMaze(mazeSize, mazeSize);
     mazeMap = factory.convertToMatrixMap();
     rayCastingPainter.map = mazeMap;
+    rayCastingBackViewPainter.map = mazeMap;
     miniMapPainter.map = mazeMap;
   }
 
@@ -186,6 +206,7 @@ class Maze3dGame extends BBGame {
 
       double dx = target.x - newX;
       double dy = target.y - newY;
+
       double distance = sqrt(dx * dx + dy * dy);
 
       if (distance < 0.5) {
@@ -194,18 +215,15 @@ class Maze3dGame extends BBGame {
 
       if (!collisionWithTarget) {
         // If no collision, update the player's position
-        if(newX != player.x) {
+        if (newX != player.x) {
           player.x = newX;
           playerMovementTime += deltaTime;
-        }
-        else {
+        } else {
           playerMovementTime = 0.0;
         }
-        if(newY != player.y) {
+        if (newY != player.y) {
           player.y = newY;
         }
-
-
       } else {
         playerMovementTime = 0.0;
         setGameStateToWon(true);
@@ -221,10 +239,30 @@ class Maze3dGame extends BBGame {
   @override
   void render(Canvas canvas) {
     if (state != GameState.lost && state != GameState.won) {
-      rayCastingPainter.setFOV( settingsController.maze3dSettings.FOV);
+      rayCastingPainter.setFOV(settingsController.maze3dSettings.FOV);
       rayCastingPainter.paint(canvas, size.toSize());
       renderPlayer(canvas, size.toSize());
-      miniMapPainter.paint(canvas, Size(150, 150));
+      if (settingsController.maze3dSettings.hasBackView) {
+        canvas.save();
+        canvas.drawRect(
+          Rect.fromLTWH(
+            0,
+            0,
+            160,
+            160,
+          ),
+          hudPaint,
+        );
+        rayCastingBackViewPainter.setFOV(settingsController.maze3dSettings.FOV);
+        canvas.translate(5, 5);
+        rayCastingBackViewPainter.paint(canvas, Size(150, 150));
+        canvas.restore();
+        canvas.translate(size.x - 150, 0);
+        miniMapPainter.paint(canvas, Size(150, 150));
+        canvas.restore();
+      } else {
+        miniMapPainter.paint(canvas, Size(150, 150));
+      }
     } else {
       canvas.drawRect(Rect.fromLTWH(0, 0, size.x, size.y),
           Paint()..color = BBColor.sheepGray.color);
@@ -232,20 +270,18 @@ class Maze3dGame extends BBGame {
     super.render(canvas);
   }
 
-
   void renderPlayer(Canvas canvas, Size size) {
-
     final screenWidth = size.width;
     final screenHeight = size.height;
 
     if (player.image != null) {
       var yOffest = 2.0;
-      var movementTime = settingsController.maze3dSettings.speedMovement*playerMovementTime;
-      var deltaXMovement = sin(movementTime)*10.0;
-      var deltaYMovement = sin(movementTime)*yOffest;
+      var movementTime =
+          settingsController.maze3dSettings.speedMovement * playerMovementTime;
+      var deltaXMovement = sin(movementTime) * 10.0;
+      var deltaYMovement = sin(movementTime) * yOffest;
 
-
-      var ratio = player.image!.height/player.image!.width ;
+      var ratio = player.image!.height / player.image!.width;
       // Draw player image
       Paint paint = Paint();
       Rect srcRect = Rect.fromLTWH(
@@ -254,15 +290,19 @@ class Maze3dGame extends BBGame {
         player.image!.width.toDouble(),
         player.image!.height.toDouble(),
       );
-      var playerImageWidth = screenWidth/3;
-      if(screenWidth>screenHeight) {
-        playerImageWidth = screenHeight/4/ratio;
+      var playerImageWidth = screenWidth / 3;
+      if (screenWidth > screenHeight) {
+        playerImageWidth = screenHeight / 4 / ratio;
       }
       Rect dstRect = Rect.fromCenter(
-          center:Offset(screenWidth/2+deltaXMovement, yOffest+screenHeight-(ratio * playerImageWidth)/2+deltaYMovement),
-          width:playerImageWidth,
-          height:ratio * playerImageWidth
-      );
+          center: Offset(
+              screenWidth / 2 + deltaXMovement,
+              yOffest +
+                  screenHeight -
+                  (ratio * playerImageWidth) / 2 +
+                  deltaYMovement),
+          width: playerImageWidth,
+          height: ratio * playerImageWidth);
       canvas.drawImageRect(player.image!, srcRect, dstRect, paint);
     }
   }
