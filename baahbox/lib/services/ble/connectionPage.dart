@@ -19,17 +19,13 @@
 
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
-//import 'package:location_permissions/location_permissions.dart';
-import 'dart:io' show Platform;
-import 'package:get/get.dart';
-import 'package:baahbox/model/sensorInput.dart';
-import 'package:baahbox/controllers/appController.dart';
-import 'package:baahbox/routes/routes.dart';
-import 'package:baahbox/services/ble/getXble/getx_ble.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:permission_handler/permission_handler.dart';
 
+import 'package:get/get.dart';
+
+import 'package:baahbox/controllers/appController.dart';
+
+import 'BleController.dart';
+import 'bleDevicesView.Dart';
 import 'bleMonitorView.dart';
 
 class ConnectionPage extends StatefulWidget {
@@ -41,302 +37,89 @@ class ConnectionPage extends StatefulWidget {
 }
 
 class _ConnectionPageState extends State<ConnectionPage> {
-  List<DiscoveredDevice> _foundBleUARTDevices = [];
-
   final Controller appController = Get.find();
-  final GetxBle bleController = Get.find();
+  final BleController bleController = Get.find();
 
-  late StreamSubscription<ConnectionStateUpdate> _connection;
-  late QualifiedCharacteristic _rxCharacteristic;
-  late Stream<List<int>>? _receivedDataStream;
 
-  final Uuid serviceUuid = Uuid.parse('6E400001-B5A3-F393-E0A9-E50E24DCCA9E');
-  final Uuid characteristicUuid =
-      Uuid.parse('6E400003-B5A3-F393-E0A9-E50E24DCCA9E');
-
-  bool _connected = false;
-  String _logTexts = "";
 
   void initState() {
     super.initState();
-    waitBluetoothReady();
-  }
-
-  void refreshScreen() {
-    setState(() {});
-    _connected =
-        (bleController.connector.rxBleConnectionState.value.connectionState ==
-            DeviceConnectionState.connected);
-    appController.updateConnectionState();
-  }
-
-  void _disconnect() async {
-    if (bleController.connector.rxBleConnectionState.value.connectionState ==
-        DeviceConnectionState.connected) {
-      var deviceId =
-          bleController.connector.rxBleConnectionState.value.deviceId;
-      await bleController.connector.disconnect(deviceId);
-    }
-    //await _connection.cancel();
-    // _connected = false;
-    _logTexts = "";
-    refreshScreen();
-    appController.updateConnectionState();
-  }
-
-  void waitBluetoothReady() async {
-    bleController.bleLogger.addToLog("waiting for BLE ready");
-    bleController.ble.statusStream.listen((event) {
-      bleController.bleLogger.addToLog("bleStatus updated");
-
-      // Connected
-      if (event == BleStatus.ready) {
-        bleController.bleLogger.addToLog("starting Scanning");
-        bleController.scanner.rxBleScannerState.listen((scannerState) {
-          _foundBleUARTDevices = scannerState.discoveredDevices;
-          refreshScreen();
-        });
-      }
-    });
-  }
-
-  void _stopScan() async {
-    await bleController.scanner.stopScan();
-    refreshScreen();
-  }
-
-  void _startScan() async {
-    bool goForIt = false;
-    //PermissionStatus permission;
-    if (Platform.isAndroid) {
-      Map<Permission, PermissionStatus> statuses = await [
-        Permission.bluetoothScan,
-        Permission.bluetoothAdvertise,
-        Permission.bluetoothConnect,
-        Permission.locationWhenInUse,
-        Permission.location
-      ].request();
-      goForIt = true;
-
-      //   if (permission == PermissionStatus.granted) goForIt = true;
-    } else if (Platform.isIOS) {
-      goForIt = true;
-    }
-    if (goForIt) {
-      //TODO replace True with permission == PermissionStatus.granted is for IOS test
-      //_foundBleUARTDevices = [];
-      refreshScreen();
-
-      bleController.scanner
-          .startScan(BleScannerFilter(serviceId: [serviceUuid]));
-    }
-  }
-
-  bool isDeviceConnectedToApp(String id) {
-    return (bleController
-                .connector.rxBleConnectionState.value.connectionState ==
-            DeviceConnectionState.connected) &&
-        (id == bleController.connector.rxBleConnectionState.value.deviceId);
-  }
-
-  void onConnectDevice(index) {
-    refreshScreen();
-    var deviceId = bleController
-        .scanner.rxBleScannerState.value.discoveredDevices[index].id;
-    var deviceName = bleController
-        .scanner.rxBleScannerState.value.discoveredDevices[index].name;
-
-    if ((deviceId !=
-            bleController.connector.rxBleConnectionState.value.deviceId) ||
-        (bleController.connector.rxBleConnectionState.value.connectionState ==
-            DeviceConnectionState.disconnected)) {
-      bleController.connector.connect(deviceId);
-      _logTexts = "Essai de connexion avec ${deviceName}\n";
-      bleController.connector.rxBleConnectionState.listen((event) {
-        var id = event.deviceId.toString();
-
-        switch (event.connectionState) {
-          case DeviceConnectionState.connecting:
-            {
-              _logTexts = "${_logTexts}Connexion en cours ${deviceName}\n";
-              break;
-            }
-          case DeviceConnectionState.connected:
-            {
-              _logTexts = "${_logTexts}Connecté à $deviceName\n";
-              _rxCharacteristic = QualifiedCharacteristic(
-                  characteristicId: characteristicUuid,
-                  serviceId: serviceUuid,
-                  deviceId: event.deviceId);
-              subscribeToStream();
-              appController.updateConnectionState();
-              appController.setConnectedDeviceIdTo(id);
-              appController.setConnectedDeviceNameTo(deviceName);
-              bleController.scanner.stopScan();
-              _startScan();
-              break;
-            }
-          case DeviceConnectionState.disconnecting:
-            {
-              _logTexts = "${_logTexts}Déconnexion de ${deviceName}\n";
-              break;
-            }
-          case DeviceConnectionState.disconnected:
-            {
-              _logTexts = "${_logTexts}Déconnecté de ${deviceName} \n";
-              appController.updateConnectionState();
-              appController.setConnectedDeviceIdTo("");
-              appController.setConnectedDeviceNameTo("");
-              _startScan();
-              break;
-            }
-        }
-        refreshScreen();
-      });
-    } else {
-      bleController.bleLogger.addToLog(
-          "Appareil déjà connecté: ${bleController.connector.rxBleConnectionState.value.deviceId}");
-    }
-  }
-
-  void subscribeToStream() async {
-    setState(() {
-      _receivedDataStream =
-          bleController.interactor.subScribeToCharacteristic(_rxCharacteristic);
-      appController.setConnectionStateTo(_receivedDataStream != null);
-      _receivedDataStream?.forEach((element) => updateControllerWith(element));
-    });
-  }
-
-  void updateControllerWith(List<int> data) {
-    var tuples = computeData(data);
-    for ((MusclesInput, JoystickInput) tuple in tuples) {
-      //  print("${tuple.$1.describe()}, ${tuple.$2.describe()}");
-      appController.setJoystickTo(tuple.$2);
-      appController.setMusclesTo(tuple.$1);
-    }
   }
 
   Future<bool> _onBackPressed() {
-    bleController.scanner.stopScan();
-    //Get.toNamed(BBRoute.welcome.path);
+    bleController.stopScanDevices();
     Navigator.of(context).pop(true);
     return Future<bool>.value(true);
   }
+
   @override
   Widget build(BuildContext context) => WillPopScope(
-  onWillPop: _onBackPressed,
-  child: Scaffold(
-        appBar: AppBar(
-            title: Text("Connexion")),
-        body: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              BleMonitorView(),
-              Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                      padding: EdgeInsets.only(left: 20),
-                      child: Text(
-                          _connected
-                              ? "Vous êtes connecté:"
-                              : "Sélectionnez votre Baah Box: ",
-                          style: Theme.of(context).textTheme.bodyLarge))),
-              if (_connected)
-                ListTile(
-                  leading: Image.asset('assets/images/Dashboard/tick.png',
-                      width: 20),
-                  dense: false,
-                  enabled: true,
-                  onTap: () async {
-                    _disconnect();
-                  },
-                  title: Text(appController.connectedDeviceName,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyLarge
-                          ?.copyWith(fontWeight: FontWeight.bold)),
-                  subtitle: Text(appController.connectedDeviceId),
-                ),
-              SizedBox(
-                height: 15,
+      onWillPop: _onBackPressed,
+      child: Scaffold(
+          appBar: AppBar(title: Text("Connexion")),
+          body: SafeArea(
+            child: Expanded(
+                child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  BleMonitorView(),
+                  Obx(() {
+                    if (bleController.availableDevices.isBlank == true) {
+                      return Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                              padding: EdgeInsets.only(left: 20),
+                              child: Text("Aucune BaahBox trouvée.",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.copyWith(
+                                          fontWeight: FontWeight.bold))));
+                    } else {
+                      return Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                              padding: EdgeInsets.only(left: 20),
+                              child: Text("Sélectionnez votre Baah Box: ",
+                                  style:
+                                      Theme.of(context).textTheme.bodyLarge)));
+                    }
+                  }),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  BleDevicesView(),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                      padding: EdgeInsets.all(5),
+                      child: const Text("Données reçues:",
+                          textAlign: TextAlign.left)),
+                  Container(
+                      margin: const EdgeInsets.all(5.0),
+                      width: 1400,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: Colors.blue, width: 2)),
+                      height: 90,
+                      child: Obx(() {
+                        if (bleController.adapterState.value ==
+                            BleAdapterState.enable) {
+                          return Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Text(
+                                  "${appController.analogInputs.describe()}\n${appController.digitalInputs.describe()}"));
+                        } else {
+                          return const Text("");
+                        }
+                      })),
+                  SizedBox(
+                    height: 30,
+                  )
+                ],
               ),
-              if (_foundBleUARTDevices.length <= 0)
-                Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                        padding: EdgeInsets.only(left: 20),
-                        child: Text("Aucune BaahBox trouvée.",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge
-                                ?.copyWith(fontWeight: FontWeight.bold))))
-              else
-                Container(
-                    margin: const EdgeInsets.all(5.0),
-                    height: 75,
-                    child: ListView.builder(
-                      itemCount: _foundBleUARTDevices.length,
-                      itemBuilder: (context, index) => ListTile(
-                        leading: isDeviceConnectedToApp(
-                                _foundBleUARTDevices[index].id)
-                            ? const Icon(Icons.link, color: Colors.blue)
-                            : const Icon(Icons.link_off_outlined),
-                        dense: false,
-                        enabled: true,
-                        onTap: () async {
-                          !_connected ? onConnectDevice(index) : _disconnect();
-                        },
-                        title: Text(_foundBleUARTDevices[index].name,
-                            style: TextStyle(
-                                color:
-                                    _connected ? Colors.black : Colors.blue)),
-                        subtitle: Text(
-                          _foundBleUARTDevices[index].id,
-                        ),
-                      ),
-                    )),
-              SizedBox(
-                height: 10,
-              ),
-              Padding(
-                  padding: EdgeInsets.all(5),
-                  child:
-                      const Text("Données reçues:", textAlign: TextAlign.left)),
-              Container(
-                margin: const EdgeInsets.all(5.0),
-                width: 1400,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    border: Border.all(color: Colors.blue, width: 2)),
-                height: 90,
-                child: _connected
-                    ? Obx(() => Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Text(appController.musclesInput.describe() +
-                            "\n" +
-                            appController.joystickInput.describe())))
-                    : const Text(""),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              const Text(" Messages bluetooth:"),
-              Container(
-                  margin: const EdgeInsets.all(5.0),
-                  width: 1400,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      border: Border.all(color: Colors.blue, width: 2)),
-                  height: 100,
-                  child: Scrollbar(
-                      child: SingleChildScrollView(
-                          child: Padding(padding: EdgeInsets.all(5), child: Text(
-                              //"${bleController.bleLogger.rxMessages.value})//"
-                              "$_logTexts"))))),
-            ],
-          ),
-        ),
-      ));
+            )),
+          )));
 }

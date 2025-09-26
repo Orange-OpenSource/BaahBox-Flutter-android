@@ -44,17 +44,18 @@ class TestGamePage extends StatelessWidget {
                   onPressed: () => Get.toNamed(BBRoute.welcome.path)
               ),
             ),
-            body: Container(alignment: Alignment.center,
+            body: SafeArea(
+              child:Container(alignment: Alignment.center,
               child:
                 Column(mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(c.musclesInput.describe()),
+                      Text(c.analogInputs.describe()),
                       sensorTest(),
                     ]
                 )
-            ),
+            )),
           floatingActionButton: FloatingActionButton(
           onPressed: () => Get.back(),
           tooltip: 'Increment',
@@ -73,13 +74,13 @@ class sensorTest extends StatelessWidget {
     return Obx(() =>
         Container(
             width: 150,
-            height: (controller.musclesInput.muscle1).toDouble() / 5,
+            height: (controller.analogInputs.analog1).toDouble() / 5,
             decoration: BoxDecoration(
               color: Colors.blue,
               border: Border.all(),
             ),
 
-            child: Text(controller.musclesInput.describe())
+            child: Text(controller.analogInputs.describe())
         )
     );
   }

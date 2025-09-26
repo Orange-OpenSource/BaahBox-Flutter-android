@@ -19,6 +19,7 @@
 
 import 'dart:math';
 import 'dart:ui';
+import 'package:baahbox/constants/utils.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/services.dart';
@@ -29,6 +30,8 @@ import 'package:get/get.dart';
 import 'package:baahbox/controllers/appController.dart';
 import 'package:baahbox/constants/enums.dart';
 import 'package:baahbox/games/BBGame.dart';
+import '../../model/GameInput.dart';
+import '../../model/sensorInput.dart';
 import 'starSprite.dart';
 import 'package:baahbox/services/settings/settingsController.dart';
 
@@ -40,12 +43,14 @@ class StarGame extends BBGame with TapCallbacks {
   late Size screenSize;
   late StarSprite _star;
 
-  var panInput = 0;
-  var input = 0;
+  late GameInput gameInput;
+
+  int input = 0;
   final instructionTitle = 'Fais briller l\'étoile';
   var instructionSubtitleMuscle = 'en contractant ton muscle';
   var instructionSubtitleJoystick = 'pousse le joystick en haut';
   var instructionSubtitleFinger = 'glisse le doigt de bas en haut';
+  var instructionSubtitleHandle = 'tire la poignée vers le haut';
 
   final feedBackTitle = 'encore un effort!';
   @override
@@ -71,7 +76,7 @@ class StarGame extends BBGame with TapCallbacks {
   void update(double dt) {
     super.update(dt);
     if (appController.isActive) {
-      appController.updateConnectionState();
+
       if (isRunning) {
         refreshInput();
        //scoreText.text = 'Score: $input';
@@ -94,29 +99,22 @@ class StarGame extends BBGame with TapCallbacks {
   }
 
   void refreshInput() {
-    // Todo : deal with threshod and sensitivity
-    if (appController.isConnectedToBox) {
-      var sensorType = settingsController.currentSensor;
-      switch (sensorType) {
-        case Sensor.muscle:
-        // The strength is in range [0...1024] -> Have it fit into [0...100]
-          input = appController.musclesInput.muscle1;
-        case Sensor.arcadeJoystick:
-          var joystickInput = appController.joystickInput;
-          if (joystickInput.up && input < 1000) {
+    if (checkCompatibleSensor(BBGameList.star.compatibleSensorsList)) {
+      if(gameInput.directionType==GameInputDirectionType.analogic) {
+        input = max(0,-(gameInput.delta.y*1000).toInt());
+      }
+      else
+        {
+          if (gameInput.direction == GameInputDirection.up && input < 1000) {
             input += 8;
           } else if  (input >= 10) {
-              input -= 5;
+            input -= 5;
           }
-        default:
-      }
-    } else {
-      input = panInput;
+        }
     }
   }
 
   void updateOverlaysAndState() {
-    int coeff = (input / 100).toInt();
     if (input < 300) {
       title = instructionTitle;
       setInstructions();
@@ -133,8 +131,12 @@ class StarGame extends BBGame with TapCallbacks {
 
   @override
   void startGame() {
+    input =0;
+    gameInput = GameInput(
+        axes: GameInputAxes.vertical,
+        musclesSettings: settingsController.musclesSettings,
+        handleSettings: settingsController.handleSettings);
     _star.initialize();
-    input = 0;
     super.startGame();
   }
 
@@ -152,10 +154,10 @@ class StarGame extends BBGame with TapCallbacks {
   @override
   void onPanUpdate(DragUpdateInfo info) {
     if (appController.isConnectedToBox || state != GameState.running) {
-      panInput = 0;
+      input = 0;
     } else {
       var yPos = info.eventPosition.global.y;
-      panInput = ((canvasSize.y - yPos) * 1024.0 / canvasSize.y).toInt();
+      input = (1000*(canvasSize.y - yPos) / canvasSize.y).toInt();
       // print(
       //     "panInput : ${panInput} :::  panY : ${yPos} vs game ${canvasSize.y}");
     }
@@ -164,6 +166,6 @@ class StarGame extends BBGame with TapCallbacks {
   @override
   void onTapDown(TapDownEvent event) {
     super.onTapDown(event);
-   // print("state : $state ");
+    //debugLog("state : $state ");
   }
 }

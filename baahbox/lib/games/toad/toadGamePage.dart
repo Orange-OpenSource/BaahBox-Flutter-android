@@ -17,55 +17,16 @@
  *
  */
 
-import 'package:auto_size_text/auto_size_text.dart';
+
 import 'package:baahbox/constants/enums.dart';
 import 'toadGame.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:flame/game.dart';
-import 'package:baahbox/controllers/appController.dart';
-import 'package:baahbox/games/overlayBuilder.dart';
+import '../../model/GamePage.dart';
 
-class ToadGamePage extends StatelessWidget {
-  final Controller appController = Get.find();
-  final game = ToadGame();
-  final mainColor = BBGameList.toad.baseColor.color;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          foregroundColor: mainColor,
-          titleTextStyle: TextStyle(
-              color: mainColor, fontWeight: FontWeight.bold, fontSize: 20),
-          title: AutoSizeText("Slurp !", maxLines: 1),
-          actions: [
-            Container(
-                width: 25,
-                child: Obx(() => Image.asset(appController.currentSensor.asset,
-                    color: mainColor))),
-            IconButton(
-                icon: Image.asset(
-                    'assets/images/Dashboard/settings_icon.png',
-                    width: 25, height: 25, color: mainColor),
-                onPressed: () => Get.toNamed('/toadSettings')),
-          ],
-        ),
-        body: Stack(children: [
-          GameWidget(
-            game: game,
-            overlayBuilderMap: const {
-              'PreGame': OverlayBuilder.preGame,
-              'Instructions': OverlayBuilder.instructions,
-              'FeedBack': OverlayBuilder.feedback,
-              'PostGame': OverlayBuilder.postGame,
-            },
-            loadingBuilder: (_) => const Center(
-              child: Text('Loading'),
-            ),
-          )
-        ]),
-    );
-  }
+class ToadGamePage extends GamePage {
+  ToadGamePage({super.key})
+      : super(
+      game: ToadGame(),
+      mainColor: BBGameList.toad.baseColor.color,
+      title: "Slurp !",
+      settingsRoute: '/toadSettings');
 }

@@ -31,7 +31,8 @@ class SettingsPage extends StatelessWidget {
         appBar: AppBar(
           title: Text("Réglages"),
         ),
-        body: ListView(padding: const EdgeInsets.all(0), children: [
+        body: SafeArea(
+    child:ListView(padding: const EdgeInsets.all(0), children: [
           Card(
             shape: ContinuousRectangleBorder(),
             child: Padding(
@@ -103,6 +104,19 @@ class SettingsPage extends StatelessWidget {
             title: Text('Gobe les mouches',
                 style: Theme.of(context).textTheme.bodyLarge),
           ),
+          const Divider(
+            height: 0,
+          ),
+          ListTile(
+            trailing: Icon(Icons.arrow_forward_outlined),
+            dense: false,
+            enabled: true,
+            onTap: () => Get.toNamed(BBRoute.maze3dSettings.path),
+            title: Text('Labyrinthe 3D',
+                style: Theme.of(context).textTheme.bodyLarge),
+          ),
+
+
           Card(
             shape: ContinuousRectangleBorder(),
             child: Padding(
@@ -123,6 +137,6 @@ class SettingsPage extends StatelessWidget {
             title:
                 Text('A propos', style: Theme.of(context).textTheme.bodyLarge),
           ),
-        ]));
+        ])));
   }
 }

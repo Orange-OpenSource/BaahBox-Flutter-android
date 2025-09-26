@@ -19,7 +19,7 @@
 
 import 'package:flame/components.dart';
 
-class ExplosionComponent extends SpriteAnimationComponent with HasGameRef {
+class ExplosionComponent extends SpriteAnimationComponent with HasGameReference {
   ExplosionComponent({super.position})
       : super(
           size: Vector2.all(50),

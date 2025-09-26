@@ -26,8 +26,9 @@ import 'package:flame/components.dart';
 import 'package:baahbox/games/toad/toadGame.dart';
 
 class TongueComponent extends SpriteComponent
-    with  HasVisibility, HasGameRef<ToadGame>, CollisionCallbacks {
-  TongueComponent({required super.position}) : super(anchor: Anchor.bottomCenter);
+    with HasVisibility, HasGameReference<ToadGame>, CollisionCallbacks {
+  TongueComponent({required super.position})
+      : super(anchor: Anchor.bottomCenter);
 
   final tongueSprite = Sprite(Flame.images.fromCache('Games/Toad/tongue.png'));
   late final _timer = TimerComponent(
@@ -47,8 +48,8 @@ class TongueComponent extends SpriteComponent
   void initialize() {
     this.sprite = tongueSprite;
     var ratio = tongueSprite.srcSize.x / tongueSprite.srcSize.y;
-    var width = gameRef.size.x/30;
-    size = Vector2(width,width/ratio*5);
+    var width = game.size.x / 30;
+    size = Vector2(width, width / ratio * 5);
     priority = 2;
     hide();
   }
@@ -67,14 +68,15 @@ class TongueComponent extends SpriteComponent
   }
 
   void showAtAngle(double destAngle, double distance) {
-    angle = destAngle;
-    scale = Vector2(1.0 ,distance/size.y);
+     angle = destAngle;
+    scale = Vector2(1.0, distance/size.y);
     show();
     _timer.timer.start();
 
   }
+
   void takeHit() {
-  //  disappear();
+    //  disappear();
   }
 
   void disappear() {
@@ -82,5 +84,3 @@ class TongueComponent extends SpriteComponent
     //removeFromParent();
   }
 }
-
-

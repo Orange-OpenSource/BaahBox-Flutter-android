@@ -25,7 +25,7 @@ import 'package:baahbox/games/spaceShip/components/meteorComponent.dart';
 import 'package:baahbox/games/spaceShip/spaceShipGame.dart';
 
 class ShipComponent extends SpriteComponent
-    with HasGameRef<SpaceShipGame>, CollisionCallbacks {
+    with HasGameReference<SpaceShipGame>, CollisionCallbacks {
   ShipComponent()
       : super(
           size: Vector2(75, 100),
@@ -42,11 +42,29 @@ class ShipComponent extends SpriteComponent
   void initialize() {
     sprite = normalShipSprite;
     size = normalShipSprite.srcSize / 13;
-    position = Vector2(gameRef.size.x / 2,
-        (gameRef.size.y) / 2 + size.y );
+    position = Vector2(game.size.x / 2, (game.size.y) / 2 + (1.5 * size.y));
     anchor = Anchor.center;
   }
 
+  void moveTo(double newPosition)
+  {
+    var center = game.size.x / 2;
+    var nextPositionX = center + newPosition * center;
+    if(nextPositionX==position.x)
+      {
+        setSpriteTo(0);
+        return;
+      }
+    else if(nextPositionX<0) {
+      nextPositionX=0;
+    }
+    else if(nextPositionX>game.size.x) {
+      nextPositionX = game.size.x;
+    }
+
+    setSpriteTo(nextPositionX > position.x ? 1 : 2);
+    position.x = nextPositionX;
+  }
   void moveBy(double offset) {
     var nextPositionX = position.x + offset;
     if (((offset > 0) && ((nextPositionX + (size.x / 2)) <= game.size.x)) ||
@@ -90,12 +108,15 @@ class ShipComponent extends SpriteComponent
     Set<Vector2> intersectionPoints,
     PositionComponent other,
   ) {
-      super.onCollisionStart(intersectionPoints, other);
-      if (other is MeteorComponent) {
-        other.takeHit();
-        takeHit();
-        gameRef.looseLife();
+    super.onCollisionStart(intersectionPoints, other);
+    if (other is MeteorComponent) {
+      other.takeHit();
+      takeHit();
+      if (other.isSheepMeteor) {
+        game.addLife();
+      } else {
+        game.looseLife();
       }
-
+    }
   }
 }

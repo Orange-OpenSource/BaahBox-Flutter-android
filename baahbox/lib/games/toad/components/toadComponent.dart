@@ -20,26 +20,26 @@
 import 'dart:math' as math;
 import 'dart:math';
 import 'dart:core';
+import 'package:baahbox/model/sensorInput.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/components.dart';
 import 'package:baahbox/games/toad/toadGame.dart';
 import 'package:flame/geometry.dart';
 
 class ToadComponent extends SpriteComponent
-    with  HasVisibility,
-        HasGameRef<ToadGame> {
-  ToadComponent()
-      : super(size: Vector2(100, 100), anchor: Anchor.bottomCenter);
+    with HasVisibility, HasGameReference<ToadGame> {
+  ToadComponent() : super(size: Vector2(100, 100), anchor: Anchor.bottomCenter);
 
   final toadSprite = Sprite(Flame.images.fromCache('Games/Toad/toad.png'));
-  final toadBlinkSprite = Sprite(Flame.images.fromCache('Games/Toad/toad_blink.png'));
+  final toadBlinkSprite =
+      Sprite(Flame.images.fromCache('Games/Toad/toad_blink.png'));
 
   final blinkingImages = [
     Flame.images.fromCache('Games/Toad/toad.png'),
     Flame.images.fromCache('Games/Toad/toad_blink.png'),
   ];
 
-  late final _binkTimer = TimerComponent(
+  late final _blinkTimer = TimerComponent(
     period: .25,
     onTick: setSpriteTo,
     autoStart: false,
@@ -50,12 +50,16 @@ class ToadComponent extends SpriteComponent
     onTick: resetToadShooting,
     autoStart: false,
   );
+
   final Vector2 deltaPosition = Vector2.zero();
+
+  final angularTolerance = 10;
+  final degreeToRadian = pi / 180;
 
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    await add(_binkTimer);
+    await add(_blinkTimer);
     await add(_shootTimer);
     initialize();
   }
@@ -63,10 +67,11 @@ class ToadComponent extends SpriteComponent
   void initialize() {
     this.sprite = toadSprite;
     var ratio = toadSprite.srcSize.x / toadSprite.srcSize.y;
-    var width = gameRef.size.x * 3/8;
-    size = Vector2(width,width/ratio);
+
+    var width = min(game.size.x,game.size.y) / 3 ; //* 3 / 8;
+    size = Vector2(width, width / ratio);
     anchor = Anchor.center;
-    position =  Vector2(gameRef.size.x / 2, gameRef.size.y - size.y -150);
+    position = Vector2(game.size.x / 2, game.size.y - size.y/2 - (game.size.y/4));// - 150);
     angle = nativeAngle;
     show();
   }
@@ -86,37 +91,49 @@ class ToadComponent extends SpriteComponent
 
   void blink() {
     setSpriteTo(spriteNb: 1);
-    _binkTimer.timer.start();
+    _blinkTimer.timer.start();
   }
 
   void jump() {}
+
   void resetToadShooting() {
-    gameRef.isToadShooting = false;
+    game.isToadShooting = false;
   }
 
+  void rotateTo(double normalizedAngle) {
+    var newAngle = rangeMapDouble(normalizedAngle, -1.0, 1.0, -tau / 4, tau / 4);
+    angle = newAngle;
+  }
   void rotateBy(int deltaAngle) {
     {
-      var delta = (deltaAngle/ 180 * math.pi/2);
+      var delta = (deltaAngle / 180 * math.pi / 2);
       var newAngle = angle + delta;
-      if ( newAngle> tau/4 || newAngle < -tau/4) { return ;}
+      if (newAngle > tau / 4 || newAngle < -tau / 4) {
+        return;
+      }
       for (double interAngle = 0; interAngle < delta; interAngle++) {
         angle = angle + interAngle;
       }
       angle = newAngle;
-
     }
   }
 
   bool checkFlies({bool automaticMode = true}) {
-   bool gotOne = false;
-    for (double x in gameRef.flyNet.keys) {
-      var _flyX = gameRef.flyNet[x]!;
-      var target = Vector2(x, _flyX);
-      var angleToTarget = angleTo(target);
-       var deltaAngle = automaticMode ?  pi / 360 : pi/ 90;
-      if (angleToTarget.abs() <= deltaAngle) {
-        shoot(distance: position.distanceTo(target));
-        gotOne = true;
+    bool gotOne = false;
+    var flyList = game.flyNet.keys.toList();
+
+    if (flyList.length >= 1) {
+      flyList.sort((a, b) => b.compareTo(a));
+      for (double y in flyList) {
+        var _flyX = game.flyNet[y]!;
+        var target = Vector2(_flyX, y);
+        var angleToTarget = angleTo(target);
+
+        var deltaAngle = automaticMode ? 1 : angularTolerance;
+        if (angleToTarget.abs() <= deltaAngle * degreeToRadian) {
+          shoot(distance: position.distanceTo(target));
+          gotOne = true;
+        }
       }
     }
     return gotOne;
@@ -137,9 +154,9 @@ class ToadComponent extends SpriteComponent
   }
 
   void shoot({double distance = 300.0}) {
-    gameRef.isToadShooting = true;
-    gameRef.tongue.priority = -1;
-    gameRef.tongue.showAtAngle(angle, distance);
+    game.isToadShooting = true;
+    game.tongue.priority = -1;
+    game.tongue.showAtAngle(angle, distance);
     blink();
     _shootTimer.timer.start();
     // animateToadForShooting();

@@ -24,6 +24,7 @@ import 'package:baahbox/constants/enums.dart';
 import 'package:baahbox/controllers/appController.dart';
 import 'package:baahbox/services/settings/settingsController.dart';
 
+import 'generalSettingsHandlePage.dart';
 import 'generalSettingsMusclePage.dart';
 
 class GeneralSettingsPage extends GetView<SettingsController> {
@@ -38,90 +39,98 @@ class GeneralSettingsPage extends GetView<SettingsController> {
         appBar: AppBar(
           title: Text('Général'),
         ),
-        body: appController.isConnectedToBox
-            ? ListView(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(left: 32, top: 8),
-                  ),
-                  Card(
-                      shape: ContinuousRectangleBorder(),
-                      child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'Type de capteur',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const Text(
-                                  'Précisez le type de capteur utilisé',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ]))),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                  const Padding(
-                      padding: EdgeInsets.only(left: 16, top: 8),
-                      child: const Text(
-                        'Capteur utilisé:',
-                        style: TextStyle(
-                          fontSize: 16,
-                        ),
-                      )),
-                  const Padding(
-                      padding: EdgeInsets.only(right: 16, top: 8),
-                      child: Align(
-                          alignment: Alignment.centerRight,
-                          child: SensitivitySelectionView())),
-                  const SizedBox(
-                    height: 36,
-                  ),
-                  Obx(() => controller.currentSensor == Sensor.muscle
-                      ? MuscleSettingsView()
-                      : const SizedBox(
-                          height: 0,
-                        ))
-                ],
-              )
-            : ListView(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(left: 32, top: 8),
-                  ),
-                  Card(
-                      shape: ContinuousRectangleBorder(),
-                      child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'Mode sans connexion activé',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const Text(
-                                  "S'il n'y a pas de boitier BaahBox connecté, \nvous pouvez quand même jouer!\nFaites glisser votre doigt vers le haut, la gauche ou la droite pour jouer.",
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ]))),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                ],
-              ));
+        body: SafeArea(
+            child: appController.isConnectedToBox
+                ? ListView(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(left: 32, top: 8),
+                      ),
+                      Card(
+                          shape: ContinuousRectangleBorder(),
+                          child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Type de capteur',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const Text(
+                                      'Précisez le type de capteur utilisé',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ]))),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      const Padding(
+                          padding: EdgeInsets.only(left: 16, top: 8),
+                          child: const Text(
+                            'Capteur utilisé:',
+                            style: TextStyle(
+                              fontSize: 16,
+                            ),
+                          )),
+                      const Padding(
+                          padding: EdgeInsets.only(right: 16, top: 8),
+                          child: Align(
+                              alignment: Alignment.centerRight,
+                              child: RadioSensorChoice())),
+                      const SizedBox(
+                        height: 36,
+                      ),
+                      Obx(() {
+                        if (controller.genericSettings.sensor ==
+                            Sensor.muscle) {
+                          return MuscleSettingsView(
+                              muscleSettings: controller.musclesSettings);
+                        } else if (controller.genericSettings.sensor ==
+                            Sensor.handle) {
+                          return HandleSettingsView(handleSettings: controller.handleSettings);
+                        } else {
+                          return const SizedBox(height: 0);
+                        }
+                      })
+                    ],
+                  )
+                : ListView(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(left: 32, top: 8),
+                      ),
+                      Card(
+                          shape: ContinuousRectangleBorder(),
+                          child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Mode sans connexion activé',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const Text(
+                                      "S'il n'y a pas de boitier BaahBox connecté, \nvous pouvez quand même jouer!\nFaites glisser votre doigt vers le haut, la gauche ou la droite pour jouer.",
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ]))),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                    ],
+                  )));
   }
 }
 
@@ -136,39 +145,38 @@ class SensitivitySelectionView extends StatefulWidget {
 class _SensitivitySelectionViewState extends State<SensitivitySelectionView> {
   final SettingsController controller = Get.find();
   late Sensitivity? _selection;
-  void onSelectionChanged (Sensitivity? value) {
+  void onSelectionChanged(Sensitivity? value) {
     setState(() {
       _selection = value;
       if (value != null) {
-        controller.updateSensitivityTo(value);
+        controller.genericSettings.sensitivity = value;
       }
     });
   }
+
   @override
   Widget build(BuildContext context) {
-    _selection =  Sensitivity.medium;
+    _selection = Sensitivity.medium;
     return Column(
       children: <Widget>[
         RadioListTile.adaptive(
-            title:const Text('Faible'),
+            title: const Text('Faible'),
             value: Sensitivity.low,
             groupValue: _selection,
             toggleable: true,
-            onChanged:  onSelectionChanged),
+            onChanged: onSelectionChanged),
         RadioListTile.adaptive(
-            title:const Text('Moyenne'),
+            title: const Text('Moyenne'),
             value: Sensitivity.medium,
             groupValue: _selection,
             toggleable: true,
             onChanged: onSelectionChanged),
-
         RadioListTile.adaptive(
-            title:const Text('Elevée'),
+            title: const Text('Elevée'),
             value: Sensitivity.high,
             groupValue: _selection,
             toggleable: true,
             onChanged: onSelectionChanged),
-
       ],
     );
   }
@@ -182,51 +190,51 @@ class RadioSensorChoice extends StatefulWidget {
 
 class _RadioSensorChoiceState extends State<RadioSensorChoice> {
   final SettingsController controller = Get.find();
-  int _value = 1;
+  late Sensor? _selection;
+  void onSelectionChanged(Sensor? value) {
+    setState(() {
+      _selection = value;
+      if (value != null) {
+        controller.genericSettings.sensor = value;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    _selection = controller.genericSettings.sensor;
     return Column(
       children: [
-        ListTile(
-          title: Text("button"),
-          leading: Radio.adaptive(
-            groupValue: _value,
-            value: 1,
-            onChanged: (int? value) {
-              setState(() {
-                _value = value ?? 0;
-                controller.setNumberOfGatesTo(value);
-              });
-            },
-          ),
-        ),
-        ListTile(
-          title: Text("joystick"),
-          leading: Radio.adaptive(
-            groupValue: _value,
-            value: 2,
-            onChanged: (int? value) {
-              setState(() {
-                _value = value ?? 0;
-                controller.setNumberOfGatesTo(value);
-              });
-            },
-          ),
-        ),
-        ListTile(
-          title: Text("muscle"),
-          leading: Radio.adaptive(
-            groupValue: _value,
-            value: 3,
-            onChanged: (int? value) {
-              setState(() {
-                _value = value ?? 0;
-                controller.setNumberOfGatesTo(value);
-              });
-            },
-          ),
-        ),
+        RadioListTile.adaptive(
+            title: const Text('bouton'),
+            value: Sensor.button,
+            groupValue: _selection,
+            toggleable: true,
+            onChanged: onSelectionChanged),
+        RadioListTile.adaptive(
+            title: const Text('joystick digital'),
+            value: Sensor.digitalJoystick,
+            groupValue: _selection,
+            toggleable: true,
+            onChanged: onSelectionChanged),
+        RadioListTile.adaptive(
+            title: const Text('joystick analogique'),
+            value: Sensor.analogJoystick,
+            groupValue: _selection,
+            toggleable: true,
+            onChanged: onSelectionChanged),
+        RadioListTile.adaptive(
+            title: const Text('muscle'),
+            value: Sensor.muscle,
+            groupValue: _selection,
+            toggleable: true,
+            onChanged: onSelectionChanged),
+        RadioListTile.adaptive(
+            title: const Text('poignée'),
+            value: Sensor.handle,
+            groupValue: _selection,
+            toggleable: true,
+            onChanged: onSelectionChanged)
       ],
     );
   }

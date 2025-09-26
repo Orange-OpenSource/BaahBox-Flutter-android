@@ -32,11 +32,12 @@ import '../../../constants/enums.dart';
 
 
 class MeteorComponent extends SpriteComponent
-    with HasGameRef<SpaceShipGame>, CollisionCallbacks {
+    with HasGameReference<SpaceShipGame>, CollisionCallbacks {
   static const speed = 100;
   static final Vector2 initialSize = Vector2.all(100);
   double accelerationRate = 1.0;
   final Controller appController = Get.find();
+  bool isSheepMeteor=false;
 
   MeteorComponent({required super.position, required this.accelerationRate}) : super(anchor: Anchor.center);
 
@@ -49,6 +50,9 @@ class MeteorComponent extends SpriteComponent
   void initialize() {
     var rng = new Random();
     var i = rng.nextInt(6) + 1;
+    if(i==6) {
+      isSheepMeteor = true;
+    }
     var imageName = 'Games/Spaceship/meteor_0$i@3x.png';
     final newSprite = Sprite(Flame.images.fromCache(imageName));
     this.sprite = newSprite;
@@ -59,7 +63,7 @@ class MeteorComponent extends SpriteComponent
   void update(double dt) {
     super.update(dt);
       y += speed * dt * accelerationRate ;
-      if (isNotVisible() || !gameRef.appController.isActive || gameRef.state == GameState.lost ) {
+      if (isNotVisible() || !game.appController.isActive || game.state == GameState.lost ) {
         removeFromParent();
       }
   }

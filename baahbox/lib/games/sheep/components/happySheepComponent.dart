@@ -22,7 +22,7 @@ import 'package:flame/flame.dart';
 import 'package:baahbox/games/sheep/sheepGame.dart';
 
 class HappySheepComponent extends SpriteAnimationComponent
-    with HasGameRef<SheepGame> {
+    with HasGameReference<SheepGame> {
   final happySprite1 =
       Sprite(Flame.images.fromCache('Games/Sheep/happy_sheep_01.png'));
   final happySprite2 =
@@ -54,7 +54,7 @@ class HappySheepComponent extends SpriteAnimationComponent
   @override
   void update(double dt) {
     super.update(dt);
-    var alpha = gameRef.isWon ? 255 : 0;
+    var alpha = game.isWon ? 255 : 0;
     setAlpha(alpha);
   }
 }

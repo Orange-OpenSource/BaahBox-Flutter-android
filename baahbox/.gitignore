@@ -33,6 +33,8 @@ migrate_working_dir/
 .pub/
 /build/
 **/.cxx/
+pubspec.lock
+**/Podfile.lock
 
 # Symbolication related
 app.*.symbols

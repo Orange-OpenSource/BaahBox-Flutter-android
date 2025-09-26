@@ -33,8 +33,17 @@ class SheepSettingsPage extends GetView<SettingsController> {
     return Scaffold(
       appBar: AppBar(
         title: AutoSizeText('Réglages du saute mouton', maxLines: 1),
+        actions: [
+          IconButton(
+              icon: Image.asset(
+                  'assets/images/Dashboard/settings_icon.png',
+                  width: 25, height: 25,
+                  color: mainColor),
+              onPressed: () => Get.toNamed('/settings')),
+        ],
       ),
-      body: ListView(
+      body: SafeArea(
+    child:ListView(
         children: [
           const Padding(
             padding: EdgeInsets.only(left: 32, top: 8),
@@ -47,10 +56,8 @@ class SheepSettingsPage extends GetView<SettingsController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Obx(() => Text(
-                              'Nombre de barrières: ' +
-                                  controller.sheepSettings["numberOfGates"]
-                                      .toString(),
-                              style: TextStyle(
+                          'Nombre de barrières: ${controller.sheepSettings.numberOfGates}',
+                          style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.bold),
                             )),
                       ]))),
@@ -86,7 +93,7 @@ class SheepSettingsPage extends GetView<SettingsController> {
           ),
         ],
       ),
-    );
+    ));
   }
 }
 
@@ -104,14 +111,14 @@ class _GateSpeedSelectionViewState extends State<GateSpeedSelectionView> {
     setState(() {
       _selection = value;
       if (value != null) {
-        controller.setGateSpeedTo(value);
+        controller.sheepSettings.gateVelocity =value;
       }
     });
   }
   @override
   Widget build(BuildContext context) {
     _selection =
-        (controller.sheepSettings["gateVelocity"]) ?? ObjectVelocity.low;
+        (controller.sheepSettings.gateVelocity) ?? ObjectVelocity.low;
     return Column(
       children: <Widget>[
         RadioListTile.adaptive(
@@ -152,7 +159,7 @@ class _GateNumberSliderState extends State<GateNumberSlider> {
 
   @override
   Widget build(BuildContext context) {
-    final int _nbG = (controller.sheepSettings["numberOfGates"]);
+    final int _nbG = (controller.sheepSettings.numberOfGates);
     double _value = _nbG.toDouble();
     return Slider.adaptive(
       value: _value,
@@ -166,7 +173,7 @@ class _GateNumberSliderState extends State<GateNumberSlider> {
       onChanged: (double value) {
         setState(() {
           _value = value;
-          controller.setNumberOfGatesTo(value.toInt());
+          controller.sheepSettings.numberOfGates=value.toInt();
         });
       },
     );

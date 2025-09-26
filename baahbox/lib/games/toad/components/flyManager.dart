@@ -24,9 +24,9 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:baahbox/services/settings/settingsController.dart';
 
-class FlyManager extends Component with HasGameRef<ToadGame> {
+class FlyManager extends Component with HasGameReference<ToadGame> {
   final SettingsController settingsController = Get.find();
-  var scoreArray = [];
+  List<FlyScoreComponent> scoreArray = [];
   final gapSize = 5;
 
   @override
@@ -36,18 +36,18 @@ class FlyManager extends Component with HasGameRef<ToadGame> {
 
   void createScores() {
     scoreArray = [];
-    var nbFLies = settingsController.toadSettings["numberOfFlies"];
-    var gap = (gameRef.size.x - 40.0 - (nbFLies*15)) / (nbFLies -1);
+    var nbFLies = settingsController.toadSettings.numberOfFlies;
+    var gap = (game.size.x - 40.0 - (nbFLies*15)) / (nbFLies -1);
     for (var i = 0; i < nbFLies; i++) {
        var xPos = (20 + (gap+ 15.0) * i);
-       _createScoreAt(xPos, gameRef.size.y - 10);
+       _createScoreAt(xPos, game.size.y - 10);
     }
   }
 
   void _createScoreAt(double x, double y) {
     final fly = FlyScoreComponent(position: Vector2(x, y));
     scoreArray.add(fly);
-    gameRef.add(fly);
+    game.add(fly);
   }
 
   void looseOneScore() {

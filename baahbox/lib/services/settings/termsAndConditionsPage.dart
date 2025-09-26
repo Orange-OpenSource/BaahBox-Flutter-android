@@ -31,7 +31,8 @@ class TermsAndConditionsPage extends StatelessWidget {
         appBar: AppBar(
           title: Text("A propos"),
         ),
-        body:ListView(
+        body:SafeArea(
+    child:ListView(
             padding: const EdgeInsets.all(0),
             children:
             [
@@ -56,6 +57,6 @@ class TermsAndConditionsPage extends StatelessWidget {
                 => Get.toNamed(BBRoute.legals.path),
                 title: Text('Mentions Légales'),
               ),
-            ]));
+            ])));
   }
 }

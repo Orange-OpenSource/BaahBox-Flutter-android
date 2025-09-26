@@ -17,55 +17,16 @@
  *
  */
 
-import 'package:auto_size_text/auto_size_text.dart';
+
 import 'package:baahbox/constants/enums.dart';
+import '../../model/GamePage.dart';
 import 'mazeGame.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:flame/game.dart';
-import 'package:baahbox/controllers/appController.dart';
-import 'package:baahbox/games/overlayBuilder.dart';
 
-class MazeGamePage extends StatelessWidget {
-  final Controller appController = Get.find();
-  final game = MazeGame();
-  final mainColor = BBGameList.maze.baseColor.color;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        foregroundColor: mainColor,
-        titleTextStyle: TextStyle(
-            color: mainColor, fontWeight: FontWeight.bold, fontSize: 25),
-        title:  AutoSizeText("Labyrinthe", maxLines: 1),
-        actions: [
-          Container(
-              width: 25,
-              child: Obx(() => Image.asset(appController.currentSensor.asset,
-                  color: mainColor))),
-          IconButton(
-              icon: Image.asset(
-                  'assets/images/Dashboard/settings_icon.png',
-                  color: mainColor, width: 25, height: 25),
-              onPressed: () => Get.toNamed('/mazeSettings')),
-        ],
-      ),
-      body: Stack(children: [
-        GameWidget(
-          game: game,
-          overlayBuilderMap: const {
-            'PreGame': OverlayBuilder.preGame,
-            'Instructions': OverlayBuilder.instructions,
-            'FeedBack': OverlayBuilder.feedback,
-            'PostGame': OverlayBuilder.postGame,
-          },
-          loadingBuilder: (_) => const Center(
-            child: Text('...'),
-          ),
-        )
-      ]),
-    );
-  }
+class MazeGamePage extends GamePage {
+  MazeGamePage({super.key})
+      : super(
+      game: MazeGame(),
+      mainColor: BBGameList.maze.baseColor.color,
+      title: "Labyrinthe",
+      settingsRoute: '/mazeSettings');
 }

@@ -24,7 +24,7 @@ import '../random_extension.dart';
 import '../sheepGame.dart';
 
 class Cloud extends SpriteComponent
-    with ParentIsA<CloudManager>, HasGameRef<SheepGame> {
+    with ParentIsA<CloudManager>, HasGameReference<SheepGame> {
   Cloud({required Vector2 position})
       : cloudGap = random.fromRange(
           minCloudGap,

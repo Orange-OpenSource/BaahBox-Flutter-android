@@ -24,7 +24,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:baahbox/services/settings/settingsController.dart';
 
-class LifeManager extends Component with HasGameRef<SpaceShipGame> {
+class LifeManager extends Component with HasGameReference<SpaceShipGame> {
   final SettingsController settingsController = Get.find();
   final lifeArray = [];
   final gapSize = 5;
@@ -34,11 +34,15 @@ class LifeManager extends Component with HasGameRef<SpaceShipGame> {
     createLifes();
   }
 
+  int getLifeXPosFromIndex(int index) {
+    const int  gapSize = 6;
+    return (25 + gapSize) * index + 10;
+  }
   void createLifes() {
-    const gapSize = 6;
-    for (var i = 0; i < settingsController.spaceShipSettings["numberOfShips"]; i++) {
-       var xpos = (25 + gapSize) * i;
-      _createLifeAt(xpos + 10, game.size.y - 10);
+
+    for (var i = 0; i < settingsController.spaceShipSettings.numberOfShips; i++) {
+
+      _createLifeAt(getLifeXPosFromIndex(i).toDouble(), game.size.y - 10);
     }
   }
 
@@ -49,11 +53,18 @@ class LifeManager extends Component with HasGameRef<SpaceShipGame> {
   }
 
   void looseOneLife() {
-    if (lifeArray.length > 0) {
+    if (lifeArray.isNotEmpty) {
       lifeArray.last.disappear();
       lifeArray.removeLast();
-    } else {
-      game.endGame();
+    }
+    if (lifeArray.isEmpty) {
+        game.endGame();
+    }
+  }
+
+  void addOneLife() {
+    if (lifeArray.length<settingsController.spaceShipSettings.numberOfShips) {
+      _createLifeAt(getLifeXPosFromIndex(lifeArray.length).toDouble(), game.size.y - 10);
     }
   }
 }

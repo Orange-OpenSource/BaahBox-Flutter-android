@@ -18,6 +18,7 @@
  */
 
 import 'dart:ui';
+import 'package:baahbox/constants/utils.dart';
 import 'package:baahbox/games/spaceShip/components/scoreManager.dart';
 import 'package:baahbox/games/spaceShip/components/shipComponent.dart';
 import 'package:flame/effects.dart';
@@ -36,6 +37,9 @@ import 'package:baahbox/games/spaceShip/components/lifeManager.dart';
 import 'package:flame/input.dart';
 import 'package:baahbox/services/settings/settingsController.dart';
 
+import '../../model/GameInput.dart';
+import '../../model/sensorInput.dart';
+
 class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
   final Controller appController = Get.find();
   final SettingsController settingsController = Get.find();
@@ -48,16 +52,17 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
   late final StarBackGroundCreator backgroundManager;
 
   int score = 0;
-  var panInput = 0;
-  var inputL = 0;
-  var inputR = 0;
+
   var goLeft = false;
   var goRight = false;
   var instructionTitle = 'Evite les météorites';
   var instructionSubtitleMuscle = 'en contractant tes muscles';
   var instructionSubtitleJoystick = 'pousse le joystick à gauche ou à droite';
   var instructionSubtitleFinger = 'glisse le doigt à gauche ou à droite';
-  int threshold = 10;
+  var instructionSubtitleHandle = 'tire la poignée vers le haut';
+
+  double threshold = 0.1;
+  late GameInput gameInput;
 
   @override
   Color backgroundColor() => BBGameList.starship.baseColor.color;
@@ -114,10 +119,9 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
   void update(double dt) {
     super.update(dt);
     if (appController.isActive) {
-      appController.updateConnectionState();
       if (state == GameState.running) {
         refreshInput();
-        transformInputInOffset();
+
         scoreText.text = 'Score: $score';
       } else {
         setInstructions();
@@ -128,45 +132,46 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
   // Box input
   void refreshInput() {
     // todo deal with joystick input
-    inputL = 0;
-    inputR = 0;
+
     goLeft = false;
     goRight = false;
 
-    if (appController.isConnectedToBox) {
-      var sensorType = settingsController.currentSensor;
-      switch (sensorType) {
-        case Sensor.muscle:
-          // The strength is in range [0...1024] -> Have it fit into [0...100]
-          inputL = (appController.musclesInput.muscle1 ~/ 10);
-          inputR = (appController.musclesInput.muscle2 ~/ 10);
-          goLeft = (inputL > threshold) && (inputL > inputR);
-          goRight = (inputR > threshold) && (inputR > inputL);
-
-        case Sensor.arcadeJoystick:
-          var joystickInput = appController.joystickInput;
-          goLeft = joystickInput.right;
-          goRight = joystickInput.left;
-          print("joystick : " + joystickInput.describe());
-          print("right : $goRight");
-          print("left : $goLeft");
-
-        default:
+    if (checkCompatibleSensor(BBGameList.starship.compatibleSensorsList)) {
+      switch (gameInput.directionType) {
+        case GameInputDirectionType.analogic:
+          var deltaX = gameInput.delta.x;
+          if (deltaX.abs() > threshold) {
+            ship.moveTo(deltaX);
+          } else {
+            ship.setSpriteTo(0);
+          }
+        case GameInputDirectionType.digital:
+          var currentInputDirection = gameInput.direction;
+          goLeft = currentInputDirection == GameInputDirection.left;
+          goRight = currentInputDirection == GameInputDirection.right;
+          transformInputInOffset();
       }
     }
   }
 
   void transformInputInOffset() {
     if (!goLeft && !goRight) {
+      ship.setSpriteTo(0);
       return;
     }
-    var offset = goLeft ? 2.0 : -2.0;
+    var offset = goLeft ? -2.0 : 2.0;
     ship.moveBy(offset);
   }
 
   void looseLife() {
     if (state == GameState.running) {
       lifeManager.looseOneLife();
+    }
+  }
+
+  void addLife() {
+    if (state == GameState.running) {
+      lifeManager.addOneLife();
     }
   }
 
@@ -179,7 +184,14 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
 // Game State management
   @override
   void startGame() {
-    initializeParams();
+    // force handle settings to be centered to 0
+    gameInput = GameInput(
+        axes: GameInputAxes.horizontal,
+        musclesSettings: settingsController.spaceShipSettings.muscleSettings,
+        handleSettings: HandleSettings(
+            prefs: settingsController.handleSettings.prefs,
+            prefsPrefix: settingsController.handleSettings.prefsPrefix)
+          ..isCenteredToZero = true);
     super.startGame();
   }
 

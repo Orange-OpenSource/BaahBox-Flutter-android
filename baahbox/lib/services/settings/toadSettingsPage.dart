@@ -24,6 +24,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:baahbox/constants/enums.dart';
 import 'package:baahbox/services/settings/settingsController.dart';
 
+import '../../services/settings/generalSettingsMusclePage.dart';
+import 'generalSettingsHandlePage.dart';
+
 class ToadSettingsPage extends GetView<SettingsController> {
   final mainColor = BBGameList.toad.baseColor.color;
   final SettingsController controller = Get.find();
@@ -33,8 +36,17 @@ class ToadSettingsPage extends GetView<SettingsController> {
     return Scaffold(
       appBar: AppBar(
         title: AutoSizeText("Réglages du crapaud", maxLines: 1),
+        actions: [
+          IconButton(
+              icon: Image.asset(
+                  'assets/images/Dashboard/settings_icon.png',
+                  width: 25, height: 25,
+                  color: mainColor),
+              onPressed: () => Get.toNamed('/settings')),
+        ],
       ),
-      body: ListView(
+      body: SafeArea(
+    child:ListView(
         children: [
           const Padding(
             padding: EdgeInsets.only(left: 32, top: 8),
@@ -47,9 +59,7 @@ class ToadSettingsPage extends GetView<SettingsController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Obx(() => Text(
-                              'Nombre de mouches: ' +
-                                  controller.toadSettings["numberOfFlies"]
-                                      .toString(),
+                              'Nombre de mouches: ${controller.toadSettings.numberOfFlies}',
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.bold),
                             )),
@@ -69,10 +79,8 @@ class ToadSettingsPage extends GetView<SettingsController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Obx(() => Text(
-                              'Temps pendant lequel les mouches ne bougent pas (en s): ' +
-                                  controller.toadSettings["flySteadyTime"]
-                                      .round()
-                                      .toString(),
+                              'Temps pendant lequel les mouches ne bougent pas (en s): ${controller.toadSettings.flySteadyTime
+                                      .round()}',
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.bold),
                             )),
@@ -102,16 +110,17 @@ class ToadSettingsPage extends GetView<SettingsController> {
           ),
           Obx(() => SwitchListTile.adaptive(
               title: Text("Tirs automatiques"),
-              value: controller.toadSettings["iShootingModeAutomatic"],
+              value: controller.toadSettings.iShootingModeAutomatic,
               onChanged: (bool newValue) {
-                controller.setToadShootingModeToAutomatic(newValue);
+                controller.toadSettings.iShootingModeAutomatic=newValue;
               })),
           const SizedBox(
-            height: 5,
+            height: 24,
           ),
+          MuscleSettingsView(muscleSettings: controller.toadSettings.muscleSettings)
         ],
       ),
-    );
+    ));
   }
 }
 
@@ -127,7 +136,7 @@ class _FlyDurationSliderState extends State<FlyDurationSlider> {
 
   @override
   Widget build(BuildContext context) {
-    final double _flyDuration = controller.toadSettings["flySteadyTime"];
+    final double _flyDuration = controller.toadSettings.flySteadyTime;
     double _value = _flyDuration;
     return Slider.adaptive(
       value: _value,
@@ -141,7 +150,7 @@ class _FlyDurationSliderState extends State<FlyDurationSlider> {
       onChanged: (double value) {
         setState(() {
           _value = value.floorToDouble();
-          controller.setFlyDurationTo(_value);
+          controller.toadSettings.flySteadyTime=_value;
         });
       },
     );
@@ -160,7 +169,7 @@ class _FlyNumberSliderState extends State<FlyNumberSlider> {
 
   @override
   Widget build(BuildContext context) {
-    final int _nbF = controller.toadSettings["numberOfFlies"];
+    final int _nbF = controller.toadSettings.numberOfFlies;
     double _value = _nbF.toDouble();
     return Slider.adaptive(
       value: _value,
@@ -174,7 +183,7 @@ class _FlyNumberSliderState extends State<FlyNumberSlider> {
       onChanged: (double value) {
         setState(() {
           _value = value;
-          controller.setNumberOfFliesTo(value.toInt());
+          controller.toadSettings.numberOfFlies=value.toInt();
         });
       },
     );
