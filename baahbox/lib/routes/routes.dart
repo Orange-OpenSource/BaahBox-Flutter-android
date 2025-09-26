@@ -33,6 +33,8 @@ import 'package:baahbox/services/settings/termsOfUsePage.dart';
 import 'package:baahbox/services/settings/legalInformationsPage.dart';
 
 import '../games/maze/mazeGamePage.dart';
+import '../games/maze3d/maze3dGamePage.dart';
+import '../services/settings/maze3dSettings.dart';
 import '../services/settings/mazeSettings.dart';
 import '../services/settings/sheepSettingsPage.dart';
 import '../services/settings/spaceShipSettingsPage.dart';
@@ -46,6 +48,7 @@ enum BBRoute {
   spaceShip(path: "/spaceShip"),
   toad(path: "/toad"),
   maze(path: "/maze"),
+  maze3d(path: "/maze3d"),
   testSensors(path: "/testSensors"),
   settings(path: "/settings"),
   connection(path: "/connection"),
@@ -54,6 +57,7 @@ enum BBRoute {
   toadSettings(path: "/toadSettings"),
   spaceShipSettings(path: "/spaceShipSettings"),
   mazeSettings(path: "/mazeSettings"),
+  maze3dSettings(path: "/maze3dSettings"),
   termsAndConditions(path: "/termsAndConditions"),
   cgu(path: "/cgu"),
   legals(path: "/legals");
@@ -73,6 +77,7 @@ class BBRoutes {
     GetPage(page: () => SpaceShipSettingsPage(), name: BBRoute.spaceShipSettings.path),
     GetPage(page: () => ToadSettingsPage(), name: BBRoute.toadSettings.path),
     GetPage(page: () => MazeSettingsPage(), name: BBRoute.mazeSettings.path),
+    GetPage(page: () => Maze3dSettingsPage(), name: BBRoute.maze3dSettings.path),
     GetPage(page: () => const ConnectionPage(), name: BBRoute.connection.path),
     GetPage(page: () => BalloonGamePage(), name: BBRoute.balloon.path),
     GetPage(page: () => ToadGamePage(), name: BBRoute.toad.path),
@@ -80,6 +85,7 @@ class BBRoutes {
     GetPage(page: () => SpaceShipGamePage(), name: BBRoute.spaceShip.path),
     GetPage(page: () => StarGamePage(), name: BBRoute.star.path),
     GetPage(page: () => MazeGamePage(), name: BBRoute.maze.path),
+    GetPage(page: () => Maze3dGamePage(), name: BBRoute.maze3d.path),
     GetPage(page: () => const TermsAndConditionsPage(), name: BBRoute.termsAndConditions.path),
     GetPage(page: () => const TermsOfUsePage(), name: BBRoute.cgu.path),
     GetPage(page: () => const LegalInformationsPage(), name: BBRoute.legals.path),

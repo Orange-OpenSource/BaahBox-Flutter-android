@@ -122,4 +122,28 @@ class MazeFactory {
       }
     }
   }
+
+
+  List<List<int>> convertToMatrixMap() {
+    List<List<int>> resultCells = List.generate(NB_ROW*2+1,
+        (index) => List<int>.filled(NB_COL*2+1, 1, growable: false),
+        growable: false);
+
+    int I=0;
+    int J=0;
+    for (int i = 0; i < NB_ROW; i++) {
+      for (int j = 0; j < NB_COL; j++) {
+        I=1+i*2;
+        J=1+j*2;
+        resultCells[I][J] = 0;
+        resultCells[I][J+1] = (mazeCells[i][j] & MazeFactory.RIGHT)!=0 ? 1 : 0;
+        resultCells[I+1][J] = (mazeCells[i][j] & MazeFactory.BOTTOM)!=0 ? 1 : 0;
+        resultCells[I+1][J+1] = resultCells[I][J+1]==1 ||resultCells[I+1][J]==1 ? 1 : 0;
+      }
+  }
+
+    return resultCells;
+
+  }
+
 }

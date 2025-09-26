@@ -1,6 +1,6 @@
 /*
  * Baah Box
- * Copyright (c) 2024-2025. Orange SA
+ * Copyright (c) 2024. Orange SA
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -17,40 +17,16 @@
  *
  */
 
-import 'package:flutter/foundation.dart';
 
-void debugLog(String message) {
-  if (kDebugMode) {
-    print(message);
-  }
-}
+import 'package:baahbox/constants/enums.dart';
+import '../../model/GamePage.dart';
+import 'maze3dGame.dart';
 
-
-String prettyDuration(double durationInSec) {
-  var components = <String>[];
-
-  int seconds = durationInSec ~/ 1;
-  int minutes = seconds ~/ 60;
-  int hours = minutes ~/ 60;
-  int days = hours ~/ 24;
-
-  seconds %= 60;
-  minutes %= 60;
-  hours %= 24;
-
-  if (days != 0) {
-    components.add('${days}d');
-  }
-  if (hours != 0) {
-    components.add('${hours}h');
-  }
-
-  if (minutes != 0) {
-    components.add('${minutes}m');
-  }
-
-  components.add('$seconds');
-  components.add('s');
-
-  return components.join();
+class Maze3dGamePage extends GamePage {
+  Maze3dGamePage({super.key})
+      : super(
+      game: Maze3dGame(),
+      mainColor: BBGameList.maze3d.baseColor.color,
+      title: "Labyrinthe 3D",
+      settingsRoute: '/maze3dSettings');
 }

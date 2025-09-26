@@ -55,6 +55,7 @@ enum Sensor {
 }
 
 enum BBColor implements Comparable<BBColor> {
+  sheepGray(sRGB: 0xFF676461),
   beurkGreen(sRGB: 0xFFCEAF17),
   blueGreen(sRGB: 0xFF085559),
   greenDash(sRGB: 0xFF3A9B8D),
@@ -142,6 +143,11 @@ enum BBGameList {
       title: 'Labyrinthe',
       mainAsset: 'assets/images/Dashboard/menu_maze.png',
       baseColor: BBColor.lightGreen,
+      compatibleSensorsList: [Sensor.digitalJoystick, Sensor.analogJoystick]),
+  maze3d(
+      title: 'Labyrinthe3d',
+      mainAsset: 'assets/images/Dashboard/menu_maze.png',
+      baseColor: BBColor.sheepGray,
       compatibleSensorsList: [Sensor.digitalJoystick, Sensor.analogJoystick]);
 
   const BBGameList({

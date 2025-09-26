@@ -111,10 +111,12 @@ class SettingsPage extends StatelessWidget {
             trailing: Icon(Icons.arrow_forward_outlined),
             dense: false,
             enabled: true,
-            onTap: () => Get.toNamed(BBRoute.mazeSettings.path),
-            title: Text('Labyrinthe',
+            onTap: () => Get.toNamed(BBRoute.maze3dSettings.path),
+            title: Text('Labyrinthe 3D',
                 style: Theme.of(context).textTheme.bodyLarge),
           ),
+
+
           Card(
             shape: ContinuousRectangleBorder(),
             child: Padding(
