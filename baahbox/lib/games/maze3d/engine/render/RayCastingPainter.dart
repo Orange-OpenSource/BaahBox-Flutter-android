@@ -283,7 +283,8 @@ class RayCastingPainter extends CustomPainter {
     double dy = target.y - player.y;
     double distance = sqrt(dx * dx + dy * dy);
 
-    double angleToTarget = atan2(dy, dx) - player.angle;
+    double playerAngleView = isReverse ? player.angle + pi : player.angle;
+    double angleToTarget = atan2(dy, dx) - playerAngleView;
 
     // Normalize angle to -pi to pi
     if (angleToTarget < -pi) angleToTarget += 2 * pi;
