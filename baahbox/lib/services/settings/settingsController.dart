@@ -23,6 +23,7 @@ import 'package:baahbox/constants/enums.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../games/maze/mazeSettings.dart';
+import '../../games/maze3d/maze3dSettings.dart';
 import '../../games/sheep/sheepSettings.dart';
 import '../../games/toad/toadSettings.dart';
 import '../../model/AnalogicSensor.dart';
@@ -135,6 +136,7 @@ class SettingsController extends GetxController {
   late SpaceShipSettings spaceShipSettings;
   late ToadSettings toadSettings;
   late MazeSettings mazeSettings;
+  late Maze3dSettings maze3dSettings;
 
   late final SharedPreferences prefs;
   static const prefsPrefix = "GenericSettings::";
@@ -150,6 +152,7 @@ class SettingsController extends GetxController {
     spaceShipSettings = SpaceShipSettings(prefs: prefs);
     toadSettings = ToadSettings(prefs: prefs);
     mazeSettings = MazeSettings(prefs: prefs);
+    maze3dSettings = Maze3dSettings(prefs: prefs);
 
   }
 

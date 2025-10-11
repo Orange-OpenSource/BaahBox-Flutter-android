@@ -81,6 +81,7 @@ class GameList extends StatelessWidget {
         GameRow(BBGameList.starship, BBRoute.spaceShip.path, height),
         GameRow(BBGameList.toad, BBRoute.toad.path, height),
         GameRow(BBGameList.maze, BBRoute.maze.path, height),
+        GameRow(BBGameList.maze3d, BBRoute.maze3d.path, height),
       ] //wrap
           ),
     );
