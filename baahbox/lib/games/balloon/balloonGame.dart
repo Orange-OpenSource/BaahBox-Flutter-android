@@ -44,7 +44,7 @@ class BalloonGame extends BBGame with TapCallbacks {
   int inflation = 0;
   double threshold = 0.0;
   double gameLoopDt = 0.0;
-  double gameLoopDuration = .02; // 60 ms
+  double gameLoopDuration = .02; // 20 ms
 
   var instructionTitle = 'Gonfle le ballon';
   var instructionSubtitleMuscle = 'en contractant ton muscle';
