@@ -137,18 +137,17 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
     goRight = false;
 
     if (checkCompatibleSensor(BBGameList.starship.compatibleSensorsList)) {
+      var currentInputDirection = gameInput.direction;
+      goLeft = currentInputDirection == GameInputDirection.left;
+      goRight = currentInputDirection == GameInputDirection.right;
+
       switch (gameInput.directionType) {
         case GameInputDirectionType.analogic:
           var deltaX = gameInput.delta.x;
           if (deltaX.abs() > threshold) {
-            ship.moveTo(deltaX);
-          } else {
-            ship.setSpriteTo(0);
+            transformInputInOffset();
           }
         case GameInputDirectionType.digital:
-          var currentInputDirection = gameInput.direction;
-          goLeft = currentInputDirection == GameInputDirection.left;
-          goRight = currentInputDirection == GameInputDirection.right;
           transformInputInOffset();
       }
     }

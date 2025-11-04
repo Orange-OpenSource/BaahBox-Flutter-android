@@ -56,12 +56,12 @@ class BalloonComponent extends SpriteComponent with HasGameReference<BalloonGame
   }
 
   updateSprite(double dt) {
-    int coeff = (game.input / 100).toInt();
+    int coeff = (game.inflation / 100).toInt();
     switch (coeff) {
       case 0 || 1:
         setTo(balloonstartSprite, 0);
       case 2 || 3 || 4 || 5 || 6 || 7:
-        setTo(balloonlowSprite, game.input);
+        setTo(balloonlowSprite, game.inflation);
       case 8 || 9 || 10:
         setTo(balloonexplodeSprite, 0);
     }
