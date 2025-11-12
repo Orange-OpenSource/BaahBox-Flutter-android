@@ -56,7 +56,6 @@ class ToadGame extends BBGame with TapCallbacks, HasCollisionDetection {
   late final FlyComponent myFly;
 
   int score = 0;
-  double threshold = 0.1;
   var goLeft = false;
   var goRight = false;
   late GameInput gameInput;

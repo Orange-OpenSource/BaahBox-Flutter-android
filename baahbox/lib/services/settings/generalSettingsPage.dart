@@ -24,6 +24,7 @@ import 'package:baahbox/constants/enums.dart';
 import 'package:baahbox/controllers/appController.dart';
 import 'package:baahbox/services/settings/settingsController.dart';
 
+import 'analogJoystickSettingsView.dart';
 import 'generalSettingsHandlePage.dart';
 import 'generalSettingsMusclePage.dart';
 
@@ -94,6 +95,9 @@ class GeneralSettingsPage extends GetView<SettingsController> {
                         } else if (controller.genericSettings.sensor ==
                             Sensor.handle) {
                           return HandleSettingsView(handleSettings: controller.handleSettings);
+                        } else if (controller.genericSettings.sensor ==
+                            Sensor.analogJoystick) {
+                          return AnalogicJoystickInputSettingsView(analogJoystickSettings: controller.analogJoystickSettings);
                         } else {
                           return const SizedBox(height: 0);
                         }

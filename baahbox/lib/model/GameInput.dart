@@ -168,13 +168,33 @@ class GameInput {
   }
 
   void convertAnalogJoystickInput() {
-    double newXValue = (500 - appController.analogInputs.analog2) / 500;
-    if(newXValue.abs()<0.05) {
+
+    var axeXInput = (settingsController.analogJoystickSettings.sensor1.orientation == AnalogicSensorOrientation.horizontal) ||
+        (settingsController.analogJoystickSettings.sensor1.orientation == AnalogicSensorOrientation.horizontalReversed) ?
+    appController.analogInputs.analog1: appController.analogInputs.analog2;
+
+    var axeYInput = axeXInput==appController.analogInputs.analog1?
+    appController.analogInputs.analog2 : appController.analogInputs.analog1;
+
+    var axeXInputsettings = axeXInput==appController.analogInputs.analog1 ?
+    settingsController.analogJoystickSettings.sensor1 : settingsController.analogJoystickSettings.sensor2;
+
+    var axeYInputsettings = axeYInput==appController.analogInputs.analog1?
+    settingsController.analogJoystickSettings.sensor1 : settingsController.analogJoystickSettings.sensor2;
+
+    double newXValue = (500 - axeXInput) / 500;
+    if(newXValue.abs()<=axeXInputsettings.threshold) {
       newXValue = 0.0;
     }
-    double newYValue = (500 - appController.analogInputs.analog1) / 500;
-    if(newYValue.abs()<0.05) {
+    if(axeXInputsettings.orientation == AnalogicSensorOrientation.horizontalReversed) {
+      newXValue = -1.0 * newXValue;
+    }
+    double newYValue = (500 - axeYInput) / 500;
+    if(newYValue.abs()<axeYInputsettings.threshold) {
       newYValue = 0.0;
+    }
+    if(axeYInputsettings.orientation == AnalogicSensorOrientation.verticalReversed) {
+      newYValue = -1.0 * newYValue;
     }
     switch (axes) {
       case GameInputAxes.horizontal:

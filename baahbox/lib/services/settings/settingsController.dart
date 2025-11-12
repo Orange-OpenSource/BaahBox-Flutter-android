@@ -131,6 +131,7 @@ class SettingsController extends GetxController {
   late GeneralSettings genericSettings;
   late MuscleSettings musclesSettings;
   late HandleSettings handleSettings;
+  late AnalogicChannelsSettings analogJoystickSettings;
 
   late SheepSettings sheepSettings;
   late SpaceShipSettings spaceShipSettings;
@@ -148,6 +149,7 @@ class SettingsController extends GetxController {
     genericSettings = GeneralSettings(prefs: prefs);
     musclesSettings = MuscleSettings(prefs: prefs, prefsPrefix:prefsPrefix);
     handleSettings = HandleSettings(prefs: prefs, prefsPrefix:prefsPrefix);
+    analogJoystickSettings = AnalogicChannelsSettings(prefs: prefs, prefsPrefix:prefsPrefix);
     sheepSettings = SheepSettings(prefs: prefs);
     spaceShipSettings = SpaceShipSettings(prefs: prefs);
     toadSettings = ToadSettings(prefs: prefs);

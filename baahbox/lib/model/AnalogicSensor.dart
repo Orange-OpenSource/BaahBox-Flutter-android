@@ -38,6 +38,8 @@ class AnalogicSensorSettings {
         .obs;
 
     _isCenteredToZero = (prefs.getBool('${prefsPrefix}_isCenteredToZero') ?? false).obs;
+
+    _threshold = (prefs.getDouble('${prefsPrefix}_threshold') ?? 0.0).obs;
   }
   late Rx<AnalogicSensorOrientation> _orientation = AnalogicSensorOrientation.vertical.obs;
 
@@ -53,6 +55,13 @@ class AnalogicSensorSettings {
     _isCenteredToZero.value = val;
     prefs.setBool('${prefsPrefix}_isCenteredToZero', val);
   }
+
+  late RxDouble _threshold;
+  double get threshold => _threshold.value;
+  set threshold(double val) {
+    _threshold.value = val;
+    prefs.setDouble('${prefsPrefix}_threshold', val);
+  }
 }
 
 class AnalogicChannelsSettings {
@@ -60,8 +69,8 @@ class AnalogicChannelsSettings {
   late final String prefsPrefix;
 
   AnalogicChannelsSettings({required this.prefs, required this.prefsPrefix}) {
-    sensor1 = AnalogicSensorSettings(prefs: prefs, prefsPrefix: prefsPrefix);
-    sensor2 = AnalogicSensorSettings(prefs: prefs, prefsPrefix: prefsPrefix);
+    sensor1 = AnalogicSensorSettings(prefs: prefs, prefsPrefix: '${prefsPrefix}_analog1');
+    sensor2 = AnalogicSensorSettings(prefs: prefs, prefsPrefix: '${prefsPrefix}_analog2');
   }
   late final AnalogicSensorSettings sensor1;
   late final AnalogicSensorSettings sensor2;
