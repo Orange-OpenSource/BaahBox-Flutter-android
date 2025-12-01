@@ -100,41 +100,31 @@ class MazePlayerComponent extends SpriteComponent
   }
 
   bool isOnstartCell() {
-    if (isVerticalScreen) {
       return position.x > startCell.left &&
           position.x < startCell.right &&
           position.y > startCell.top &&
           position.y < startCell.bottom;
-    } else {
-      return position.x < startCell.right &&
-          position.x > startCell.left &&
-          position.y > startCell.top &&
-          position.y < startCell.bottom;
-    }
-
   }
+
   @override
   void update(double dt) {
     super.update(dt);
-
-
     if (game.isRunning && !game.isGameOver) {
       position.copyInto(lastPosition);
       var onStartCell = isOnstartCell();
-
 
       if (!isOut) {
         if (settingsController.mazeSettings.isFineDirection) {
           if (onStartCell) {
             if (isVerticalScreen) {
               relativeMovementDelta.x = 0;
-              if(relativeMovementDelta.y<0) {
+              if(relativeMovementDelta.y>0) {
                 relativeMovementDelta.y=0;
               }
             }
             else {
               relativeMovementDelta.y = 0;
-              if(relativeMovementDelta.x<0) {
+              if(relativeMovementDelta.x>0) {
                 relativeMovementDelta.x=0;
               }
             }
