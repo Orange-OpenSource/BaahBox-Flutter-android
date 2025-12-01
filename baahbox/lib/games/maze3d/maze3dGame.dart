@@ -100,8 +100,8 @@ class Maze3dGame extends BBGame {
         x: 0,
         y: 0,
         angle: 0.0,
-        miniMapImage: await getImageFromPath(
-            'assets/images/Games/Maze/mouton_labyrinthe.png'),
+        miniMapImage:  await getImageFromPath(
+            'assets/images/Games/Maze/mapArrow.png'),
         image:
             await getImageFromPath('assets/images/Games/Maze/sheep_fps.png'));
     resetPlayerPosition();
@@ -145,14 +145,15 @@ class Maze3dGame extends BBGame {
   }
 
   void resetPlayerPosition() {
-    player.x = 1.5;
-    player.y = 1.5;
-    player.angle = mazeMap[1][2] == 1 ? pi / 2 : 0.0;
+    var mazeSize = settingsController.maze3dSettings.mazeSize;
+    player.x = mazeMap[0].length - 1.5;
+    player.y = mazeMap.length - 1.5;
+    player.angle = mazeMap[mazeSize -2][mazeSize -1]  == 1 ? -pi/2 : pi;
   }
 
   void resetTargetPosition() {
-    target.x = mazeMap[0].length - 1.5;
-    target.y = mazeMap.length - 1.5;
+    target.x = 1.5;
+    target.y = 1.5;
   }
 
   void createTouchJoystick() {

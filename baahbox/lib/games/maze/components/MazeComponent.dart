@@ -86,17 +86,18 @@ class MazeComponent extends PositionComponent
 
     if (isVertical) {
       startCell = Rectangle.fromLTWH(
-          x + startOffset, y + topOffset, cellRefUnit, cellRefUnit);
-      exitCell = Rectangle.fromLTWH(
           startOffset + (cellSize.x-mazeWallWidth) * (MazeFactory.NB_COL - 1),
           topOffset + (cellSize.y-mazeWallWidth) * (MazeFactory.NB_ROW) + cellRefUnit,
           cellRefUnit,
           cellRefUnit);
-    } else {
-      startCell = Rectangle.fromLTWH(
-          x + startOffset, y + topOffset, cellRefUnit, cellRefUnit);
       exitCell = Rectangle.fromLTWH(
-          startOffset + (cellSize.x-mazeWallWidth) * (MazeFactory.NB_COL)+ cellRefUnit,
+          x + startOffset, y + topOffset, cellRefUnit, cellRefUnit);
+
+    } else {
+      exitCell = Rectangle.fromLTWH(
+           startOffset, y + topOffset, cellRefUnit, cellRefUnit);
+      startCell = Rectangle.fromLTWH(
+          x + startOffset + (cellSize.x-mazeWallWidth) * (MazeFactory.NB_COL)+ cellRefUnit,
           topOffset + (cellSize.y-mazeWallWidth) * (MazeFactory.NB_ROW - 1),
           cellRefUnit,
           cellRefUnit);
