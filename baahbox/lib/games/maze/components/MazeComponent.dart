@@ -94,14 +94,13 @@ class MazeComponent extends PositionComponent
           x + startOffset, y + topOffset, cellRefUnit, cellRefUnit);
 
     } else {
+      exitCell = Rectangle.fromLTWH(
+           startOffset, y + topOffset, cellRefUnit, cellRefUnit);
       startCell = Rectangle.fromLTWH(
-          startOffset + (cellSize.x-mazeWallWidth) * (MazeFactory.NB_COL + 1) + 2 * cellRefUnit,
+          x + startOffset + (cellSize.x-mazeWallWidth) * (MazeFactory.NB_COL)+ cellRefUnit,
           topOffset + (cellSize.y-mazeWallWidth) * (MazeFactory.NB_ROW - 1),
           cellRefUnit,
           cellRefUnit);
-      exitCell =  Rectangle.fromLTWH(
-          x -(cellSize.x-mazeWallWidth) - startOffset, y + topOffset, cellRefUnit, cellRefUnit);
-
     }
 
     for (int i = 0; i < MazeFactory.NB_COL; i++) {
