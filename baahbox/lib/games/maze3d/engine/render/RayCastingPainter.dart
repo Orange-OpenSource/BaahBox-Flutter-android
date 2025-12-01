@@ -1,6 +1,6 @@
-// credit : Jobehi (Youssef El Behi)
-// licence : MIT Licence
-// url :https://github.com/jobehi/Flutter_ray_casting
+// raycasting explanations (DDA algorithm) :
+// https://wynnliam.github.io/raycaster/news/tutorial/2019/03/23/raycaster-part-01.html
+// https://ismailassil.medium.com/ray-casting-c-8bfae2c2fc13
 
 import 'dart:math';
 import 'dart:ui' as ui;
@@ -30,6 +30,7 @@ class RayCastingPainter extends CustomPainter {
   void setFOV(double newFOV) {
     fov = newFOV;
   }
+
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint();
@@ -44,9 +45,8 @@ class RayCastingPainter extends CustomPainter {
 
     const maxDepth = 20.0;
 
-    if(isReverse)
-    {
-      paint.color =Colors.white;
+    if (isReverse) {
+      paint.color = Colors.white;
       canvas.drawRect(
         Rect.fromLTWH(
           0,
@@ -99,110 +99,147 @@ class RayCastingPainter extends CustomPainter {
       double hitY = 0.0;
 
       while (!hitWall && distanceToWall < maxDepth) {
-        /// adjust this value to increase the raycasting resolution
-        distanceToWall += 0.01;
+// Position sur la carte (en cases entières)
+        int mapX = player.x.toInt();
+        int mapY = player.y.toInt();
 
-        hitX = player.x + eyeX * distanceToWall;
-        hitY = player.y + eyeY * distanceToWall;
+        // Longueur du rayon depuis la position actuelle jusqu'au prochain côté x ou y
+        double sideDistX;
+        double sideDistY;
 
-        final testX = hitX.toInt();
-        final testY = hitY.toInt();
+        // Longueur du rayon d'un côté x ou y au côté suivant x ou y
+        // On évite la division par zéro si le rayon est parfaitement parallèle aux axes
+        final deltaDistX = (eyeX == 0) ? 1e30 : (1 / eyeX).abs();
+        final deltaDistY = (eyeY == 0) ? 1e30 : (1 / eyeY).abs();
 
-        if (testX < 0 ||
-            testX >= map[0].length ||
-            testY < 0 ||
-            testY >= map.length) {
-          hitWall = true;
-          distanceToWall = maxDepth;
+        // Direction dans laquelle avancer sur la grille (+1 ou -1)
+        int stepX;
+        int stepY;
+
+        // Calcul des valeurs initiales de sideDist et step
+        if (eyeX < 0) {
+          stepX = -1;
+          sideDistX = (player.x - mapX) * deltaDistX;
         } else {
-          if (map[testY][testX] == 1) {
+          stepX = 1;
+          sideDistX = (mapX + 1.0 - player.x) * deltaDistX;
+        }
+
+        if (eyeY < 0) {
+          stepY = -1;
+          sideDistY = (player.y - mapY) * deltaDistY;
+        } else {
+          stepY = 1;
+          sideDistY = (mapY + 1.0 - player.y) * deltaDistY;
+        }
+
+        // Boucle DDA
+        while (!hitWall && distanceToWall < maxDepth) {
+          // On saute à la prochaine case de la grille, soit en direction x, soit en y
+          if (sideDistX < sideDistY) {
+            sideDistX += deltaDistX;
+            mapX += stepX;
+            isVerticalHit = true; // Le rayon a traversé une ligne verticale
+          } else {
+            sideDistY += deltaDistY;
+            mapY += stepY;
+            isVerticalHit = false; // Le rayon a traversé une ligne horizontale
+          }
+
+          // À l'intérieur de la boucle DDA, après avoir avancé,
+          // on calcule la distance du rayon. C'est la distance euclidienne le long du rayon.
+          if (isVerticalHit) {
+            // La distance est calculée à partir de la position du joueur jusqu'au mur vertical
+            distanceToWall = (mapX - player.x + (1 - stepX) / 2) / eyeX;
+          } else {
+            // La distance est calculée à partir de la position du joueur jusqu'au mur horizontal
+            distanceToWall = (mapY - player.y + (1 - stepY) / 2) / eyeY;
+          }
+
+          // Vérifier si le rayon est sorti des limites
+          if (mapX < 0 ||
+              mapX >= map[0].length ||
+              mapY < 0 ||
+              mapY >= map.length) {
+            hitWall = true; // Considéré comme un mur pour arrêter le rayon
+            distanceToWall = maxDepth;
+          } else if (map[mapY][mapX] == 1) {
             hitWall = true;
-
-            // Determine if the hit was vertical or horizontal
-            double blockMidX = testX + 0.5;
-            double blockMidY = testY + 0.5;
-
-            double hitX = player.x + eyeX * distanceToWall;
-            double hitY = player.y + eyeY * distanceToWall;
-
-            double angleBetween = atan2(hitY - blockMidY, hitX - blockMidX);
-            angleBetween = angleBetween % (pi / 2);
-
-            if (angleBetween < 0.0001 || angleBetween > (pi / 2) - 0.0001) {
-              isVerticalHit = true;
-            } else {
-              isVerticalHit = false;
-            }
+            // La distance est déjà calculée, isVerticalHit est déjà défini.
           }
         }
-      }
 
-      final correctedDistance =
-          distanceToWall * cos(playerAngleView - rayAngle + 0.0001);
+//      Calcule la différence d'angle entre la direction du joueur et le rayon actuel.
+        final angleDifference = playerAngleView - rayAngle;
 
-      final wallHeight = screenHeight / (correctedDistance + 0.0001);
+        // Corrige la distance pour annuler la distorsion fisheye.
+        // On utilise le cosinus de la différence d'angle.
+        final correctedDistance = distanceToWall * cos(angleDifference);
 
-      double brightness = (1 - (correctedDistance / maxDepth)).clamp(0.0, 1.0);
+        final wallHeight = screenHeight / (correctedDistance + 0.0001);
 
-      // Further adjust shade based on hit orientation
-      if (isVerticalHit) {
-        brightness *= 0.5; // Darken vertical walls
-      }
+        double brightness =
+            (1 - (correctedDistance / maxDepth)).clamp(0.0, 1.0);
 
-      final x = i * (screenWidth / numRays);
-      if (wallTexture != null && hitWall) {
-        // Texture mapping
-        double wallX;
+        // Further adjust shade based on hit orientation
         if (isVerticalHit) {
-          wallX = hitY % 1;
-        } else {
-          wallX = hitX % 1;
+          brightness *= 0.5; // Darken vertical walls
         }
-        int texX = (wallX * wallTexture!.width).toInt();
-        texX = texX.clamp(0, wallTexture!.width - 1);
 
-        Rect srcRect = Rect.fromLTWH(
-          texX.toDouble(),
-          0,
-          1,
-          wallTexture!.height.toDouble(),
-        );
+        final x = i * (screenWidth / numRays);
 
-        Rect dstRect = Rect.fromLTWH(
-          x,
-          (screenHeight - wallHeight) / 2,
-          (screenWidth / numRays) + 1,
-          wallHeight,
-        );
+        // rendu des murs
+        if (wallTexture != null && hitWall) {
+          // Texture mapping
+          double wallX;
+          if (isVerticalHit) {
+            wallX = hitY % 1;
+          } else {
+            wallX = hitX % 1;
+          }
+          int texX = (wallX * wallTexture!.width).toInt();
+          texX = texX.clamp(0, wallTexture!.width - 1);
 
-        paint.color = Colors.white;
-        paint.colorFilter = ColorFilter.mode(
-          Colors.black.withValues(alpha: 1 - brightness),
-          BlendMode.multiply,
-        );
+          Rect srcRect = Rect.fromLTWH(
+            texX.toDouble(),
+            0,
+            1,
+            wallTexture!.height.toDouble(),
+          );
 
-        canvas.drawImageRect(wallTexture!, srcRect, dstRect, paint);
+          Rect dstRect = Rect.fromLTWH(
+            x,
+            (screenHeight - wallHeight) / 2,
+            (screenWidth / numRays) + 1,
+            wallHeight,
+          );
 
-        paint.colorFilter = null; // Reset color filter
-      } else {
-        // Use solid color if texture is not available
-        // int shade = (255 * brightness).toInt();
+          paint.color = Colors.white;
+          paint.colorFilter = ColorFilter.mode(
+            Colors.black.withValues(alpha: 1 - brightness),
+            BlendMode.multiply,
+          );
 
-        // paint.color = Color.fromARGB(255, shade, shade, shade);
-        paint.color =
-            Color.lerp(BBColor.sheepGray.color, Colors.black, 1 - brightness)!;
-        canvas.drawLine(
-          Offset(x, max(0,(screenHeight - wallHeight) / 2)),
-          Offset(x, min(screenHeight,(screenHeight + wallHeight) / 2)),
-          paint..strokeWidth = (screenWidth / numRays) + 1,
-        );
+          canvas.drawImageRect(wallTexture!, srcRect, dstRect, paint);
+
+          paint.colorFilter = null; // Reset color filter
+        } else {
+          paint.color = Color.lerp(
+              BBColor.sheepGray.color, Colors.black, 1 - brightness)!;
+
+          canvas.drawLine(
+            Offset(x, max(0, (screenHeight - wallHeight) / 2)),
+            Offset(x, min(screenHeight, (screenHeight + wallHeight) / 2)),
+            paint..strokeWidth = (screenWidth / numRays) + 1,
+          );
+        }
+        // Save the distance to the wall for this ray
+        depthBuffer[i] = correctedDistance;
       }
-      // Save the distance to the wall for this ray
-      depthBuffer[i] = correctedDistance;
     }
     // Render target
     renderTarget(canvas, size, depthBuffer);
-   // applyLighting(canvas, size);
+    // applyLighting(canvas, size);
   }
 
   void applyLighting(Canvas canvas, Size size) {
@@ -221,7 +258,7 @@ class RayCastingPainter extends CustomPainter {
         radius: 0.8,
         colors: [
           Colors.transparent,
-          Colors.black.withValues(alpha:0.8),
+          Colors.black.withValues(alpha: 0.8),
         ],
         stops: const [0.6, 1.0],
       ).createShader(gradientRect)
@@ -233,7 +270,6 @@ class RayCastingPainter extends CustomPainter {
       lightPaint,
     );
   }
-
 
   void renderTarget(Canvas canvas, Size size, List<double> depthBuffer) {
     final screenWidth = size.width;
@@ -247,7 +283,8 @@ class RayCastingPainter extends CustomPainter {
     double dy = target.y - player.y;
     double distance = sqrt(dx * dx + dy * dy);
 
-    double angleToTarget = atan2(dy, dx) - player.angle;
+    double playerAngleView = isReverse ? player.angle + pi : player.angle;
+    double angleToTarget = atan2(dy, dx) - playerAngleView;
 
     // Normalize angle to -pi to pi
     if (angleToTarget < -pi) angleToTarget += 2 * pi;
@@ -298,8 +335,7 @@ class RayCastingPainter extends CustomPainter {
         // Translate canvas to the target's position
         canvas.translate(screenX, screenHeight / 2);
 
-
-        canvas.rotate(target.angle );
+        canvas.rotate(target.angle);
 
         if (target.image != null) {
           // Draw target image

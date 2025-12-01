@@ -41,7 +41,11 @@ class BalloonGame extends BBGame with TapCallbacks {
 
   late GameInput gameInput;
 
-  int input = 0;
+  int inflation = 0;
+  double threshold = 0.0;
+  double gameLoopDt = 0.0;
+  double gameLoopDuration = .02; // 20 ms
+
   var instructionTitle = 'Gonfle le ballon';
   var instructionSubtitleMuscle = 'en contractant ton muscle';
   var instructionSubtitleJoystick = 'pousse le joystick en haut';
@@ -67,7 +71,7 @@ class BalloonGame extends BBGame with TapCallbacks {
       'Games/Balloon/ballon_03@2x.png',
       'Games/Balloon/ballon_04@2x.png',
     ]);
-    input = 0;
+    inflation = 0;
     _balloon = BalloonComponent();
     await add(_balloon);
   }
@@ -75,40 +79,40 @@ class BalloonGame extends BBGame with TapCallbacks {
   @override
   void update(double dt) {
     super.update(dt);
-
-    if (appController.isActive) {
-      if (isRunning) {
-        refreshInput();
-        updateOverlaysAndState();
-      } else {
-        setInstructions();
+    gameLoopDt += dt;
+    if (gameLoopDt >= gameLoopDuration) {
+      if (appController.isActive) {
+        if (isRunning) {
+          refreshInput();
+          updateOverlaysAndState();
+        } else {
+          setInstructions();
+        }
       }
+      gameLoopDt = 0.0;
     }
   }
 
   void refreshInput() {
     if (checkCompatibleSensor(BBGameList.balloon.compatibleSensorsList)) {
-      if(gameInput.directionType==GameInputDirectionType.analogic) {
-        input = max(0,-(gameInput.delta.y*1000).toInt());
-      }
-      else
-      {
-        if (gameInput.direction == GameInputDirection.up && input < 1000) {
-          input += 8;
-        } else if  (input >= 10) {
-          input -= 5;
-        }
-      }
+      processInput();
+    }
+  }
+
+  void processInput() {
+    if (gameInput.direction == GameInputDirection.up && inflation < 1000) {
+      inflation += 5;
+    } else if (inflation >= 10) {
+      inflation -= 5;
     }
   }
 
   void updateOverlaysAndState() {
-
-    if (input < 300) {
+    if (inflation < 300) {
       feedback = feedback1;
-    } else if (input < 500) {
+    } else if (inflation < 500) {
       feedback = feedback2;
-    } else if (input < 800) {
+    } else if (inflation < 800) {
       feedback = feedback3;
     } else {
       endGame();
@@ -118,7 +122,7 @@ class BalloonGame extends BBGame with TapCallbacks {
 
   @override
   void startGame() {
-    input =0;
+    inflation = 0;
     gameInput = GameInput(
         axes: GameInputAxes.vertical,
         musclesSettings: settingsController.musclesSettings,
@@ -131,7 +135,6 @@ class BalloonGame extends BBGame with TapCallbacks {
   @override
   void resetGame() {
     super.resetGame();
-
   }
 
   @override
@@ -143,12 +146,12 @@ class BalloonGame extends BBGame with TapCallbacks {
   @override
   void onPanUpdate(DragUpdateInfo info) {
     if (appController.isConnectedToBox || state != GameState.running) {
-      input = 0;
+      inflation = 0;
     } else {
       var yPos = info.eventPosition.global.y;
-      input = (1000*(canvasSize.y - yPos) / canvasSize.y).toInt();
+      inflation = (1000 * (canvasSize.y - yPos) / canvasSize.y).toInt();
       debugLog(
-          "panInput : ${input} :::  panY : ${yPos} vs game ${canvasSize.y}");
+          "panInput : ${inflation} :::  panY : ${yPos} vs game ${canvasSize.y}");
     }
   }
 
