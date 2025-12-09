@@ -291,9 +291,9 @@ class Maze3dGame extends BBGame {
         player.image!.width.toDouble(),
         player.image!.height.toDouble(),
       );
-      var playerImageWidth = screenWidth / 3;
+      var playerImageWidth = screenWidth / 6;
       if (screenWidth > screenHeight) {
-        playerImageWidth = screenHeight / 4 / ratio;
+        playerImageWidth = screenHeight / 8 / ratio;
       }
       Rect dstRect = Rect.fromCenter(
           center: Offset(

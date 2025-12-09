@@ -38,7 +38,6 @@ class MazeLifeComponent extends SpriteComponent with HasGameReference, HasVisibi
   Future<void> onLoad() async {
     super.onLoad();
     sprite = await game.loadSprite('Games/Maze/mouton_labyrinthe.png');
-
   }
 
   void disappear() {
