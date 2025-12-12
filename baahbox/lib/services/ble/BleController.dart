@@ -216,7 +216,7 @@ class BleController extends GetxController {
         element.deviceID == device.remoteId.toString().toUpperCase());
     associatedAvailableDevice?.isWorking.value = true;
 
-    await device.connect();
+    await device.connect(license: License.free);
     /* if(device.isConnected) {
       deviceConnected(device);
       scanDeviceServices(device);
