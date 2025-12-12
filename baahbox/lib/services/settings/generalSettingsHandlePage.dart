@@ -21,6 +21,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:baahbox/services/settings/settingsController.dart';
 
+import 'analogInputSettingsView.dart';
+
 class HandleSettingsView extends GetView<SettingsController> {
   final HandleSettings handleSettings;
 
@@ -52,45 +54,53 @@ class HandleSettingsView extends GetView<SettingsController> {
                           ),
                         ),
                       ]))),
-          const SizedBox(
-            height: 12,
-          ),
+          const SizedBox(height: 12),
           Container(
               padding: EdgeInsets.all(20),
               child: Obx(() => Text(
                     "Limite basse (entre 0° et 90°) : ${handleSettings.rangeForHandleLower}",
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ))),
-          const SizedBox(
-            height: 5,
-          ),
+          const SizedBox(height: 5),
           Container(
               padding: EdgeInsets.all(20),
               child: RotationSlider(handleSettings:handleSettings, isLower: true, min: 0, max: 90)),
-          const SizedBox(
-            height: 12,
-          ),
+          const SizedBox(height: 12),
           Container(
               padding: EdgeInsets.all(20),
               child: Obx(() => Text(
                     "Limite haute (entre 90° et 180°) : ${handleSettings.rangeForHandleUpper}",
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ))),
-          const SizedBox(
-            height: 5,
-          ),
+          const SizedBox(height: 5),
           Container(
               padding: EdgeInsets.all(20),
               child: RotationSlider(handleSettings:handleSettings, isLower: false, min: 90, max: 180)),
-              const SizedBox(
-                height: 5,
-              ),
-              Obx(() => SwitchListTile.adaptive(
-                  title: const Text("Poignée centrée sur 0"),
-                  value: handleSettings.isCenteredToZero,
-                  onChanged: (bool newValue) {
-                    handleSettings.isCenteredToZero = newValue;
-                  })),
+          const SizedBox(height: 5),
+              Card(
+                  shape: ContinuousRectangleBorder(),
+                  child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Configuration de l'axe",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const Text(
+                              "Sélectionnez le type d'axe de la poignée et son seuil de détection.",
+                              style: TextStyle(
+                                fontSize: 12,
+                              ),
+                            ),
+                          ]))),
+          const SizedBox(height: 5),
+          AnalogInputSettingsView(analogSensorSettings:handleSettings),
+          const SizedBox(height: 5)
         ]));
   }
 }
