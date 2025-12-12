@@ -186,8 +186,8 @@ class Maze3dGame extends BBGame {
 
   void createChronoText() {
     durationText = TextComponent(
-      position: Vector2(size.x - 5, 10),
-      anchor: Anchor.topRight,
+      position: Vector2(size.x - 5, size.y-10),
+      anchor: Anchor.bottomRight,
       priority: 1,
     );
     add(durationText);
