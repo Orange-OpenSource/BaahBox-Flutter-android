@@ -25,7 +25,7 @@ class SpaceShipGamePage extends GamePage {
   SpaceShipGamePage({super.key})
       : super(
       game: SpaceShipGame(),
-      mainColor: BBGameList.sheep.baseColor.color,
+      mainColor: BBGameList.starship.baseColor.color,
       title: "La bataille de l'espace",
       settingsRoute: '/spaceShipSettings');
 }
