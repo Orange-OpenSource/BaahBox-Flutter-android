@@ -42,7 +42,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
 
 
 
-  void initState() {
+  @override void initState() {
     super.initState();
   }
 
@@ -58,8 +58,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
       child: Scaffold(
           appBar: AppBar(title: Text("Connexion")),
           body: SafeArea(
-            child: Expanded(
-                child: SingleChildScrollView(
+            child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
@@ -120,6 +119,6 @@ class _ConnectionPageState extends State<ConnectionPage> {
                   )
                 ],
               ),
-            )),
+            ),
           )));
 }

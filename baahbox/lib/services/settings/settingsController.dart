@@ -43,7 +43,7 @@ class GeneralSettings {
             .byName(prefs.getString('_sensitivity') ?? Sensitivity.medium.name))
         .obs;
     _sensor = (Sensor.values
-            .byName(prefs.getString('_sensor') ?? Sensor.digitalJoystick.name))
+            .byName(prefs.getString('_sensor') ?? Sensor.analogJoystick.name))
         .obs;
     _threshold = (prefs.getDouble('_threshold') ?? 0.2).obs;
     _demoMode = (prefs.getBool('_demoMode') ?? false).obs;

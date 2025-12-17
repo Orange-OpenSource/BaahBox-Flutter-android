@@ -36,7 +36,6 @@ import 'package:baahbox/services/settings/settingsController.dart';
 class BalloonGame extends BBGame with TapCallbacks {
   final Controller appController = Get.find();
   final SettingsController settingsController = Get.find();
-
   late BalloonComponent _balloon;
 
   late GameInput gameInput;
@@ -100,11 +99,10 @@ class BalloonGame extends BBGame with TapCallbacks {
   }
 
   void processInput() {
-    if (gameInput.direction == GameInputDirection.up && inflation < 1000) {
-      inflation += 5;
-    } else if (inflation >= 10) {
-      inflation -= 5;
-    }
+    var handleInput = appController.analogInputs;
+    inflation = calibrateAnalogInput(handleInput.analog1,
+         settingsController.handleSettings.rangeForHandleLower, 
+         settingsController.handleSettings.rangeForHandleUpper);
   }
 
   void updateOverlaysAndState() {
