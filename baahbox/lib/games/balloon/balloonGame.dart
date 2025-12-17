@@ -40,7 +40,6 @@ class BalloonGame extends BBGame with TapCallbacks {
 
   late GameInput gameInput;
 
-
   int inflation = 0;
   double threshold = 0.0;
   double gameLoopDt = 0.0;
@@ -101,9 +100,9 @@ class BalloonGame extends BBGame with TapCallbacks {
 
   void processInput() {
     var handleInput = appController.analogInputs;
-
-     inflation = calibrateAnalogInput(handleInput.analog1,
-         settingsController.handleSettings.rangeForHandleLower, settingsController.handleSettings.rangeForHandleUpper);
+    inflation = calibrateAnalogInput(handleInput.analog1,
+         settingsController.handleSettings.rangeForHandleLower, 
+         settingsController.handleSettings.rangeForHandleUpper);
   }
 
   void updateOverlaysAndState() {
