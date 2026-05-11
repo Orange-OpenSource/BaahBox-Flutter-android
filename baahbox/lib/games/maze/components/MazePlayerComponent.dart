@@ -99,29 +99,32 @@ class MazePlayerComponent extends SpriteComponent
 
   }
 
-  @override
-  void update(double dt) {
-    super.update(dt);
-
-
-    if (game.isRunning && !game.isGameOver) {
-      position.copyInto(lastPosition);
-      var onStartCell = position.x > startCell.left &&
+  bool isOnstartCell() {
+      return position.x > startCell.left &&
           position.x < startCell.right &&
           position.y > startCell.top &&
           position.y < startCell.bottom;
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    if (game.isRunning && !game.isGameOver) {
+      position.copyInto(lastPosition);
+      var onStartCell = isOnstartCell();
+
       if (!isOut) {
         if (settingsController.mazeSettings.isFineDirection) {
           if (onStartCell) {
             if (isVerticalScreen) {
               relativeMovementDelta.x = 0;
-              if(relativeMovementDelta.y<0) {
+              if(relativeMovementDelta.y>0) {
                 relativeMovementDelta.y=0;
               }
             }
             else {
               relativeMovementDelta.y = 0;
-              if(relativeMovementDelta.x<0) {
+              if(relativeMovementDelta.x>0) {
                 relativeMovementDelta.x=0;
               }
             }
@@ -139,24 +142,24 @@ class MazePlayerComponent extends SpriteComponent
         }
         else if (state != MovingState.none && collisionState != state) {
           switch (state) {
-            case MovingState.left:
-              if (!onStartCell) {
-                moveLeft(dt);
-              }
-              break;
             case MovingState.right:
-              if (!isVerticalScreen || !onStartCell) {
+              if (!onStartCell) {
                 moveRight(dt);
               }
               break;
-            case MovingState.up:
-              if (!onStartCell) {
-                moveUp(dt);
+            case MovingState.left:
+              if (!isVerticalScreen || !onStartCell) {
+                moveLeft(dt);
               }
               break;
             case MovingState.down:
-              if (isVerticalScreen || !onStartCell) {
+              if (!onStartCell) {
                 moveDown(dt);
+              }
+              break;
+            case MovingState.up:
+              if (isVerticalScreen || !onStartCell) {
+                moveUp(dt);
               }
               break;
             case MovingState.none:
@@ -190,11 +193,14 @@ class MazePlayerComponent extends SpriteComponent
     state = MovingState.none;
     isOut = false;
     collisionState = MovingState.none;
-
+    if (isVerticalScreen) {
     position = Vector2(startCell.left + (startCell.width) / 2,
         startCell.top + (startCell.height) / 2);
-    if (!isVerticalScreen) {
-      angle = -pi / 2;
+      angle = pi;
+    } else {
+        position = Vector2(startCell.left + (startCell.width) / 2,
+          startCell.top + (startCell.height) / 2);
+        angle = pi / 2;
     }
 
   }

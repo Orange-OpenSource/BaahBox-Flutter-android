@@ -30,9 +30,10 @@ class MazeLifeManager extends PositionComponent with HasGameReference<MazeGame>,
   final SettingsController settingsController = Get.find();
   final lifeArray = [];
   final gapSize = 5;
-  late  Vector2 lifeSize;
+  late  double lifeHeight;
+  late Vector2 lifeSize;
 
-  MazeLifeManager({required this.lifeSize, required super.position})
+  MazeLifeManager({required this.lifeHeight, required super.position})
       : super(
     anchor: Anchor.bottomRight,
     priority:1
@@ -42,16 +43,11 @@ class MazeLifeManager extends PositionComponent with HasGameReference<MazeGame>,
     super.onLoad();
 
     var sprite = await game.loadSprite('Games/Maze/mouton_labyrinthe.png');
-    var ratio = (sprite.srcSize.x) / (sprite.srcSize.y );
+    var spriteRatio = (sprite?.srcSize.x ?? 10) /
+        (sprite?.srcSize.y ?? lifeHeight);
+    var width = lifeHeight * spriteRatio;
 
-    /*var height =  lifeSize.x / 3 * 2;
-    var width = height * ratio;*/
-    var height =  lifeSize.y;
-    var width = height * ratio;
-
-
-    lifeSize = Vector2(width, height);
-
+    lifeSize = Vector2(width, lifeHeight);
     createLifes();
   }
   void hide() {
@@ -80,7 +76,7 @@ class MazeLifeManager extends PositionComponent with HasGameReference<MazeGame>,
   }
 
   void _createLifeAt(double x, double y) {
-    final life = MazeLifeComponent(position: Vector2(x, y), size:lifeSize);
+    final life = MazeLifeComponent(position: Vector2(x, y), size: lifeSize);
     lifeArray.add(life);
     add(life);
   }

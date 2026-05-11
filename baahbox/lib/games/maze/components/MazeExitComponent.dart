@@ -44,7 +44,7 @@ class MazeExitComponent extends SpriteComponent with CollisionCallbacks,
   Future<void> initialize() async {
     sprite = await game.loadSprite('Games/Maze/trefle.png');
     var ratio = (sprite?.srcSize.x ?? endCell.width) / (sprite?.srcSize.y ?? endCell.height);
-    var width = endCell.width/3*2;
+    var width = endCell.width/2;
     var height = width/ratio;
     size = Vector2(width,height);
     position = Vector2(endCell.left+(endCell.width-width)/2, endCell.top+(endCell.height-height)/2);

@@ -58,7 +58,10 @@ class GameInput {
 
   final Vector2 _delta = Vector2.zero();
 
-  GameInput({required this.axes, required this.musclesSettings, required this.handleSettings});
+  GameInput(
+      {required this.axes,
+      required this.musclesSettings,
+      required this.handleSettings});
 
   static const double _eighthOfPi = pi / 8;
 
@@ -82,7 +85,11 @@ class GameInput {
   }
 
   GameInputDirection get direction {
-    return convertDeltaToDirection(delta);
+    if (directionType == GameInputDirectionType.analogic) {
+      return convertDeltaToDirection(delta);
+    } else {
+      return convertArcadeJoystickInputToGameInputDirection();
+    }
   }
 
   GameInputDirection convertDeltaToDirection(Vector2 currentDelta) {
@@ -120,6 +127,50 @@ class GameInput {
       return GameInputDirection.upLeft;
     } else if (joystickAngle > 15 * _eighthOfPi) {
       return GameInputDirection.up;
+    } else {
+      return GameInputDirection.idle;
+    }
+  }
+
+  GameInputDirection convertArcadeJoystickInputToGameInputDirection() {
+    var joystickInput = appController.digitalInputs;
+
+    if (joystickInput.right) {
+      switch (axes) {
+        case GameInputAxes.vertical:
+          return GameInputDirection.up;
+        case GameInputAxes.horizontal:
+          return GameInputDirection.right;
+        case GameInputAxes.both:
+          return GameInputDirection.right;
+      }
+    } else if (joystickInput.left) {
+      switch (axes) {
+        case GameInputAxes.vertical:
+          return GameInputDirection.down;
+        case GameInputAxes.horizontal:
+          return GameInputDirection.left;
+        case GameInputAxes.both:
+          return GameInputDirection.left;
+      }
+    } else if (joystickInput.up) {
+      switch (axes) {
+        case GameInputAxes.vertical:
+          return GameInputDirection.up;
+        case GameInputAxes.horizontal:
+          return GameInputDirection.left;
+        case GameInputAxes.both:
+          return GameInputDirection.up;
+      }
+    } else if (joystickInput.down) {
+      switch (axes) {
+        case GameInputAxes.vertical:
+          return GameInputDirection.down;
+        case GameInputAxes.horizontal:
+          return GameInputDirection.right;
+        case GameInputAxes.both:
+          return GameInputDirection.down;
+      }
     } else {
       return GameInputDirection.idle;
     }
@@ -406,11 +457,10 @@ class GameInput {
           _delta.setValues(analog1.abs() >= 0.5 ? analog1.sign : 0, 0);
         }
       case GameInputAxes.vertical:
-
         if (directionType == GameInputDirectionType.analogic) {
           _delta.setValues(0, -1 * analog1);
         } else {
-          _delta.setValues(0, analog1.abs() >= 0.5 ? -1 *analog1.sign : 0);
+          _delta.setValues(0, analog1.abs() >= 0.5 ? -1 * analog1.sign : 0);
         }
     }
   }

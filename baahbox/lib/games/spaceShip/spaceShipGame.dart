@@ -61,6 +61,7 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
   var instructionSubtitleFinger = 'glisse le doigt à gauche ou à droite';
   var instructionSubtitleHandle = 'tire la poignée vers le haut';
 
+  double threshold = 0.1;
   late GameInput gameInput;
 
   @override
@@ -136,10 +137,19 @@ class SpaceShipGame extends BBGame with TapCallbacks, HasCollisionDetection {
     goRight = false;
 
     if (checkCompatibleSensor(BBGameList.starship.compatibleSensorsList)) {
-          var currentInputDirection = gameInput.direction;
-          goLeft = currentInputDirection == GameInputDirection.left;
-          goRight = currentInputDirection == GameInputDirection.right;
+      var currentInputDirection = gameInput.direction;
+      goLeft = currentInputDirection == GameInputDirection.left;
+      goRight = currentInputDirection == GameInputDirection.right;
+
+      switch (gameInput.directionType) {
+        case GameInputDirectionType.analogic:
+          var deltaX = gameInput.delta.x;
+          if (deltaX.abs() > threshold) {
+            transformInputInOffset();
+          }
+        case GameInputDirectionType.digital:
           transformInputInOffset();
+      }
     }
   }
 

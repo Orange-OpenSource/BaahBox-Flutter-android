@@ -102,7 +102,7 @@ class GameRow extends StatelessWidget {
             shape: MaterialStateProperty.all(ContinuousRectangleBorder())),
         child: Container(
             alignment: Alignment.centerLeft,
-            height: max(60, height), //(Get.height/5)-10,
+            height: max(80, height), //(Get.height/5)-10,
             width: double.infinity,
             padding: const EdgeInsets.all(0),
             child: Row(

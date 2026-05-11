@@ -139,16 +139,15 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
 }
 
   void createMazeAndPlayer() {
-    //var mazeSize = min(size.x, size.y- durationText.size.y-10);
-    var isVertical = (size.y - 10) >= size.x;
-    var mazeSize = isVertical ? size.x : (size.y - 10);
-    var mazePosition = Vector2((size.x - mazeSize) / 2, 0);
+    var isVertical = (size.y - 20) >= size.x;
+    var mazePosition = Vector2(0, 0);
+
 
     maze = MazeComponent(
         mazeController: mazeController,
         isVertical: isVertical,
         position: mazePosition,
-        size: Vector2(mazeSize, mazeSize));
+        size: Vector2(size.x, size.y - 10));
     add(maze);
 
     player = MazePlayerComponent(
@@ -156,7 +155,7 @@ class MazeGame extends BBGame with TapCallbacks, HasCollisionDetection {
     add(player);
 
     add(lifeManager = MazeLifeManager(
-        lifeSize: player.size, position: Vector2(size.x, size.y - 10)));
+        lifeHeight: (player.size.y / 3), position: Vector2(size.x - 5, size.y - 10)));
     lifeManager.hide();
   }
 

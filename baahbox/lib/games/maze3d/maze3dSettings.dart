@@ -42,8 +42,8 @@ class Maze3dSettings  {
     _hasChrono = (prefs.getBool('${prefsPrefix}_hasChrono') ?? false).obs;
     _hasBackView = (prefs.getBool('${prefsPrefix}_hasBackView') ?? false).obs;
     _chronoMaxTime = (prefs.getDouble('${prefsPrefix}_chronoMaxTime') ?? 40.0).obs;
-    _speedMovement = (prefs.getDouble('${prefsPrefix}_speedMovement') ?? 5).obs;
-    _FOV = (prefs.getDouble('${prefsPrefix}_FOV') ?? (pi /3)).obs;
+    _speedMovement = (prefs.getDouble('${prefsPrefix}_speedMovement') ?? 2).obs;
+    _FOV = (prefs.getDouble('${prefsPrefix}_FOV') ?? (pi /6)).obs;
 
     musclesSettings = MuscleSettings(prefs : prefs, prefsPrefix:prefsPrefix);
 
