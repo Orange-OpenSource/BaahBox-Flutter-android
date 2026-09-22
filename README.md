@@ -1,7 +1,5 @@
 # BaahBox-Flutter
-Français | English
-------------- | -------------
-[![BaahBoxPix](https://github.com/Orange-OpenSource/BaahBox-Arduino/blob/dev/documentation/img/fr.jpg)](https://github.com/Orange-OpenSource/BaahBox-Arduino/blob/dev/documentation/fr/README.md) | [![BaahBoxPix](https://github.com/Orange-OpenSource/BaahBox-Arduino/blob/dev/documentation/img/en.jpg)](https://github.com/Orange-OpenSource/BaahBox-Arduino/blob/dev/documentation/en/README.md)| Content 
+# Présentation
+Cliquez sur l'image ci-dessous pour accéder à la présentation du projet Baah Box.
 
-
-![BaahBoxPix](https://github.com/Orange-OpenSource/BaahBox-Arduino/blob/dev/documentation/img/photoBaaBox.jpg)
+[![BaahBoxPix](https://github.com/Orange-OpenSource/BaahBox-Arduino/blob/dev/docs/assets/images/snapShopBBoxDoc.png)](https://orange-opensource.github.io/BaahBox-Arduino/)
