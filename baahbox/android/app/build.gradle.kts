@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.orange.labs.baahbox"
-    compileSdk = 35
+    compileSdk = 36
     ndkVersion =  "27.0.12077973" //flutter.ndkVersion
 
 
@@ -33,7 +33,7 @@ android {
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdk = 21
-        targetSdk = 35
+        targetSdk = 36
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
